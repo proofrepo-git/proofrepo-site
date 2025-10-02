@@ -6,143 +6,120 @@
   <title>ProofRepo — Compliance Proof, Done For You</title>
 
   <!-- SEO -->
-  <meta name="description" content="Skip screenshot chaos. ProofRepo assembles a clean ‘Proof Pack’ for SOC 2, ISO 27001, HIPAA, customer security reviews, and RFPs—delivered in 24–72 hours." />
+  <meta name="description" content="Skip screenshot chaos. ProofRepo assembles a clean ‘Proof Pack’ for SOC 2, ISO 27001, HIPAA, and customer security reviews—delivered in 24–72 hours." />
   <meta name="keywords" content="SOC 2 evidence, ISO 27001 evidence, vendor security review, compliance proof, audit readiness, security RFP" />
 
-  <!-- Open Graph / Twitter -->
+  <!-- Open Graph -->
   <meta property="og:title" content="ProofRepo — Compliance Proof, Done For You">
   <meta property="og:description" content="Get a complete, organized ‘Proof Pack’ for audits & RFPs in 24–72 hours.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://proofrepo.com/">
-  <meta property="og:image" content="https://proofrepo.com/og-image.png">
-  <meta name="twitter:card" content="summary_large_image">
 
-  <!-- Brand: system font stack (fast), accessible colors -->
+  <!-- Brand styles: fast, accessible, no external deps -->
   <style>
     :root{
-      --bg:#0b1020;          /* deep navy */
-      --panel:#0f162e;       /* card/bg */
-      --text:#e6ecff;        /* high-contrast text */
-      --muted:#a9b7e6;       /* secondary text */
-      --primary:#2563eb;     /* cobalt blue */
-      --accent:#22c55e;      /* mint/green for trust cues */
-      --warning:#f59e0b;     /* amber highlight */
-      --ring: rgba(37,99,235,.35);
-      --shadow: 0 10px 28px rgba(3,7,18,.35);
-      --radius: 16px;
-      --radius-sm: 12px;
-      --maxw: 1200px;
+      --bg:#0b1020; --panel:#111834; --text:#e8edff; --muted:#a7b6e7;
+      --primary:#2563eb; --accent:#22c55e; --line:#1e2a57;
+      --shadow:0 8px 28px rgba(3,7,18,.35); --r:16px; --rs:12px; --max:1200px;
     }
     *{box-sizing:border-box}
-    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font:16px/1.55 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji"}
+    html,body{margin:0;background:var(--bg);color:var(--text);
+      font:16px/1.55 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
     a{color:inherit;text-decoration:none}
     img{max-width:100%;height:auto}
-    .container{max-width:var(--maxw);margin:0 auto;padding:28px}
-    .nav{display:flex;align-items:center;justify-content:space-between;gap:16px}
-    .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.2px}
-    .logo{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--primary),#6aa4ff);box-shadow:var(--shadow)}
-    .nav .cta{display:flex;gap:10px}
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:999px;border:1px solid transparent;cursor:pointer;transition:.15s ease;white-space:nowrap}
-    .btn.primary{background:var(--primary);color:#fff;box-shadow:var(--shadow)}
+    .wrap{max-width:var(--max);margin:0 auto;padding:28px}
+    .row{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .logo{display:flex;align-items:center;gap:10px;font-weight:800}
+    .glyph{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#3b82f6,#60a5fa);box-shadow:var(--shadow)}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:999px;border:1px solid #2a3766;cursor:pointer;transition:.15s}
+    .btn:hover{background:#0e1530}
+    .btn.primary{background:var(--primary);border-color:transparent;color:#fff;box-shadow:var(--shadow)}
     .btn.primary:hover{filter:brightness(1.07)}
-    .btn.ghost{border-color:#2c3659;background:transparent;color:var(--text)}
-    .btn.ghost:hover{background:#111735}
+    .btn.link{padding:0;border:0;color:#9db0ff}
     .hero{padding:56px 28px}
-    .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center}
-    .kicker{color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.18em;font-size:.8rem}
-    h1{font-size:clamp(28px,4vw,44px);line-height:1.15;margin:12px 0 10px}
-    .sub{color:var(--muted);font-size:1.05rem;max-width:54ch}
-    .hero-card{background:var(--panel);border:1px solid #1d2543;border-radius:var(--radius);padding:22px}
-    .hero-list{display:grid;gap:10px;margin-top:12px}
-    .li{display:flex;align-items:flex-start;gap:10px}
-    .li .tick{width:20px;height:20px;border-radius:999px;background:linear-gradient(135deg,var(--accent),#69f0ae);display:inline-grid;place-items:center;color:#04120a;font-weight:800;font-size:.8rem}
-    .strip{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,0));border-top:1px solid #1b2242;border-bottom:1px solid #1b2242}
-    .logos{display:flex;flex-wrap:wrap;gap:18px;align-items:center;opacity:.9}
-    .pill{padding:8px 12px;border:1px solid #26305a;border-radius:999px;color:var(--muted);font-size:.9rem}
+    .heroGrid{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center}
+    .kicker{color:var(--accent);font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:.8rem}
+    h1{font-size:clamp(28px,4vw,44px);line-height:1.15;margin:10px 0 12px}
+    .sub{color:var(--muted);font-size:1.05rem;max-width:60ch}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+    .ticks{display:grid;gap:10px;margin-top:12px}
+    .li{display:flex;gap:10px}
+    .tick{width:20px;height:20px;border-radius:999px;display:inline-grid;place-items:center;background:linear-gradient(135deg,#34d399,#86efac);color:#062312;font-weight:900;font-size:.8rem}
+    .strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.03),transparent)}
+    .pills{display:flex;flex-wrap:wrap;gap:10px;opacity:.95}
+    .pill{padding:7px 11px;border-radius:999px;border:1px solid var(--line);color:#b9c6ff;font-size:.9rem;background:#0d1636}
     .section{padding:40px 28px}
     .grid{display:grid;gap:18px}
-    .grid.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
-    .card{background:var(--panel);border:1px solid #1d2543;border-radius:var(--radius-sm);padding:20px}
-    .card h3{margin:0 0 8px}
+    .cols2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .cols3{grid-template-columns:repeat(3,minmax(0,1fr))}
     .muted{color:var(--muted)}
+    .pricing .plan{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:10px}
+    .pricing h3{margin:0}
     .price{font-size:2rem;font-weight:800}
-    .price s{color:#8090c7;font-weight:500;font-size:1.1rem;margin-left:8px}
-    .faq details{background:var(--panel);border:1px solid #1d2543;border-radius:12px;padding:14px}
-    .faq summary{cursor:pointer;font-weight:600}
-    .footer{padding:28px;color:#9db0f7;border-top:1px solid #1c2445;font-size:.95rem}
-    .tag{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:999px;background:#0c1636;border:1px solid #1e2a57;color:#9fb5ff;font-size:.85rem}
-    .grid.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
-    .announce{display:inline-flex;gap:8px;align-items:center;background:#0d1a3d;border:1px dashed #2a3a73;color:#b8c7ff;border-radius:999px;padding:6px 10px}
-    .cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+    .popular{position:relative;border-color:#2b5cff;box-shadow:0 8px 32px rgba(43,92,255,.25)}
+    .popular::before{content:"Most popular";position:absolute;top:-12px;left:16px;background:#1a2a6b;color:#cfe0ff;padding:4px 10px;border-radius:999px;border:1px solid #27419e;font-size:.78rem}
+    .trial{background:#0d1a3a;border:1px dashed #2a3a73}
+    details{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+    summary{cursor:pointer;font-weight:600}
+    footer{padding:26px;border-top:1px solid var(--line);color:#9fb2ff;font-size:.95rem}
+    .tag{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:999px;background:#0c1636;border:1px solid var(--line);color:#a7b9ff;font-size:.85rem}
+    .ctaRow{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
     .badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
-    .badge{background:#0c1636;border:1px solid #1e2a57;border-radius:8px;padding:8px 10px;color:#a7b9ff;font-size:.85rem}
-    .tip{font-size:.9rem;color:#99a9e8}
-    @media (max-width:960px){.hero-grid{grid-template-columns:1fr}.grid.cols-3{grid-template-columns:1fr}.grid.cols-2{grid-template-columns:1fr}}
-    /* Simple focus ring */
-    .btn:focus-visible, a:focus-visible, summary:focus-visible{outline:3px solid var(--ring);outline-offset:2px;border-radius:10px}
+    .badge{background:#0c1636;border:1px solid var(--line);border-radius:8px;padding:8px 10px;color:#a7b9ff;font-size:.85rem}
+    @media (max-width:980px){.heroGrid{grid-template-columns:1fr}.cols3,.cols2{grid-template-columns:1fr}}
+    /* Focus ring */
+    .btn:focus-visible, a:focus-visible, summary:focus-visible{outline:3px solid rgba(37,99,235,.35);outline-offset:2px;border-radius:10px}
   </style>
 
-  <!-- Basic JSON-LD for organization -->
+  <!-- JSON-LD -->
   <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"Organization",
-    "name":"ProofRepo",
-    "url":"https://proofrepo.com",
-    "email":"ops@proofrepo.com",
-    "logo":"https://proofrepo.com/logo.png",
-    "description":"Done-for-you compliance evidence packs for SOC 2, ISO 27001, HIPAA, and vendor security reviews."
-  }
+  {"@context":"https://schema.org","@type":"Organization","name":"ProofRepo","url":"https://proofrepo.com","email":"ops@proofrepo.com","description":"Done-for-you compliance evidence packs for SOC 2, ISO 27001, HIPAA, and vendor security reviews."}
   </script>
 </head>
 <body>
   <!-- NAV -->
-  <header class="container nav">
-    <div class="brand">
-      <div class="logo" aria-hidden="true"></div>
-      <span>ProofRepo</span>
-    </div>
-    <div class="cta">
-      <a class="btn ghost" href="#pricing" aria-label="See pricing">Pricing</a>
-      <a class="btn primary" href="mailto:ops@proofrepo.com?subject=Request%20Proof%20Pack&body=Hi%20ProofRepo%20team%2C%20we’d%20like%20a%20Proof%20Pack%20for%20our%20upcoming%20SOC%202%2FRFP.%20Please%20reply%20with%20next%20steps." aria-label="Request Proof Pack">Get a Proof Pack</a>
-    </div>
+  <header class="wrap row" role="banner">
+    <div class="logo"><div class="glyph" aria-hidden="true"></div><span>ProofRepo</span></div>
+    <nav class="row" aria-label="primary">
+      <a class="btn" href="#pricing">Pricing</a>
+      <a class="btn primary" href="mailto:ops@proofrepo.com?subject=Request%20Proof%20Pack&body=Hi%20ProofRepo%20team%2C%20we’d%20like%20a%20Proof%20Pack.%20Please%20reply%20with%20next%20steps.">Get a Proof Pack</a>
+    </nav>
   </header>
 
   <!-- HERO -->
-  <section class="container hero">
-    <div class="hero-grid">
+  <section class="wrap hero">
+    <div class="heroGrid">
       <div>
-        <span class="kicker">Done-for-you evidence</span>
+        <div class="kicker">Done-for-you evidence</div>
         <h1>Compliance proof in <span style="color:var(--accent)">24–72 hours</span> — not weeks</h1>
-        <p class="sub">Skip screenshot chaos, ad-hoc emails, and stale docs. We assemble a clean, review-ready <strong>Proof Pack</strong> for SOC&nbsp;2, ISO&nbsp;27001, HIPAA, and customer/vendor security reviews so you can move deals faster.</p>
+        <p class="sub">Skip screenshot chaos and stale docs. We assemble a clean, review-ready <strong>Proof Pack</strong> for SOC&nbsp;2, ISO&nbsp;27001, HIPAA, and customer/vendor security reviews so you can move deals faster.</p>
 
-        <div class="cta-row">
-          <a class="btn primary" href="mailto:ops@proofrepo.com?subject=Start%20Proof%20Pack" aria-label="Start Proof Pack">Start now</a>
-          <a class="btn ghost" href="#how" aria-label="How it works">How it works</a>
+        <div class="ctaRow">
+          <a class="btn primary" href="mailto:ops@proofrepo.com?subject=Start%20Proof%20Pack">Start now</a>
+          <a class="btn" href="#how">How it works</a>
         </div>
 
         <div class="badges">
           <span class="badge">⏱ 24–72h turnaround</span>
           <span class="badge">🧰 SOC 2 / ISO 27001 / HIPAA</span>
-          <span class="badge">🔐 DKIM + SPF + DMARC aligned</span>
+          <span class="badge">🔐 Redaction & watermarking</span>
         </div>
       </div>
 
-      <div class="hero-card">
-        <div class="announce">✨ New: “Proof Suite” add-ons for pentests, backups, and access reviews</div>
-        <div class="hero-list">
-          <div class="li"><span class="tick">✓</span><div>Centralized <strong>artifact index</strong> mapped to common frameworks</div></div>
-          <div class="li"><span class="tick">✓</span><div>Redaction & watermarking to share safely with prospects</div></div>
-          <div class="li"><span class="tick">✓</span><div>Optional monthly refresh so your pack is never stale</div></div>
+      <aside class="card" aria-label="Highlights">
+        <div class="ticks">
+          <div class="li"><span class="tick">✓</span><div>Centralized <strong>artifact index</strong> mapped to common controls</div></div>
+          <div class="li"><span class="tick">✓</span><div>Safe sharing with redactions & watermarks</div></div>
+          <div class="li"><span class="tick">✓</span><div>Optional monthly/quarterly refresh so evidence never goes stale</div></div>
         </div>
-        <p class="tip">Want a one-pager sample? <a href="mailto:ops@proofrepo.com?subject=Sample%20Proof%20Pack">Email us</a> and we’ll reply with a sanitized example.</p>
-      </div>
+        <p class="muted" style="margin-top:12px">Want a sanitized sample? <a class="btn link" href="mailto:ops@proofrepo.com?subject=Sample%20Proof%20Pack">Email us</a> and we’ll reply with a one-pager.</p>
+      </aside>
     </div>
   </section>
 
-  <!-- STRIP / TRUST CUES -->
+  <!-- STRIP -->
   <div class="strip">
-    <div class="container logos">
+    <div class="wrap pills">
       <span class="pill">Vendor Security Reviews</span>
       <span class="pill">RFP Support</span>
       <span class="pill">Board & Investor Requests</span>
@@ -152,122 +129,98 @@
   </div>
 
   <!-- HOW IT WORKS -->
-  <section id="how" class="container section">
+  <section id="how" class="wrap section">
     <h2>How ProofRepo works</h2>
-    <div class="grid cols-3">
-      <div class="card">
-        <h3>1) Quick intake</h3>
-        <p class="muted">Send us current policies, screenshots, and system exports—only what you’re comfortable sharing. We give you a redaction checklist.</p>
-      </div>
-      <div class="card">
-        <h3>2) We assemble</h3>
-        <p class="muted">We normalize filenames, map artifacts to SOC&nbsp;2/ISO controls, and package everything into a clean <em>Proof Pack</em> with an index.</p>
-      </div>
-      <div class="card">
-        <h3>3) Deliver & refresh</h3>
-        <p class="muted">Receive your pack in 24–72h. Optionally subscribe to monthly refresh so your evidence never goes stale.</p>
-      </div>
+    <div class="grid cols3">
+      <div class="card"><h3>1) Quick intake</h3><p class="muted">Send only what you’re comfortable sharing (we provide a redaction checklist). We keep it least-privilege.</p></div>
+      <div class="card"><h3>2) We assemble</h3><p class="muted">We normalize filenames, map artifacts to SOC&nbsp;2/ISO controls, and package everything into a tidy <em>Proof Pack</em> with an index.</p></div>
+      <div class="card"><h3>3) Deliver & refresh</h3><p class="muted">Receive your pack in 24–72h. Subscribe for monthly or quarterly refresh so you’re always audit-ready.</p></div>
     </div>
   </section>
 
-  <!-- VALUE / PROBLEMS SOLVED -->
-  <section class="container section">
-    <div class="grid cols-3">
-      <div class="card">
-        <h3>Close deals faster</h3>
-        <p class="muted">Avoid multi-week back-and-forth with prospects. Send one tidy pack that answers 90% of security questions.</p>
-      </div>
-      <div class="card">
-        <h3>Reduce audit hours</h3>
-        <p class="muted">Arrive organized for auditors: indexed artifacts, dates, and scope notes save frustration and billable time.</p>
-      </div>
-      <div class="card">
-        <h3>Protect sensitive info</h3>
-        <p class="muted">Redaction + watermarks. Optional link-based sharing with expirations (coming soon).</p>
-      </div>
+  <!-- PRICING (optimized for clarity & trust) -->
+  <section id="pricing" class="wrap section pricing" aria-labelledby="pricing-h">
+    <h2 id="pricing-h">Simple, transparent pricing</h2>
+
+    <!-- Small trial card -->
+    <div class="card trial" style="margin-bottom:18px">
+      <strong>$1 Starter Pack (first-time only):</strong>
+      <span class="muted">try a lean pack before you commit. Includes artifact index + up to 20 items. </span>
+      <a class="btn primary" style="margin-left:10px" href="mailto:ops@proofrepo.com?subject=$1%20Starter%20Pack&body=We%E2%80%99d%20like%20the%20$1%20Starter%20Pack.">Start for $1</a>
     </div>
-  </section>
 
-  <!-- PRICING -->
-  <section id="pricing" class="container section">
-    <h2>Simple pricing</h2>
-    <div class="grid cols-3">
-      <div class="card">
-        <h3>Starter Pack</h3>
-        <div class="price">$149</div>
-        <p class="muted">One-time deliverable. Great for immediate RFPs or vendor reviews.</p>
-        <ul class="muted">
-          <li>Evidence index + folder structure</li>
-          <li>Up to 60 artifacts</li>
-          <li>Basic redaction pass</li>
-        </ul>
-        <a class="btn primary" href="mailto:ops@proofrepo.com?subject=Starter%20Pack">Order Starter</a>
-      </div>
-
-      <div class="card" style="border-color:#2b5cff;box-shadow:0 10px 30px rgba(43,92,255,.25)">
+    <div class="grid cols3" role="list">
+      <article class="plan" role="listitem" aria-label="Monthly Refresh">
         <h3>Monthly Refresh</h3>
-        <div class="price">$99<span style="font-size:1rem;font-weight:600">/mo</span></div>
-        <p class="muted">Keep your pack fresh for audits & fast-moving sales cycles.</p>
+        <div class="price">$119<span style="font-size:1rem;font-weight:600">/mo</span></div>
+        <p class="muted">Cancel anytime — best for active sales teams.</p>
         <ul class="muted">
           <li>Monthly artifact updates</li>
-          <li>New evidence mapped to controls</li>
+          <li>Control mapping & index</li>
           <li>Priority turnaround</li>
         </ul>
-        <a class="btn primary" href="mailto:ops@proofrepo.com?subject=Monthly%20Refresh">Start Refresh</a>
-      </div>
+        <a class="btn primary" href="mailto:ops@proofrepo.com?subject=Monthly%20Refresh">Choose Monthly</a>
+      </article>
 
-      <div class="card">
-        <h3>Proof Suite</h3>
-        <div class="price">$249<span style="font-size:1rem;font-weight:600">/mo</span> <s>$299</s></div>
-        <p class="muted">Add repeatable ops: access reviews, backup proof, vuln/pentest tracking.</p>
+      <article class="plan popular" role="listitem" aria-label="Quarterly Refresh (Most Popular)">
+        <h3>Quarterly Refresh</h3>
+        <div class="price">$299<span style="font-size:1rem;font-weight:600">/qtr</span></div>
+        <p class="muted">Best balance of price & flexibility (≈$99/mo).</p>
         <ul class="muted">
-          <li>Quarterly access review kit</li>
-          <li>Backup & recovery evidence</li>
-          <li>Pentest & remediation summary</li>
+          <li>Quarterly updates (all features in Monthly)</li>
+          <li>Priority turnaround</li>
+          <li>Vendor-package docs on request</li>
         </ul>
-        <a class="btn primary" href="mailto:ops@proofrepo.com?subject=Proof%20Suite">Get Suite</a>
-      </div>
+        <a class="btn primary" href="mailto:ops@proofrepo.com?subject=Quarterly%20Refresh">Choose Quarterly</a>
+      </article>
+
+      <article class="plan" role="listitem" aria-label="Annual Refresh">
+        <h3>Annual Refresh</h3>
+        <div class="price">$999<span style="font-size:1rem;font-weight:600">/yr</span></div>
+        <p class="muted">Best value (≈$83/mo). Set-and-forget audit readiness.</p>
+        <ul class="muted">
+          <li>All Monthly features</li>
+          <li>Annual audit prep extras</li>
+          <li>Dedicated support window</li>
+        </ul>
+        <a class="btn primary" href="mailto:ops@proofrepo.com?subject=Annual%20Refresh">Choose Annual</a>
+      </article>
     </div>
-    <p class="tip">Procurement hoops? We can vendor-package (W-9, insurance, security overview) on request.</p>
+
+    <p class="muted" style="margin-top:10px">
+      Add-ons: <strong>Proof Suite</strong> (+$50–100/mo) for access reviews, backups evidence, and pentest/remediation summaries.
+    </p>
   </section>
 
   <!-- FAQ -->
-  <section class="container section faq">
+  <section class="wrap section">
     <h2>FAQ</h2>
-    <div class="grid cols-2">
+    <div class="grid cols2">
       <details open>
-        <summary>Is this acceptable for auditors and customer security reviews?</summary>
-        <p class="muted">Yes—the pack follows common evidence conventions (timestamps, scope notes, policy versions). For formal audits, we align with SOC&nbsp;2 and ISO&nbsp;27001 evidence categories.</p>
+        <summary>Is a Proof Pack acceptable for auditors and customer reviews?</summary>
+        <p class="muted">Yes. Packs follow common evidence conventions (timestamps, scope notes, policy versions) and align to SOC&nbsp;2 / ISO&nbsp;27001 categories.</p>
       </details>
       <details>
         <summary>How do you keep things secure?</summary>
-        <p class="muted">We begin with least-privilege and accept only what you choose to share. We recommend sending redacted exports and we watermark outbound artifacts that you approve for sharing.</p>
+        <p class="muted">Least-privilege intake, redaction guidance, watermarking of outbound artifacts you approve for sharing.</p>
       </details>
       <details>
         <summary>What if we cancel?</summary>
-        <p class="muted">You can cancel any time. Packs already delivered remain yours; ongoing refresh ends at the current billing period.</p>
+        <p class="muted">Cancel anytime on Monthly. Quarterly/Annual renew at term; delivered packs remain yours.</p>
       </details>
       <details>
-        <summary>Do you support frameworks beyond SOC 2 / ISO?</summary>
-        <p class="muted">Yes—HIPAA, NIST CSF, and custom vendor questionnaires. Tell us what you need during intake.</p>
+        <summary>What frameworks do you support?</summary>
+        <p class="muted">SOC&nbsp;2, ISO&nbsp;27001, HIPAA, NIST CSF, plus custom vendor questionnaires.</p>
       </details>
     </div>
   </section>
 
   <!-- FOOTER -->
-  <footer class="footer container">
-    <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap">
-      <div>© <span id="y"></span> ProofRepo • ops@proofrepo.com</div>
-      <div class="tag">Status: <span style="color:var(--accent);font-weight:700">&nbsp;Accepting new clients</span></div>
-    </div>
+  <footer class="wrap row">
+    <div>© <span id="y"></span> ProofRepo • ops@proofrepo.com</div>
+    <div class="tag">Status: <span style="color:var(--accent);font-weight:700">&nbsp;Accepting new clients</span></div>
   </footer>
 
   <script>document.getElementById('y').textContent=new Date().getFullYear();</script>
-
-  <!-- Optional: Cloudflare Web Analytics (free & privacy-focused)
-       Replace token below after enabling in Cloudflare Analytics -->
-  <!--
-  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token":"YOUR_TOKEN_HERE"}'></script>
-  -->
 </body>
 </html>
