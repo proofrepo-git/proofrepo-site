@@ -21,18 +21,24 @@
       --panel:#10183a; --panel2:#0e1532; --text:#e8edff; --muted:#a7b6e7; --line:#1d2857;
       --primary:#2563eb; --primary2:#3b82f6; --accent:#22c55e; --ring:rgba(37,99,235,.35);
       --r:16px; --rs:12px; --shadow:0 14px 40px rgba(3,7,18,.35); --max:1200px;
+      --marqueeH: 54px;
     }
     *{box-sizing:border-box}
-    html,body{margin:0;background:linear-gradient(180deg,var(--gradA),var(--gradB));color:var(--text);
-      font:16px/1.55 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+    html,body{
+      margin:0;
+      background:linear-gradient(180deg,var(--gradA),var(--gradB));
+      color:var(--text);
+      font:16px/1.55 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial
+    }
+    body{padding-bottom:calc(var(--marqueeH) + env(safe-area-inset-bottom, 0px))}
     a{color:inherit;text-decoration:none}
+    img{max-width:100%;height:auto}
     .wrap{max-width:var(--max);margin:0 auto;padding:28px}
     .row{display:flex;align-items:center;justify-content:space-between;gap:16px}
-    img{max-width:100%;height:auto}
 
     /* NAV */
     .logo{display:flex;align-items:center;gap:10px;font-weight:800}
-    .glyph{width:34px;height:34px;border-radius:10px;background:conic-gradient(from 210deg,var(--primary),var(--primary2));box-shadow:var(--shadow);transform:translateZ(0)}
+    .glyph{width:34px;height:34px;border-radius:10px;background:conic-gradient(from 210deg,var(--primary),var(--primary2));box-shadow:var(--shadow)}
     .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:999px;border:1px solid #2a3766;cursor:pointer;transition:transform .12s ease, background .12s ease, filter .12s ease}
     .btn:hover{background:#111b3e; transform:translateY(-1px)}
     .btn.primary{background:linear-gradient(135deg,var(--primary),var(--primary2));border-color:transparent;color:#fff;box-shadow:var(--shadow)}
@@ -46,18 +52,32 @@
     .kicker{color:var(--accent);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.8rem}
     h1{font-size:clamp(28px,4vw,46px);line-height:1.15;margin:10px 0 12px}
     .sub{color:var(--muted);font-size:1.05rem;max-width:60ch}
-    .card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--r);padding:22px;
-      transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease}
+    .card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--r);padding:22px;transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease}
     .card:hover{transform:translateY(-2px); box-shadow:0 18px 45px rgba(20,40,120,.35); border-color:#2b3e7a}
     .ticks{display:grid;gap:10px;margin-top:12px}
     .li{display:flex;gap:10px}
     .tick{width:20px;height:20px;border-radius:999px;display:inline-grid;place-items:center;background:linear-gradient(135deg,#34d399,#86efac);color:#062312;font-weight:900;font-size:.8rem}
 
-    /* MARQUEE (subtle movement) */
-    .marquee-wrap{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0))}
-    .marquee{display:flex;gap:30px;white-space:nowrap;animation:scroll 24s linear infinite;padding:10px 0}
-    .marquee span{opacity:.9;color:#b9c6ff}
+    /* STICKY BOTTOM MARQUEE */
+    .marquee-fixed{
+      position:fixed; left:0; right:0; bottom:0;
+      height:var(--marqueeH);
+      display:flex; align-items:center;
+      border-top:1px solid var(--line);
+      background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0));
+      backdrop-filter:saturate(120%) blur(6px);
+      z-index:9999;
+      padding-bottom:env(safe-area-inset-bottom, 0px);
+      transition:transform .18s ease, opacity .18s ease;
+      will-change: transform, opacity;
+    }
+    .marquee-fixed.hidden{transform:translateY(100%); opacity:0}
+    .marquee{display:flex; gap:30px; white-space:nowrap; animation:scroll 24s linear infinite;
+      width:max-content; padding-left:28px; padding-right:28px; opacity:.95; color:#b9c6ff;}
+    .marquee.paused{animation-play-state:paused}
+    .marquee span{padding-right:30px}
     @keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    @media (prefers-reduced-motion: reduce){ .marquee{animation:none} }
 
     /* SECTIONS / GRID */
     .section{padding:40px 28px}
@@ -65,30 +85,32 @@
     .cols2{grid-template-columns:repeat(2,minmax(0,1fr))}
     .cols3{grid-template-columns:repeat(3,minmax(0,1fr))}
     .muted{color:var(--muted)}
+    .small{font-size:.9rem;color:var(--muted)}
 
     /* PRICING */
-    .pricing .plan{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);
-      border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:10px; position:relative}
+    .pricing .plan{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:10px; position:relative}
     .pricing h3{margin:0}
     .price{font-size:2rem;font-weight:800}
     .popular{border-color:#2b5cff;box-shadow:0 12px 36px rgba(43,92,255,.25)}
-    .popular::before{content:"Most popular";position:absolute;top:-12px;left:16px;background:#1a2a6b;color:#cfe0ff;
-      padding:4px 10px;border-radius:999px;border:1px solid #27419e;font-size:.78rem}
+    .popular::before{content:"Most popular";position:absolute;top:-12px;left:16px;background:#1a2a6b;color:#cfe0ff;padding:4px 10px;border-radius:999px;border:1px solid #27419e;font-size:.78rem}
 
     /* FORM */
     form{display:grid;gap:14px}
     label{font-weight:600}
-    input, select, textarea{
-      width:100%; padding:12px 12px; border-radius:10px; border:1px solid #2a3766; background:#0e1634; color:var(--text)
-    }
+    input, select, textarea{width:100%; padding:12px 12px; border-radius:10px; border:1px solid #2a3766; background:#0e1634; color:var(--text)}
     textarea{min-height:110px;resize:vertical}
     .form-row{display:grid;gap:12px}
     .two{grid-template-columns:1fr 1fr}
     .three{grid-template-columns:1fr 1fr 1fr}
 
-    /* FAQ */
-    details{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:12px;padding:14px}
-    summary{cursor:pointer;font-weight:600}
+    /* WIZARD */
+    .wizard{max-width:880px;margin:0 auto}
+    .steps{display:flex;gap:8px;margin-bottom:14px}
+    .step{height:6px;background:#21306a;border-radius:999px;flex:1;opacity:.6}
+    .step.active{background:linear-gradient(90deg,var(--primary),var(--primary2));opacity:1}
+    .wiz-card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:14px;padding:18px}
+    .wiz-actions{display:flex;justify-content:space-between;gap:10px;margin-top:14px}
+    .hide{display:none}
 
     /* FOOTER */
     footer{padding:26px;border-top:1px solid var(--line);color:#9fb2ff;font-size:.95rem}
@@ -111,7 +133,6 @@
     <nav class="row" aria-label="primary">
       <a class="btn" href="#pricing">Pricing</a>
       <a class="btn" href="#how">How it works</a>
-      <a class="btn" href="#demos">Demos & Looms</a>
       <a class="btn" href="#request">Get a Proof Pack</a>
     </nav>
   </header>
@@ -127,8 +148,8 @@
           <br><br><strong>Lean alternative to bundled platforms:</strong> buy only the deliverable you need — a polished Proof Pack — without a $10k–$20k/yr compliance suite.
         </p>
         <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px">
-          <a class="btn primary" href="#pricing">See plans</a>
-          <a class="btn" href="#request">Request now</a>
+          <a class="btn primary" href="#pricing" data-analytics="cta_pricing">See plans</a>
+          <a class="btn" href="#request" data-analytics="cta_request">Request now</a>
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
           <span class="pill">24–72h turnaround</span>
@@ -144,24 +165,10 @@
           <div class="li"><span class="tick">✓</span><div><strong>Privacy-first:</strong> share only artifacts you approve (manual upload by default)</div></div>
           <div class="li"><span class="tick">✓</span><div><strong>Refresh reminders</strong> on your cadence (monthly / quarterly / annual)</div></div>
         </div>
-        <p class="muted" style="margin-top:12px">Sample pack coming soon. For now, email <a class="btn link" href="mailto:ops@proofrepo.com?subject=Sample%20Proof%20Pack">ops@proofrepo.com</a>.</p>
+        <p class="muted" style="margin-top:12px">Sample pack coming soon. For now, email <a class="btn link" href="mailto:ops@proofrepo.com?subject=Sample%20Proof%20Pack" data-analytics="cta_mail_sample">ops@proofrepo.com</a>.</p>
       </aside>
     </div>
   </section>
-
-  <!-- MARQUEE -->
-  <div class="marquee-wrap">
-    <div class="marquee" aria-hidden="true">
-      <span>Auditor-ready outputs: PDF + CSV (base)</span>
-      <span>Advanced Exports: XLSX, custom CSV, full ZIP (Annual included)</span>
-      <span>Privacy-first intake • Least-privilege by default</span>
-      <span>Quarterly refresh shortens sales stalls</span>
-      <span>Jacksonville, Florida • Feedback welcome</span>
-      <span>Auditor-ready outputs: PDF + CSV (base)</span>
-      <span>Advanced Exports: XLSX, custom CSV, full ZIP (Annual included)</span>
-      <span>Privacy-first intake • Least-privilege by default</span>
-    </div>
-  </div>
 
   <!-- PRICING -->
   <section id="pricing" class="wrap section pricing" aria-labelledby="pricing-h">
@@ -170,9 +177,8 @@
     <div class="card" style="margin-bottom:18px;border-style:dashed">
       <strong>$1 Starter Pack (first-time only):</strong>
       <span class="muted">try a small sample; we organize & index what you already share for audits.</span>
-      <!-- STRIPE LINK placeholder -->
-      <a class="btn primary" style="margin-left:10px" href="#stripe-trial">Start for $1</a>
-      <a class="btn" style="margin-left:6px" href="#request">Or request via form</a>
+      <a class="btn primary" style="margin-left:10px" href="#stripe-trial" data-analytics="cta_trial">Start for $1</a>
+      <a class="btn" style="margin-left:6px" href="#request" data-analytics="cta_request2">Or request via form</a>
     </div>
 
     <div class="grid cols3" role="list">
@@ -187,7 +193,7 @@
           <li>Outputs: <strong>PDF + CSV</strong></li>
           <li><em>Advanced Exports add-on available</em></li>
         </ul>
-        <a class="btn primary" href="#stripe-monthly">Choose Monthly</a>
+        <a class="btn primary" href="#stripe-monthly" data-analytics="cta_monthly">Choose Monthly</a>
       </article>
 
       <article class="plan popular" role="listitem" aria-label="Quarterly Refresh (Most Popular)">
@@ -200,7 +206,7 @@
           <li><strong>Advanced Exports included</strong></li>
           <li>Outputs: PDF + CSV + <strong>Advanced</strong></li>
         </ul>
-        <a class="btn primary" href="#stripe-quarterly">Choose Quarterly</a>
+        <a class="btn primary" href="#stripe-quarterly" data-analytics="cta_quarterly">Choose Quarterly</a>
       </article>
 
       <article class="plan" role="listitem" aria-label="Annual Refresh">
@@ -213,7 +219,7 @@
           <li><strong>Advanced Exports included</strong></li>
           <li>Outputs: PDF + CSV + <strong>Advanced</strong></li>
         </ul>
-        <a class="btn primary" href="#stripe-annual">Choose Annual</a>
+        <a class="btn primary" href="#stripe-annual" data-analytics="cta_annual">Choose Annual</a>
       </article>
     </div>
 
@@ -232,210 +238,271 @@
       </div>
       <div class="card">
         <h3>2) Submit artifacts</h3>
-        <p class="muted"><strong>Manual upload (default):</strong> share the same evidence you already prepare for audits (settings screenshots/exports, logs, policy excerpts). We organize and label it for you.</p>
+        <p class="muted">
+          <strong>Manual upload (default):</strong> share the same evidence you already prepare for audits (settings screenshots/exports, logs, policy excerpts). We organize and label it for you.
+          <br><br><em>Options:</em> Local Collector (premium) for a time-saving local bundle, or a read-only GitHub App (later). You always approve what’s shared.
+        </p>
       </div>
       <div class="card">
         <h3>3) Delivery & refresh</h3>
-        <p class="muted">Receive your Proof Pack in 24–72h. We’ll send <strong>refresh reminders</strong> on your cadence (monthly / quarterly / annual).</p>
-      </div>
-    </div>
-
-    <div class="grid cols3" style="margin-top:18px">
-      <div class="card">
-        <h3>Local Collector (premium)</h3>
-        <p class="muted">Optional time-saver: run a small tool locally to gather repo metadata & logs; <em>you</em> review & approve what to share. Nothing leaves your machine until you submit.</p>
-      </div>
-      <div class="card">
-        <h3>GitHub App (read-only, later)</h3>
-        <p class="muted">Grant minimal scopes so we can auto-pull branch protections & CI status. You still review before sharing.</p>
-      </div>
-      <div class="card">
-        <h3>Privacy by design</h3>
-        <p class="muted">Least-privilege intake, redaction guidance, and watermarks on artifacts approved for external sharing. No raw data required.</p>
+        <p class="muted">
+          Receive your Proof Pack in 24–72h. We’ll send <strong>refresh reminders</strong> on your cadence (monthly / quarterly / annual).
+        </p>
       </div>
     </div>
   </section>
 
-  <!-- WHY STAY FRESH -->
-  <section class="wrap section">
-    <h2>Why keeping evidence fresh actually pays</h2>
-    <div class="grid cols3">
-      <div class="card"><h3>Win more deals</h3><p class="muted">Buyers ask for current proof in vendor reviews. Fresh packs reduce stalls in your sales cycle.</p></div>
-      <div class="card"><h3>Save internal time</h3><p class="muted">Turn repetitive scrambling into a quick monthly or quarterly review step.</p></div>
-      <div class="card"><h3>Avoid costly mistakes</h3><p class="muted">Out-of-date controls increase audit risk. Regular refresh surfaces gaps early.</p></div>
-    </div>
-    <p class="muted" style="margin-top:10px">Sources available on request. We paraphrase published industry research to keep the page clean and readable.</p>
-  </section>
+  <!-- POSITIONING -->
+  <section class="wrap section" id="why-proofrepo">
+    <h2>Why teams choose ProofRepo over bundled suites</h2>
 
-  <!-- DEMOS & LOOMS (placeholder) -->
-  <section id="demos" class="wrap section">
-    <h2>Demos & Looms</h2>
-    <div class="card">
-      <p class="muted">Short walkthrough videos coming soon. Want a preview? Email <a class="btn link" href="mailto:ops@proofrepo.com?subject=Loom%20demo%20request">ops@proofrepo.com</a>.</p>
-    </div>
-  </section>
-
-  <!-- REQUEST / QUESTIONNAIRE -->
-  <section id="request" class="wrap section">
-    <h2>Request a Proof Pack</h2>
-    <p class="muted">Prefer to start without Stripe tonight? Fill this out and we’ll reply via email. You’ll also get a local JSON copy of your request.</p>
-    <form id="reqForm">
-      <div class="form-row two">
-        <div>
-          <label for="name">Your name</label>
-          <input id="name" name="name" autocomplete="name" required />
-        </div>
-        <div>
-          <label for="email">Work email</label>
-          <input id="email" name="email" type="email" autocomplete="email" required />
-        </div>
-      </div>
-
-      <div class="form-row two">
-        <div>
-          <label for="company">Company</label>
-          <input id="company" name="company" autocomplete="organization" required />
-        </div>
-        <div>
-          <label for="plan">Plan</label>
-          <select id="plan" name="plan" required>
-            <option value="Trial $1">Trial $1 (sample)</option>
-            <option value="Monthly $119">Monthly $119</option>
-            <option value="Quarterly $299">Quarterly $299 (Advanced Exports included)</option>
-            <option value="Annual $999">Annual $999 (Advanced Exports included)</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-row three">
-        <div>
-          <label for="frameworks">Frameworks</label>
-          <select id="frameworks" name="frameworks" multiple>
-            <option>SOC 2</option><option>ISO 27001</option><option>HIPAA</option><option>NIST CSF</option><option>Other</option>
-          </select>
-          <small class="muted">Hold Ctrl/Cmd to multi-select</small>
-        </div>
-        <div>
-          <label for="repos">Approx. repos</label>
-          <select id="repos" name="repos">
-            <option>1</option><option>2-4</option><option>5-8</option><option>9+</option>
-          </select>
-        </div>
-        <div>
-          <label for="submission">Submission preference</label>
-          <select id="submission" name="submission">
-            <option>Manual upload (default)</option>
-            <option>Local Collector (premium)</option>
-            <option>GitHub App (read-only, later)</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-row two">
-        <div>
-          <label for="cadence">Refresh cadence</label>
-          <select id="cadence" name="cadence" required>
-            <option>Monthly</option><option>Quarterly</option><option>Annual</option>
-          </select>
-        </div>
-        <div>
-          <label for="nextAudit">Next audit / review date</label>
-          <input id="nextAudit" name="nextAudit" type="date" />
-        </div>
-      </div>
-
-      <div class="form-row two">
-        <div>
-          <label for="timezone">Your timezone</label>
-          <input id="timezone" name="timezone" placeholder="e.g., America/New_York" />
-        </div>
-        <div>
-          <label for="reminder">Preferred reminder day/time</label>
-          <input id="reminder" name="reminder" placeholder="e.g., 1st Monday 9am" />
-        </div>
-      </div>
-
-      <div class="form-row two">
-        <div>
-          <label for="advExports">Advanced Exports?</label>
-          <select id="advExports" name="advExports">
-            <option>No (PDF + CSV is fine)</option>
-            <option>Yes — XLSX workbook</option>
-            <option>Yes — custom CSV schema</option>
-            <option>Yes — full ZIP of originals</option>
-            <option>Yes — all of the above</option>
-          </select>
-          <small class="muted">Included on Quarterly & Annual. Add-on for others.</small>
-        </div>
-        <div>
-          <label for="notes">Anything else?</label>
-          <textarea id="notes" name="notes" placeholder="Questionnaire needs, vendor pack, specific controls, output details, etc."></textarea>
-        </div>
-      </div>
-
-      <div class="form-row two">
-        <button class="btn primary" type="submit">Send request</button>
-        <a class="btn" href="#pricing">See plans again</a>
-      </div>
-      <p id="thanks" class="muted" style="display:none;margin-top:8px">Opening your email client… we also saved a JSON copy of your request locally.</p>
-    </form>
-  </section>
-
-  <!-- LIGHT COMPARISON -->
-  <section class="wrap section">
-    <h2>Why ProofRepo vs. bundled platforms?</h2>
     <div class="grid cols2">
       <div class="card">
         <h3>ProofRepo</h3>
         <ul class="muted">
-          <li>Buy just what you need: the Proof Pack</li>
-          <li>No lock-in contracts</li>
-          <li>Delivered in 24–72h</li>
-          <li>$1 Starter available</li>
+          <li>Buy only the deliverable you need: a polished <strong>Proof Pack</strong></li>
+          <li>No long contracts, no lock-in</li>
+          <li><strong>24–72h</strong> turnaround (trial available)</li>
+          <li>Transparent pricing:
+            <div class="small">Monthly $119 • Quarterly $299 • Annual $999</div>
+          </li>
         </ul>
       </div>
+
       <div class="card">
         <h3>Bundled Suites</h3>
         <ul class="muted">
-          <li>$10k–$20k/yr subscriptions</li>
-          <li>Features you may not need yet</li>
-          <li>Longer onboarding</li>
+          <li>Complicated packages; pay for features you don’t need</li>
+          <li>12–36 month terms with price escalators</li>
+          <li>Longer onboarding → slower RFP responses</li>
+          <li>Typical spend: <strong>$10k–$20k/yr</strong></li>
         </ul>
       </div>
+    </div>
+
+    <div class="grid cols3" style="margin-top:18px">
+      <div class="card"><h3>Win more deals, respond faster</h3><p class="muted">Security questionnaires are now standard in procurement; faster, organized responses reduce friction in sales cycles.<sup>1</sup></p></div>
+      <div class="card"><h3>Save team time</h3><p class="muted">Automation & reminders cut manual prep time and reduce human error in evidence handling.<sup>2</sup></p></div>
+      <div class="card"><h3>Avoid costly misses</h3><p class="muted">Across industries, non-compliance costs more than maintaining compliance — lost deals, remediation, fines.<sup>3</sup></p></div>
+    </div>
+
+    <div class="card" style="margin-top:18px">
+      <h3>Managed Refresh = fewer misses</h3>
+      <p class="muted">Well-timed reminders measurably improve adherence; we apply the same principle to compliance refreshes (artifact updates, screenshots, exports).<sup>4</sup></p>
+      <p class="small">Set a cadence (monthly / quarterly / annual). We nudge, you approve, we deliver.</p>
+    </div>
+
+    <details style="margin-top:10px">
+      <summary>Sources & notes</summary>
+      <ol class="small">
+        <li><a href="https://www.upguard.com/blog/completing-vendor-questionnaires-faster" target="_blank" rel="noopener">UpGuard</a>; <a href="https://www.getvera.ai/blog/vendor-security-questionnaire" target="_blank" rel="noopener">Vera</a>.</li>
+        <li><a href="https://www.trustcloud.ai/security-questionnaires/automating-evidence-collection-for-regulatory-compliance-tools-best-practices/" target="_blank" rel="noopener">TrustCloud</a>.</li>
+        <li><a href="https://hyperproof.io/resource/50-compliance-statistics-to-inform-your-2020-strategy/" target="_blank" rel="noopener">Hyperproof</a>; <a href="https://www.colligo.com/cost-of-non-compliance/" target="_blank" rel="noopener">Colligo</a>.</li>
+        <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3287416/" target="_blank" rel="noopener">PMC meta-analysis</a>; <a href="https://jamanetwork.com/journals/jama/fullarticle/2827429" target="_blank" rel="noopener">JAMA trial</a>.</li>
+      </ol>
+    </details>
+  </section>
+
+  <!-- REQUEST / QUESTIONNAIRE (MULTI-STEP) -->
+  <section id="request" class="wrap section">
+    <h2>Request a Proof Pack</h2>
+    <p class="muted">Prefer to start without Stripe tonight? The form below emails us your details and saves a local JSON copy for your records.</p>
+
+    <div class="wizard">
+      <div class="steps" aria-hidden="true">
+        <div class="step active" id="st1"></div>
+        <div class="step" id="st2"></div>
+        <div class="step" id="st3"></div>
+      </div>
+
+      <form id="reqForm" class="wiz-card" novalidate>
+        <!-- STEP 1 -->
+        <div class="wiz-step" data-step="1">
+          <div class="form-row two">
+            <div>
+              <label for="name">Your name</label>
+              <input id="name" name="name" autocomplete="name" required />
+            </div>
+            <div>
+              <label for="email">Work email</label>
+              <input id="email" name="email" type="email" autocomplete="email" required />
+            </div>
+          </div>
+          <div class="form-row two">
+            <div>
+              <label for="company">Company</label>
+              <input id="company" name="company" autocomplete="organization" required />
+            </div>
+            <div>
+              <label for="plan">Plan</label>
+              <select id="plan" name="plan" required>
+                <option value="Trial $1">Trial $1 (sample)</option>
+                <option value="Monthly $119">Monthly $119</option>
+                <option value="Quarterly $299">Quarterly $299 (Advanced Exports included)</option>
+                <option value="Annual $999">Annual $999 (Advanced Exports included)</option>
+              </select>
+            </div>
+          </div>
+          <div class="wiz-actions">
+            <span class="small">Step 1 of 3</span>
+            <button class="btn primary" type="button" data-next data-analytics="wiz_next_1">Next</button>
+          </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="wiz-step hide" data-step="2">
+          <div class="form-row three">
+            <div>
+              <label for="frameworks">Frameworks</label>
+              <select id="frameworks" name="frameworks" multiple>
+                <option>SOC 2</option><option>ISO 27001</option><option>HIPAA</option><option>NIST CSF</option><option>Other</option>
+              </select>
+              <small class="small">Hold Ctrl/Cmd to multi-select</small>
+            </div>
+            <div>
+              <label for="repos">Approx. repos</label>
+              <select id="repos" name="repos">
+                <option>1</option><option>2-4</option><option>5-8</option><option>9+</option>
+              </select>
+            </div>
+            <div>
+              <label for="submission">Submission preference</label>
+              <select id="submission" name="submission">
+                <option>Manual upload (default)</option>
+                <option>Local Collector (premium)</option>
+                <option>GitHub App (read-only, later)</option>
+              </select>
+            </div>
+          </div>
+          <div class="wiz-actions">
+            <button class="btn" type="button" data-back data-analytics="wiz_back_2">Back</button>
+            <button class="btn primary" type="button" data-next data-analytics="wiz_next_2">Next</button>
+          </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="wiz-step hide" data-step="3">
+          <div class="form-row two">
+            <div>
+              <label for="cadence">Refresh cadence</label>
+              <select id="cadence" name="cadence" required>
+                <option>Monthly</option><option>Quarterly</option><option>Annual</option>
+              </select>
+            </div>
+            <div>
+              <label for="nextAudit">Next audit / review date</label>
+              <input id="nextAudit" name="nextAudit" type="date" />
+            </div>
+          </div>
+
+          <div class="form-row two">
+            <div>
+              <label for="timezone">Your timezone</label>
+              <input id="timezone" name="timezone" placeholder="e.g., America/New_York" />
+            </div>
+            <div>
+              <label for="reminder">Preferred reminder day/time</label>
+              <input id="reminder" name="reminder" placeholder="e.g., 1st Monday 9am" />
+            </div>
+          </div>
+
+          <div class="form-row two">
+            <div>
+              <label for="advExports">Advanced Exports?</label>
+              <select id="advExports" name="advExports">
+                <option>No (PDF + CSV is fine)</option>
+                <option>Yes — XLSX workbook</option>
+                <option>Yes — custom CSV schema</option>
+                <option>Yes — full ZIP of originals</option>
+                <option>Yes — all of the above</option>
+              </select>
+              <small class="small">Included on Quarterly & Annual. Add-on for others.</small>
+            </div>
+            <div>
+              <label for="notes">Anything else?</label>
+              <textarea id="notes" name="notes" placeholder="Questionnaire needs, specific controls, output details, etc."></textarea>
+            </div>
+          </div>
+
+          <div class="wiz-actions">
+            <button class="btn" type="button" data-back data-analytics="wiz_back_3">Back</button>
+            <button class="btn primary" type="submit" data-analytics="wiz_submit">Send request</button>
+          </div>
+          <p id="thanks" class="small" style="display:none;margin-top:8px">Opening your email client… we also saved a JSON copy of your request locally.</p>
+        </div>
+      </form>
     </div>
   </section>
 
   <!-- FOOTER -->
-  <footer class="wrap row">
-    <div>© <span id="y"></span> ProofRepo • <a class="btn link" href="mailto:ops@proofrepo.com">ops@proofrepo.com</a></div>
-    <div class="tag">Based in Jacksonville, Florida • Feedback welcome</div>
+  <footer class="wrap">
+    <div class="row" style="margin-bottom:8px">
+      <div>© <span id="y"></span> ProofRepo • <a class="btn link" href="mailto:ops@proofrepo.com" data-analytics="cta_mail_footer">ops@proofrepo.com</a></div>
+      <div class="tag">Based in Jacksonville, Florida • Feedback welcome</div>
+    </div>
+    <div class="small">Disclaimer: ProofRepo prepares materials to assist with audits and vendor reviews; it is not a certification or attestation body.</div>
   </footer>
 
+  <!-- STICKY BOTTOM MARQUEE -->
+  <div class="marquee-fixed" role="region" aria-label="Key highlights" id="marqueeBar">
+    <div class="marquee" id="marqueeTrack">
+      <span>Auditor-ready outputs: PDF + CSV (base)</span>
+      <span>Advanced Exports: XLSX, custom CSV, full ZIP (Quarterly & Annual included)</span>
+      <span>Privacy-first intake • Least-privilege by default</span>
+      <span>Refresh reminders aligned to your schedule</span>
+      <span>Jacksonville, Florida • Feedback welcome</span>
+      <span>Auditor-ready outputs: PDF + CSV (base)</span>
+      <span>Advanced Exports: XLSX, custom CSV, full ZIP (Quarterly & Annual included)</span>
+      <span>Privacy-first intake • Least-privilege by default</span>
+    </div>
+  </div>
+
+  <!-- Optional: Cloudflare Web Analytics (add your token later) -->
+  <!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "YOUR-CF-WEB-ANALYTICS-TOKEN"}'></script> -->
+
   <script>
-    // year
+    // ---------- Year ----------
     document.getElementById('y').textContent = new Date().getFullYear();
 
+    // ---------- Wizard ----------
+    const steps = Array.from(document.querySelectorAll('.wiz-step'));
+    const bars = [document.getElementById('st1'), document.getElementById('st2'), document.getElementById('st3')];
+    let current = 0;
+    function showStep(i){
+      steps.forEach((s,idx)=> s.classList.toggle('hide', idx!==i));
+      bars.forEach((b,idx)=> b.classList.toggle('active', idx<=i));
+      current = i;
+      document.getElementById('request').scrollIntoView({behavior:'smooth', block:'start'});
+    }
+    document.querySelectorAll('[data-next]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{ if(current < steps.length-1) showStep(current+1); });
+    });
+    document.querySelectorAll('[data-back]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{ if(current > 0) showStep(current-1); });
+    });
+
+    // ---------- Form submit (mailto + JSON download) ----------
+    const form = document.getElementById('reqForm');
     function serializeForm(form){
       const data = {};
       Array.from(new FormData(form).entries()).forEach(([k,v])=>{
-        if(data[k]) {
-          if(Array.isArray(data[k])) data[k].push(v); else data[k] = [data[k], v];
-        } else data[k] = v;
+        if(data[k]) { if(Array.isArray(data[k])) data[k].push(v); else data[k] = [data[k], v]; }
+        else data[k] = v;
       });
-      const fw = Array.from((document.getElementById('frameworks')||{}).selectedOptions || []).map(o=>o.value);
-      if(fw.length) data.frameworks = fw;
+      const fwEl = document.getElementById('frameworks');
+      if (fwEl) {
+        const fw = Array.from(fwEl.selectedOptions || []).map(o=>o.value);
+        if(fw.length) data.frameworks = fw;
+      }
       return data;
     }
-
     function downloadJSON(obj, filename){
       const blob = new Blob([JSON.stringify(obj, null, 2)], {type:'application/json'});
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = filename;
+      const a = document.createElement('a'); a.href = url; a.download = filename;
       document.body.appendChild(a); a.click();
       setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 0);
     }
-
     function buildMailto(data){
       const subject = encodeURIComponent(`Proof Pack request — ${data.company || ''} — ${data.plan || ''}`);
       const bodyLines = [
@@ -461,16 +528,219 @@
       const body = encodeURIComponent(bodyLines.join('\n'));
       return `mailto:ops@proofrepo.com?subject=${subject}&body=${body}`;
     }
-
-    document.getElementById('reqForm').addEventListener('submit', function(e){
+    form.addEventListener('submit', function(e){
       e.preventDefault();
       const data = serializeForm(this);
       const ts = new Date().toISOString().replace(/[:.]/g,'-');
       downloadJSON(data, `proofrepo_request_${ts}.json`);
-      const url = buildMailto(data);
-      document.getElementById('thanks').style.display = 'block';
-      window.location.href = url;
+      document.getElementById('thanks')?.setAttribute('style','display:block;margin-top:8px');
+      window.location.href = buildMailto(data);
+      track('form_submit', {plan:data.plan||null});
     });
+
+    // ---------- Sticky banner hide on input/keyboard ----------
+    const marqueeBar = document.getElementById('marqueeBar');
+    const marqueeTrack = document.getElementById('marqueeTrack');
+    const focusables = Array.from(document.querySelectorAll('input, textarea, select'));
+    function hideBanner(){ marqueeBar.classList.add('hidden'); marqueeTrack.classList.add('paused'); }
+    function showBanner(){ marqueeBar.classList.remove('hidden'); marqueeTrack.classList.remove('paused'); }
+    focusables.forEach(el=>{
+      el.addEventListener('focus', hideBanner);
+      el.addEventListener('blur', () => {
+        setTimeout(() => {
+          if (!document.activeElement || !document.activeElement.matches('input, textarea, select')) showBanner();
+        }, 120);
+      });
+    });
+    if (window.visualViewport) {
+      const baseHeight = window.visualViewport.height;
+      window.visualViewport.addEventListener('resize', () => {
+        const ratio = window.visualViewport.height / baseHeight;
+        if (ratio < 0.9) hideBanner(); else showBanner();
+      });
+    }
+
+    // ---------- Hide banner while actively scrolling anywhere ----------
+    (function () {
+      let scrollTimer = null;
+      window.addEventListener('scroll', () => {
+        hideBanner(); // immediately hide during scroll
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(() => {
+          // show again after 600ms of no scroll
+          showBanner();
+        }, 600);
+      }, { passive: true });
+    })();
+
+    // =========================================================
+    //           INVISIBLE VISITOR INTELLIGENCE (client)
+    // =========================================================
+    // Privacy-first: no form field contents, no cookies, no IP.
+    // Sends only operational metrics to an optional endpoint.
+    const ANALYTICS_ENDPOINT = ""; // e.g., "https://your-worker.your-subdomain.workers.dev/ingest"
+    const sessionId = (crypto && crypto.randomUUID) ? crypto.randomUUID()
+                      : Math.random().toString(36).slice(2) + Date.now().toString(36);
+
+    const kpis = { start: Date.now(), engaged: false, maxScroll: 0 };
+
+    function uaHash(){
+      const seed = [
+        navigator.userAgent||'',
+        window.devicePixelRatio||1,
+        navigator.language||'',
+        (screen.width||0)+'x'+(screen.height||0)
+      ].join('|');
+      let h=0; for(let i=0;i<seed.length;i++){ h=((h<<5)-h)+seed.charCodeAt(i); h|=0; }
+      return 'u'+(h>>>0).toString(36);
+    }
+
+    function basePayload(){
+      const url = new URL(location.href);
+      const utm = {};
+      ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'].forEach(k=>{
+        if(url.searchParams.get(k)) utm[k]=url.searchParams.get(k);
+      });
+      return {
+        ts: new Date().toISOString(),
+        sid: sessionId,
+        path: location.pathname,
+        title: document.title,
+        ref: document.referrer || null,
+        utm,
+        lang: navigator.language || null,
+        vp: { w: window.innerWidth, h: window.innerHeight, dpr: window.devicePixelRatio || 1 },
+        tzOffsetMin: new Date().getTimezoneOffset(),
+        ua: uaHash()
+      };
+    }
+
+    function send(event, extra={}){
+      if(!ANALYTICS_ENDPOINT) return;
+      const payload = Object.assign({event}, basePayload(), extra);
+      try{
+        const blob = new Blob([JSON.stringify(payload)], {type:'application/json'});
+        navigator.sendBeacon(ANALYTICS_ENDPOINT, blob);
+      }catch(e){ /* no-op */ }
+    }
+
+    function track(event, data){ send(event, data); }
+
+    // Pageview + UTM
+    track('pageview', {});
+
+    // Scroll depth
+    window.addEventListener('scroll', ()=>{
+      const scrolled = (window.scrollY + window.innerHeight) / Math.max(1, document.documentElement.scrollHeight);
+      const pct = Math.round(Math.min(100, Math.max(kpis.maxScroll, scrolled*100)));
+      if (pct > kpis.maxScroll){
+        kpis.maxScroll = pct;
+        if (pct===25 || pct===50 || pct===75 || pct===90) track('scroll', {pct});
+      }
+      if (!kpis.engaged && (Date.now()-kpis.start) > 8000) { kpis.engaged = true; track('engaged', {}); }
+    }, {passive:true});
+
+    // Time on page (on unload)
+    window.addEventListener('pagehide', ()=>{
+      const durMs = Date.now() - kpis.start;
+      track('pageclose', {durMs, maxScroll:kpis.maxScroll});
+    });
+
+    // CTA & wizard step tracking
+    document.querySelectorAll('[data-analytics]').forEach(el=>{
+      el.addEventListener('click', ()=>{
+        track('click', {id: el.getAttribute('data-analytics')});
+      });
+    });
+
+    // Initialize first step
+    showStep(0);
   </script>
+
+  <!--
+  ===========================
+  CLOUDflare WORKER (copy me)
+  ===========================
+  1) In Cloudflare Dashboard → Workers & Pages → Create Worker.
+  2) Paste this JS, name it e.g. proofrepo-analytics.
+  3) Settings → Variables:
+     - Bind KV namespace "ANALYTICS" (create one).
+     - Add ENV var OPS_EMAIL="ops@proofrepo.com"
+  4) Triggers → Cron: "55 23 * * *"  (11:55 PM UTC daily)
+  5) In index.html set ANALYTICS_ENDPOINT to the Worker URL.
+
+  export default {
+    async fetch(req, env, ctx) {
+      const url = new URL(req.url);
+      if (url.pathname === '/ingest' && req.method === 'POST') {
+        const body = await req.json().catch(()=>null);
+        if (!body || !body.event || !body.ts) return new Response('bad', {status:400});
+        const day = body.ts.slice(0,10); // YYYY-MM-DD
+        const key = \`raw:\${day}\`;
+        await env.ANALYTICS.put(
+          key,
+          (await env.ANALYTICS.get(key)) ? ((await env.ANALYTICS.get(key)) + '\\n' + JSON.stringify(body)) : JSON.stringify(body)
+        );
+        return new Response('ok');
+      }
+      return new Response('not found', {status:404});
+    },
+
+    async scheduled(event, env, ctx) {
+      const day = new Date().toISOString().slice(0,10);
+      const key = \`raw:\${day}\`;
+      const raw = await env.ANALYTICS.get(key);
+      if (!raw) return;
+
+      const lines = raw.split('\\n').map(l=>{ try{return JSON.parse(l)}catch(e){return null} }).filter(Boolean);
+      const totals = { pageviews:0, engaged:0, submits:0, clicks:{}, paths:{}, utm:{} };
+
+      for (const ev of lines){
+        if (ev.event==='pageview'){ totals.pageviews++; totals.paths[ev.path]=(totals.paths[ev.path]||0)+1; }
+        if (ev.event==='engaged') totals.engaged++;
+        if (ev.event==='form_submit') totals.submits++;
+        if (ev.event==='click'){ const id=ev.id||'unknown'; totals.clicks[id]=(totals.clicks[id]||0)+1; }
+        if (ev.utm){ const src=ev.utm.utm_source||'direct'; totals.utm[src]=(totals.utm[src]||0)+1; }
+      }
+      const ctr = (totals.submits && totals.pageviews) ? (100*totals.submits/totals.pageviews).toFixed(2)+'%' : '0%';
+
+      const subject = \`ProofRepo Daily Web KPIs — \${day}\`;
+      const html = \`
+        <h2>Daily Web KPIs — \${day}</h2>
+        <ul>
+          <li><strong>Pageviews:</strong> \${totals.pageviews}</li>
+          <li><strong>Engaged (8s+):</strong> \${totals.engaged}</li>
+          <li><strong>Form submits:</strong> \${totals.submits} (CTR \${ctr})</li>
+        </ul>
+        <h3>Top paths</h3>
+        <pre>\${Object.entries(totals.paths).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([p,c])=>\`\${p} — \${c}\`).join('\\n')||'-'}</pre>
+        <h3>Top clicks</h3>
+        <pre>\${Object.entries(totals.clicks).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([p,c])=>\`\${p} — \${c}\`).join('\\n')||'-'}</pre>
+        <h3>Traffic sources</h3>
+        <pre>\${Object.entries(totals.utm).sort((a,b)=>b[1]-a[1]).map(([p,c])=>\`\${p} — \${c}\`).join('\\n')||'direct'}</pre>
+        <p style="color:#666">Privacy note: No form contents, cookies, or IP addresses were stored.</p>
+      \`;
+
+      await sendMail(env, env.OPS_EMAIL, subject, html);
+      await env.ANALYTICS.put(\`archive:\${day}\`, raw);
+      await env.ANALYTICS.delete(key);
+    }
+  };
+
+  async function sendMail(env, to, subject, html) {
+    const resp = await fetch('https://api.mailchannels.net/tx/v1/send', {
+      method: 'POST',
+      headers: {'content-type':'application/json'},
+      body: JSON.stringify({
+        personalizations: [{ to: [{ email: to }] }],
+        from: { email: "no-reply@proofrepo.com", name: "ProofRepo Analytics" },
+        subject, content: [{ type:"text/html", value: html }]
+      })
+    });
+    if (!resp.ok) {
+      console.log('Email failed', await resp.text());
+    }
+  }
+  -->
 </body>
 </html>
