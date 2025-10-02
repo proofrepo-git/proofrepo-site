@@ -6,19 +6,19 @@
   <title>ProofRepo — Compliance Proof, Done For You</title>
 
   <!-- SEO -->
-  <meta name="description" content="ProofRepo assembles a clean, review-ready ‘Proof Pack’ for SOC 2, ISO 27001, HIPAA, and customer security reviews — delivered in 24–72 hours." />
+  <meta name="description" content="ProofRepo assembles a clean, auditor-ready ‘Proof Pack’ for SOC 2, ISO 27001, HIPAA, and security questionnaires — delivered in 24–72 hours. Optional Advanced Exports: XLSX, custom CSV, full ZIP." />
   <meta name="keywords" content="SOC 2 evidence, ISO 27001 evidence, vendor security review, compliance proof, audit readiness, security RFP" />
 
   <!-- Open Graph -->
   <meta property="og:title" content="ProofRepo — Compliance Proof, Done For You">
-  <meta property="og:description" content="Get a complete, organized ‘Proof Pack’ for audits & RFPs in 24–72 hours.">
+  <meta property="og:description" content="Get a complete, organized ‘Proof Pack’ in 24–72 hours. Privacy-first intake. Optional Advanced Exports.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://proofrepo.com/">
 
   <style>
     :root{
-      --bg:#0b1020; --gradA:#0b1020; --gradB:#0d1b3d; --panel:#10183a; --panel2:#0e1532;
-      --text:#e8edff; --muted:#a7b6e7; --line:#1d2857;
+      --bg:#0b1020; --gradA:#0b1020; --gradB:#0d1b3d;
+      --panel:#10183a; --panel2:#0e1532; --text:#e8edff; --muted:#a7b6e7; --line:#1d2857;
       --primary:#2563eb; --primary2:#3b82f6; --accent:#22c55e; --ring:rgba(37,99,235,.35);
       --r:16px; --rs:12px; --shadow:0 14px 40px rgba(3,7,18,.35); --max:1200px;
     }
@@ -26,16 +26,14 @@
     html,body{margin:0;background:linear-gradient(180deg,var(--gradA),var(--gradB));color:var(--text);
       font:16px/1.55 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
     a{color:inherit;text-decoration:none}
-    img{max-width:100%;height:auto}
     .wrap{max-width:var(--max);margin:0 auto;padding:28px}
     .row{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    img{max-width:100%;height:auto}
 
     /* NAV */
     .logo{display:flex;align-items:center;gap:10px;font-weight:800}
-    .glyph{width:34px;height:34px;border-radius:10px;background:conic-gradient(from 210deg at 50% 50%, var(--primary), var(--primary2));
-      box-shadow:var(--shadow); transform:translateZ(0)}
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:999px;
-      border:1px solid #2a3766;cursor:pointer;transition:transform .12s ease, background .12s ease, filter .12s ease}
+    .glyph{width:34px;height:34px;border-radius:10px;background:conic-gradient(from 210deg,var(--primary),var(--primary2));box-shadow:var(--shadow);transform:translateZ(0)}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:999px;border:1px solid #2a3766;cursor:pointer;transition:transform .12s ease, background .12s ease, filter .12s ease}
     .btn:hover{background:#111b3e; transform:translateY(-1px)}
     .btn.primary{background:linear-gradient(135deg,var(--primary),var(--primary2));border-color:transparent;color:#fff;box-shadow:var(--shadow)}
     .btn.primary:hover{filter:brightness(1.07)}
@@ -55,11 +53,11 @@
     .li{display:flex;gap:10px}
     .tick{width:20px;height:20px;border-radius:999px;display:inline-grid;place-items:center;background:linear-gradient(135deg,#34d399,#86efac);color:#062312;font-weight:900;font-size:.8rem}
 
-    /* STRIP */
-    .strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);
-      background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0))}
-    .pills{display:flex;flex-wrap:wrap;gap:10px;opacity:.95}
-    .pill{padding:7px 11px;border-radius:999px;border:1px solid var(--line);color:#b9c6ff;font-size:.9rem;background:#0d1636}
+    /* MARQUEE (subtle movement) */
+    .marquee-wrap{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0))}
+    .marquee{display:flex;gap:30px;white-space:nowrap;animation:scroll 24s linear infinite;padding:10px 0}
+    .marquee span{opacity:.9;color:#b9c6ff}
+    @keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
     /* SECTIONS / GRID */
     .section{padding:40px 28px}
@@ -77,6 +75,17 @@
     .popular::before{content:"Most popular";position:absolute;top:-12px;left:16px;background:#1a2a6b;color:#cfe0ff;
       padding:4px 10px;border-radius:999px;border:1px solid #27419e;font-size:.78rem}
 
+    /* FORM */
+    form{display:grid;gap:14px}
+    label{font-weight:600}
+    input, select, textarea{
+      width:100%; padding:12px 12px; border-radius:10px; border:1px solid #2a3766; background:#0e1634; color:var(--text)
+    }
+    textarea{min-height:110px;resize:vertical}
+    .form-row{display:grid;gap:12px}
+    .two{grid-template-columns:1fr 1fr}
+    .three{grid-template-columns:1fr 1fr 1fr}
+
     /* FAQ */
     details{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:12px;padding:14px}
     summary{cursor:pointer;font-weight:600}
@@ -92,7 +101,7 @@
 
   <!-- JSON-LD -->
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Organization","name":"ProofRepo","url":"https://proofrepo.com","email":"ops@proofrepo.com","description":"Done-for-you compliance evidence packs for SOC 2, ISO 27001, HIPAA, and vendor security reviews."}
+  {"@context":"https://schema.org","@type":"Organization","name":"ProofRepo","url":"https://proofrepo.com","email":"ops@proofrepo.com","description":"Done-for-you compliance evidence packs for SOC 2, ISO 27001, HIPAA, and vendor security reviews.","address":{"@type":"PostalAddress","addressLocality":"Jacksonville","addressRegion":"FL","addressCountry":"US"}}
   </script>
 </head>
 <body>
@@ -101,7 +110,9 @@
     <div class="logo"><div class="glyph" aria-hidden="true"></div><span>ProofRepo</span></div>
     <nav class="row" aria-label="primary">
       <a class="btn" href="#pricing">Pricing</a>
-      <a class="btn primary" href="#get-started">Get a Proof Pack</a>
+      <a class="btn" href="#how">How it works</a>
+      <a class="btn" href="#demos">Demos & Looms</a>
+      <a class="btn" href="#request">Get a Proof Pack</a>
     </nav>
   </header>
 
@@ -111,41 +122,57 @@
       <div>
         <div class="kicker">Done-for-you evidence</div>
         <h1>Compliance proof in <span style="color:var(--accent)">24–72 hours</span> — not weeks</h1>
-        <p class="sub">Skip screenshot chaos and stale docs. We assemble a clean, review-ready <strong>Proof Pack</strong> for SOC&nbsp;2, ISO&nbsp;27001, HIPAA, and customer/vendor security reviews so you can move deals faster.</p>
-
+        <p class="sub">
+          Skip screenshot chaos. We assemble a clean, reviewer-ready <strong>Proof Pack</strong> for SOC&nbsp;2, ISO&nbsp;27001, HIPAA, and security questionnaires so you can move deals faster.
+          <br><br><strong>Lean alternative to bundled platforms:</strong> buy only the deliverable you need — a polished Proof Pack — without a $10k–$20k/yr compliance suite.
+        </p>
         <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px">
           <a class="btn primary" href="#pricing">See plans</a>
-          <a class="btn" href="#how">How it works</a>
+          <a class="btn" href="#request">Request now</a>
         </div>
-
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
           <span class="pill">24–72h turnaround</span>
           <span class="pill">SOC 2 / ISO 27001 / HIPAA</span>
-          <span class="pill">Redaction & watermarking</span>
+          <span class="pill">Outputs: PDF + CSV (base)</span>
+          <span class="pill">Advanced Exports add-on (XLSX, custom CSV, full ZIP)</span>
         </div>
       </div>
 
       <aside class="card" aria-label="Highlights">
         <div class="ticks">
-          <div class="li"><span class="tick">✓</span><div>Centralized <strong>artifact index</strong> mapped to common controls</div></div>
-          <div class="li"><span class="tick">✓</span><div>“No raw data required” option — share only redacted exports</div></div>
-          <div class="li"><span class="tick">✓</span><div>Optional monthly/quarterly refresh so evidence never goes stale</div></div>
+          <div class="li"><span class="tick">✓</span><div>Centralized <strong>artifact index</strong> mapped to controls</div></div>
+          <div class="li"><span class="tick">✓</span><div><strong>Privacy-first:</strong> share only artifacts you approve (manual upload by default)</div></div>
+          <div class="li"><span class="tick">✓</span><div><strong>Refresh reminders</strong> on your cadence (monthly / quarterly / annual)</div></div>
         </div>
-        <p class="muted" style="margin-top:12px">Want a sanitized sample later? We’ll add a download. For now, email <a class="btn link" href="mailto:ops@proofrepo.com?subject=Sample%20Proof%20Pack">ops@proofrepo.com</a>.</p>
+        <p class="muted" style="margin-top:12px">Sample pack coming soon. For now, email <a class="btn link" href="mailto:ops@proofrepo.com?subject=Sample%20Proof%20Pack">ops@proofrepo.com</a>.</p>
       </aside>
     </div>
   </section>
 
-  <!-- PRICING PREVIEW (front and center) -->
+  <!-- MARQUEE -->
+  <div class="marquee-wrap">
+    <div class="marquee" aria-hidden="true">
+      <span>Auditor-ready outputs: PDF + CSV (base)</span>
+      <span>Advanced Exports: XLSX, custom CSV, full ZIP (Annual included)</span>
+      <span>Privacy-first intake • Least-privilege by default</span>
+      <span>Quarterly refresh shortens sales stalls</span>
+      <span>Jacksonville, Florida • Feedback welcome</span>
+      <span>Auditor-ready outputs: PDF + CSV (base)</span>
+      <span>Advanced Exports: XLSX, custom CSV, full ZIP (Annual included)</span>
+      <span>Privacy-first intake • Least-privilege by default</span>
+    </div>
+  </div>
+
+  <!-- PRICING -->
   <section id="pricing" class="wrap section pricing" aria-labelledby="pricing-h">
     <h2 id="pricing-h">Simple, transparent pricing</h2>
 
-    <!-- Tiny trial -->
     <div class="card" style="margin-bottom:18px;border-style:dashed">
       <strong>$1 Starter Pack (first-time only):</strong>
-      <span class="muted">try a lean pack before you commit (artifact index + up to 20 items).</span>
-      <!-- STRIPE LINK: replace with your real $1 Checkout link -->
+      <span class="muted">try a small sample; we organize & index what you already share for audits.</span>
+      <!-- STRIPE LINK placeholder -->
       <a class="btn primary" style="margin-left:10px" href="#stripe-trial">Start for $1</a>
+      <a class="btn" style="margin-left:6px" href="#request">Or request via form</a>
     </div>
 
     <div class="grid cols3" role="list">
@@ -154,11 +181,12 @@
         <div class="price">$119<span style="font-size:1rem;font-weight:600">/mo</span></div>
         <p class="muted">Cancel anytime — ideal for active sales cycles.</p>
         <ul class="muted">
-          <li>Monthly artifact updates</li>
-          <li>Control mapping & index</li>
-          <li>Priority turnaround</li>
+          <li>Evidence organization & control mapping</li>
+          <li>Refresh reminders on your schedule</li>
+          <li>Manual upload included</li>
+          <li>Outputs: <strong>PDF + CSV</strong></li>
+          <li><em>Advanced Exports add-on available</em></li>
         </ul>
-        <!-- STRIPE LINK: replace with your Monthly Checkout link -->
         <a class="btn primary" href="#stripe-monthly">Choose Monthly</a>
       </article>
 
@@ -167,11 +195,11 @@
         <div class="price">$299<span style="font-size:1rem;font-weight:600">/qtr</span></div>
         <p class="muted">Best balance of price & flexibility (≈$99/mo).</p>
         <ul class="muted">
-          <li>Quarterly updates (all Monthly features)</li>
+          <li>All Monthly features</li>
           <li>Priority turnaround</li>
-          <li>Vendor-package docs on request</li>
+          <li><strong>Advanced Exports included</strong></li>
+          <li>Outputs: PDF + CSV + <strong>Advanced</strong></li>
         </ul>
-        <!-- STRIPE LINK: replace with your Quarterly Checkout link -->
         <a class="btn primary" href="#stripe-quarterly">Choose Quarterly</a>
       </article>
 
@@ -182,15 +210,15 @@
         <ul class="muted">
           <li>All Monthly features</li>
           <li>Annual audit prep extras</li>
-          <li>Dedicated support window</li>
+          <li><strong>Advanced Exports included</strong></li>
+          <li>Outputs: PDF + CSV + <strong>Advanced</strong></li>
         </ul>
-        <!-- STRIPE LINK: replace with your Annual Checkout link -->
         <a class="btn primary" href="#stripe-annual">Choose Annual</a>
       </article>
     </div>
 
     <p class="muted" style="margin-top:10px">
-      Add-ons: <strong>Proof Suite</strong> (+$50–100/mo) for access reviews, backup evidence, and pentest/remediation summaries.
+      <strong>Advanced Exports (add-on):</strong> XLSX workbook, custom CSV schema, and a full ZIP of originals. Included on Quarterly & Annual by default.
     </p>
   </section>
 
@@ -199,75 +227,250 @@
     <h2>How ProofRepo works</h2>
     <div class="grid cols3">
       <div class="card">
-        <h3>1) Quick intake</h3>
-        <p class="muted">Choose a plan and complete a short checklist. Prefer not to share raw data? Use our <strong>redaction-first</strong> option.</p>
+        <h3>1) Pick a plan</h3>
+        <p class="muted">Self-serve checkout (Stripe) or the request form below. No calls required.</p>
       </div>
       <div class="card">
-        <h3>2) We assemble</h3>
-        <p class="muted">We normalize filenames, map artifacts to SOC&nbsp;2/ISO controls, then package everything into a tidy <em>Proof Pack</em> with an index.</p>
+        <h3>2) Submit artifacts</h3>
+        <p class="muted"><strong>Manual upload (default):</strong> share the same evidence you already prepare for audits (settings screenshots/exports, logs, policy excerpts). We organize and label it for you.</p>
       </div>
       <div class="card">
-        <h3>3) Deliver & refresh</h3>
-        <p class="muted">Receive your pack in 24–72h. Subscribe for monthly/quarterly refresh so your proof never goes stale.</p>
+        <h3>3) Delivery & refresh</h3>
+        <p class="muted">Receive your Proof Pack in 24–72h. We’ll send <strong>refresh reminders</strong> on your cadence (monthly / quarterly / annual).</p>
+      </div>
+    </div>
+
+    <div class="grid cols3" style="margin-top:18px">
+      <div class="card">
+        <h3>Local Collector (premium)</h3>
+        <p class="muted">Optional time-saver: run a small tool locally to gather repo metadata & logs; <em>you</em> review & approve what to share. Nothing leaves your machine until you submit.</p>
+      </div>
+      <div class="card">
+        <h3>GitHub App (read-only, later)</h3>
+        <p class="muted">Grant minimal scopes so we can auto-pull branch protections & CI status. You still review before sharing.</p>
+      </div>
+      <div class="card">
+        <h3>Privacy by design</h3>
+        <p class="muted">Least-privilege intake, redaction guidance, and watermarks on artifacts approved for external sharing. No raw data required.</p>
       </div>
     </div>
   </section>
 
-  <!-- PRIVACY & TRUST -->
+  <!-- WHY STAY FRESH -->
   <section class="wrap section">
-    <h2>Privacy by design</h2>
-    <div class="grid cols2">
-      <div class="card">
-        <h3>No raw data required</h3>
-        <p class="muted">Share only redacted screenshots/exports, or provide read-only artifacts. We’ll add a secure upload link and automatic redaction guidance later.</p>
-      </div>
-      <div class="card">
-        <h3>Least-privilege</h3>
-        <p class="muted">We request the minimum necessary artifacts. Anything you approve for external sharing is watermarked by default.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOR LATER (UX concept we’ll add) -->
-  <section id="get-started" class="wrap section">
-    <h2>What buyers will experience (soon)</h2>
+    <h2>Why keeping evidence fresh actually pays</h2>
     <div class="grid cols3">
-      <div class="card"><h3>Self-serve checkout</h3><p class="muted">Stripe Checkout with card/Apple Pay/Google Pay — normal SaaS flow.</p></div>
-      <div class="card"><h3>Instant intake</h3><p class="muted">Post-checkout, a short form + secure upload link. Or choose “redaction-first” to avoid raw data.</p></div>
-      <div class="card"><h3>Auto delivery</h3><p class="muted">We’ll email a link to your packaged Proof Pack (PDF + folder). Subscriptions refresh on schedule.</p></div>
+      <div class="card"><h3>Win more deals</h3><p class="muted">Buyers ask for current proof in vendor reviews. Fresh packs reduce stalls in your sales cycle.</p></div>
+      <div class="card"><h3>Save internal time</h3><p class="muted">Turn repetitive scrambling into a quick monthly or quarterly review step.</p></div>
+      <div class="card"><h3>Avoid costly mistakes</h3><p class="muted">Out-of-date controls increase audit risk. Regular refresh surfaces gaps early.</p></div>
     </div>
-    <p class="muted" style="margin-top:10px">You can try the $1 Starter first, then upgrade to a refresh plan.</p>
+    <p class="muted" style="margin-top:10px">Sources available on request. We paraphrase published industry research to keep the page clean and readable.</p>
   </section>
 
-  <!-- FAQ -->
+  <!-- DEMOS & LOOMS (placeholder) -->
+  <section id="demos" class="wrap section">
+    <h2>Demos & Looms</h2>
+    <div class="card">
+      <p class="muted">Short walkthrough videos coming soon. Want a preview? Email <a class="btn link" href="mailto:ops@proofrepo.com?subject=Loom%20demo%20request">ops@proofrepo.com</a>.</p>
+    </div>
+  </section>
+
+  <!-- REQUEST / QUESTIONNAIRE -->
+  <section id="request" class="wrap section">
+    <h2>Request a Proof Pack</h2>
+    <p class="muted">Prefer to start without Stripe tonight? Fill this out and we’ll reply via email. You’ll also get a local JSON copy of your request.</p>
+    <form id="reqForm">
+      <div class="form-row two">
+        <div>
+          <label for="name">Your name</label>
+          <input id="name" name="name" autocomplete="name" required />
+        </div>
+        <div>
+          <label for="email">Work email</label>
+          <input id="email" name="email" type="email" autocomplete="email" required />
+        </div>
+      </div>
+
+      <div class="form-row two">
+        <div>
+          <label for="company">Company</label>
+          <input id="company" name="company" autocomplete="organization" required />
+        </div>
+        <div>
+          <label for="plan">Plan</label>
+          <select id="plan" name="plan" required>
+            <option value="Trial $1">Trial $1 (sample)</option>
+            <option value="Monthly $119">Monthly $119</option>
+            <option value="Quarterly $299">Quarterly $299 (Advanced Exports included)</option>
+            <option value="Annual $999">Annual $999 (Advanced Exports included)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row three">
+        <div>
+          <label for="frameworks">Frameworks</label>
+          <select id="frameworks" name="frameworks" multiple>
+            <option>SOC 2</option><option>ISO 27001</option><option>HIPAA</option><option>NIST CSF</option><option>Other</option>
+          </select>
+          <small class="muted">Hold Ctrl/Cmd to multi-select</small>
+        </div>
+        <div>
+          <label for="repos">Approx. repos</label>
+          <select id="repos" name="repos">
+            <option>1</option><option>2-4</option><option>5-8</option><option>9+</option>
+          </select>
+        </div>
+        <div>
+          <label for="submission">Submission preference</label>
+          <select id="submission" name="submission">
+            <option>Manual upload (default)</option>
+            <option>Local Collector (premium)</option>
+            <option>GitHub App (read-only, later)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row two">
+        <div>
+          <label for="cadence">Refresh cadence</label>
+          <select id="cadence" name="cadence" required>
+            <option>Monthly</option><option>Quarterly</option><option>Annual</option>
+          </select>
+        </div>
+        <div>
+          <label for="nextAudit">Next audit / review date</label>
+          <input id="nextAudit" name="nextAudit" type="date" />
+        </div>
+      </div>
+
+      <div class="form-row two">
+        <div>
+          <label for="timezone">Your timezone</label>
+          <input id="timezone" name="timezone" placeholder="e.g., America/New_York" />
+        </div>
+        <div>
+          <label for="reminder">Preferred reminder day/time</label>
+          <input id="reminder" name="reminder" placeholder="e.g., 1st Monday 9am" />
+        </div>
+      </div>
+
+      <div class="form-row two">
+        <div>
+          <label for="advExports">Advanced Exports?</label>
+          <select id="advExports" name="advExports">
+            <option>No (PDF + CSV is fine)</option>
+            <option>Yes — XLSX workbook</option>
+            <option>Yes — custom CSV schema</option>
+            <option>Yes — full ZIP of originals</option>
+            <option>Yes — all of the above</option>
+          </select>
+          <small class="muted">Included on Quarterly & Annual. Add-on for others.</small>
+        </div>
+        <div>
+          <label for="notes">Anything else?</label>
+          <textarea id="notes" name="notes" placeholder="Questionnaire needs, vendor pack, specific controls, output details, etc."></textarea>
+        </div>
+      </div>
+
+      <div class="form-row two">
+        <button class="btn primary" type="submit">Send request</button>
+        <a class="btn" href="#pricing">See plans again</a>
+      </div>
+      <p id="thanks" class="muted" style="display:none;margin-top:8px">Opening your email client… we also saved a JSON copy of your request locally.</p>
+    </form>
+  </section>
+
+  <!-- LIGHT COMPARISON -->
   <section class="wrap section">
-    <h2>FAQ</h2>
+    <h2>Why ProofRepo vs. bundled platforms?</h2>
     <div class="grid cols2">
-      <details open>
-        <summary>Is the Proof Pack acceptable for auditors and customer reviews?</summary>
-        <p class="muted">Yes — we follow common evidence conventions (timestamps, scope notes, policy versions) aligned to SOC&nbsp;2 / ISO&nbsp;27001 categories.</p>
-      </details>
-      <details>
-        <summary>How do you keep our data safe?</summary>
-        <p class="muted">Redaction-first intake, least-privilege access, and watermarking on outbound artifacts you approve for sharing. No raw data required.</p>
-      </details>
-      <details>
-        <summary>Can we cancel?</summary>
-        <p class="muted">Cancel anytime on Monthly. Quarterly/Annual renew per term; delivered packs remain yours.</p>
-      </details>
-      <details>
-        <summary>Do you support NIST/HIPAA or custom questionnaires?</summary>
-        <p class="muted">Yes. Tell us your framework needs during intake; we’ll map artifacts accordingly.</p>
-      </details>
+      <div class="card">
+        <h3>ProofRepo</h3>
+        <ul class="muted">
+          <li>Buy just what you need: the Proof Pack</li>
+          <li>No lock-in contracts</li>
+          <li>Delivered in 24–72h</li>
+          <li>$1 Starter available</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Bundled Suites</h3>
+        <ul class="muted">
+          <li>$10k–$20k/yr subscriptions</li>
+          <li>Features you may not need yet</li>
+          <li>Longer onboarding</li>
+        </ul>
+      </div>
     </div>
   </section>
 
   <!-- FOOTER -->
   <footer class="wrap row">
-    <div>© <span id="y"></span> ProofRepo • ops@proofrepo.com</div>
-    <div class="tag">Status: <span style="color:var(--accent);font-weight:700">&nbsp;Accepting new clients</span></div>
+    <div>© <span id="y"></span> ProofRepo • <a class="btn link" href="mailto:ops@proofrepo.com">ops@proofrepo.com</a></div>
+    <div class="tag">Based in Jacksonville, Florida • Feedback welcome</div>
   </footer>
 
-  <script>document.getElementById('y').textContent=new Date().getFullYear();</script>
+  <script>
+    // year
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    function serializeForm(form){
+      const data = {};
+      Array.from(new FormData(form).entries()).forEach(([k,v])=>{
+        if(data[k]) {
+          if(Array.isArray(data[k])) data[k].push(v); else data[k] = [data[k], v];
+        } else data[k] = v;
+      });
+      const fw = Array.from((document.getElementById('frameworks')||{}).selectedOptions || []).map(o=>o.value);
+      if(fw.length) data.frameworks = fw;
+      return data;
+    }
+
+    function downloadJSON(obj, filename){
+      const blob = new Blob([JSON.stringify(obj, null, 2)], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename;
+      document.body.appendChild(a); a.click();
+      setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 0);
+    }
+
+    function buildMailto(data){
+      const subject = encodeURIComponent(`Proof Pack request — ${data.company || ''} — ${data.plan || ''}`);
+      const bodyLines = [
+        `Name: ${data.name||''}`,
+        `Email: ${data.email||''}`,
+        `Company: ${data.company||''}`,
+        `Plan: ${data.plan||''}`,
+        `Frameworks: ${(data.frameworks||[]).join(', ')}`,
+        `Repos: ${data.repos||''}`,
+        `Submission: ${data.submission||''}`,
+        `Cadence: ${data.cadence||''}`,
+        `Next audit: ${data.nextAudit||''}`,
+        `Timezone: ${data.timezone||''}`,
+        `Preferred reminder: ${data.reminder||''}`,
+        `Advanced Exports: ${data.advExports||'No'}`,
+        `Notes: ${data.notes||''}`,
+        ``,
+        `Requested base outputs: PDF + CSV.`,
+        `Advanced Exports policy: Included on Quarterly & Annual; add-on otherwise.`,
+        `—`,
+        `(We’ll schedule refresh reminders based on your cadence and dates above.)`
+      ];
+      const body = encodeURIComponent(bodyLines.join('\n'));
+      return `mailto:ops@proofrepo.com?subject=${subject}&body=${body}`;
+    }
+
+    document.getElementById('reqForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      const data = serializeForm(this);
+      const ts = new Date().toISOString().replace(/[:.]/g,'-');
+      downloadJSON(data, `proofrepo_request_${ts}.json`);
+      const url = buildMailto(data);
+      document.getElementById('thanks').style.display = 'block';
+      window.location.href = url;
+    });
+  </script>
 </body>
 </html>
