@@ -347,6 +347,16 @@
               </select>
             </div>
           </div>
+
+          <!-- NEW: trial artifact upload -->
+          <div class="form-row">
+            <div>
+              <label for="artifact">Upload artifact (trial)</label>
+              <input id="artifact" name="file" type="file" />
+              <small class="small">Up to 10 artifacts / 50 MB total for the $1 trial (start with one file here).</small>
+            </div>
+          </div>
+
           <div class="wiz-actions">
             <button class="btn" type="button" data-back data-analytics="wiz_back_2">Back</button>
             <button class="btn primary" type="button" data-next data-analytics="wiz_next_2">Next</button>
@@ -466,8 +476,30 @@
       btn.addEventListener('click', ()=>{ if(current > 0) showStep(current-1); });
     });
 
-    // ---------- Form submit (mailto + JSON download, with safe fallback) ----------
+    // ---------- Upload helper (Worker -> R2) ----------
+    async function uploadArtifactIfPresent() {
+      const input = document.getElementById('artifact');
+      if (!input || !input.files || input.files.length === 0) return null;
+
+      const fd = new FormData();
+      fd.append('file', input.files[0]);
+
+      const res = await fetch('https://proofrepo-intake.atucker5.workers.dev', {
+        method: 'POST',
+        body: fd
+      });
+
+      if (!res.ok) {
+        const t = await res.text().catch(()=> '');
+        throw new Error(`Upload failed (${res.status}) ${t}`);
+      }
+      const json = await res.json();
+      return json.key || null;
+    }
+
+    // ---------- Form submit (upload → save JSON → email) ----------
     const form = document.getElementById('reqForm');
+
     function serializeForm(form){
       const data = {};
       Array.from(new FormData(form).entries()).forEach(([k,v])=>{
@@ -505,6 +537,7 @@
         `Primary reviewer: ${data.recipientRole||''}`,
         `Preferred output: ${data.outputFormat||''}`,
         `Trial preference: ${data.trialContinue||''}`,
+        ...(data.artifactKey ? [`Uploaded artifact key (R2): ${data.artifactKey}`] : []),
         `Notes: ${data.notes||''}`,
         ``,
         `Requested base outputs: PDF + CSV.`,
@@ -519,13 +552,30 @@
       try { window.location.href = href; }
       catch(e){ alert('If your email app did not open, please email ops@proofrepo.com and attach your downloaded JSON.'); }
     }
-    form.addEventListener('submit', function(e){
+
+    form.addEventListener('submit', async function(e){
       e.preventDefault();
+
+      // 1) upload if present
+      let artifactKey = null;
+      try {
+        artifactKey = await uploadArtifactIfPresent();
+      } catch (err) {
+        alert('Upload failed. Please try again or remove the file and submit.\n\n' + err.message);
+        return;
+      }
+
+      // 2) serialize form and include artifact key
       const data = serializeForm(this);
+      if (artifactKey) data.artifactKey = artifactKey;
+
+      // 3) save local JSON + mailto open
       const ts = new Date().toISOString().replace(/[:.]/g,'-');
       downloadJSON(data, `proofrepo_request_${ts}.json`);
       document.getElementById('thanks')?.setAttribute('style','display:block;margin-top:8px');
       safeOpen(buildMailto(data));
+
+      // 4) analytics
       track('form_submit', {plan:data.plan||null, cadence:data.cadence||null});
     });
 
@@ -647,4 +697,3 @@
   -->
 </body>
 </html>
-
