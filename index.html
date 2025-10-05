@@ -20,6 +20,7 @@
       --bg:#0b1020; --gradA:#0b1020; --gradB:#0d1b3d;
       --panel:#10183a; --panel2:#0e1532; --text:#e8edff; --muted:#a7b6e7; --line:#1d2857;
       --primary:#2563eb; --primary2:#3b82f6; --accent:#22c55e; --ring:rgba(37,99,235,.35);
+      --ok:#22c55e; --warn:#f59e0b; --err:#ef4444;
       --r:16px; --rs:12px; --shadow:0 14px 40px rgba(3,7,18,.35); --max:1200px;
       --marqueeH: 54px;
     }
@@ -35,6 +36,8 @@
     img{max-width:100%;height:auto}
     .wrap{max-width:var(--max);margin:0 auto;padding:28px}
     .row{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .muted{color:var(--muted)}
+    .small{font-size:.9rem;color:var(--muted)}
 
     /* NAV */
     .logo{display:flex;align-items:center;gap:10px;font-weight:800}
@@ -44,7 +47,7 @@
     .btn.primary{background:linear-gradient(135deg,var(--primary),var(--primary2));border-color:transparent;color:#fff;box-shadow:var(--shadow)}
     .btn.primary:hover{filter:brightness(1.07)}
     .btn.link{padding:0;border:0;color:#9db0ff}
-    .nav{backdrop-filter:saturate(120%) blur(4px)}
+    .tag{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:999px;background:#0c1636;border:1px solid var(--line);color:#a7b9ff;font-size:.85rem}
 
     /* HERO */
     .hero{padding:56px 28px}
@@ -58,50 +61,11 @@
     .li{display:flex;gap:10px}
     .tick{width:20px;height:20px;border-radius:999px;display:inline-grid;place-items:center;background:linear-gradient(135deg,#34d399,#86efac);color:#062312;font-weight:900;font-size:.8rem}
 
-    /* STICKY BOTTOM MARQUEE */
-    .marquee-fixed{
-      position:fixed; left:0; right:0; bottom:0;
-      height:var(--marqueeH);
-      display:flex; align-items:center;
-      border-top:1px solid var(--line);
-      background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0));
-      backdrop-filter:saturate(120%) blur(6px);
-      z-index:9999;
-      padding-bottom:env(safe-area-inset-bottom, 0px);
-      transition:transform .18s ease, opacity .18s ease;
-      will-change: transform, opacity;
-    }
-    .marquee-fixed.hidden{transform:translateY(100%); opacity:0}
-    .marquee{display:flex; gap:30px; white-space:nowrap; animation:scroll 24s linear infinite;
-      width:max-content; padding-left:28px; padding-right:28px; opacity:.95; color:#b9c6ff;}
-    .marquee.paused{animation-play-state:paused}
-    .marquee span{padding-right:30px}
-    @keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-    @media (prefers-reduced-motion: reduce){ .marquee{animation:none} }
-
     /* SECTIONS / GRID */
     .section{padding:40px 28px}
     .grid{display:grid;gap:18px}
-    .cols2{grid-template-columns:repeat(2,minmax(0,1fr))}
     .cols3{grid-template-columns:repeat(3,minmax(0,1fr))}
-    .muted{color:var(--muted)}
-    .small{font-size:.9rem;color:var(--muted)}
-
-    /* PRICING */
-    .pricing .plan{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:10px; position:relative}
-    .pricing h3{margin:0}
-    .price{font-size:2rem;font-weight:800}
-    .popular{border-color:#2b5cff;box-shadow:0 12px 36px rgba(43,92,255,.25)}
-    .popular::before{content:"Most popular";position:absolute;top:-12px;left:16px;background:#1a2a6b;color:#cfe0ff;padding:4px 10px;border-radius:999px;border:1px solid #27419e;font-size:.78rem}
-
-    /* FORM */
-    form{display:grid;gap:14px}
-    label{font-weight:600}
-    input, select, textarea{width:100%; padding:12px 12px; border-radius:10px; border:1px solid #2a3766; background:#0e1634; color:var(--text)}
-    textarea{min-height:110px;resize:vertical}
-    .form-row{display:grid;gap:12px}
-    .two{grid-template-columns:1fr 1fr}
-    .three{grid-template-columns:1fr 1fr 1fr}
+    @media (max-width:980px){.heroGrid{grid-template-columns:1fr}.cols3{grid-template-columns:1fr}}
 
     /* WIZARD */
     .wizard{max-width:880px;margin:0 auto}
@@ -112,18 +76,28 @@
     .wiz-actions{display:flex;justify-content:space-between;gap:10px;margin-top:14px}
     .hide{display:none}
 
-    /* FOOTER */
-    footer{padding:26px;border-top:1px solid var(--line);color:#9fb2ff;font-size:.95rem}
-    .tag{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:999px;background:#0c1636;border:1px solid var(--line);color:#a7b9ff;font-size:.85rem}
+    /* DROPZONE */
+    .drop{border:1px dashed #2a3766;border-radius:12px;padding:16px;background:#0f1735}
+    .drop.active{border-color:#5b7cff; background:#0f183f}
+    .drop .row{justify-content:flex-start}
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:#0c1636;border:1px solid var(--line);color:#a7b9ff;font-size:.85rem}
+    .files{margin-top:10px}
+    .file{display:flex;justify-content:space-between;gap:8px;background:#0e1634;border:1px solid #1f2c5a;border-radius:10px;padding:10px 12px;margin-top:8px}
+    .file small{color:#9fb2ff}
+    .prog{height:6px;background:#19265a;border-radius:999px;overflow:hidden;margin-top:8px}
+    .prog > div{height:100%;width:0%;background:linear-gradient(90deg,var(--primary),var(--primary2))}
+    .note{margin-top:10px}
 
-    /* Responsive */
-    @media (max-width:980px){.heroGrid{grid-template-columns:1fr}.cols3,.cols2{grid-template-columns:1fr}}
-    .focusable:focus-visible, .btn:focus-visible, a:focus-visible, summary:focus-visible {outline:3px solid var(--ring);outline-offset:2px;border-radius:10px}
+    /* SUCCESS */
+    .success{display:none;gap:12px;align-items:center;margin-top:10px}
+    .success.show{display:flex}
+    .dot{width:16px;height:16px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 6px rgba(34,197,94,.18)}
+    .warn{color:var(--warn)}
+    .err{color:var(--err)}
   </style>
 
-  <!-- JSON-LD -->
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Organization","name":"ProofRepo","url":"https://proofrepo.com","email":"ops@proofrepo.com","description":"Done-for-you compliance evidence packs with weekly or quarterly cadence—predictable and reviewer-ready.","address":{"@type":"PostalAddress","addressLocality":"Jacksonville","addressRegion":"FL","addressCountry":"US"}}
+    {"@context":"https://schema.org","@type":"Organization","name":"ProofRepo","url":"https://proofrepo.com","email":"ops@proofrepo.com","description":"Done-for-you compliance evidence packs with weekly or quarterly cadence—predictable and reviewer-ready.","address":{"@type":"PostalAddress","addressLocality":"Jacksonville","addressRegion":"FL","addressCountry":"US"}}
   </script>
 </head>
 <body>
@@ -149,8 +123,8 @@
           <br><br><strong>Lean alternative to bundled suites:</strong> buy the deliverable you need without a $10k–$20k/yr platform.
         </p>
         <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px">
-          <a class="btn primary" href="#pricing" data-analytics="cta_pricing">See plans</a>
-          <a class="btn" href="#request" data-analytics="cta_request">Start free trial</a>
+          <a class="btn primary" href="#pricing">See plans</a>
+          <a class="btn" href="#request">Start free trial</a>
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
           <span class="pill">Immediate trial delivery</span>
@@ -166,7 +140,7 @@
           <div class="li"><span class="tick">✓</span><div><strong>Review-first outputs:</strong> easy to forward, easy to verify</div></div>
           <div class="li"><span class="tick">✓</span><div><strong>Same-time cadence:</strong> hits inbox predictably</div></div>
         </div>
-        <p class="muted" style="margin-top:12px">Sample pack coming soon. For now, email <a class="btn link" href="mailto:ops@proofrepo.com?subject=Sample%20Proof%20Pack" data-analytics="cta_mail_sample">ops@proofrepo.com</a>.</p>
+        <p class="muted" style="margin-top:12px">Sample pack coming soon. For now, email <a class="btn link" href="mailto:ops@proofrepo.com?subject=Sample%20Proof%20Pack">ops@proofrepo.com</a>.</p>
       </aside>
     </div>
   </section>
@@ -190,8 +164,8 @@
 
     <div class="card" style="margin-bottom:18px;border-style:dashed">
       <strong>$1 Trial (immediate):</strong>
-      <span class="muted">upload up to 10 artifacts / 50 MB to get a full sample Proof Pack, right now.</span>
-      <a class="btn primary" style="margin-left:10px" href="#request" data-analytics="cta_trial">Start free trial</a>
+      <span class="muted">Upload up to 10 artifacts / 50 MB to get a full sample Proof Pack, right now.</span>
+      <a class="btn primary" style="margin-left:10px" href="#request">Start free trial</a>
       <a class="btn" style="margin-left:6px" href="#caps">Review limits</a>
     </div>
 
@@ -207,7 +181,7 @@
           <li>Outputs: <strong>PDF + CSV</strong></li>
           <li><em>Advanced Exports add-on available</em></li>
         </ul>
-        <a class="btn primary" href="#request" data-analytics="cta_monthly">Choose Monthly</a>
+        <a class="btn primary" href="#request">Choose Monthly</a>
       </article>
 
       <article class="plan popular" role="listitem" aria-label="Quarterly Refresh (Most Popular)">
@@ -220,7 +194,7 @@
           <li><strong>Advanced Exports included</strong></li>
           <li>Outputs: PDF + CSV + <strong>Advanced</strong></li>
         </ul>
-        <a class="btn primary" href="#request" data-analytics="cta_quarterly">Choose Quarterly</a>
+        <a class="btn primary" href="#request">Choose Quarterly</a>
       </article>
 
       <article class="plan" role="listitem" aria-label="Annual Refresh">
@@ -233,7 +207,7 @@
           <li><strong>Advanced Exports included</strong></li>
           <li>Outputs: PDF + CSV + <strong>Advanced</strong></li>
         </ul>
-        <a class="btn primary" href="#request" data-analytics="cta_annual">Choose Annual</a>
+        <a class="btn primary" href="#request">Choose Annual</a>
       </article>
     </div>
 
@@ -256,7 +230,7 @@
       </div>
       <div class="card">
         <h3>3) Deliver & refresh</h3>
-        <p class="muted">Receive the pack, forward to reviewers, and let our reminders keep evidence fresh. Advanced exports available when needed.</p>
+        <p class="muted">Receive the pack by email, forward to reviewers, and let our reminders keep evidence fresh. Advanced exports available when needed.</p>
       </div>
     </div>
   </section>
@@ -276,10 +250,10 @@
     </div>
   </section>
 
-  <!-- REQUEST / QUESTIONNAIRE (MULTI-STEP) -->
+  <!-- REQUEST / WIZARD WITH MULTI-FILE UPLOAD -->
   <section id="request" class="wrap section">
     <h2>Start your trial (or choose a plan)</h2>
-    <p class="muted">This form emails us your details and saves a local JSON copy. We’ll guide you if your upload exceeds trial limits, and you can opt into weekly cadence at checkout.</p>
+    <p class="muted">Upload, click submit, get the Proof Pack by email. If your upload exceeds trial caps, we’ll suggest the right plan before delivery.</p>
 
     <div class="wizard">
       <div class="steps" aria-hidden="true">
@@ -291,7 +265,7 @@
       <form id="reqForm" class="wiz-card" novalidate>
         <!-- STEP 1 -->
         <div class="wiz-step" data-step="1">
-          <div class="form-row two">
+          <div class="form-row two" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
             <div>
               <label for="name">Your name</label>
               <input id="name" name="name" autocomplete="name" required />
@@ -300,8 +274,6 @@
               <label for="email">Work email</label>
               <input id="email" name="email" type="email" autocomplete="email" required />
             </div>
-          </div>
-          <div class="form-row two">
             <div>
               <label for="company">Company</label>
               <input id="company" name="company" autocomplete="organization" required />
@@ -318,54 +290,59 @@
           </div>
           <div class="wiz-actions">
             <span class="small">Step 1 of 3</span>
-            <button class="btn primary" type="button" data-next data-analytics="wiz_next_1">Next</button>
+            <button class="btn primary" type="button" data-next>Next</button>
           </div>
         </div>
 
         <!-- STEP 2 -->
         <div class="wiz-step hide" data-step="2">
-          <div class="form-row three">
-            <div>
-              <label for="frameworks">Frameworks</label>
-              <select id="frameworks" name="frameworks" multiple>
-                <option>SOC 2</option><option>ISO 27001</option><option>HIPAA</option><option>NIST CSF</option><option>Other</option>
-              </select>
-              <small class="small">Hold Ctrl/Cmd to multi-select</small>
+          <div class="form-row" style="display:grid;gap:12px">
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+              <div>
+                <label for="frameworks">Frameworks</label>
+                <select id="frameworks" name="frameworks" multiple>
+                  <option>SOC 2</option><option>ISO 27001</option><option>HIPAA</option><option>NIST CSF</option><option>Other</option>
+                </select>
+                <small class="small">Hold Ctrl/Cmd to multi-select</small>
+              </div>
+              <div>
+                <label for="repos">Approx. repos</label>
+                <select id="repos" name="repos">
+                  <option>1</option><option>2-4</option><option>5-8</option><option>9+</option>
+                </select>
+              </div>
+              <div>
+                <label for="submission">Submission preference</label>
+                <select id="submission" name="submission">
+                  <option>Manual upload (default)</option>
+                  <option>Local Collector (premium)</option>
+                  <option>GitHub App (read-only, later)</option>
+                </select>
+              </div>
             </div>
-            <div>
-              <label for="repos">Approx. repos</label>
-              <select id="repos" name="repos">
-                <option>1</option><option>2-4</option><option>5-8</option><option>9+</option>
-              </select>
-            </div>
-            <div>
-              <label for="submission">Submission preference</label>
-              <select id="submission" name="submission">
-                <option>Manual upload (default)</option>
-                <option>Local Collector (premium)</option>
-                <option>GitHub App (read-only, later)</option>
-              </select>
-            </div>
-          </div>
 
-          <!-- NEW: trial artifact upload -->
-          <div class="form-row">
-            <div>
-              <label for="artifact">Upload artifact (trial)</label>
-              <input id="artifact" name="file" type="file" />
-              <small class="small">Up to 10 artifacts / 50 MB total for the $1 trial (start with one file here).</small>
+            <!-- Dropzone -->
+            <div class="drop" id="drop">
+              <div class="row">
+                <strong>Upload artifacts</strong>&nbsp;&nbsp;<span class="pill">Up to 10 files / 50 MB total (trial)</span>
+              </div>
+              <p class="small muted">Drag & drop or <label for="files" class="btn link">choose files</label>.</p>
+              <input id="files" name="files" type="file" multiple style="display:none" />
+              <div class="files" id="fileList"></div>
+              <div class="prog" aria-hidden="true"><div id="bar"></div></div>
+              <div id="uploadNote" class="note small muted"></div>
             </div>
           </div>
 
           <div class="wiz-actions">
-            <button class="btn" type="button" data-back data-analytics="wiz_back_2">Back</button>
-            <button class="btn primary" type="button" data-next data-analytics="wiz_next_2">Next</button>
+            <button class="btn" type="button" data-back>Back</button>
+            <button class="btn primary" type="button" data-next>Next</button>
           </div>
         </div>
 
         <!-- STEP 3 -->
         <div class="wiz-step hide" data-step="3">
-          <div class="form-row two">
+          <div class="form-row two" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
             <div>
               <label for="cadence">Refresh cadence</label>
               <select id="cadence" name="cadence" required>
@@ -377,9 +354,6 @@
               <label for="nextAudit">Next audit / review date</label>
               <input id="nextAudit" name="nextAudit" type="date" />
             </div>
-          </div>
-
-          <div class="form-row two">
             <div>
               <label for="timezone">Your timezone</label>
               <input id="timezone" name="timezone" placeholder="e.g., America/New_York" />
@@ -388,9 +362,6 @@
               <label for="reminder">Preferred delivery day/time</label>
               <input id="reminder" name="reminder" placeholder="e.g., Monday 9am" />
             </div>
-          </div>
-
-          <div class="form-row two">
             <div>
               <label for="recipientRole">Primary reviewer role</label>
               <select id="recipientRole" name="recipientRole" required>
@@ -412,28 +383,27 @@
               </select>
               <small class="small">Advanced Exports included on Quarterly & Annual; add-on otherwise.</small>
             </div>
-          </div>
-
-          <div class="form-row two">
-            <div>
-              <label for="notes">Anything else?</label>
-              <textarea id="notes" name="notes" placeholder="Questionnaire needs, specific controls, output details, etc."></textarea>
-            </div>
-            <div>
+            <div style="grid-column:1/-1">
               <label for="trialContinue">Trial preference</label>
               <select id="trialContinue" name="trialContinue" required>
                 <option>Auto-continue monthly with weekly updates (cancel anytime)</option>
                 <option>One-time trial only (decide after delivery)</option>
               </select>
-              <small class="small">If your upload exceeds trial caps, we’ll suggest the right plan before delivery.</small>
+            </div>
+            <div style="grid-column:1/-1">
+              <label for="notes">Anything else?</label>
+              <textarea id="notes" name="notes" placeholder="Questionnaire needs, specific controls, output details, etc." style="min-height:110px"></textarea>
             </div>
           </div>
 
           <div class="wiz-actions">
-            <button class="btn" type="button" data-back data-analytics="wiz_back_3">Back</button>
-            <button class="btn primary" type="submit" data-analytics="wiz_submit">Send request</button>
+            <button class="btn" type="button" data-back>Back</button>
+            <button class="btn primary" type="submit">Submit</button>
           </div>
-          <p id="thanks" class="small" style="display:none;margin-top:8px">Opening your email client… we also saved a JSON copy of your request locally.</p>
+
+          <!-- Success / error -->
+          <div id="success" class="success"><span class="dot"></span><strong>Uploaded!</strong><span class="muted">We’ll email your Proof Pack shortly.</span></div>
+          <div id="fail" class="small err" style="display:none;margin-top:8px"></div>
         </div>
       </form>
     </div>
@@ -442,24 +412,21 @@
   <!-- FOOTER -->
   <footer class="wrap">
     <div class="row" style="margin-bottom:8px">
-      <div>© <span id="y"></span> ProofRepo • <a class="btn link" href="mailto:ops@proofrepo.com" data-analytics="cta_mail_footer">ops@proofrepo.com</a></div>
+      <div>© <span id="y"></span> ProofRepo • <a class="btn link" href="mailto:ops@proofrepo.com">ops@proofrepo.com</a></div>
       <div class="tag">Based in Jacksonville, Florida</div>
     </div>
     <div class="small">Disclaimer: ProofRepo prepares materials to assist with audits and vendor reviews; it is not a certification or attestation body.</div>
   </footer>
 
-  <!-- Optional: Cloudflare Web Analytics (add your token later) -->
-  <!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "YOUR-CF-WEB-ANALYTICS-TOKEN"}'></script> -->
-
   <script>
-    // Ensure page starts at top on reload (avoid browser scroll restoration)
-    if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
+    // Top on reload
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     window.addEventListener('load', () => { window.scrollTo(0,0); }, { once:true });
 
-    // ---------- Year ----------
+    // Year
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    // ---------- Wizard ----------
+    // Wizard nav
     const steps = Array.from(document.querySelectorAll('.wiz-step'));
     const bars = [document.getElementById('st1'), document.getElementById('st2'), document.getElementById('st3')];
     let current = 0;
@@ -476,224 +443,149 @@
       btn.addEventListener('click', ()=>{ if(current > 0) showStep(current-1); });
     });
 
-    // ---------- Upload helper (Worker -> R2) ----------
-    async function uploadArtifactIfPresent() {
-      const input = document.getElementById('artifact');
-      if (!input || !input.files || input.files.length === 0) return null;
+    // Dropzone + size caps
+    const filesInput = document.getElementById('files');
+    const drop = document.getElementById('drop');
+    const fileList = document.getElementById('fileList');
+    const bar = document.getElementById('bar');
+    const note = document.getElementById('uploadNote');
+    const MAX_FILES = 10;
+    const MAX_TOTAL = 50 * 1024 * 1024; // 50 MB
 
-      const fd = new FormData();
-      fd.append('file', input.files[0]);
-
-      const res = await fetch('https://proofrepo-intake.atucker5.workers.dev', {
-        method: 'POST',
-        body: fd
+    function renderFiles(list){
+      fileList.innerHTML = '';
+      [...list].forEach(f=>{
+        const el = document.createElement('div');
+        el.className = 'file';
+        const kb = Math.round(f.size/1024);
+        el.innerHTML = `<div>${f.name}<br><small>${kb.toLocaleString()} KB</small></div><button type="button" class="btn small rm">Remove</button>`;
+        el.querySelector('.rm').onclick = () => {
+          const dt = new DataTransfer();
+          [...filesInput.files].forEach(x=>{ if(x!==f) dt.items.add(x); });
+          filesInput.files = dt.files;
+          renderFiles(filesInput.files);
+        };
+        fileList.appendChild(el);
       });
-
-      if (!res.ok) {
-        const t = await res.text().catch(()=> '');
-        throw new Error(`Upload failed (${res.status}) ${t}`);
-      }
-      const json = await res.json();
-      return json.key || null;
+    }
+    function capMessage(){
+      const count = filesInput.files.length;
+      const total = [...filesInput.files].reduce((n,f)=> n+f.size, 0);
+      const overFiles = count > MAX_FILES;
+      const overBytes = total > MAX_TOTAL;
+      const msgs = [];
+      if(overFiles) msgs.push(`Max ${MAX_FILES} files.`);
+      if(overBytes) msgs.push(`Max ${(MAX_TOTAL/1024/1024)|0} MB total.`);
+      note.textContent = msgs.join(' ');
+      note.style.color = (overFiles || overBytes) ? '#fca5a5' : '';
+      return !(overFiles || overBytes);
     }
 
-    // ---------- Form submit (upload → save JSON → email) ----------
+    ;['dragenter','dragover'].forEach(ev=>{
+      drop.addEventListener(ev,e=>{ e.preventDefault(); drop.classList.add('active'); });
+    });
+    ;['dragleave','drop'].forEach(ev=>{
+      drop.addEventListener(ev,e=>{ e.preventDefault(); drop.classList.remove('active'); });
+    });
+    drop.addEventListener('drop', e=>{
+      const dt = e.dataTransfer;
+      if(!dt?.files?.length) return;
+      const merged = new DataTransfer();
+      [...filesInput.files, ...dt.files].slice(0, 60).forEach(f=> merged.items.add(f));
+      filesInput.files = merged.files;
+      renderFiles(filesInput.files);
+      capMessage();
+    });
+    filesInput.addEventListener('change', ()=>{
+      renderFiles(filesInput.files);
+      capMessage();
+    });
+
+    // Form submit -> POST to Worker
     const form = document.getElementById('reqForm');
+    const okBox = document.getElementById('success');
+    const failBox = document.getElementById('fail');
+    const WORKER_URL = 'https://proofrepo-intake.atucker5.workers.dev';
 
     function serializeForm(form){
-      const data = {};
-      Array.from(new FormData(form).entries()).forEach(([k,v])=>{
-        if(data[k]) { if(Array.isArray(data[k])) data[k].push(v); else data[k] = [data[k], v]; }
-        else data[k] = v;
+      const obj = {};
+      new FormData(form).forEach((v,k)=>{
+        if(obj[k]) { if(Array.isArray(obj[k])) obj[k].push(v); else obj[k] = [obj[k], v]; }
+        else obj[k] = v;
       });
       const fwEl = document.getElementById('frameworks');
-      if (fwEl) {
-        const fw = Array.from(fwEl.selectedOptions || []).map(o=>o.value);
-        if(fw.length) data.frameworks = fw;
+      if (fwEl) obj.frameworks = Array.from(fwEl.selectedOptions||[]).map(o=>o.value);
+      return obj;
+    }
+
+    async function uploadToWorker(){
+      const fd = new FormData();
+      const data = serializeForm(form);
+      Object.entries(data).forEach(([k,v])=>{
+        if (Array.isArray(v)) v.forEach(x=> fd.append(k, x));
+        else fd.append(k, v);
+      });
+      [...filesInput.files].forEach(f=> fd.append('files', f, f.name));
+
+      // simple progress animation (until server responds)
+      bar.style.width = '20%';
+      const prog = setInterval(()=>{
+        const now = parseInt(bar.style.width) || 0;
+        if(now < 90) bar.style.width = (now+5)+'%';
+      }, 250);
+
+      try{
+        const res = await fetch(WORKER_URL, { method:'POST', body: fd });
+        clearInterval(prog);
+        bar.style.width = '100%';
+        if(!res.ok) throw new Error(`Upload failed (${res.status})`);
+        const j = await res.json();
+        return j;
+      }catch(err){
+        clearInterval(err);
+        throw err;
       }
-      return data;
-    }
-    function downloadJSON(obj, filename){
-      const blob = new Blob([JSON.stringify(obj, null, 2)], {type:'application/json'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href = url; a.download = filename;
-      document.body.appendChild(a); a.click();
-      setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 0);
-    }
-    function buildMailto(data){
-      const subject = encodeURIComponent(`Proof Pack request — ${data.company || ''} — ${data.plan || ''}`);
-      const bodyLines = [
-        `Name: ${data.name||''}`,
-        `Email: ${data.email||''}`,
-        `Company: ${data.company||''}`,
-        `Plan: ${data.plan||''}`,
-        `Frameworks: ${(data.frameworks||[]).join(', ')}`,
-        `Repos: ${data.repos||''}`,
-        `Submission: ${data.submission||''}`,
-        `Cadence: ${data.cadence||''}`,
-        `Next audit: ${data.nextAudit||''}`,
-        `Timezone: ${data.timezone||''}`,
-        `Preferred delivery time: ${data.reminder||''}`,
-        `Primary reviewer: ${data.recipientRole||''}`,
-        `Preferred output: ${data.outputFormat||''}`,
-        `Trial preference: ${data.trialContinue||''}`,
-        ...(data.artifactKey ? [`Uploaded artifact key (R2): ${data.artifactKey}`] : []),
-        `Notes: ${data.notes||''}`,
-        ``,
-        `Requested base outputs: PDF + CSV.`,
-        `Advanced Exports policy: Included on Quarterly & Annual; add-on otherwise.`,
-        `—`,
-        `(We’ll schedule refreshes based on your cadence and preferred time.)`
-      ];
-      const body = encodeURIComponent(bodyLines.join('\n'));
-      return `mailto:ops@proofrepo.com?subject=${subject}&body=${body}`;
-    }
-    function safeOpen(href){
-      try { window.location.href = href; }
-      catch(e){ alert('If your email app did not open, please email ops@proofrepo.com and attach your downloaded JSON.'); }
     }
 
-    form.addEventListener('submit', async function(e){
+    form.addEventListener('submit', async (e)=>{
       e.preventDefault();
+      failBox.style.display = 'none';
+      okBox.classList.remove('show');
 
-      // 1) upload if present
-      let artifactKey = null;
-      try {
-        artifactKey = await uploadArtifactIfPresent();
-      } catch (err) {
-        alert('Upload failed. Please try again or remove the file and submit.\n\n' + err.message);
+      // client caps
+      if(!capMessage()){
+        failBox.textContent = 'Upload exceeds trial limits. Remove files or choose a paid plan.';
+        failBox.style.display = 'block';
         return;
       }
 
-      // 2) serialize form and include artifact key
-      const data = serializeForm(this);
-      if (artifactKey) data.artifactKey = artifactKey;
-
-      // 3) save local JSON + mailto open
-      const ts = new Date().toISOString().replace(/[:.]/g,'-');
-      downloadJSON(data, `proofrepo_request_${ts}.json`);
-      document.getElementById('thanks')?.setAttribute('style','display:block;margin-top:8px');
-      safeOpen(buildMailto(data));
-
-      // 4) analytics
-      track('form_submit', {plan:data.plan||null, cadence:data.cadence||null});
-    });
-
-    // ---------- Sticky banner hide on input/keyboard ----------
-    const marqueeBar = document.getElementById('marqueeBar');
-    const marqueeTrack = document.getElementById('marqueeTrack');
-    const focusables = Array.from(document.querySelectorAll('input, textarea, select'));
-    function hideBanner(){ marqueeBar.classList.add('hidden'); marqueeTrack.classList.add('paused'); }
-    function showBanner(){ marqueeBar.classList.remove('hidden'); marqueeTrack.classList.remove('paused'); }
-    focusables.forEach(el=>{
-      el.addEventListener('focus', hideBanner);
-      el.addEventListener('blur', () => {
-        setTimeout(() => {
-          if (!document.activeElement || !document.activeElement.matches('input, textarea, select')) showBanner();
-        }, 120);
-      });
-    });
-    if (window.visualViewport) {
-      const baseHeight = window.visualViewport.height;
-      window.visualViewport.addEventListener('resize', () => {
-        const ratio = window.visualViewport.height / baseHeight;
-        if (ratio < 0.9) hideBanner(); else showBanner();
-      });
-    }
-    // Hide banner while actively scrolling anywhere on page
-    (function () {
-      let scrollTimer = null;
-      window.addEventListener('scroll', () => {
-        hideBanner();
-        clearTimeout(scrollTimer);
-        scrollTimer = setTimeout(() => { showBanner(); }, 600);
-      }, { passive: true });
-    })();
-
-    // =========================================================
-    //           INVISIBLE VISITOR INTELLIGENCE (client)
-    // =========================================================
-    // Privacy-first: no form field contents, no cookies, no IP.
-    // Sends only operational metrics to an optional endpoint.
-    const ANALYTICS_ENDPOINT = ""; // e.g., "https://your-worker.your-subdomain.workers.dev/ingest"
-    const sessionId = (crypto && crypto.randomUUID) ? crypto.randomUUID() :
-                      Math.random().toString(36).slice(2) + Date.now().toString(36);
-
-    const kpis = { start: Date.now(), engaged: false, maxScroll: 0 };
-
-    function uaHash(){
-      const seed = [
-        navigator.userAgent||'',
-        window.devicePixelRatio||1,
-        navigator.language||'',
-        (screen.width||0)+'x'+(screen.height||0)
-      ].join('|');
-      let h=0; for(let i=0;i<seed.length;i++){ h=((h<<5)-h)+seed.charCodeAt(i); h|=0; }
-      return 'u'+(h>>>0).toString(36);
-    }
-    function basePayload(){
-      const url = new URL(location.href);
-      const utm = {};
-      ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'].forEach(k=>{
-        if(url.searchParams.get(k)) utm[k]=url.searchParams.get(k);
-      });
-      return {
-        ts: new Date().toISOString(),
-        sid: sessionId,
-        path: location.pathname,
-        title: document.title,
-        ref: document.referrer || null,
-        utm,
-        lang: navigator.language || null,
-        vp: { w: window.innerWidth, h: window.innerHeight, dpr: window.devicePixelRatio || 1 },
-        tzOffsetMin: new Date().getTimezoneOffset(),
-        ua: uaHash()
-      };
-    }
-    function send(event, extra={}){
-      if(!ANALYTICS_ENDPOINT) return;
-      const payload = Object.assign({event}, basePayload(), extra);
-      try{
-        const blob = new Blob([JSON.stringify(payload)], {type:'application/json'});
-        navigator.sendBeacon(ANALYTICS_ENDPOINT, blob);
-      }catch(e){ /* no-op */ }
-    }
-    function track(event, data){ send(event, data); }
-
-    // Pageview + UTM
-    track('pageview', {});
-
-    // Scroll depth + engaged
-    window.addEventListener('scroll', ()=>{
-      const scrolled = (window.scrollY + window.innerHeight) / Math.max(1, document.documentElement.scrollHeight);
-      const pct = Math.round(Math.min(100, Math.max(kpis.maxScroll, scrolled*100)));
-      if (pct > kpis.maxScroll){
-        kpis.maxScroll = pct;
-        if (pct===25 || pct===50 || pct===75 || pct===90) track('scroll', {pct});
+      // must have email + at least 1 file on trial
+      if(!document.getElementById('email').value){
+        failBox.textContent = 'Please enter a valid work email.';
+        failBox.style.display = 'block';
+        return;
       }
-      if (!kpis.engaged && (Date.now()-kpis.start) > 8000) { kpis.engaged = true; track('engaged', {}); }
-    }, {passive:true});
+      if(document.getElementById('plan').value.includes('Trial') && filesInput.files.length === 0){
+        failBox.textContent = 'Please add at least one file for the trial.';
+        failBox.style.display = 'block';
+        return;
+      }
 
-    // Time on page (on unload)
-    window.addEventListener('pagehide', ()=>{
-      const durMs = Date.now() - kpis.start;
-      track('pageclose', {durMs, maxScroll:kpis.maxScroll});
+      try{
+        const resp = await uploadToWorker();
+        okBox.classList.add('show');
+        // Friendly nudge if they hit trial limits on server side:
+        if(resp?.recommendPlan){
+          note.innerHTML = `Heads up: your intake exceeded trial caps. <span class="warn">Recommended:</span> ${resp.recommendPlan}.`;
+        }
+      }catch(err){
+        failBox.textContent = err.message || 'Upload error. Please try again or email ops@proofrepo.com.';
+        failBox.style.display = 'block';
+      }
     });
 
-    // CTA tracking
-    document.querySelectorAll('[data-analytics]').forEach(el=>{
-      el.addEventListener('click', ()=>{ track('click', {id: el.getAttribute('data-analytics')}); });
-    });
-
-    // Initialize first step
+    // Init first step
     showStep(0);
   </script>
-
-  <!--
-    If you include any external links again later (blogs/resources), add:
-    target="_blank" rel="noopener"
-    Example:
-    <a href="https://example.com" target="_blank" rel="noopener">Example</a>
-  -->
 </body>
 </html>
