@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ProofRepo — Compliance proof in minutes, then on a cadence</title>
+  <title>ProofRepo — Reviewer-ready compliance evidence in minutes</title>
 
   <!-- SEO -->
-  <meta name="description" content="Send your evidence, get back a clean, reviewer-ready Proof Pack in minutes—then on a reliable cadence. No setup or dashboards to learn." />
+  <meta name="description" content="Upload SOC 2 evidence and get back a clean, reviewer-ready ProofPack in minutes. Built for boutique auditors and the clients they serve." />
   <meta name="keywords" content="SOC 2 evidence, ISO 27001 evidence, vendor security review, compliance proof, audit readiness, security questionnaire" />
 
   <!-- Open Graph -->
-  <meta property="og:title" content="ProofRepo — Compliance proof in minutes, then on a cadence">
-  <meta property="og:description" content="Deliverable-first compliance: upload artifacts, receive a reviewer-ready pack.">
+  <meta property="og:title" content="ProofRepo — Reviewer-ready compliance evidence in minutes">
+  <meta property="og:description" content="Companies upload the artifacts they already use. Auditors receive a clean, structured ProofPack that drops straight into workpapers.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://proofrepo.com/">
 
@@ -34,11 +34,11 @@
     /* NAV */
     .logo{display:flex;align-items:center;gap:10px;font-weight:800}
     .glyph{width:34px;height:34px;border-radius:10px;background:conic-gradient(from 210deg,var(--primary),var(--primary2));box-shadow:var(--shadow)}
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:999px;border:1px solid #2a3766;cursor:pointer;transition:transform .12s ease, background .12s ease, filter .12s ease;font-size:.9rem}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:999px;border:1px solid #2a3766;cursor:pointer;transition:transform .12s ease, background .12s ease, filter .12s ease}
     .btn:hover{background:#111b3e; transform:translateY(-1px)}
     .btn.primary{background:linear-gradient(135deg,var(--primary),var(--primary2));border-color:transparent;color:#fff;box-shadow:var(--shadow)}
     .btn.primary[disabled]{opacity:.6;cursor:not-allowed;transform:none}
-    .btn.link{padding:0;border:0;color:#9db0ff;background:transparent}
+    .btn.link{padding:0;border:0;color:#9db0ff}
     .nav{backdrop-filter:saturate(120%) blur(4px)}
 
     /* HERO */
@@ -46,7 +46,6 @@
     .heroGrid{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center}
     .kicker{color:var(--accent);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.8rem}
     h1{font-size:clamp(28px,4vw,46px);line-height:1.15;margin:10px 0 12px}
-    h2{margin:0 0 10px}
     .sub{color:var(--muted);font-size:1.05rem;max-width:60ch}
     .card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--r);padding:22px;transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease}
     .card:hover{transform:translateY(-2px); box-shadow:0 18px 45px rgba(20,40,120,.35); border-color:#2b3e7a}
@@ -73,46 +72,61 @@
     /* PRICING */
     .pricing .plan{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:10px; position:relative}
     .pricing h3{margin:0}
-    .price{font-size:2rem;font-weight:800}
+    .price{font-size:1.4rem;font-weight:700}
     .popular{border-color:#2b5cff;box-shadow:0 12px 36px rgba(43,92,255,.25)}
-    .popular::before{content:"Most popular";position:absolute;top:-12px;left:16px;background:#1a2a6b;color:#cfe0ff;padding:4px 10px;border-radius:999px;border:1px solid #27419e;font-size:.78rem}
+    .popular::before{content:"Auditor beta focus";position:absolute;top:-12px;left:16px;background:#1a2a6b;color:#cfe0ff;padding:4px 10px;border-radius:999px;border:1px solid #27419e;font-size:.78rem}
 
     /* FORM */
     form{display:grid;gap:14px}
-    label{font-weight:600;font-size:.9rem}
-    input, select, textarea{width:100%; padding:10px 12px; border-radius:10px; border:1px solid #2a3766; background:#0e1634; color:var(--text); font-size:.9rem}
+    label{font-weight:600}
+    input, select, textarea{width:100%; padding:12px 12px; border-radius:10px; border:1px solid #2a3766; background:#0e1634; color:var(--text)}
     textarea{min-height:110px;resize:vertical}
     .form-row{display:grid;gap:12px}
     .two{grid-template-columns:1fr 1fr}
-    .status{margin-top:8px;padding:10px;border-radius:10px;background:#0d193c;border:1px solid #27356b;font-size:.9rem}
+    .three{grid-template-columns:1fr 1fr 1fr}
+    .status{margin-top:8px;padding:10px;border-radius:10px;background:#0d193c;border:1px solid #27356b}
     .status.ok{border-color:#195d3a;background:#0f2a22}
     .status.err{border-color:#7a1a2a;background:#2b0e16}
     .filebox{border:1px dashed #3a4a86;border-radius:12px;padding:14px}
-    .filemeta{font-size:.85rem;color:#a9b8ef}
-    .checkbox-group{display:grid;gap:6px;font-size:.85rem}
-    .checkbox-group input{width:auto;margin-right:6px}
-    .checkbox-group label{font-weight:400;display:flex;align-items:center}
+    .filemeta{font-size:.9rem;color:#a9b8ef}
 
-    /* Responsive */
+    details.advanced{margin-top:8px}
+    details.advanced summary{cursor:pointer;font-weight:600;color:#9fb2ff}
+
     @media (max-width:980px){
       .heroGrid{grid-template-columns:1fr}
       .cols3,.cols2{grid-template-columns:1fr}
-      .row{flex-wrap:wrap}
     }
     .focusable:focus-visible,.btn:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--ring);outline-offset:2px;border-radius:10px}
   </style>
 
   <!-- JSON-LD -->
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Organization","name":"ProofRepo","url":"https://proofrepo.com","email":"ops@proofrepo.com","description":"Deliverable-first compliance packs.","address":{"@type":"PostalAddress","addressLocality":"Jacksonville","addressRegion":"FL","addressCountry":"US"}}
+  {
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "name":"ProofRepo",
+    "url":"https://proofrepo.com",
+    "email":"ops@proofrepo.com",
+    "description":"Reviewer-ready compliance evidence packs for boutique auditors and their clients.",
+    "address":{
+      "@type":"PostalAddress",
+      "addressLocality":"Jacksonville",
+      "addressRegion":"FL",
+      "addressCountry":"US"
+    }
+  }
   </script>
 </head>
 <body>
   <!-- NAV -->
   <header class="wrap row nav" role="banner">
-    <div class="logo"><div class="glyph" aria-hidden="true"></div><span>ProofRepo</span></div>
+    <div class="logo">
+      <div class="glyph" aria-hidden="true"></div>
+      <span>ProofRepo</span>
+    </div>
     <nav class="row" aria-label="primary">
-      <a class="btn" href="#pricing">Pricing</a>
+      <a class="btn" href="#pricing">For auditors</a>
       <a class="btn" href="#how">How it works</a>
       <a class="btn" href="#request">Upload evidence</a>
     </nav>
@@ -122,31 +136,45 @@
   <section class="wrap hero">
     <div class="heroGrid">
       <div>
-        <div class="kicker">Deliverable-first compliance</div>
-        <h1>Compliance proof in <span style="color:var(--accent)">minutes</span> — then on a cadence</h1>
+        <div class="kicker">Reviewer-ready compliance evidence</div>
+        <h1>Compliance proof in <span style="color:var(--accent)">minutes</span> — built for boutique auditors</h1>
         <p class="sub">
-          Send your evidence, get back a clean, reviewer-ready <strong>Proof Pack</strong> you can forward right away.
-          No dashboards to learn—just the deliverable, refreshed when you need it.
+          Companies upload the artifacts they already use. ProofRepo organizes and classifies the files
+          and returns a clean, structured <strong>ProofPack</strong> that drops straight into workpapers.
+          No portals to learn, no new templates for clients.
         </p>
         <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px">
-          <a class="btn primary" href="#request">Start an upload</a>
-          <a class="btn" href="#pricing">See pricing ideas</a>
+          <a class="btn primary" href="#request" data-analytics="cta_upload">Upload evidence</a>
+          <a class="btn" href="mailto:ops@proofrepo.com?subject=Auditor%20beta" data-analytics="cta_auditor_beta">
+            Auditor? Join the beta
+          </a>
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
-          <span class="pill">Evidence → ProofPack</span>
-          <span class="pill">SOC 2 first</span>
-          <span class="pill">Quarterly refresh friendly</span>
+          <span class="pill">Designed for boutique firms</span>
+          <span class="pill">SOC 2 focus (more later)</span>
+          <span class="pill">ProofPack: JSON + viewer</span>
+          <span class="pill">Email-based, no logins</span>
         </div>
       </div>
 
       <aside class="card" aria-label="Highlights">
         <div class="ticks">
-          <div class="li"><span class="tick">✓</span><div><strong>Deliverable-first:</strong> outputs built for auditors</div></div>
-          <div class="li"><span class="tick">✓</span><div><strong>Low friction:</strong> upload what you already have</div></div>
-          <div class="li"><span class="tick">✓</span><div><strong>Predictable:</strong> same process for each client</div></div>
+          <div class="li">
+            <span class="tick">✓</span>
+            <div><strong>Auditor-first:</strong> outputs organized the way reviewers think.</div>
+          </div>
+          <div class="li">
+            <span class="tick">✓</span>
+            <div><strong>Low friction for clients:</strong> just an upload form and an email.</div>
+          </div>
+          <div class="li">
+            <span class="tick">✓</span>
+            <div><strong>Smart hints:</strong> automatic detection and suggestions for key SOC 2 artifacts.</div>
+          </div>
         </div>
         <p class="muted" style="margin-top:12px">
-          You’ll get a confirmation email with a ProofPack viewer link after each submission.
+          Today’s beta focuses on <strong>SOC 2</strong> evidence. You can tag other frameworks
+          (ISO 27001, HIPAA, etc.) for future-ready organization, even before full automation is live.
         </p>
       </aside>
     </div>
@@ -155,139 +183,235 @@
   <!-- STICKY BOTTOM MARQUEE -->
   <div class="marquee-fixed" role="region" aria-label="Key highlights">
     <div class="marquee"><div>
-      &nbsp;SOC 2 access review intake • Change log + vendor list detection • Viewer-ready packs • Auditor codes supported • Self-destructing storage (R2 lifecycle) •
-      SOC 2 access review intake • Change log + vendor list detection • Viewer-ready packs • Auditor codes supported • Self-destructing storage (R2 lifecycle) •
+      &nbsp;Built with auditors in mind • SOC 2 focus, more frameworks coming • Upload what you already send today • ProofPack viewer link for easy review • Beta pricing and Stripe billing coming soon • Feedback welcome at ops@proofrepo.com •
+      Built with auditors in mind • SOC 2 focus, more frameworks coming • Upload what you already send today • ProofPack viewer link for easy review • Beta pricing and Stripe billing coming soon • Feedback welcome at ops@proofrepo.com •
     </div></div>
   </div>
 
-  <!-- PRICING (ROUGH IDEAS / COPY, NOT FINAL) -->
+  <!-- PRICING / POSITIONING -->
   <section id="pricing" class="wrap section pricing" aria-labelledby="pricing-h">
-    <h2 id="pricing-h">Very rough pricing ideas (not final)</h2>
+    <h2 id="pricing-h">For auditors and for companies</h2>
 
-    <div class="grid cols3" role="list">
-      <article class="plan" role="listitem">
-        <h3>One-off pack</h3>
-        <div class="price">$??</div>
-        <p class="muted">Single SOC 2 intake. Good for emergency “we need evidence now”.</p>
-      </article>
-
-      <article class="plan popular" role="listitem">
-        <h3>Auditor bundle</h3>
-        <div class="price">$??</div>
-        <p class="muted">Bundles of “packs” for boutique firms. You pass the link to clients.</p>
-      </article>
-
-      <article class="plan" role="listitem">
-        <h3>Refresh plan</h3>
-        <div class="price">$??</div>
-        <p class="muted">Quarterly / semi-annual refreshes for the same client.</p>
-      </article>
+    <div class="card" style="margin-bottom:18px;border-style:dashed">
+      <strong>Beta stage:</strong>
+      <span class="muted">
+        we’re working closely with a small group of boutique firms and early-stage companies.
+        Stripe billing and final pricing are not live yet; we’re focusing on getting the workflow right.
+      </span>
+      <a class="btn primary" style="margin-left:10px" href="mailto:ops@proofrepo.com?subject=Auditor%20beta">
+        Join auditor beta
+      </a>
     </div>
 
-    <p class="small" style="margin-top:10px">
-      All of this is placeholder until you finalize pricing. The important part right now: the intake flow below works.
-    </p>
+    <div class="grid cols3" role="list">
+      <article class="plan popular" role="listitem" aria-label="Auditor-led">
+        <h3>Auditor-led flows</h3>
+        <p class="muted">
+          You hand clients a link + a short code. They upload evidence, you receive a ProofPack link
+          and JSON manifest mapped to SOC 2 controls.
+        </p>
+        <ul class="muted">
+          <li>Client upload, auditor receives pack</li>
+          <li>Automatic detection for Access Review / ChangeLog / Vendors</li>
+          <li>Manifest JSON + human-friendly viewer</li>
+        </ul>
+        <div class="price">Beta: by arrangement</div>
+      </article>
+
+      <article class="plan" role="listitem" aria-label="Direct company uploads">
+        <h3>Companies, self-serve</h3>
+        <p class="muted">
+          No auditor yet? You can still upload evidence and use the ProofPack internally
+          or share it with investors and potential auditors.
+        </p>
+        <ul class="muted">
+          <li>Simple upload form, no login</li>
+          <li>ProofPack link emailed to you</li>
+          <li>Good for pre-audit prep and vendor reviews</li>
+        </ul>
+        <div class="price">Beta: free / by invite</div>
+      </article>
+
+      <article class="plan" role="listitem" aria-label="Future Stripe plans">
+        <h3>Stripe-backed plans (later)</h3>
+        <p class="muted">
+          Once the flows are solid we’ll expose Stripe-backed plans for one-off packs
+          and bundles for firms.
+        </p>
+        <ul class="muted">
+          <li>Per-engagement ProofPacks</li>
+          <li>Firm-level bundles for multiple clients</li>
+          <li>Optional refresh / follow-up flows</li>
+        </ul>
+        <div class="price small">Not live yet — collecting feedback first.</div>
+      </article>
+    </div>
   </section>
 
   <!-- HOW IT WORKS -->
   <section id="how" class="wrap section">
-    <h2>How this works for a client or auditor</h2>
+    <h2>How ProofRepo works (today)</h2>
     <div class="grid cols3">
       <div class="card">
-        <h3>1) Send them this link</h3>
-        <p class="muted">You (or an auditor) send a link to this page with optional auditor code.</p>
+        <h3>1) Share or open the link</h3>
+        <p class="muted">
+          An auditor or company goes to <strong>proofrepo.com</strong>.
+          Auditors can share the link plus a short code so uploads are routed correctly.
+        </p>
       </div>
       <div class="card">
-        <h3>2) They upload evidence</h3>
-        <p class="muted">Access review, change log, vendor list, etc. The Worker detects what’s there.</p>
+        <h3>2) Upload evidence</h3>
+        <p class="muted">
+          Attach the SOC 2 artifacts you already use: access reviews, change logs, vendor exports,
+          and related files. ProofRepo stores them only long enough to generate the pack.
+        </p>
       </div>
       <div class="card">
-        <h3>3) Everyone gets a ProofPack</h3>
-        <p class="muted">An email goes out with a pack viewer URL plus a machine-readable JSON manifest.</p>
+        <h3>3) Receive a ProofPack</h3>
+        <p class="muted">
+          We generate a structured manifest and a human-friendly viewer that groups files and
+          flags gaps (for example, missing vendor list). You receive a link via email.
+        </p>
       </div>
+    </div>
+  </section>
+
+  <!-- FAIR USE & CAPS -->
+  <section id="caps" class="wrap section">
+    <h2>Fair use & technical caps (beta)</h2>
+    <div class="card">
+      <p class="muted">
+        These are <strong>technical limits</strong> for the current beta, not final pricing.
+        They roughly match the limits configured in the backend. Consolidate files into ZIPs
+        when it makes sense.
+      </p>
+      <ul class="muted">
+        <li><strong>Trial:</strong> up to 10 files, ~50 MB total per submission.</li>
+        <li><strong>Starter (planned):</strong> higher caps for recurring use and more files.</li>
+        <li><strong>Pro (planned):</strong> sized for firms with multiple clients.</li>
+      </ul>
+      <p class="small">
+        Files are stored in R2 with lifecycle rules configured to delete objects
+        automatically after a short period.
+      </p>
     </div>
   </section>
 
   <!-- REQUEST / INTAKE -->
   <section id="request" class="wrap section">
-    <h2>Upload SOC 2 evidence</h2>
+    <h2>Upload evidence and get a ProofPack</h2>
     <p class="muted">
-      Use this for testing or real uploads. Files are stored briefly in R2 with an automatic delete rule.
-      You’ll receive an email from <code>ops@proofrepo.com</code> with a ProofPack viewer link.
+      Use this form to send SOC 2 (and related) evidence. You’ll receive a confirmation email with a
+      secure ProofPack link. During beta we’re focusing on correctness and reviewer experience —
+      payments are handled separately, not via this form yet.
     </p>
 
     <form id="intakeForm" class="card" novalidate>
+      <!-- Row 1: email + company -->
       <div class="form-row two">
         <div>
-          <label for="email">Your email</label>
-          <input id="email" name="email" type="email" required placeholder="you@company.com" />
+          <label for="email">Work email</label>
+          <input id="email" name="email" type="email" required placeholder="you@company.com"/>
         </div>
         <div>
           <label for="company">Company</label>
-          <input id="company" name="company" required placeholder="Company Inc." />
+          <input id="company" name="company" required placeholder="Company Inc."/>
         </div>
       </div>
 
+      <!-- Row 2: role + plan -->
       <div class="form-row two">
         <div>
-          <label for="plan">Plan label (for now this is just a label)</label>
-          <select id="plan" name="plan" required>
-            <option value="OneOff" selected>OneOff</option>
-            <option value="AuditorBundle">Auditor bundle</option>
-            <option value="Refresh">Refresh client</option>
+          <label for="role">Who are you?</label>
+          <select id="role" name="role">
+            <option value="client" selected>I’m a company uploading for an auditor</option>
+            <option value="auditor">I’m an auditor uploading on behalf of a client</option>
           </select>
+          <div class="hint">This just helps with wording and routing — it doesn’t change your plan.</div>
         </div>
         <div>
-          <label for="cadence">Cadence (optional)</label>
-          <input id="cadence" name="cadence" type="text" placeholder="annual / quarterly / one-off" />
+          <label for="plan">Plan (beta)</label>
+          <select id="plan" name="plan">
+            <option value="Trial" selected>Trial (beta)</option>
+            <option value="Starter">Starter (planned)</option>
+            <option value="Pro">Pro (planned)</option>
+          </select>
+          <div class="hint">Backend uses this to apply fair-use caps. Pricing itself is handled separately.</div>
         </div>
       </div>
 
+      <!-- Row 3: frameworks + cadence -->
       <div class="form-row two">
         <div>
-          <label>Frameworks</label>
-          <div class="checkbox-group" aria-label="frameworks">
-            <label><input type="checkbox" name="frameworks" value="SOC2" checked /> SOC 2</label>
-            <label><input type="checkbox" name="frameworks" value="ISO27001" /> ISO 27001</label>
-            <label><input type="checkbox" name="frameworks" value="HIPAA" /> HIPAA</label>
-            <label><input type="checkbox" name="frameworks" value="GDPR" /> GDPR</label>
-          </div>
-          <div class="hint">SOC 2 is the only one wired up right now; others are future-proof labels.</div>
+          <label for="frameworks">Framework(s)</label>
+          <select id="frameworks" name="frameworks" multiple required>
+            <option value="SOC2">SOC 2</option>
+            <option value="ISO27001">ISO 27001 (tag only, beta)</option>
+            <option value="HIPAA">HIPAA (tag only, beta)</option>
+            <option value="NIST CSF">NIST CSF (tag only, beta)</option>
+            <option value="Other">Other</option>
+          </select>
+          <div class="hint">SOC 2 is fully wired today. Others are recorded as tags for future automation.</div>
         </div>
+        <div>
+          <label for="cadence">When do you need this?</label>
+          <select id="cadence" name="cadence">
+            <option value="">One-off pack</option>
+            <option>Upcoming audit</option>
+            <option>Vendor security review</option>
+            <option>Investor diligence</option>
+            <option>Other / recurring (explain in notes)</option>
+          </select>
+          <div class="hint">Cadence fields are stored in the manifest but do not trigger auto-refresh yet.</div>
+        </div>
+      </div>
+
+      <!-- Row 4: auditor routing -->
+      <div class="form-row two">
         <div>
           <label for="auditorCode">Auditor code (optional)</label>
-          <input id="auditorCode" name="auditorCode" type="text" placeholder="If your auditor gave you one" />
-          <div class="hint">This lets you route ProofPacks back to a specific boutique firm.</div>
+          <input id="auditorCode" name="auditorCode" placeholder="Short code from your auditor (e.g. TEST123)"/>
+          <div class="hint">If your auditor gave you a code, we’ll attach it in the manifest for easier routing.</div>
         </div>
-      </div>
-
-      <div class="form-row two">
         <div>
           <label for="auditorEmail">Auditor email (optional)</label>
-          <input id="auditorEmail" name="auditorEmail" type="email" placeholder="auditor@example.com" />
+          <input id="auditorEmail" name="auditorEmail" type="email" placeholder="auditor@examplefirm.com"/>
+          <div class="hint">We can send the ProofPack link here as well as to your own email.</div>
         </div>
+      </div>
+
+      <!-- Notes -->
+      <div class="form-row">
         <div>
-          <label for="notes">Notes (optional)</label>
-          <textarea id="notes" name="notes" placeholder="Anything you want to explain about the evidence…"></textarea>
+          <label for="notes">Anything we should know?</label>
+          <textarea id="notes" name="notes" placeholder="Deadlines, specific controls, output preferences…"></textarea>
         </div>
       </div>
 
-      <div>
-        <label for="map">Manual map JSON (optional)</label>
-        <textarea id="map" name="map" class="muted" placeholder='{"AccessReview":"access.csv","ChangeLog":"change.txt","Vendors":"vendors.json"}'></textarea>
-        <div class="hint">If set, back-end can use this to override automatic mapping.</div>
-      </div>
+      <!-- Advanced manual map -->
+      <details class="advanced">
+        <summary>Advanced: Manual map JSON (optional)</summary>
+        <div style="margin-top:8px">
+          <label for="map">Manual Map JSON</label>
+          <textarea id="map" name="map" class="muted" placeholder='{"AccessReview":"access.csv","ChangeLog":"change.txt","Vendors":"vendors.json"}'></textarea>
+          <div class="hint">Most people can ignore this. It overrides the auto-mapping engine for specific files.</div>
+        </div>
+      </details>
 
+      <!-- Files -->
       <div class="filebox">
-        <label for="files"><strong>Upload files</strong> (multiple allowed)</label>
-        <input id="files" name="files" type="file" multiple required />
+        <label for="files">
+          <strong>Upload artifacts</strong>
+          <span class="muted">(Trial: up to 10 files; ≈50 MB total. Zip archives are fine.)</span>
+        </label>
+        <input id="files" name="files" type="file" multiple />
         <div id="fileMeta" class="filemeta">No files selected.</div>
       </div>
 
       <div id="status" class="status" style="display:none"></div>
 
-      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
-        <button id="submitBtn" class="btn primary" type="submit">Submit to ProofRepo</button>
+      <div class="wiz-actions" style="display:flex;gap:10px;justify-content:flex-end">
+        <button id="submitBtn" class="btn primary" type="submit">Send and build ProofPack</button>
       </div>
     </form>
   </section>
@@ -295,15 +419,20 @@
   <!-- FOOTER -->
   <footer class="wrap">
     <div class="row" style="margin-bottom:8px">
-      <div>© <span id="y"></span> ProofRepo • <a class="btn link" href="mailto:ops@proofrepo.com">ops@proofrepo.com</a></div>
-      <div class="small">Based in Jacksonville, Florida</div>
+      <div>
+        © <span id="y"></span> ProofRepo •
+        <a class="btn link" href="mailto:ops@proofrepo.com" data-analytics="cta_mail_footer">ops@proofrepo.com</a>
+      </div>
+      <div class="tag">Based in Jacksonville, Florida</div>
     </div>
-    <div class="small">Disclaimer: ProofRepo prepares materials to assist with audits and vendor reviews; it is not a certification or attestation body.</div>
+    <div class="small">
+      Disclaimer: ProofRepo prepares materials to assist with audits and vendor reviews; it is not a certification or attestation body.
+    </div>
   </footer>
 
   <script>
-    // IMPORTANT: point directly at your /submit endpoint
-    const INTAKE_URL = 'https://proofrepo-intake.atucker5.workers.dev/submit';
+    // IMPORTANT: this stays pointed at your existing Intake Worker.
+    const INTAKE_URL = 'https://proofrepo-intake.atucker5.workers.dev/';
 
     const $ = s => document.querySelector(s);
     const statusEl = $('#status');
@@ -313,110 +442,114 @@
 
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    // Show simple file count + size
+    // File meta / caps display
     fileInput.addEventListener('change', () => {
       const files = Array.from(fileInput.files || []);
       if (!files.length) { fileMeta.textContent = 'No files selected.'; return; }
-      const total = files.reduce((n,f)=> n + (f.size||0), 0);
+      const total = files.reduce((n,f)=> n + (f.size || 0), 0);
       const totalMB = (total/1024/1024).toFixed(2);
       fileMeta.textContent = `${files.length} file(s), ${totalMB} MB total`;
     });
 
-    function showStatus(msg, ok){
+    function showStatus(msg, ok=false){
       statusEl.style.display='block';
-      statusEl.className = 'status ' + (ok ? 'ok' : 'err');
+      statusEl.className = 'status ' + (ok ? 'ok':'err');
       statusEl.innerHTML = msg;
     }
-    function clearStatus(){
-      statusEl.style.display='none';
-      statusEl.className = 'status';
-      statusEl.innerHTML = '';
-    }
+    function clearStatus(){ statusEl.style.display='none'; statusEl.textContent=''; }
 
     function validate(){
       const email = $('#email').value.trim();
       const company = $('#company').value.trim();
-      if (!email) return 'Please enter a valid email.';
+      if (!email) return 'Please enter a valid work email.';
       if (!company) return 'Please enter your company name.';
-      const frameworks = Array.from(document.querySelectorAll('input[name="frameworks"]:checked'));
-      if (frameworks.length === 0) return 'Please select at least one framework.';
+
+      const frameworksSel = document.getElementById('frameworks');
+      const fws = Array.from(frameworksSel.selectedOptions || []).map(o=>o.value);
+      if (fws.length === 0) return 'Please select at least one framework (SOC 2 is fully supported).';
+
       const files = Array.from(fileInput.files || []);
-      if (files.length === 0) return 'Please add at least one file.';
+      const plan = document.getElementById('plan').value || 'Trial';
+
+      // Trial caps: 10 files / 50 MB. For non-trial, keep same caps for now but looser messaging.
+      const total = files.reduce((n,f)=> n + (f.size || 0), 0);
+
+      if (plan === 'Trial') {
+        if (files.length === 0) return 'For the trial, please upload at least one file (up to 10).';
+        if (files.length > 10) return 'Trial limit is 10 files per submission. If needed, zip extras.';
+        if (total > 50 * 1024 * 1024) return 'Trial total size limit is about 50 MB. Please zip or trim your upload.';
+      } else {
+        if (files.length === 0) return 'Please upload at least one file so we can build a ProofPack.';
+        if (files.length > 50) return 'For large batches, split into multiple submissions.';
+      }
+
       return null;
     }
 
-    function gatherFormData(){
+    function gather(){
       const fd = new FormData();
-      fd.append('email', $('#email').value.trim());
-      fd.append('company', $('#company').value.trim());
-      fd.append('plan', $('#plan').value);
-      fd.append('cadence', $('#cadence').value.trim());
-      fd.append('notes', $('#notes').value.trim());
-      fd.append('auditorCode', $('#auditorCode').value.trim());
-      fd.append('auditorEmail', $('#auditorEmail').value.trim());
-      const mapVal = $('#map').value.trim();
+      fd.append('email', document.getElementById('email').value.trim());
+      fd.append('company', document.getElementById('company').value.trim());
+      fd.append('plan', document.getElementById('plan').value || 'Trial');
+      fd.append('cadence', document.getElementById('cadence').value || '');
+      fd.append('role', document.getElementById('role').value || 'client');
+
+      const frameworksSel = document.getElementById('frameworks');
+      Array.from(frameworksSel.selectedOptions || []).forEach(o => fd.append('frameworks', o.value));
+
+      fd.append('notes', document.getElementById('notes').value.trim());
+      const auditorCode = document.getElementById('auditorCode').value.trim();
+      const auditorEmail = document.getElementById('auditorEmail').value.trim();
+      if (auditorCode) fd.append('auditorCode', auditorCode);
+      if (auditorEmail) fd.append('auditorEmail', auditorEmail);
+      const mapVal = document.getElementById('map').value.trim();
       if (mapVal) fd.append('map', mapVal);
 
-      Array.from(document.querySelectorAll('input[name="frameworks"]:checked'))
-        .forEach(cb => fd.append('frameworks', cb.value));
-
       Array.from(fileInput.files || []).forEach(f => fd.append('files', f, f.name));
-
       return fd;
     }
 
-    document.getElementById('intakeForm').addEventListener('submit', async (e) => {
+    document.getElementById('intakeForm').addEventListener('submit', async (e)=>{
       e.preventDefault();
       clearStatus();
-
       const err = validate();
-      if (err) {
-        showStatus(err, false);
-        return;
-      }
+      if (err) { showStatus(err, false); return; }
 
       submitBtn.disabled = true;
       submitBtn.textContent = 'Uploading…';
 
-      try {
-        const res = await fetch(INTAKE_URL, { method: 'POST', body: gatherFormData() });
+      try{
+        const res = await fetch(INTAKE_URL, { method:'POST', body: gather() });
         const text = await res.text();
         let json = null;
-        try { json = JSON.parse(text); } catch { /* show raw if needed */ }
+        try { json = JSON.parse(text); } catch (_) {}
 
         if (!res.ok || !json || json.ok === false) {
-          const msg = json && json.error ? json.error : `Upload failed (${res.status})`;
+          const msg = (json && json.error) ? json.error : `Upload failed (${res.status})`;
           showStatus(msg, false);
         } else {
-          // Build missing-items summary if present
-          let missingHtml = '';
-          if (Array.isArray(json.needs) && json.needs.length > 0) {
-            const parts = json.needs.map(n => {
-              const fw = n.framework || 'Framework';
-              const items = (n.missing || []).join(', ');
-              return `${fw}: missing ${items}`;
-            });
-            missingHtml = `<br><strong>Missing items:</strong> ${parts.join(' • ')}`;
-          }
-
-          const viewerLink = json.viewerUrl
-            ? `<br><br><a href="${json.viewerUrl}" target="_blank" rel="noopener">Open ProofPack viewer</a>`
+          const keys = (json.keys || []).map(k => `<code>${k}</code>`).join('<br>');
+          const viewer = json.viewerUrl || json.packUrl;
+          const linkHtml = viewer
+            ? `<br><br><a href="${viewer}" target="_blank" rel="noopener">Open ProofPack viewer</a>`
             : '';
-
           showStatus(
-            `✅ Submission received. You’ll get an email shortly.${missingHtml}${viewerLink}`,
+            `✅ Received! ${json.usage?.files || json.keys?.length || 0} file(s) saved.<br>
+             A ProofPack email will arrive shortly.${linkHtml}<br><br>${keys || ''}`,
             true
           );
         }
-      } catch (err) {
+      } catch(err){
         showStatus(`Network error: ${err.message}`, false);
       } finally {
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Submit to ProofRepo';
+        submitBtn.textContent = 'Send and build ProofPack';
       }
     });
   </script>
 </body>
+</html>
+
 </html>
 
 </html>
