@@ -7,7 +7,7 @@
 
   <!-- SEO -->
   <meta name="description" content="Compliance ProofPacks in seconds. Auditors use ProofRepo to collect SOC 2 evidence without messy Google Drives or endless correction emails. Companies use it to stay audit-ready with clean inputs, without buying a full platform like Drata or Vanta." />
-  <meta name="keywords" content="SOC 2 evidence, ISO 27001 evidence, vendor security review, compliance proof, audit readiness, security questionnaire" />
+  <meta name="keywords" content="SOC 2 evidence, ISO 27001 evidence, HIPAA evidence, GDPR evidence, vendor security review, compliance proof, audit readiness" />
 
   <!-- Open Graph -->
   <meta property="og:title" content="ProofRepo — Compliance ProofPacks in seconds">
@@ -176,7 +176,7 @@
           </div>
         </div>
         <p class="muted" style="margin-top:12px">
-          Today’s beta focuses on <strong>SOC 2</strong> evidence. Other frameworks (ISO 27001, HIPAA, NIST CSF)
+          Today’s beta focuses on <strong>SOC 2</strong> evidence. Other frameworks (ISO 27001, HIPAA, GDPR, NIST CSF)
           can be tagged now so they’re organized for later automation.
         </p>
       </aside>
@@ -288,8 +288,9 @@
         That’s usually enough for SOC 2 evidence like access review exports, change logs, and vendor lists.
       </p>
       <p class="small">
-        Files are stored in R2 and automatically deleted after a short retention window. Final caps and pricing
-        will be based on the <strong>number of uploads / packs</strong>, not on trying to meter every individual file.
+        Files are stored in Cloudflare R2 with an automatic delete rule after a short retention window.
+        Final caps and pricing will be based on the <strong>number of uploads / packs</strong>, not on
+        trying to meter every individual file.
       </p>
     </div>
   </section>
@@ -307,34 +308,52 @@
       <!-- Row 1: email + company -->
       <div class="form-row two">
         <div>
-          <label for="email">Work email</label>
+          <label id="emailLabel" for="email">Work email</label>
           <input id="email" name="email" type="email" required placeholder="you@company.com"/>
         </div>
         <div>
-          <label for="company">Company</label>
+          <label id="companyLabel" for="company">Company</label>
           <input id="company" name="company" required placeholder="Company Inc."/>
         </div>
       </div>
 
-      <!-- Row 2: role + plan -->
+      <!-- Row 2: who + plan -->
       <div class="form-row two">
         <div>
           <label for="role">Who are you?</label>
           <select id="role" name="role">
-            <option value="auditor_collecting" selected>I’m an auditor collecting evidence from a client</option>
-            <option value="client_for_auditor">My auditor sent me here to upload evidence</option>
-            <option value="company_direct">I’m a company proactively building/updating my ProofPack</option>
+            <option value="auditor" selected>I’m an auditor collecting evidence from a client</option>
+            <option value="client">My auditor sent me here to upload evidence</option>
+            <option value="company">I’m a company proactively updating my ProofPack</option>
           </select>
-          <div class="hint">We use this for routing and wording — not for billing (yet).</div>
+          <div class="hint" id="roleHint">
+            We use this for routing and wording — not for billing (yet).
+          </div>
         </div>
         <div>
           <label for="plan">Plan label (beta)</label>
           <select id="plan" name="plan">
             <option value="Trial" selected>Trial</option>
+            <option value="OneOff">One-off pack</option>
             <option value="Starter">Starter (planned)</option>
             <option value="Pro">Pro (planned)</option>
           </select>
           <div class="hint">Backend uses this as a label plus simple caps. Real pricing will be upload-based.</div>
+        </div>
+      </div>
+
+      <!-- Billing / codes -->
+      <div class="form-row">
+        <div>
+          <label>How will this ProofPack be covered?</label>
+          <div class="small">
+            <label><input type="radio" name="billingMode" value="code" checked> I have a code from an auditor</label><br>
+            <label><input type="radio" name="billingMode" value="oneoff"> I want to pay for a one-off pack (coming soon)</label><br>
+            <label><input type="radio" name="billingMode" value="bundle"> I’m an auditor and want a bundle of packs (coming soon)</label>
+          </div>
+          <div class="hint" id="billingHint">
+            In beta we’re mostly using codes. You can leave it on this option and just upload.
+          </div>
         </div>
       </div>
 
@@ -346,6 +365,7 @@
             <option value="SOC2">SOC 2</option>
             <option value="ISO27001">ISO 27001 (tag only, beta)</option>
             <option value="HIPAA">HIPAA (tag only, beta)</option>
+            <option value="GDPR">GDPR (tag only, beta)</option>
             <option value="NIST CSF">NIST CSF (tag only, beta)</option>
             <option value="Other">Other</option>
           </select>
@@ -367,21 +387,25 @@
 
       <!-- Row 4: auditor routing + client email -->
       <div class="form-row three">
-        <div>
+        <div id="auditorCodeCol">
           <label for="auditorCode">Auditor code (optional)</label>
           <input id="auditorCode" name="auditorCode" placeholder="Short code from your auditor (e.g. TEST123)"/>
-          <div class="hint">In the future, auditors will get blocks of codes. For now, we can issue these manually in beta.</div>
+          <div class="hint" id="auditorCodeHint">
+            In the future, auditors will get blocks of codes. For now, you can leave this blank or use test codes.
+          </div>
         </div>
-        <div>
+        <div id="auditorEmailCol">
           <label for="auditorEmail">Auditor email (optional)</label>
           <input id="auditorEmail" name="auditorEmail" type="email" placeholder="auditor@examplefirm.com"/>
-          <div class="hint">We can send the ProofPack link here as well as to your own email.</div>
+          <div class="hint" id="auditorEmailHint">
+            We can send the ProofPack link here as well as to your own email.
+          </div>
         </div>
-        <div>
+        <div id="clientEmailCol">
           <label for="clientEmail">Client email (optional)</label>
           <input id="clientEmail" name="clientEmail" type="email" placeholder="client@company.com"/>
-          <div class="hint">
-            If you’re an auditor, add your client contact here so we can also associate the pack with them (and later, email them directly).
+          <div class="hint" id="clientEmailHint">
+            If you’re an auditor, add your client contact here so we can associate the pack with them (and later, email codes directly).
           </div>
         </div>
       </div>
@@ -446,6 +470,21 @@
     const fileInput = $('#files');
     const fileMeta = $('#fileMeta');
 
+    const roleSelect = $('#role');
+    const emailLabel = $('#emailLabel');
+    const companyLabel = $('#companyLabel');
+    const roleHint = $('#roleHint');
+
+    const auditorCodeCol = $('#auditorCodeCol');
+    const auditorEmailCol = $('#auditorEmailCol');
+    const clientEmailCol = $('#clientEmailCol');
+
+    const auditorEmailHint = $('#auditorEmailHint');
+    const clientEmailHint = $('#clientEmailHint');
+
+    const billingHint = $('#billingHint');
+    const billingRadios = document.querySelectorAll('input[name="billingMode"]');
+
     document.getElementById('y').textContent = new Date().getFullYear();
 
     // File meta / caps display
@@ -464,6 +503,73 @@
     }
     function clearStatus(){ statusEl.style.display='none'; statusEl.textContent=''; }
 
+    // Dynamic UI for role
+    function updateRoleUI() {
+      const role = roleSelect.value;
+
+      if (role === 'auditor') {
+        emailLabel.textContent = 'Auditor email';
+        companyLabel.textContent = 'Client company';
+        roleHint.textContent = 'You’re an auditor driving this pack. You’ll get the ProofPack link and can forward it to your client or reviewers.';
+
+        auditorCodeCol.style.display = 'block';
+        auditorEmailCol.style.display = 'block';
+        clientEmailCol.style.display = 'block';
+
+        auditorEmailHint.textContent = 'We’ll send the ProofPack link here so you can file it and forward to your client.';
+        clientEmailHint.textContent = 'Add your client contact so we can associate the pack with them (and later, email codes directly).';
+      } else if (role === 'client') {
+        emailLabel.textContent = 'Your email';
+        companyLabel.textContent = 'Your company';
+        roleHint.textContent = 'Use this if your auditor pointed you here to upload SOC 2 evidence.';
+
+        auditorCodeCol.style.display = 'block';
+        auditorEmailCol.style.display = 'block';
+        clientEmailCol.style.display = 'none';
+
+        auditorEmailHint.textContent = 'If you know your auditor’s email, add it so we can also route the ProofPack to them.';
+      } else { // company (direct)
+        emailLabel.textContent = 'Your email';
+        companyLabel.textContent = 'Your company';
+        roleHint.textContent = 'Direct company use: preparing for an audit or vendor review without an auditor driving this yet.';
+
+        auditorCodeCol.style.display = 'none';
+        auditorEmailCol.style.display = 'none';
+        clientEmailCol.style.display = 'none';
+      }
+
+      // Re-apply billing logic in case role changes
+      updateBillingUI();
+    }
+
+    roleSelect.addEventListener('change', updateRoleUI);
+
+    // Dynamic UI for billing / codes
+    function updateBillingUI() {
+      const checked = document.querySelector('input[name="billingMode"]:checked');
+      const mode = checked ? checked.value : 'code';
+      const role = roleSelect.value;
+
+      if (mode === 'code') {
+        billingHint.textContent = 'Enter an auditor code if you have one, or leave it blank in beta. We’ll mainly use codes for coverage.';
+        if (role !== 'company') {
+          auditorCodeCol.style.display = 'block';
+        }
+      } else if (mode === 'oneoff') {
+        billingHint.textContent = 'One-off payment via Stripe will live here. For now, this is a placeholder — use codes or email ops@proofrepo.com.';
+        auditorCodeCol.style.display = 'block';
+      } else {
+        billingHint.textContent = 'Bundle pricing for auditors will live here. For now, reach out to ops@proofrepo.com and we’ll handle bundles manually.';
+        auditorCodeCol.style.display = 'block';
+      }
+    }
+
+    billingRadios.forEach(r => r.addEventListener('change', updateBillingUI));
+
+    // Initial UI setup
+    updateRoleUI();
+    updateBillingUI();
+
     function validate(){
       const email = $('#email').value.trim();
       const company = $('#company').value.trim();
@@ -477,7 +583,6 @@
       const files = Array.from(fileInput.files || []);
       const plan = document.getElementById('plan').value || 'Trial';
 
-      // Simple, conservative beta caps so we don't blow anything up.
       const total = files.reduce((n,f)=> n + (f.size || 0), 0);
 
       if (files.length === 0) {
@@ -502,6 +607,11 @@
       fd.append('cadence', document.getElementById('cadence').value || '');
       fd.append('role', document.getElementById('role').value || 'client');
 
+      const billingChecked = document.querySelector('input[name="billingMode"]:checked');
+      if (billingChecked) {
+        fd.append('billingMode', billingChecked.value);
+      }
+
       const frameworksSel = document.getElementById('frameworks');
       Array.from(frameworksSel.selectedOptions || []).forEach(o => fd.append('frameworks', o.value));
 
@@ -509,7 +619,6 @@
       const auditorCode = document.getElementById('auditorCode').value.trim();
       const auditorEmail = document.getElementById('auditorEmail').value.trim();
       const clientEmail = document.getElementById('clientEmail').value.trim();
-
       if (auditorCode) fd.append('auditorCode', auditorCode);
       if (auditorEmail) fd.append('auditorEmail', auditorEmail);
       if (clientEmail) fd.append('clientEmail', clientEmail);
