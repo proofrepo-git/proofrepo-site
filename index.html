@@ -321,8 +321,9 @@
         <div>
           <label for="role">Who are you?</label>
           <select id="role" name="role">
-            <option value="client" selected>I’m a company uploading for an auditor</option>
-            <option value="auditor">I’m an auditor uploading on behalf of a client</option>
+            <option value="auditor_collecting" selected>I’m an auditor collecting evidence from a client</option>
+            <option value="client_for_auditor">My auditor sent me here to upload evidence</option>
+            <option value="company_direct">I’m a company proactively building/updating my ProofPack</option>
           </select>
           <div class="hint">We use this for routing and wording — not for billing (yet).</div>
         </div>
@@ -364,8 +365,8 @@
         </div>
       </div>
 
-      <!-- Row 4: auditor routing -->
-      <div class="form-row two">
+      <!-- Row 4: auditor routing + client email -->
+      <div class="form-row three">
         <div>
           <label for="auditorCode">Auditor code (optional)</label>
           <input id="auditorCode" name="auditorCode" placeholder="Short code from your auditor (e.g. TEST123)"/>
@@ -375,6 +376,13 @@
           <label for="auditorEmail">Auditor email (optional)</label>
           <input id="auditorEmail" name="auditorEmail" type="email" placeholder="auditor@examplefirm.com"/>
           <div class="hint">We can send the ProofPack link here as well as to your own email.</div>
+        </div>
+        <div>
+          <label for="clientEmail">Client email (optional)</label>
+          <input id="clientEmail" name="clientEmail" type="email" placeholder="client@company.com"/>
+          <div class="hint">
+            If you’re an auditor, add your client contact here so we can also associate the pack with them (and later, email them directly).
+          </div>
         </div>
       </div>
 
@@ -500,8 +508,12 @@
       fd.append('notes', document.getElementById('notes').value.trim());
       const auditorCode = document.getElementById('auditorCode').value.trim();
       const auditorEmail = document.getElementById('auditorEmail').value.trim();
+      const clientEmail = document.getElementById('clientEmail').value.trim();
+
       if (auditorCode) fd.append('auditorCode', auditorCode);
       if (auditorEmail) fd.append('auditorEmail', auditorEmail);
+      if (clientEmail) fd.append('clientEmail', clientEmail);
+
       const mapVal = document.getElementById('map').value.trim();
       if (mapVal) fd.append('map', mapVal);
 
@@ -549,8 +561,3 @@
   </script>
 </body>
 </html>
-
-</html>
-
-</html>
-
