@@ -6,7 +6,7 @@
   <title>ProofRepo — Compliance ProofPacks in seconds</title>
 
   <!-- SEO -->
-  <meta name="description" content="Compliance ProofPacks in seconds. Auditors use ProofRepo to collect SOC 2 evidence without messy folders or endless correction emails. Companies use it to stay audit-ready with clean inputs, without buying a full GRC platform." />
+  <meta name="description" content="Compliance ProofPacks in seconds. Auditors and third parties use ProofRepo to collect SOC 2 and other framework evidence without messy folders or endless correction emails. Companies use it to stay audit- or event-ready without buying a full automation suite." />
   <meta name="keywords" content="SOC 2 evidence, ISO 27001 evidence, HIPAA evidence, GDPR evidence, vendor security review, compliance proof, audit readiness" />
 
   <!-- Open Graph -->
@@ -147,11 +147,11 @@
         <div class="kicker">Compliance ProofPacks in seconds</div>
         <h1>Guided SOC&nbsp;2 evidence collection — without Google Drive chaos</h1>
         <p class="sub">
-          <strong>Auditors & third parties</strong> use ProofRepo to collect evidence from clients without messy folders,
-          broken links, or endless “can you resend this?” emails. Clients see exactly what to upload,
+          <strong>Auditors and third parties</strong> use ProofRepo to collect evidence from companies without messy folders,
+          broken links, or endless “can you resend this?” emails. Stakeholders see exactly what to upload,
           and you get a structured <strong>ProofPack</strong> that drops straight into workpapers.
           <br><br>
-          <strong>Companies</strong> use ProofRepo to be audit-ready with the right inputs — without
+          <strong>Companies</strong> use ProofRepo to be audit- or event-ready with the right inputs — without
           buying a full 5-figure automation suite.
         </p>
         <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px">
@@ -162,7 +162,7 @@
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
           <span class="pill">Built for boutique audit firms</span>
-          <span class="pill">SOC 2 focus (other frameworks tagged)</span>
+          <span class="pill">SOC 2, ISO 27001, HIPAA, GDPR, NIST CSF</span>
           <span class="pill">Cleaner than ad-hoc shared folders</span>
           <span class="pill">No “all-in-one” platform required</span>
         </div>
@@ -172,7 +172,7 @@
         <div class="ticks">
           <div class="li">
             <span class="tick">✓</span>
-            <div><strong>Guided for clients:</strong> fewer wrong files, fewer “oops, wrong export” corrections.</div>
+            <div><strong>Guided for uploaders:</strong> fewer wrong files, fewer “oops, wrong export” corrections.</div>
           </div>
           <div class="li">
             <span class="tick">✓</span>
@@ -184,8 +184,7 @@
           </div>
         </div>
         <p class="muted" style="margin-top:12px">
-          Today’s beta focuses on <strong>SOC 2</strong> evidence. Other frameworks (ISO 27001, HIPAA, GDPR, NIST CSF)
-          can be tagged now so they’re organized for later automation.
+          Today’s flows focus on <strong>SOC 2</strong>, but the same guided pattern can be used for ISO 27001, HIPAA, GDPR, and NIST CSF.
         </p>
       </aside>
     </div>
@@ -218,12 +217,12 @@
       <article class="plan popular" role="listitem" aria-label="Auditor-led flows">
         <h3>Auditor-led flows</h3>
         <p class="muted">
-          You give clients a link and a short code. They see guided prompts for the right SOC 2 evidence.
+          You give companies a link and a short code. They see guided prompts for the right evidence.
           You receive a ProofPack and JSON manifest that records what was provided and what’s missing.
         </p>
         <ul class="muted">
-          <li>Client upload, auditor receives the ProofPack</li>
-          <li>Automatic hints for Access Review / ChangeLog / Vendors</li>
+          <li>Company upload, auditor or third party receives the ProofPack</li>
+          <li>Automatic hints for access reviews, change logs, vendor lists, and more</li>
           <li>Ideal for small SOC 2 and vendor review engagements</li>
         </ul>
         <div class="price">Pricing: based on packs / codes (planned)</div>
@@ -266,15 +265,15 @@
       <div class="card">
         <h3>1) Share or open the link</h3>
         <p class="muted">
-          An auditor or company goes to <strong>proofrepo.com</strong>.
+          An auditor, third party, or company goes to <strong>proofrepo.com</strong>.
           Auditors can share the link plus a short code so uploads are routed and tracked to the right engagement.
         </p>
       </div>
       <div class="card">
         <h3>2) Guided upload</h3>
         <p class="muted">
-          The form nudges clients toward the expected SOC 2 artifacts: access reviews, change logs,
-          vendor exports, and related proofs. No shared drives, no random screenshots in Slack.
+          The form nudges uploaders toward the expected artifacts for the frameworks selected.
+          No shared drives, no random screenshots in Slack.
         </p>
       </div>
       <div class="card">
@@ -307,7 +306,7 @@
   <section id="request" class="wrap section">
     <h2>Upload evidence and get a ProofPack</h2>
     <p class="muted">
-      Use this form to send SOC 2 (and related) evidence. You’ll receive a confirmation email with a
+      Use this form to send SOC 2 and related evidence. You’ll receive a confirmation email with a
       secure ProofPack link. During beta we’re focused on correctness and reviewer experience —
       payments (Stripe, etc.) will plug in later.
     </p>
@@ -319,8 +318,8 @@
           <label for="role">What is ProofRepo helping you with today?</label>
           <select id="role" name="role">
             <option value="" selected disabled>Choose one…</option>
-            <option value="auditor">I’m an auditor or third party collecting evidence from a client</option>
-            <option value="client">My auditor sent me here to upload evidence</option>
+            <option value="auditor">I’m an auditor or a third party collecting evidence from a company</option>
+            <option value="client">A third party sent me here to upload evidence documentation to generate a ProofPack</option>
             <option value="company">I’m a company proactively updating my ProofPack</option>
           </select>
           <div class="hint" id="roleHint">
@@ -347,13 +346,13 @@
           <label for="frameworks">Framework(s)</label>
           <select id="frameworks" name="frameworks" multiple required>
             <option value="SOC2">SOC 2</option>
-            <option value="ISO27001">ISO 27001 (tag only, beta)</option>
-            <option value="HIPAA">HIPAA (tag only, beta)</option>
-            <option value="GDPR">GDPR (tag only, beta)</option>
-            <option value="NIST CSF">NIST CSF (tag only, beta)</option>
+            <option value="ISO27001">ISO 27001</option>
+            <option value="HIPAA">HIPAA</option>
+            <option value="GDPR">GDPR</option>
+            <option value="NIST CSF">NIST CSF</option>
             <option value="Other">Other</option>
           </select>
-          <div class="hint">SOC 2 is fully wired today. Others are recorded as tags for future automation.</div>
+          <div class="hint">Select all that apply. The guided checklist will show minimum evidence for each framework.</div>
         </div>
       </div>
 
@@ -367,36 +366,8 @@
         <div id="fileMeta" class="filemeta">No files selected.</div>
       </div>
 
-      <!-- SOC 2 guidance checklist with manual tagging -->
-      <div id="soc2Guide" class="guidance step-after-role" style="display:none">
-        <h4>For SOC 2, we typically expect:</h4>
-        <ul>
-          <li>
-            <span id="soc2AccessStatus" class="missing">Access review — not tagged yet</span>
-            <div>
-              <label class="small" for="soc2AccessSelect">Which file is your access review?</label>
-              <select id="soc2AccessSelect"></select>
-            </div>
-          </li>
-          <li>
-            <span id="soc2ChangeStatus" class="missing">Change log — not tagged yet</span>
-            <div>
-              <label class="small" for="soc2ChangeSelect">Which file is your change log?</label>
-              <select id="soc2ChangeSelect"></select>
-            </div>
-          </li>
-          <li>
-            <span id="soc2VendorStatus" class="missing">Vendor list — not tagged yet</span>
-            <div>
-              <label class="small" for="soc2VendorSelect">Which file is your vendor list?</label>
-              <select id="soc2VendorSelect"></select>
-            </div>
-          </li>
-        </ul>
-        <div class="small">
-          We’ll auto-suggest based on filenames. If a file is named weirdly, just pick it here so we treat it as the right artifact.
-        </div>
-      </div>
+      <!-- Dynamic framework guidance / tagging -->
+      <div id="frameworkGuides" class="guidance step-after-role" style="display:none"></div>
 
       <!-- Optional block: everything else -->
       <details class="advanced step-after-role" id="optionalRow" style="display:none">
@@ -418,7 +389,7 @@
               <label for="billingMode">How will this ProofPack be covered?</label>
               <select id="billingMode" name="billingMode">
                 <option value="">Not decided yet</option>
-                <option value="code">I have a code from an auditor</option>
+                <option value="code">I have a code from an auditor / third party</option>
                 <option value="card">I want to pay by card (Stripe)</option>
               </select>
               <div class="hint" id="billingHint">
@@ -430,24 +401,24 @@
           <!-- Routing emails + codes -->
           <div class="form-row three">
             <div id="auditorCodeCol">
-              <label for="auditorCode">Auditor code (optional)</label>
-              <input id="auditorCode" name="auditorCode" placeholder="Short code from your auditor (e.g. TEST123)"/>
+              <label for="auditorCode">Auditor / third-party code (optional)</label>
+              <input id="auditorCode" name="auditorCode" placeholder="Short code (e.g. TEST123)"/>
               <div class="hint" id="auditorCodeHint">
-                In the future, auditors will get blocks of codes. For now, you can leave this blank or use test codes.
+                In the future, auditors and partners will get blocks of codes. For now, you can leave this blank or use test codes.
               </div>
             </div>
             <div id="auditorEmailCol">
-              <label for="auditorEmail">Auditor email (optional)</label>
-              <input id="auditorEmail" name="auditorEmail" type="email" placeholder="auditor@examplefirm.com"/>
+              <label for="auditorEmail">Auditor / third-party email (optional)</label>
+              <input id="auditorEmail" name="auditorEmail" type="email" placeholder="reviewer@examplefirm.com"/>
               <div class="hint" id="auditorEmailHint">
                 We can send the ProofPack link here as well as to your own email.
               </div>
             </div>
             <div id="clientEmailCol">
-              <label for="clientEmail">Client email (optional)</label>
+              <label for="clientEmail">Client contact email (optional)</label>
               <input id="clientEmail" name="clientEmail" type="email" placeholder="client@company.com"/>
               <div class="hint" id="clientEmailHint">
-                If you’re an auditor, add your client contact so we can associate the pack with them (and later, email codes directly).
+                If you’re an auditor or third party, add your client contact so we can associate the pack with them (and later, email codes directly).
               </div>
             </div>
           </div>
@@ -499,6 +470,51 @@
     // IMPORTANT: stays pointed at your existing Intake Worker.
     const INTAKE_URL = 'https://proofrepo-intake.atucker5.workers.dev/';
 
+    const FRAMEWORK_CONFIG = {
+      SOC2: {
+        label: 'SOC 2',
+        key: 'SOC2',
+        items: [
+          { id: 'AccessReview', label: 'Access review', mapKey: 'AccessReview', patterns: [/access/i, /user.*review/i] },
+          { id: 'ChangeLog',    label: 'Change log',    mapKey: 'ChangeLog',    patterns: [/change/i, /deploy|release/i] },
+          { id: 'Vendors',      label: 'Vendor list',   mapKey: 'Vendors',      patterns: [/vendor|supplier|third[-_ ]party/i] }
+        ]
+      },
+      ISO27001: {
+        label: 'ISO 27001',
+        key: 'ISO27001',
+        items: [
+          { id: 'AssetRegister', label: 'Asset inventory / register', patterns: [/asset/i, /inventory/i] },
+          { id: 'RiskRegister',  label: 'Risk register',              patterns: [/risk/i] },
+          { id: 'SoA',           label: 'Statement of Applicability (SoA)', patterns: [/soa/i, /statement.*applicability/i] }
+        ]
+      },
+      HIPAA: {
+        label: 'HIPAA',
+        key: 'HIPAA',
+        items: [
+          { id: 'BAAList',   label: 'Business Associate Agreements (BAAs)', patterns: [/baa/i, /business.*associate/i] },
+          { id: 'PHIAccess', label: 'PHI access log',                       patterns: [/phi/i, /access.*log/i] }
+        ]
+      },
+      GDPR: {
+        label: 'GDPR',
+        key: 'GDPR',
+        items: [
+          { id: 'RoPA', label: 'Record of Processing Activities (RoPA)', patterns: [/ropa/i, /processing.*activities/i] },
+          { id: 'DPA',  label: 'Data processing agreements',            patterns: [/dpa/i, /processing.*agreement/i] }
+        ]
+      },
+      'NIST CSF': {
+        label: 'NIST CSF',
+        key: 'NIST CSF',
+        items: [
+          { id: 'Policies',       label: 'Core security policies', patterns: [/policy/i] },
+          { id: 'RiskAssessment', label: 'Risk assessment',        patterns: [/risk.*assessment/i] }
+        ]
+      }
+    };
+
     const $ = s => document.querySelector(s);
     const statusEl = $('#status');
     const submitBtn = $('#submitBtn');
@@ -524,23 +540,13 @@
     const optionalDetails = $('#optionalRow');
     const planBillingRow = $('#planBillingRow');
 
-    const soc2Guide = $('#soc2Guide');
-    const soc2AccessStatus = $('#soc2AccessStatus');
-    const soc2ChangeStatus = $('#soc2ChangeStatus');
-    const soc2VendorStatus = $('#soc2VendorStatus');
-    const soc2AccessSelect = $('#soc2AccessSelect');
-    const soc2ChangeSelect = $('#soc2ChangeSelect');
-    const soc2VendorSelect = $('#soc2VendorSelect');
+    const frameworksSelectEl = $('#frameworks');
+    const frameworkGuides = $('#frameworkGuides');
 
     const laterRows = document.querySelectorAll('.step-after-role');
-    const frameworksSelectEl = $('#frameworks');
 
-    // Tracks which file user has tagged for each SOC 2 artifact
-    const soc2Selection = {
-      AccessReview: '',
-      ChangeLog: '',
-      Vendors: ''
-    };
+    // frameworkSelections[frameworkKey][itemId] = filename
+    const frameworkSelections = {};
 
     document.getElementById('y').textContent = new Date().getFullYear();
 
@@ -551,97 +557,126 @@
     }
     function clearStatus(){ statusEl.style.display='none'; statusEl.textContent=''; }
 
-    // --- SOC 2 guidance + tagging ---
-    function bindSelectHandlers() {
-      const configs = [
-        { key:'AccessReview', label:'Access review', select:soc2AccessSelect, statusEl:soc2AccessStatus },
-        { key:'ChangeLog',    label:'Change log',    select:soc2ChangeSelect, statusEl:soc2ChangeStatus },
-        { key:'Vendors',      label:'Vendor list',   select:soc2VendorSelect, statusEl:soc2VendorStatus }
-      ];
-      configs.forEach(cfg => {
-        if (!cfg.select || !cfg.statusEl) return;
-        cfg.select.onchange = () => {
-          soc2Selection[cfg.key] = cfg.select.value;
-          if (cfg.select.value) {
-            cfg.statusEl.textContent = `✔ ${cfg.label} — tagged as ${cfg.select.value}`;
-            cfg.statusEl.className = 'ok';
-          } else {
-            cfg.statusEl.textContent = `${cfg.label} — still not tagged`;
-            cfg.statusEl.className = 'missing';
-          }
-        };
-      });
+    function getSelectedFrameworkKeys() {
+      const fs = Array.from(frameworksSelectEl?.selectedOptions || []).map(o => o.value);
+      return fs;
     }
 
-    function populateSoc2SelectOptions(files) {
-      const configs = [
-        { key:'AccessReview', label:'Access review', select:soc2AccessSelect, statusEl:soc2AccessStatus, test:(n)=>/access/i.test(n) },
-        { key:'ChangeLog',    label:'Change log',    select:soc2ChangeSelect, statusEl:soc2ChangeStatus, test:(n)=>/change/i.test(n) },
-        { key:'Vendors',      label:'Vendor list',   select:soc2VendorSelect, statusEl:soc2VendorStatus, test:(n)=>/(vendor|supplier)/i.test(n) }
-      ];
-
-      configs.forEach(cfg => {
-        if (!cfg.select || !cfg.statusEl) return;
-
-        const previous = soc2Selection[cfg.key] || '';
-
-        // build options
-        cfg.select.innerHTML = '';
-        const placeholderOpt = document.createElement('option');
-        placeholderOpt.value = '';
-        placeholderOpt.textContent = 'Not set / not sure yet';
-        cfg.select.appendChild(placeholderOpt);
-
-        files.forEach(f => {
-          const opt = document.createElement('option');
-          opt.value = f.name;
-          opt.textContent = f.name;
-          cfg.select.appendChild(opt);
-        });
-
-        let selected = previous && files.some(f => f.name === previous) ? previous : '';
-
-        if (!selected) {
-          const guess = files.find(f => cfg.test(f.name || ''));
-          if (guess) selected = guess.name;
-        }
-
-        cfg.select.value = selected;
-        soc2Selection[cfg.key] = selected;
-
-        if (selected) {
-          cfg.statusEl.textContent = `✔ ${cfg.label} — tagged as ${selected}`;
-          cfg.statusEl.className = 'ok';
-        } else {
-          cfg.statusEl.textContent = `${cfg.label} — still not tagged`;
-          cfg.statusEl.className = 'missing';
-        }
-      });
+    function updateItemStatusSpan(span, label, selectedName) {
+      if (!span) return;
+      if (selectedName) {
+        span.textContent = '✔ ' + label + ' — tagged as ' + selectedName;
+        span.className = 'ok';
+      } else {
+        span.textContent = label + ' — not tagged yet';
+        span.className = 'missing';
+      }
     }
 
-    function updateGuidance() {
-      if (!soc2Guide) return;
-      const frameworksSel = document.getElementById('frameworks');
-      const selected = Array.from(frameworksSel?.selectedOptions || []).map(o => o.value);
-      const hasSOC2 = selected.includes('SOC2');
+    function renderFrameworkGuides() {
+      if (!frameworkGuides) return;
+      const selectedKeys = getSelectedFrameworkKeys().filter(k => FRAMEWORK_CONFIG[k]);
       const files = Array.from(fileInput?.files || []);
 
-      if (!hasSOC2) {
-        soc2Guide.style.display = 'none';
+      if (!selectedKeys.length) {
+        frameworkGuides.style.display = 'none';
+        frameworkGuides.innerHTML = '';
         return;
       }
 
-      soc2Guide.style.display = '';
-      populateSoc2SelectOptions(files);
+      frameworkGuides.style.display = '';
+      frameworkGuides.innerHTML = '';
+
+      selectedKeys.forEach(fwKey => {
+        const cfg = FRAMEWORK_CONFIG[fwKey];
+        if (!cfg) return;
+        const block = document.createElement('div');
+        block.style.marginBottom = '12px';
+
+        const h4 = document.createElement('h4');
+        h4.textContent = cfg.label + ' — recommended minimum evidence';
+        block.appendChild(h4);
+
+        const ul = document.createElement('ul');
+
+        cfg.items.forEach(item => {
+          if (!frameworkSelections[fwKey]) frameworkSelections[fwKey] = {};
+
+          const li = document.createElement('li');
+
+          const statusSpan = document.createElement('span');
+          statusSpan.id = `fw-${fwKey}-${item.id}-status`;
+          statusSpan.className = 'missing';
+          statusSpan.textContent = item.label + ' — not tagged yet';
+          li.appendChild(statusSpan);
+
+          const div = document.createElement('div');
+          const label = document.createElement('label');
+          label.className = 'small';
+          label.htmlFor = `fw-${fwKey}-${item.id}-select`;
+          label.textContent = `Which file is your ${item.label.toLowerCase()}?`;
+          div.appendChild(label);
+
+          const select = document.createElement('select');
+          select.id = `fw-${fwKey}-${item.id}-select`;
+          select.dataset.framework = fwKey;
+          select.dataset.item = item.id;
+
+          const noneOpt = document.createElement('option');
+          noneOpt.value = '';
+          noneOpt.textContent = 'Not set / not sure yet';
+          select.appendChild(noneOpt);
+
+          files.forEach(f => {
+            const opt = document.createElement('option');
+            opt.value = f.name;
+            opt.textContent = f.name;
+            select.appendChild(opt);
+          });
+
+          // restore or auto-guess
+          const prev = frameworkSelections[fwKey][item.id] || '';
+          let selectedName = prev && files.some(f => f.name === prev) ? prev : '';
+
+          if (!selectedName && files.length && item.patterns && item.patterns.length) {
+            const guess = files.find(f => item.patterns.some(re => re.test(f.name || '')));
+            if (guess) selectedName = guess.name;
+          }
+
+          select.value = selectedName;
+          frameworkSelections[fwKey][item.id] = selectedName;
+          updateItemStatusSpan(statusSpan, item.label, selectedName);
+
+          select.addEventListener('change', () => {
+            const fw = select.dataset.framework;
+            const it = select.dataset.item;
+            if (!frameworkSelections[fw]) frameworkSelections[fw] = {};
+            frameworkSelections[fw][it] = select.value;
+            updateItemStatusSpan(statusSpan, item.label, select.value);
+          });
+
+          div.appendChild(select);
+          li.appendChild(div);
+          ul.appendChild(li);
+        });
+
+        block.appendChild(ul);
+        frameworkGuides.appendChild(block);
+      });
+
+      const info = document.createElement('div');
+      info.className = 'small';
+      info.textContent = 'We auto-suggest based on filenames. If something is named weirdly, just pick it so we treat it as the right artifact.';
+      frameworkGuides.appendChild(info);
     }
 
-    // ---- File handling (choose + drag & drop) ----
+    // File handling & drag/drop
     function updateFileMeta() {
       const files = Array.from(fileInput.files || []);
       if (!files.length) {
         fileMeta.textContent = 'No files selected.';
         if (planBillingRow) planBillingRow.style.display = 'none';
-        updateGuidance();
+        renderFrameworkGuides();
         return;
       }
       const total = files.reduce((n,f)=> n + (f.size || 0), 0);
@@ -651,7 +686,7 @@
       if (planBillingRow) planBillingRow.style.display = '';
       if (optionalDetails) optionalDetails.open = true;
 
-      updateGuidance();
+      renderFrameworkGuides();
     }
 
     function handleFilesList(list) {
@@ -665,9 +700,7 @@
     }
 
     if (fileInput) {
-      fileInput.addEventListener('change', () => {
-        handleFilesList(fileInput.files);
-      });
+      fileInput.addEventListener('change', () => handleFilesList(fileInput.files));
     }
 
     if (fileBox) {
@@ -703,19 +736,18 @@
       if (!billing) {
         billingHint.textContent = 'You can decide this later. In beta we mostly use codes or manual billing via ops@proofrepo.com.';
       } else if (billing === 'code') {
-        billingHint.textContent = 'Enter an auditor code if you have one, or leave it blank in beta. We’ll mainly use codes for coverage.';
+        billingHint.textContent = 'Enter a code if you have one, or leave it blank in beta. We’ll mainly use codes for coverage.';
       } else if (billing === 'card') {
-        billingHint.textContent = 'Card payment via Stripe will live here. For now, this is a placeholder — use codes or email ops@proofrepo.com.';
+        billingHint.textContent = 'Card payment via Stripe will live here. For now this is a placeholder — use codes or email ops@proofrepo.com.';
       }
 
-      if (billing === 'code' && role !== 'company' && role) {
+      if (billing === 'code' && role && role !== 'company') {
         auditorCodeCol.style.display = 'block';
       } else if (billing === 'code' && role === 'company') {
         auditorCodeCol.style.display = 'none';
       }
     }
 
-    // Dynamic UI for role
     function updateRoleUI() {
       const role = roleSelect.value;
 
@@ -731,9 +763,9 @@
       });
 
       if (role === 'auditor') {
-        emailLabel.textContent = 'Auditor email';
+        emailLabel.textContent = 'Auditor / third-party email';
         companyLabel.textContent = 'Client company';
-        roleHint.textContent = 'You’re an auditor (or third party) driving this pack. You’ll get the ProofPack link and can forward it to your client or reviewers.';
+        roleHint.textContent = 'You’re an auditor or third party driving this pack. You’ll get the ProofPack link and can forward it to your client or reviewers.';
 
         auditorEmailCol.style.display = 'none';
         clientEmailCol.style.display = 'block';
@@ -741,11 +773,11 @@
       } else if (role === 'client') {
         emailLabel.textContent = 'Your email';
         companyLabel.textContent = 'Your company';
-        roleHint.textContent = 'Use this if your auditor pointed you here to upload SOC 2 evidence.';
+        roleHint.textContent = 'Use this if an auditor or third party pointed you here to upload evidence.';
 
         auditorEmailCol.style.display = 'block';
         clientEmailCol.style.display = 'none';
-        auditorEmailHint.textContent = 'If you know your auditor’s email, add it so we can also route the ProofPack to them.';
+        auditorEmailHint.textContent = 'If you know the reviewer’s email, add it so we can also route the ProofPack to them.';
       } else { // company
         emailLabel.textContent = 'Your email';
         companyLabel.textContent = 'Your company';
@@ -756,25 +788,17 @@
       }
 
       updateBillingUI();
-      updateGuidance();
+      renderFrameworkGuides();
     }
 
-    if (roleSelect) {
-      roleSelect.addEventListener('change', updateRoleUI);
-    }
-    if (billingSelect) {
-      billingSelect.addEventListener('change', updateBillingUI);
-    }
-    if (frameworksSelectEl) {
-      frameworksSelectEl.addEventListener('change', updateGuidance);
-    }
+    if (roleSelect) roleSelect.addEventListener('change', updateRoleUI);
+    if (billingSelect) billingSelect.addEventListener('change', updateBillingUI);
+    if (frameworksSelectEl) frameworksSelectEl.addEventListener('change', renderFrameworkGuides);
 
-    // Initial UI setup
-    document.getElementById('y').textContent = new Date().getFullYear();
-    bindSelectHandlers();
+    // Initial UI
     updateRoleUI();
     updateBillingUI();
-    updateGuidance();
+    renderFrameworkGuides();
 
     function validate(){
       const roleVal = document.getElementById('role').value;
@@ -787,7 +811,7 @@
 
       const frameworksSel = document.getElementById('frameworks');
       const fws = Array.from(frameworksSel.selectedOptions || []).map(o=>o.value);
-      if (fws.length === 0) return 'Please select at least one framework (SOC 2 is fully supported).';
+      if (fws.length === 0) return 'Please select at least one framework.';
 
       const files = Array.from(fileInput.files || []);
       const planEl = document.getElementById('plan');
@@ -806,15 +830,21 @@
         if (files.length > 50) return 'For large batches, split into multiple submissions.';
       }
 
-      // Enforce SOC 2 minimums
-      if (fws.includes('SOC2')) {
-        const missingKinds = [];
-        if (!soc2Selection.AccessReview) missingKinds.push('access review');
-        if (!soc2Selection.ChangeLog) missingKinds.push('change log');
-        if (!soc2Selection.Vendors) missingKinds.push('vendor list');
-        if (missingKinds.length) {
-          return 'For SOC 2, please tag which files correspond to: ' + missingKinds.join(', ') + '.';
-        }
+      // Enforce minimums for each configured framework
+      const missing = [];
+      fws.forEach(key => {
+        const cfg = FRAMEWORK_CONFIG[key];
+        if (!cfg) return;
+        const sel = frameworkSelections[key] || {};
+        (cfg.items || []).forEach(item => {
+          if (!sel[item.id]) {
+            missing.push(`${cfg.label}: ${item.label}`);
+          }
+        });
+      });
+
+      if (missing.length) {
+        return 'Before we build your ProofPack, please tag files for these required items:\n• ' + missing.join('\n• ');
       }
 
       return null;
@@ -851,15 +881,30 @@
       const mapEl = document.getElementById('map');
       let mapVal = mapEl ? mapEl.value.trim() : '';
 
-      // If user didn't hand-write JSON, synthesize from SOC 2 selections
-      if (!mapVal &&
-          (soc2Selection.AccessReview || soc2Selection.ChangeLog || soc2Selection.Vendors)) {
+      // If user didn't hand-write JSON, synthesize from frameworkSelections
+      if (!mapVal) {
         const autoMap = {};
-        if (soc2Selection.AccessReview) autoMap.AccessReview = soc2Selection.AccessReview;
-        if (soc2Selection.ChangeLog) autoMap.ChangeLog = soc2Selection.ChangeLog;
-        if (soc2Selection.Vendors) autoMap.Vendors = soc2Selection.Vendors;
-        mapVal = JSON.stringify(autoMap);
+        Object.keys(frameworkSelections).forEach(fwKey => {
+          const cfg = FRAMEWORK_CONFIG[fwKey];
+          const sel = frameworkSelections[fwKey] || {};
+          if (!cfg) return;
+          (cfg.items || []).forEach(item => {
+            const filename = sel[item.id];
+            if (!filename) return;
+            if (fwKey === 'SOC2' && item.mapKey) {
+              // flat keys for compatibility with existing worker
+              autoMap[item.mapKey] = filename;
+            } else {
+              if (!autoMap[fwKey]) autoMap[fwKey] = {};
+              autoMap[fwKey][item.id] = filename;
+            }
+          });
+        });
+        if (Object.keys(autoMap).length) {
+          mapVal = JSON.stringify(autoMap);
+        }
       }
+
       if (mapVal) fd.append('map', mapVal);
 
       Array.from(fileInput.files || []).forEach(f => fd.append('files', f, f.name));
@@ -870,7 +915,7 @@
       e.preventDefault();
       clearStatus();
       const err = validate();
-      if (err) { showStatus(err, false); return; }
+      if (err) { showStatus(err.replace(/\n/g,'<br>'), false); return; }
 
       submitBtn.disabled = true;
       submitBtn.textContent = 'Uploading…';
@@ -891,7 +936,6 @@
             ? `<br><br><a href="${viewer}" target="_blank" rel="noopener">Open ProofPack viewer</a>`
             : '';
 
-          // Try to surface missing items if the worker sent them
           let missingHtml = '';
           if (json.missingSummary) {
             missingHtml = json.missingSummary;
@@ -907,7 +951,7 @@
           }
 
           const missingBlock = missingHtml
-            ? `<br><br><strong>Missing items detected:</strong><br>${missingHtml}`
+            ? `<br><br><strong>Missing items detected by backend:</strong><br>${missingHtml}`
             : '';
 
           showStatus(
@@ -926,3 +970,4 @@
   </script>
 </body>
 </html>
+
