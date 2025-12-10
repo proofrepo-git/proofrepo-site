@@ -87,7 +87,8 @@
     .status{margin-top:8px;padding:10px;border-radius:10px;background:#0d193c;border:1px solid #27356b}
     .status.ok{border-color:#195d3a;background:#0f2a22}
     .status.err{border-color:#7a1a2a;background:#2b0e16}
-    .filebox{border:1px dashed #3a4a86;border-radius:12px;padding:14px}
+    .filebox{border:1px dashed #3a4a86;border-radius:12px;padding:14px;transition:border-color .15s ease, background .15s ease}
+    .filebox.dragover{border-style:solid;border-color:#4b65ff;background:#0f1a3d}
     .filemeta{font-size:.9rem;color:#a9b8ef}
 
     details.advanced{margin-top:8px}
@@ -139,7 +140,7 @@
         <div class="kicker">Compliance ProofPacks in seconds</div>
         <h1>Guided SOC&nbsp;2 evidence collection — without Google Drive chaos</h1>
         <p class="sub">
-          <strong>Auditors</strong> use ProofRepo to collect evidence from clients without messy folders,
+          <strong>Auditors & third parties</strong> use ProofRepo to collect evidence from clients without messy folders,
           broken links, or endless “can you resend this?” emails. Clients see exactly what to upload,
           and you get a structured <strong>ProofPack</strong> that drops straight into workpapers.
           <br><br>
@@ -311,7 +312,7 @@
           <label for="role">What is ProofRepo helping you with today?</label>
           <select id="role" name="role">
             <option value="" selected disabled>Choose one…</option>
-            <option value="auditor">I’m an auditor collecting evidence from a client</option>
+            <option value="auditor">I’m an auditor or third party collecting evidence from a client</option>
             <option value="client">My auditor sent me here to upload evidence</option>
             <option value="company">I’m a company proactively updating my ProofPack</option>
           </select>
@@ -320,8 +321,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Minimal essentials after role -->
 
       <!-- Contact -->
       <div class="form-row two step-after-role" id="contactRow" style="display:none">
@@ -351,11 +350,11 @@
         </div>
       </div>
 
-      <!-- Files -->
+      <!-- Files (drag & drop) -->
       <div class="filebox step-after-role" id="filesRow" style="display:none">
         <label for="files">
           <strong>Upload artifacts</strong>
-          <span class="muted">(Right now we’re tuned for a small set of evidence files — zip archives are fine.)</span>
+          <span class="muted">(Drag and drop or choose files — zip archives are fine.)</span>
         </label>
         <input id="files" name="files" type="file" multiple />
         <div id="fileMeta" class="filemeta">No files selected.</div>
@@ -467,6 +466,7 @@
     const submitBtn = $('#submitBtn');
     const fileInput = $('#files');
     const fileMeta = $('#fileMeta');
+    const fileBox = $('#filesRow');
 
     const roleSelect = $('#role');
     const emailLabel = $('#emailLabel');
@@ -490,8 +490,8 @@
 
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    // File meta / caps display & reveal billing after files uploaded
-    fileInput.addEventListener('change', () => {
+    // ---- File handling (choose + drag & drop) ----
+    function updateFileMeta() {
       const files = Array.from(fileInput.files || []);
       if (!files.length) {
         fileMeta.textContent = 'No files selected.';
@@ -502,13 +502,48 @@
       const totalMB = (total/1024/1024).toFixed(2);
       fileMeta.textContent = `${files.length} file(s), ${totalMB} MB total`;
 
-      if (planBillingRow) {
-        planBillingRow.style.display = '';
+      if (planBillingRow) planBillingRow.style.display = '';
+      if (optionalDetails) optionalDetails.open = true;
+    }
+
+    function handleFilesList(list) {
+      if (!list || !list.length) return;
+      if (window.DataTransfer) {
+        const dt = new DataTransfer();
+        Array.from(list).forEach(f => dt.items.add(f));
+        fileInput.files = dt.files;
       }
-      if (optionalDetails) {
-        optionalDetails.open = true;
-      }
+      updateFileMeta();
+    }
+
+    fileInput.addEventListener('change', () => {
+      handleFilesList(fileInput.files);
     });
+
+    if (fileBox) {
+      ['dragenter','dragover'].forEach(evt => {
+        fileBox.addEventListener(evt, e => {
+          e.preventDefault();
+          e.stopPropagation();
+          fileBox.classList.add('dragover');
+        });
+      });
+      ['dragleave','dragend'].forEach(evt => {
+        fileBox.addEventListener(evt, e => {
+          e.preventDefault();
+          e.stopPropagation();
+          fileBox.classList.remove('dragover');
+        });
+      });
+      fileBox.addEventListener('drop', e => {
+        e.preventDefault();
+        e.stopPropagation();
+        fileBox.classList.remove('dragover');
+        if (e.dataTransfer && e.dataTransfer.files) {
+          handleFilesList(e.dataTransfer.files);
+        }
+      });
+    }
 
     function showStatus(msg, ok=false){
       statusEl.style.display='block';
@@ -534,7 +569,6 @@
       if (billing === 'code' && role !== 'company' && role) {
         auditorCodeCol.style.display = 'block';
       } else {
-        // keep it hidden for company or card/undecided
         auditorCodeCol.style.display = 'none';
       }
     }
@@ -544,32 +578,26 @@
       const role = roleSelect.value;
 
       if (!role) {
-        laterRows.forEach(r => {
-          if (r.id === 'actionsRow') r.style.display = 'none';
-          else r.style.display = 'none';
-        });
+        laterRows.forEach(r => r.style.display = 'none');
         roleHint.textContent = "Start by telling us which side of the audit you're on.";
         return;
       }
 
       // show minimal essentials once role is chosen
       laterRows.forEach(r => {
-        if (r.id === 'actionsRow') {
-          r.style.display = 'flex';
-        } else {
-          r.style.display = '';
-        }
+        if (r.id === 'actionsRow') r.style.display = 'flex';
+        else r.style.display = '';
       });
 
       if (role === 'auditor') {
         emailLabel.textContent = 'Auditor email';
         companyLabel.textContent = 'Client company';
-        roleHint.textContent = 'You’re an auditor driving this pack. You’ll get the ProofPack link and can forward it to your client or reviewers.';
+        roleHint.textContent = 'You’re an auditor (or third party) driving this pack. You’ll get the ProofPack link and can forward it to your client or reviewers.';
 
-        auditorEmailCol.style.display = 'block';
+        // auditor already provided their email at top; no need for second field
+        auditorEmailCol.style.display = 'none';
         clientEmailCol.style.display = 'block';
 
-        auditorEmailHint.textContent = 'We’ll send the ProofPack link here so you can file it and forward to your client.';
         clientEmailHint.textContent = 'Add your client contact so we can associate the pack with them (and later, email codes directly).';
       } else if (role === 'client') {
         emailLabel.textContent = 'Your email';
@@ -616,7 +644,8 @@
       if (fws.length === 0) return 'Please select at least one framework (SOC 2 is fully supported).';
 
       const files = Array.from(fileInput.files || []);
-      const plan = document.getElementById('plan') ? (document.getElementById('plan').value || 'Trial') : 'Trial';
+      const planEl = document.getElementById('plan');
+      const plan = planEl ? (planEl.value || 'Trial') : 'Trial';
 
       const total = files.reduce((n,f)=> n + (f.size || 0), 0);
 
@@ -636,10 +665,13 @@
 
     function gather(){
       const fd = new FormData();
+      const planEl = document.getElementById('plan');
+      const cadenceEl = document.getElementById('cadence');
+
       fd.append('email', document.getElementById('email').value.trim());
       fd.append('company', document.getElementById('company').value.trim());
-      fd.append('plan', document.getElementById('plan') ? (document.getElementById('plan').value || 'Trial') : 'Trial');
-      fd.append('cadence', document.getElementById('cadence') ? (document.getElementById('cadence').value || '') : '');
+      fd.append('plan', planEl ? (planEl.value || 'Trial') : 'Trial');
+      fd.append('cadence', cadenceEl ? (cadenceEl.value || '') : '');
       fd.append('role', document.getElementById('role').value || 'client');
 
       if (billingSelect && billingSelect.value) {
@@ -649,7 +681,9 @@
       const frameworksSel = document.getElementById('frameworks');
       Array.from(frameworksSel.selectedOptions || []).forEach(o => fd.append('frameworks', o.value));
 
-      fd.append('notes', document.getElementById('notes') ? document.getElementById('notes').value.trim() : '');
+      const notesEl = document.getElementById('notes');
+      fd.append('notes', notesEl ? notesEl.value.trim() : '');
+
       const auditorCode = document.getElementById('auditorCode').value.trim();
       const auditorEmail = document.getElementById('auditorEmail').value.trim();
       const clientEmail = document.getElementById('clientEmail').value.trim();
@@ -689,9 +723,29 @@
           const linkHtml = viewer
             ? `<br><br><a href="${viewer}" target="_blank" rel="noopener">Open ProofPack viewer</a>`
             : '';
+
+          // Try to surface missing items if the worker sent them
+          let missingHtml = '';
+          if (json.missingSummary) {
+            missingHtml = json.missingSummary;
+          } else if (Array.isArray(json.needs) && json.needs.length) {
+            missingHtml = json.needs.join('<br>');
+          } else if (json.needs && typeof json.needs === 'object') {
+            const parts = [];
+            for (const fw in json.needs) {
+              if (!json.needs[fw] || !json.needs[fw].length) continue;
+              parts.push(`${fw}: ${json.needs[fw].join(', ')}`);
+            }
+            if (parts.length) missingHtml = parts.join('<br>');
+          }
+
+          const missingBlock = missingHtml
+            ? `<br><br><strong>Missing items detected:</strong><br>${missingHtml}`
+            : '';
+
           showStatus(
             `✅ Received! ${json.usage?.files || json.keys?.length || 0} file(s) saved.<br>
-             A ProofPack email will arrive shortly.${linkHtml}<br><br>${keys || ''}`,
+             A ProofPack email will arrive shortly.${missingBlock}${linkHtml}<br><br>${keys || ''}`,
             true
           );
         }
