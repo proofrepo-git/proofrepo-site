@@ -305,22 +305,10 @@
     </p>
 
     <form id="intakeForm" class="card" novalidate>
-      <!-- Row 1: email + company -->
-      <div class="form-row two">
+      <!-- Flow / role FIRST -->
+      <div class="form-row">
         <div>
-          <label id="emailLabel" for="email">Work email</label>
-          <input id="email" name="email" type="email" required placeholder="you@company.com"/>
-        </div>
-        <div>
-          <label id="companyLabel" for="company">Company</label>
-          <input id="company" name="company" required placeholder="Company Inc."/>
-        </div>
-      </div>
-
-      <!-- Row 2: who + plan -->
-      <div class="form-row two">
-        <div>
-          <label for="role">Who are you?</label>
+          <label for="role">What is ProofRepo helping you with today?</label>
           <select id="role" name="role">
             <option value="auditor" selected>I’m an auditor collecting evidence from a client</option>
             <option value="client">My auditor sent me here to upload evidence</option>
@@ -330,6 +318,22 @@
             We use this for routing and wording — not for billing (yet).
           </div>
         </div>
+      </div>
+
+      <!-- Row 1: email + company -->
+      <div class="form-row two">
+        <div>
+          <label id="emailLabel" for="email">Auditor email</label>
+          <input id="email" name="email" type="email" required placeholder="you@company.com"/>
+        </div>
+        <div>
+          <label id="companyLabel" for="company">Client company</label>
+          <input id="company" name="company" required placeholder="Company Inc."/>
+        </div>
+      </div>
+
+      <!-- Plan (kept for backend / future pricing) -->
+      <div class="form-row two">
         <div>
           <label for="plan">Plan label (beta)</label>
           <select id="plan" name="plan">
@@ -342,22 +346,10 @@
         </div>
       </div>
 
-      <!-- Billing / codes -->
-      <div class="form-row">
-        <div>
-          <label>How will this ProofPack be covered?</label>
-          <div class="small">
-            <label><input type="radio" name="billingMode" value="code" checked> I have a code from an auditor</label><br>
-            <label><input type="radio" name="billingMode" value="oneoff"> I want to pay for a one-off pack (coming soon)</label><br>
-            <label><input type="radio" name="billingMode" value="bundle"> I’m an auditor and want a bundle of packs (coming soon)</label>
-          </div>
-          <div class="hint" id="billingHint">
-            In beta we’re mostly using codes. You can leave it on this option and just upload.
-          </div>
-        </div>
-      </div>
+      <!-- Hidden billing mode: keep the field, remove noisy radios -->
+      <input type="hidden" id="billingModeHidden" name="billingMode" value="code" />
 
-      <!-- Row 3: frameworks + WHY (cadence field) -->
+      <!-- Row 3: frameworks -->
       <div class="form-row two">
         <div>
           <label for="frameworks">Framework(s)</label>
@@ -372,16 +364,8 @@
           <div class="hint">SOC 2 is fully wired today. Others are recorded as tags for future automation.</div>
         </div>
         <div>
-          <label for="cadence">Why do you need this pack?</label>
-          <select id="cadence" name="cadence">
-            <option value="">Just want a clean SOC 2 pack</option>
-            <option>Upcoming SOC 2 audit</option>
-            <option>Vendor security questionnaire</option>
-            <option>Investor or board diligence</option>
-            <option>Internal readiness / gap check</option>
-            <option>Other (explain in notes)</option>
-          </select>
-          <div class="hint">We store this in the manifest so you and your auditor remember the context.</div>
+          <label for="notes">Anything we should know?</label>
+          <textarea id="notes" name="notes" placeholder="Deadlines, specific controls, output preferences…"></textarea>
         </div>
       </div>
 
@@ -407,14 +391,6 @@
           <div class="hint" id="clientEmailHint">
             If you’re an auditor, add your client contact here so we can associate the pack with them (and later, email codes directly).
           </div>
-        </div>
-      </div>
-
-      <!-- Notes -->
-      <div class="form-row">
-        <div>
-          <label for="notes">Anything we should know?</label>
-          <textarea id="notes" name="notes" placeholder="Deadlines, specific controls, output preferences…"></textarea>
         </div>
       </div>
 
@@ -482,9 +458,6 @@
     const auditorEmailHint = $('#auditorEmailHint');
     const clientEmailHint = $('#clientEmailHint');
 
-    const billingHint = $('#billingHint');
-    const billingRadios = document.querySelectorAll('input[name="billingMode"]');
-
     document.getElementById('y').textContent = new Date().getFullYear();
 
     // File meta / caps display
@@ -537,38 +510,10 @@
         auditorEmailCol.style.display = 'none';
         clientEmailCol.style.display = 'none';
       }
-
-      // Re-apply billing logic in case role changes
-      updateBillingUI();
     }
 
     roleSelect.addEventListener('change', updateRoleUI);
-
-    // Dynamic UI for billing / codes
-    function updateBillingUI() {
-      const checked = document.querySelector('input[name="billingMode"]:checked');
-      const mode = checked ? checked.value : 'code';
-      const role = roleSelect.value;
-
-      if (mode === 'code') {
-        billingHint.textContent = 'Enter an auditor code if you have one, or leave it blank in beta. We’ll mainly use codes for coverage.';
-        if (role !== 'company') {
-          auditorCodeCol.style.display = 'block';
-        }
-      } else if (mode === 'oneoff') {
-        billingHint.textContent = 'One-off payment via Stripe will live here. For now, this is a placeholder — use codes or email ops@proofrepo.com.';
-        auditorCodeCol.style.display = 'block';
-      } else {
-        billingHint.textContent = 'Bundle pricing for auditors will live here. For now, reach out to ops@proofrepo.com and we’ll handle bundles manually.';
-        auditorCodeCol.style.display = 'block';
-      }
-    }
-
-    billingRadios.forEach(r => r.addEventListener('change', updateBillingUI));
-
-    // Initial UI setup
     updateRoleUI();
-    updateBillingUI();
 
     function validate(){
       const email = $('#email').value.trim();
@@ -604,13 +549,17 @@
       fd.append('email', document.getElementById('email').value.trim());
       fd.append('company', document.getElementById('company').value.trim());
       fd.append('plan', document.getElementById('plan').value || 'Trial');
-      fd.append('cadence', document.getElementById('cadence').value || '');
+
       fd.append('role', document.getElementById('role').value || 'client');
 
-      const billingChecked = document.querySelector('input[name="billingMode"]:checked');
-      if (billingChecked) {
-        fd.append('billingMode', billingChecked.value);
+      // billingMode: keep sending it, default from hidden input
+      const billingHidden = document.getElementById('billingModeHidden');
+      if (billingHidden) {
+        fd.append('billingMode', billingHidden.value || 'code');
       }
+
+      // cadence not needed for UI right now; send empty for compatibility
+      fd.append('cadence', '');
 
       const frameworksSel = document.getElementById('frameworks');
       Array.from(frameworksSel.selectedOptions || []).forEach(o => fd.append('frameworks', o.value));
