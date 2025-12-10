@@ -91,6 +91,13 @@
     .filebox.dragover{border-style:solid;border-color:#4b65ff;background:#0f1a3d}
     .filemeta{font-size:.9rem;color:#a9b8ef}
 
+    .guidance{margin-top:12px;padding:12px 14px;border-radius:10px;border:1px solid #27356b;background:#0d1736;font-size:.9rem}
+    .guidance h4{margin:0 0 6px;font-size:.95rem}
+    .guidance ul{margin:0;padding-left:18px}
+    .guidance li{margin:3px 0}
+    .guidance .ok{color:#4ade80}
+    .guidance .missing{color:#fca5a5}
+
     details.advanced{margin-top:8px}
     details.advanced summary{cursor:pointer;font-weight:600;color:#9fb2ff}
 
@@ -360,6 +367,15 @@
         <div id="fileMeta" class="filemeta">No files selected.</div>
       </div>
 
+      <!-- SOC 2 guidance checklist -->
+      <div id="soc2Guide" class="guidance step-after-role" style="display:none">
+        <h4>For SOC 2, we typically expect:</h4>
+        <ul id="soc2GuideList"></ul>
+        <div class="small">
+          This is a quick checklist based on filenames. The backend still runs deeper checks after upload.
+        </div>
+      </div>
+
       <!-- Optional block: everything else -->
       <details class="advanced step-after-role" id="optionalRow" style="display:none">
         <summary>Optional details: codes, emails, context, and advanced mapping</summary>
@@ -414,7 +430,7 @@
             </div>
           </div>
 
-          <!-- Context + notes (cadence hidden, notes visible) -->
+          <!-- Context (hidden cadence, visible notes) -->
           <input type="hidden" id="cadence" name="cadence" value="">
           <div class="form-row">
             <div>
@@ -486,9 +502,50 @@
     const optionalDetails = $('#optionalRow');
     const planBillingRow = $('#planBillingRow');
 
+    const soc2Guide = $('#soc2Guide');
+    const soc2GuideList = $('#soc2GuideList');
+
     const laterRows = document.querySelectorAll('.step-after-role');
+    const frameworksSelectEl = $('#frameworks');
 
     document.getElementById('y').textContent = new Date().getFullYear();
+
+    // ---- File guidance (pre-upload checklist) ----
+    function updateGuidance() {
+      if (!soc2Guide || !soc2GuideList) return;
+
+      const frameworksSel = document.getElementById('frameworks');
+      const selected = Array.from(frameworksSel?.selectedOptions || []).map(o => o.value);
+      const hasSOC2 = selected.includes('SOC2');
+
+      if (!hasSOC2) {
+        soc2Guide.style.display = 'none';
+        soc2GuideList.innerHTML = '';
+        return;
+      }
+
+      const files = Array.from(fileInput.files || []);
+      const names = files.map(f => f.name || '');
+
+      const checks = [
+        { label:'Access review', test:(n)=>/access/i.test(n) },
+        { label:'Change log',   test:(n)=>/change/i.test(n) },
+        { label:'Vendor list',  test:(n)=>/(vendor|supplier)/i.test(n) }
+      ];
+
+      let html = '';
+      checks.forEach(ch => {
+        const matches = names.filter(n => ch.test(n));
+        if (matches.length) {
+          html += `<li class="ok">✔ ${ch.label} — looks covered by <code>${matches[0]}</code></li>`;
+        } else {
+          html += `<li class="missing">• ${ch.label} — still looks missing</li>`;
+        }
+      });
+
+      soc2GuideList.innerHTML = html;
+      soc2Guide.style.display = '';
+    }
 
     // ---- File handling (choose + drag & drop) ----
     function updateFileMeta() {
@@ -496,6 +553,7 @@
       if (!files.length) {
         fileMeta.textContent = 'No files selected.';
         if (planBillingRow) planBillingRow.style.display = 'none';
+        updateGuidance();
         return;
       }
       const total = files.reduce((n,f)=> n + (f.size || 0), 0);
@@ -504,6 +562,8 @@
 
       if (planBillingRow) planBillingRow.style.display = '';
       if (optionalDetails) optionalDetails.open = true;
+
+      updateGuidance();
     }
 
     function handleFilesList(list) {
@@ -516,9 +576,11 @@
       updateFileMeta();
     }
 
-    fileInput.addEventListener('change', () => {
-      handleFilesList(fileInput.files);
-    });
+    if (fileInput) {
+      fileInput.addEventListener('change', () => {
+        handleFilesList(fileInput.files);
+      });
+    }
 
     if (fileBox) {
       ['dragenter','dragover'].forEach(evt => {
@@ -565,7 +627,6 @@
         billingHint.textContent = 'Card payment via Stripe will live here. For now, this is a placeholder — use codes or email ops@proofrepo.com.';
       }
 
-      // Auditor code visible only when using codes and not a direct company
       if (billing === 'code' && role !== 'company' && role) {
         auditorCodeCol.style.display = 'block';
       } else {
@@ -583,7 +644,6 @@
         return;
       }
 
-      // show minimal essentials once role is chosen
       laterRows.forEach(r => {
         if (r.id === 'actionsRow') r.style.display = 'flex';
         else r.style.display = '';
@@ -594,10 +654,8 @@
         companyLabel.textContent = 'Client company';
         roleHint.textContent = 'You’re an auditor (or third party) driving this pack. You’ll get the ProofPack link and can forward it to your client or reviewers.';
 
-        // auditor already provided their email at top; no need for second field
         auditorEmailCol.style.display = 'none';
         clientEmailCol.style.display = 'block';
-
         clientEmailHint.textContent = 'Add your client contact so we can associate the pack with them (and later, email codes directly).';
       } else if (role === 'client') {
         emailLabel.textContent = 'Your email';
@@ -606,9 +664,8 @@
 
         auditorEmailCol.style.display = 'block';
         clientEmailCol.style.display = 'none';
-
         auditorEmailHint.textContent = 'If you know your auditor’s email, add it so we can also route the ProofPack to them.';
-      } else { // company (direct)
+      } else { // company
         emailLabel.textContent = 'Your email';
         companyLabel.textContent = 'Your company';
         roleHint.textContent = 'Direct company use: preparing for an audit or vendor review without an auditor driving this yet.';
@@ -618,17 +675,23 @@
       }
 
       updateBillingUI();
+      updateGuidance();
     }
 
-    roleSelect.addEventListener('change', updateRoleUI);
-
+    if (roleSelect) {
+      roleSelect.addEventListener('change', updateRoleUI);
+    }
     if (billingSelect) {
       billingSelect.addEventListener('change', updateBillingUI);
+    }
+    if (frameworksSelectEl) {
+      frameworksSelectEl.addEventListener('change', updateGuidance);
     }
 
     // Initial UI setup
     updateRoleUI();
     updateBillingUI();
+    updateGuidance();
 
     function validate(){
       const roleVal = document.getElementById('role').value;
