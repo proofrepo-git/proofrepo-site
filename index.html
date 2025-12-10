@@ -94,7 +94,7 @@
     .guidance{margin-top:12px;padding:12px 14px;border-radius:10px;border:1px solid #27356b;background:#0d1736;font-size:.9rem}
     .guidance h4{margin:0 0 6px;font-size:.95rem}
     .guidance ul{margin:0;padding-left:18px}
-    .guidance li{margin:3px 0}
+    .guidance li{margin:6px 0}
     .guidance .ok{color:#4ade80}
     .guidance .missing{color:#fca5a5}
 
@@ -367,12 +367,34 @@
         <div id="fileMeta" class="filemeta">No files selected.</div>
       </div>
 
-      <!-- SOC 2 guidance checklist -->
+      <!-- SOC 2 guidance checklist with manual tagging -->
       <div id="soc2Guide" class="guidance step-after-role" style="display:none">
         <h4>For SOC 2, we typically expect:</h4>
-        <ul id="soc2GuideList"></ul>
+        <ul>
+          <li>
+            <span id="soc2AccessStatus" class="missing">Access review — not tagged yet</span>
+            <div>
+              <label class="small" for="soc2AccessSelect">Which file is your access review?</label>
+              <select id="soc2AccessSelect"></select>
+            </div>
+          </li>
+          <li>
+            <span id="soc2ChangeStatus" class="missing">Change log — not tagged yet</span>
+            <div>
+              <label class="small" for="soc2ChangeSelect">Which file is your change log?</label>
+              <select id="soc2ChangeSelect"></select>
+            </div>
+          </li>
+          <li>
+            <span id="soc2VendorStatus" class="missing">Vendor list — not tagged yet</span>
+            <div>
+              <label class="small" for="soc2VendorSelect">Which file is your vendor list?</label>
+              <select id="soc2VendorSelect"></select>
+            </div>
+          </li>
+        </ul>
         <div class="small">
-          This is a quick checklist based on filenames. The backend still runs deeper checks after upload.
+          We’ll auto-suggest based on filenames. If a file is named weirdly, just pick it here so we treat it as the right artifact.
         </div>
       </div>
 
@@ -503,48 +525,114 @@
     const planBillingRow = $('#planBillingRow');
 
     const soc2Guide = $('#soc2Guide');
-    const soc2GuideList = $('#soc2GuideList');
+    const soc2AccessStatus = $('#soc2AccessStatus');
+    const soc2ChangeStatus = $('#soc2ChangeStatus');
+    const soc2VendorStatus = $('#soc2VendorStatus');
+    const soc2AccessSelect = $('#soc2AccessSelect');
+    const soc2ChangeSelect = $('#soc2ChangeSelect');
+    const soc2VendorSelect = $('#soc2VendorSelect');
 
     const laterRows = document.querySelectorAll('.step-after-role');
     const frameworksSelectEl = $('#frameworks');
 
+    // Tracks which file user has tagged for each SOC 2 artifact
+    const soc2Selection = {
+      AccessReview: '',
+      ChangeLog: '',
+      Vendors: ''
+    };
+
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    // ---- File guidance (pre-upload checklist) ----
-    function updateGuidance() {
-      if (!soc2Guide || !soc2GuideList) return;
+    function showStatus(msg, ok=false){
+      statusEl.style.display='block';
+      statusEl.className = 'status ' + (ok ? 'ok':'err');
+      statusEl.innerHTML = msg;
+    }
+    function clearStatus(){ statusEl.style.display='none'; statusEl.textContent=''; }
 
+    // --- SOC 2 guidance + tagging ---
+    function bindSelectHandlers() {
+      const configs = [
+        { key:'AccessReview', label:'Access review', select:soc2AccessSelect, statusEl:soc2AccessStatus },
+        { key:'ChangeLog',    label:'Change log',    select:soc2ChangeSelect, statusEl:soc2ChangeStatus },
+        { key:'Vendors',      label:'Vendor list',   select:soc2VendorSelect, statusEl:soc2VendorStatus }
+      ];
+      configs.forEach(cfg => {
+        if (!cfg.select || !cfg.statusEl) return;
+        cfg.select.onchange = () => {
+          soc2Selection[cfg.key] = cfg.select.value;
+          if (cfg.select.value) {
+            cfg.statusEl.textContent = `✔ ${cfg.label} — tagged as ${cfg.select.value}`;
+            cfg.statusEl.className = 'ok';
+          } else {
+            cfg.statusEl.textContent = `${cfg.label} — still not tagged`;
+            cfg.statusEl.className = 'missing';
+          }
+        };
+      });
+    }
+
+    function populateSoc2SelectOptions(files) {
+      const configs = [
+        { key:'AccessReview', label:'Access review', select:soc2AccessSelect, statusEl:soc2AccessStatus, test:(n)=>/access/i.test(n) },
+        { key:'ChangeLog',    label:'Change log',    select:soc2ChangeSelect, statusEl:soc2ChangeStatus, test:(n)=>/change/i.test(n) },
+        { key:'Vendors',      label:'Vendor list',   select:soc2VendorSelect, statusEl:soc2VendorStatus, test:(n)=>/(vendor|supplier)/i.test(n) }
+      ];
+
+      configs.forEach(cfg => {
+        if (!cfg.select || !cfg.statusEl) return;
+
+        const previous = soc2Selection[cfg.key] || '';
+
+        // build options
+        cfg.select.innerHTML = '';
+        const placeholderOpt = document.createElement('option');
+        placeholderOpt.value = '';
+        placeholderOpt.textContent = 'Not set / not sure yet';
+        cfg.select.appendChild(placeholderOpt);
+
+        files.forEach(f => {
+          const opt = document.createElement('option');
+          opt.value = f.name;
+          opt.textContent = f.name;
+          cfg.select.appendChild(opt);
+        });
+
+        let selected = previous && files.some(f => f.name === previous) ? previous : '';
+
+        if (!selected) {
+          const guess = files.find(f => cfg.test(f.name || ''));
+          if (guess) selected = guess.name;
+        }
+
+        cfg.select.value = selected;
+        soc2Selection[cfg.key] = selected;
+
+        if (selected) {
+          cfg.statusEl.textContent = `✔ ${cfg.label} — tagged as ${selected}`;
+          cfg.statusEl.className = 'ok';
+        } else {
+          cfg.statusEl.textContent = `${cfg.label} — still not tagged`;
+          cfg.statusEl.className = 'missing';
+        }
+      });
+    }
+
+    function updateGuidance() {
+      if (!soc2Guide) return;
       const frameworksSel = document.getElementById('frameworks');
       const selected = Array.from(frameworksSel?.selectedOptions || []).map(o => o.value);
       const hasSOC2 = selected.includes('SOC2');
+      const files = Array.from(fileInput?.files || []);
 
       if (!hasSOC2) {
         soc2Guide.style.display = 'none';
-        soc2GuideList.innerHTML = '';
         return;
       }
 
-      const files = Array.from(fileInput.files || []);
-      const names = files.map(f => f.name || '');
-
-      const checks = [
-        { label:'Access review', test:(n)=>/access/i.test(n) },
-        { label:'Change log',   test:(n)=>/change/i.test(n) },
-        { label:'Vendor list',  test:(n)=>/(vendor|supplier)/i.test(n) }
-      ];
-
-      let html = '';
-      checks.forEach(ch => {
-        const matches = names.filter(n => ch.test(n));
-        if (matches.length) {
-          html += `<li class="ok">✔ ${ch.label} — looks covered by <code>${matches[0]}</code></li>`;
-        } else {
-          html += `<li class="missing">• ${ch.label} — still looks missing</li>`;
-        }
-      });
-
-      soc2GuideList.innerHTML = html;
       soc2Guide.style.display = '';
+      populateSoc2SelectOptions(files);
     }
 
     // ---- File handling (choose + drag & drop) ----
@@ -607,13 +695,6 @@
       });
     }
 
-    function showStatus(msg, ok=false){
-      statusEl.style.display='block';
-      statusEl.className = 'status ' + (ok ? 'ok':'err');
-      statusEl.innerHTML = msg;
-    }
-    function clearStatus(){ statusEl.style.display='none'; statusEl.textContent=''; }
-
     function updateBillingUI() {
       if (!billingSelect) return;
       const billing = billingSelect.value;
@@ -629,7 +710,7 @@
 
       if (billing === 'code' && role !== 'company' && role) {
         auditorCodeCol.style.display = 'block';
-      } else {
+      } else if (billing === 'code' && role === 'company') {
         auditorCodeCol.style.display = 'none';
       }
     }
@@ -689,6 +770,8 @@
     }
 
     // Initial UI setup
+    document.getElementById('y').textContent = new Date().getFullYear();
+    bindSelectHandlers();
     updateRoleUI();
     updateBillingUI();
     updateGuidance();
@@ -723,6 +806,17 @@
         if (files.length > 50) return 'For large batches, split into multiple submissions.';
       }
 
+      // Enforce SOC 2 minimums
+      if (fws.includes('SOC2')) {
+        const missingKinds = [];
+        if (!soc2Selection.AccessReview) missingKinds.push('access review');
+        if (!soc2Selection.ChangeLog) missingKinds.push('change log');
+        if (!soc2Selection.Vendors) missingKinds.push('vendor list');
+        if (missingKinds.length) {
+          return 'For SOC 2, please tag which files correspond to: ' + missingKinds.join(', ') + '.';
+        }
+      }
+
       return null;
     }
 
@@ -755,7 +849,17 @@
       if (clientEmail) fd.append('clientEmail', clientEmail);
 
       const mapEl = document.getElementById('map');
-      const mapVal = mapEl ? mapEl.value.trim() : '';
+      let mapVal = mapEl ? mapEl.value.trim() : '';
+
+      // If user didn't hand-write JSON, synthesize from SOC 2 selections
+      if (!mapVal &&
+          (soc2Selection.AccessReview || soc2Selection.ChangeLog || soc2Selection.Vendors)) {
+        const autoMap = {};
+        if (soc2Selection.AccessReview) autoMap.AccessReview = soc2Selection.AccessReview;
+        if (soc2Selection.ChangeLog) autoMap.ChangeLog = soc2Selection.ChangeLog;
+        if (soc2Selection.Vendors) autoMap.Vendors = soc2Selection.Vendors;
+        mapVal = JSON.stringify(autoMap);
+      }
       if (mapVal) fd.append('map', mapVal);
 
       Array.from(fileInput.files || []).forEach(f => fd.append('files', f, f.name));
