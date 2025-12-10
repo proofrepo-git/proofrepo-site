@@ -90,9 +90,6 @@
     .filebox{border:1px dashed #3a4a86;border-radius:12px;padding:14px}
     .filemeta{font-size:.9rem;color:#a9b8ef}
 
-    .small label{display:flex;align-items:center;gap:6px}
-    .small input[type="radio"]{flex-shrink:0}
-
     details.advanced{margin-top:8px}
     details.advanced summary{cursor:pointer;font-weight:600;color:#9fb2ff}
 
@@ -368,8 +365,8 @@
       <details class="advanced step-after-role" id="optionalRow" style="display:none">
         <summary>Optional details: codes, emails, context, and advanced mapping</summary>
         <div style="margin-top:12px;display:grid;gap:16px">
-          <!-- Plan & coverage -->
-          <div class="form-row two">
+          <!-- Plan & coverage (shown after files present) -->
+          <div class="form-row two" id="planBillingRow" style="display:none">
             <div>
               <label for="plan">Plan label (beta)</label>
               <select id="plan" name="plan">
@@ -381,14 +378,14 @@
               <div class="hint">Backend uses this as a label plus simple caps. Real pricing will be upload-based.</div>
             </div>
             <div>
-              <label>How will this ProofPack be covered?</label>
-              <div class="small">
-                <label><input type="radio" name="billingMode" value="code" checked> I have a code from an auditor</label>
-                <label><input type="radio" name="billingMode" value="oneoff"> I want to pay for a one-off pack (coming soon)</label>
-                <label><input type="radio" name="billingMode" value="bundle"> I’m an auditor and want a bundle of packs (coming soon)</label>
-              </div>
+              <label for="billingMode">How will this ProofPack be covered?</label>
+              <select id="billingMode" name="billingMode">
+                <option value="">Not decided yet</option>
+                <option value="code">I have a code from an auditor</option>
+                <option value="card">I want to pay by card (Stripe)</option>
+              </select>
               <div class="hint" id="billingHint">
-                In beta we’re mostly using codes. You can leave it on this option and just upload.
+                You can decide this later. In beta we mostly use codes or manual billing via ops@proofrepo.com.
               </div>
             </div>
           </div>
@@ -418,20 +415,9 @@
             </div>
           </div>
 
-          <!-- Context + notes -->
-          <div class="form-row two">
-            <div>
-              <label for="cadence">Why do you need this pack?</label>
-              <select id="cadence" name="cadence">
-                <option value="">Just want a clean SOC 2 pack</option>
-                <option>Upcoming SOC 2 audit</option>
-                <option>Vendor security questionnaire</option>
-                <option>Investor or board diligence</option>
-                <option>Internal readiness / gap check</option>
-                <option>Other (explain in notes)</option>
-              </select>
-              <div class="hint">Stored in the manifest so you and your auditor remember the context.</div>
-            </div>
+          <!-- Context + notes (cadence hidden, notes visible) -->
+          <input type="hidden" id="cadence" name="cadence" value="">
+          <div class="form-row">
             <div>
               <label for="notes">Anything we should know?</label>
               <textarea id="notes" name="notes" placeholder="Deadlines, specific controls, output preferences…"></textarea>
@@ -495,19 +481,33 @@
     const clientEmailHint = $('#clientEmailHint');
 
     const billingHint = $('#billingHint');
-    const billingRadios = document.querySelectorAll('input[name="billingMode"]');
+    const billingSelect = $('#billingMode');
+
+    const optionalDetails = $('#optionalRow');
+    const planBillingRow = $('#planBillingRow');
 
     const laterRows = document.querySelectorAll('.step-after-role');
 
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    // File meta / caps display
+    // File meta / caps display & reveal billing after files uploaded
     fileInput.addEventListener('change', () => {
       const files = Array.from(fileInput.files || []);
-      if (!files.length) { fileMeta.textContent = 'No files selected.'; return; }
+      if (!files.length) {
+        fileMeta.textContent = 'No files selected.';
+        if (planBillingRow) planBillingRow.style.display = 'none';
+        return;
+      }
       const total = files.reduce((n,f)=> n + (f.size || 0), 0);
       const totalMB = (total/1024/1024).toFixed(2);
       fileMeta.textContent = `${files.length} file(s), ${totalMB} MB total`;
+
+      if (planBillingRow) {
+        planBillingRow.style.display = '';
+      }
+      if (optionalDetails) {
+        optionalDetails.open = true;
+      }
     });
 
     function showStatus(msg, ok=false){
@@ -517,18 +517,36 @@
     }
     function clearStatus(){ statusEl.style.display='none'; statusEl.textContent=''; }
 
+    function updateBillingUI() {
+      if (!billingSelect) return;
+      const billing = billingSelect.value;
+      const role = roleSelect.value;
+
+      if (!billing) {
+        billingHint.textContent = 'You can decide this later. In beta we mostly use codes or manual billing via ops@proofrepo.com.';
+      } else if (billing === 'code') {
+        billingHint.textContent = 'Enter an auditor code if you have one, or leave it blank in beta. We’ll mainly use codes for coverage.';
+      } else if (billing === 'card') {
+        billingHint.textContent = 'Card payment via Stripe will live here. For now, this is a placeholder — use codes or email ops@proofrepo.com.';
+      }
+
+      // Auditor code visible only when using codes and not a direct company
+      if (billing === 'code' && role !== 'company' && role) {
+        auditorCodeCol.style.display = 'block';
+      } else {
+        // keep it hidden for company or card/undecided
+        auditorCodeCol.style.display = 'none';
+      }
+    }
+
     // Dynamic UI for role
     function updateRoleUI() {
       const role = roleSelect.value;
 
       if (!role) {
-        // hide everything until they choose
         laterRows.forEach(r => {
-          if (r.id === 'actionsRow') {
-            r.style.display = 'none';
-          } else {
-            r.style.display = 'none';
-          }
+          if (r.id === 'actionsRow') r.style.display = 'none';
+          else r.style.display = 'none';
         });
         roleHint.textContent = "Start by telling us which side of the audit you're on.";
         return;
@@ -548,7 +566,6 @@
         companyLabel.textContent = 'Client company';
         roleHint.textContent = 'You’re an auditor driving this pack. You’ll get the ProofPack link and can forward it to your client or reviewers.';
 
-        auditorCodeCol.style.display = 'block';
         auditorEmailCol.style.display = 'block';
         clientEmailCol.style.display = 'block';
 
@@ -559,7 +576,6 @@
         companyLabel.textContent = 'Your company';
         roleHint.textContent = 'Use this if your auditor pointed you here to upload SOC 2 evidence.';
 
-        auditorCodeCol.style.display = 'block';
         auditorEmailCol.style.display = 'block';
         clientEmailCol.style.display = 'none';
 
@@ -569,7 +585,6 @@
         companyLabel.textContent = 'Your company';
         roleHint.textContent = 'Direct company use: preparing for an audit or vendor review without an auditor driving this yet.';
 
-        auditorCodeCol.style.display = 'none';
         auditorEmailCol.style.display = 'none';
         clientEmailCol.style.display = 'none';
       }
@@ -579,27 +594,9 @@
 
     roleSelect.addEventListener('change', updateRoleUI);
 
-    // Dynamic UI for billing / codes
-    function updateBillingUI() {
-      const checked = document.querySelector('input[name="billingMode"]:checked');
-      const mode = checked ? checked.value : 'code';
-      const role = roleSelect.value;
-
-      if (mode === 'code') {
-        billingHint.textContent = 'Enter an auditor code if you have one, or leave it blank in beta. We’ll mainly use codes for coverage.';
-        if (role && role !== 'company') {
-          auditorCodeCol.style.display = 'block';
-        }
-      } else if (mode === 'oneoff') {
-        billingHint.textContent = 'One-off payment via Stripe will live here. For now, this is a placeholder — use codes or email ops@proofrepo.com.';
-        auditorCodeCol.style.display = 'block';
-      } else {
-        billingHint.textContent = 'Bundle pricing for auditors will live here. For now, reach out to ops@proofrepo.com and we’ll handle bundles manually.';
-        auditorCodeCol.style.display = 'block';
-      }
+    if (billingSelect) {
+      billingSelect.addEventListener('change', updateBillingUI);
     }
-
-    billingRadios.forEach(r => r.addEventListener('change', updateBillingUI));
 
     // Initial UI setup
     updateRoleUI();
@@ -619,7 +616,7 @@
       if (fws.length === 0) return 'Please select at least one framework (SOC 2 is fully supported).';
 
       const files = Array.from(fileInput.files || []);
-      const plan = document.getElementById('plan').value || 'Trial';
+      const plan = document.getElementById('plan') ? (document.getElementById('plan').value || 'Trial') : 'Trial';
 
       const total = files.reduce((n,f)=> n + (f.size || 0), 0);
 
@@ -641,19 +638,18 @@
       const fd = new FormData();
       fd.append('email', document.getElementById('email').value.trim());
       fd.append('company', document.getElementById('company').value.trim());
-      fd.append('plan', document.getElementById('plan').value || 'Trial');
-      fd.append('cadence', document.getElementById('cadence').value || '');
+      fd.append('plan', document.getElementById('plan') ? (document.getElementById('plan').value || 'Trial') : 'Trial');
+      fd.append('cadence', document.getElementById('cadence') ? (document.getElementById('cadence').value || '') : '');
       fd.append('role', document.getElementById('role').value || 'client');
 
-      const billingChecked = document.querySelector('input[name="billingMode"]:checked');
-      if (billingChecked) {
-        fd.append('billingMode', billingChecked.value);
+      if (billingSelect && billingSelect.value) {
+        fd.append('billingMode', billingSelect.value);
       }
 
       const frameworksSel = document.getElementById('frameworks');
       Array.from(frameworksSel.selectedOptions || []).forEach(o => fd.append('frameworks', o.value));
 
-      fd.append('notes', document.getElementById('notes').value.trim());
+      fd.append('notes', document.getElementById('notes') ? document.getElementById('notes').value.trim() : '');
       const auditorCode = document.getElementById('auditorCode').value.trim();
       const auditorEmail = document.getElementById('auditorEmail').value.trim();
       const clientEmail = document.getElementById('clientEmail').value.trim();
@@ -661,7 +657,8 @@
       if (auditorEmail) fd.append('auditorEmail', auditorEmail);
       if (clientEmail) fd.append('clientEmail', clientEmail);
 
-      const mapVal = document.getElementById('map').value.trim();
+      const mapEl = document.getElementById('map');
+      const mapVal = mapEl ? mapEl.value.trim() : '';
       if (mapVal) fd.append('map', mapVal);
 
       Array.from(fileInput.files || []).forEach(f => fd.append('files', f, f.name));
@@ -708,4 +705,3 @@
   </script>
 </body>
 </html>
-
