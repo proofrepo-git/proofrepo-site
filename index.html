@@ -1001,8 +1001,12 @@
     );
   }
 } catch(err){
-  showStatus(`Network error: ${err.message}`, false);
+showStatus(esc(`Network error: ${err?.message || err}`), false);
 } finally {
   submitBtn.disabled = false;
   submitBtn.textContent = 'Send and build ProofPack';
 }
+    });
+  </script>
+</body>
+</html>
