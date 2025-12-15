@@ -348,7 +348,7 @@
         <div>
           <label for="frameworks">Framework(s)</label>
           <select id="frameworks" name="frameworks" multiple required>
-            <option value="SOC2">SOC 2</option>
+            <option value="SOC2" selected>SOC 2</option>
             <option value="ISO27001">ISO 27001</option>
             <option value="HIPAA">HIPAA</option>
             <option value="GDPR">GDPR</option>
@@ -553,12 +553,28 @@
 
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    function showStatus(msg, ok=false){
-      statusEl.style.display='block';
-      statusEl.className = 'status ' + (ok ? 'ok':'err');
-      statusEl.innerHTML = msg;
-    }
-    function clearStatus(){ statusEl.style.display='none'; statusEl.textContent=''; }
+function showStatus(msg, ok=false){
+  statusEl.style.display = 'block';
+  statusEl.className = 'status ' + (ok ? 'ok' : 'err');
+  statusEl.innerHTML = msg;
+}
+function clearStatus(){
+  statusEl.style.display = 'none';
+  statusEl.textContent = '';
+}
+
+// Ensure SOC2 is selected by default (even if the <select multiple> started hidden)
+if (frameworksSelectEl && frameworksSelectEl.selectedOptions.length === 0) {
+  const soc2Opt = Array.from(frameworksSelectEl.options).find(o => o.value === 'SOC2');
+  if (soc2Opt) soc2Opt.selected = true;
+}
+
+
+// Keep Optional Details hidden until files are added (pre-GTM simpler flow)
+if (optionalDetails) {
+  optionalDetails.style.display = 'none';
+  optionalDetails.open = false;
+}
 
     function getSelectedFrameworkKeys() {
       const fs = Array.from(frameworksSelectEl?.selectedOptions || []).map(o => o.value);
@@ -673,24 +689,40 @@
       frameworkGuides.appendChild(info);
     }
 
-    // File handling & drag/drop
-    function updateFileMeta() {
-      const files = Array.from(fileInput.files || []);
-      if (!files.length) {
-        fileMeta.textContent = 'No files selected.';
-        if (planBillingRow) planBillingRow.style.display = 'none';
-        renderFrameworkGuides();
-        return;
-      }
-      const total = files.reduce((n,f)=> n + (f.size || 0), 0);
-      const totalMB = (total/1024/1024).toFixed(2);
-      fileMeta.textContent = `${files.length} file(s), ${totalMB} MB total`;
+// File handling & drag/drop
+function updateFileMeta() {
+  const files = Array.from(fileInput?.files || []);
 
-      if (planBillingRow) planBillingRow.style.display = '';
-      if (optionalDetails) optionalDetails.open = true;
+  if (!files.length) {
+    if (fileMeta) fileMeta.textContent = 'No files selected.';
+    if (planBillingRow) planBillingRow.style.display = 'none';
 
-      renderFrameworkGuides();
+    // Hide optional details until files exist
+    if (optionalDetails) {
+      optionalDetails.style.display = 'none';
+      optionalDetails.open = false;
     }
+
+    renderFrameworkGuides();
+    return;
+  }
+
+  const total = files.reduce((n, f) => n + (f.size || 0), 0);
+  const totalMB = (total / 1024 / 1024).toFixed(2);
+
+  if (fileMeta) fileMeta.textContent = `${files.length} file(s), ${totalMB} MB total`;
+
+  if (planBillingRow) planBillingRow.style.display = '';
+
+  // Show optional details once files exist, but keep it collapsed
+  if (optionalDetails) {
+    optionalDetails.style.display = '';
+    optionalDetails.open = false;
+  }
+
+  renderFrameworkGuides();
+}
+
 
     function handleFilesList(list) {
       if (!list || !list.length) return;
@@ -751,48 +783,56 @@
       }
     }
 
-    function updateRoleUI() {
-      const role = roleSelect.value;
+function updateRoleUI() {
+  const role = roleSelect.value;
 
-      if (!role) {
-        laterRows.forEach(r => r.style.display = 'none');
-        roleHint.textContent = "Start by telling us which side of the audit you're on.";
-        return;
-      }
+  if (!role) {
+    laterRows.forEach(r => r.style.display = 'none');
+    roleHint.textContent = "Start by telling us which side of the audit you're on.";
+    return;
+  }
 
-      laterRows.forEach(r => {
-        if (r.id === 'actionsRow') r.style.display = 'flex';
-        else r.style.display = '';
-      });
+  // Show the post-role rows as usual…
+  laterRows.forEach(r => {
+    if (r.id === 'actionsRow') r.style.display = 'flex';
+    else r.style.display = '';
+  });
 
-      if (role === 'auditor') {
-        emailLabel.textContent = 'Auditor / third-party email';
-        companyLabel.textContent = 'Client company';
-        roleHint.textContent = 'You’re an auditor or third party driving this pack. You’ll get the ProofPack link and can forward it to your client or reviewers.';
+  // ...but keep Optional Details hidden until files exist
+  const hasFiles = (fileInput && fileInput.files && fileInput.files.length > 0);
+  if (optionalDetails) {
+    optionalDetails.style.display = hasFiles ? '' : 'none';
+    optionalDetails.open = false; // keep collapsed either way
+  }
 
-        auditorEmailCol.style.display = 'none';
-        clientEmailCol.style.display = 'block';
-        clientEmailHint.textContent = 'Add your client contact so we can associate the pack with them (and later, email codes directly).';
-      } else if (role === 'client') {
-        emailLabel.textContent = 'Your email';
-        companyLabel.textContent = 'Your company';
-        roleHint.textContent = 'Use this if an auditor or third party pointed you here to upload evidence.';
+  if (role === 'auditor') {
+    emailLabel.textContent = 'Auditor / third-party email';
+    companyLabel.textContent = 'Client company';
+    roleHint.textContent = 'You’re an auditor or third party driving this pack. You’ll get the ProofPack link and can forward it to your client or reviewers.';
 
-        auditorEmailCol.style.display = 'block';
-        clientEmailCol.style.display = 'none';
-        auditorEmailHint.textContent = 'If you know the reviewer’s email, add it so we can also route the ProofPack to them.';
-      } else { // company
-        emailLabel.textContent = 'Your email';
-        companyLabel.textContent = 'Your company';
-        roleHint.textContent = 'Direct company use: preparing for an audit or vendor review without an auditor driving this yet.';
+    auditorEmailCol.style.display = 'none';
+    clientEmailCol.style.display = 'block';
+    clientEmailHint.textContent = 'Add your client contact so we can associate the pack with them (and later, email codes directly).';
+  } else if (role === 'client') {
+    emailLabel.textContent = 'Your email';
+    companyLabel.textContent = 'Your company';
+    roleHint.textContent = 'Use this if an auditor or third party pointed you here to upload evidence.';
 
-        auditorEmailCol.style.display = 'none';
-        clientEmailCol.style.display = 'none';
-      }
+    auditorEmailCol.style.display = 'block';
+    clientEmailCol.style.display = 'none';
+    auditorEmailHint.textContent = 'If you know the reviewer’s email, add it so we can also route the ProofPack to them.';
+  } else { // company
+    emailLabel.textContent = 'Your email';
+    companyLabel.textContent = 'Your company';
+    roleHint.textContent = 'Direct company use: preparing for an audit or vendor review without an auditor driving this yet.';
 
-      updateBillingUI();
-      renderFrameworkGuides();
-    }
+    auditorEmailCol.style.display = 'none';
+    clientEmailCol.style.display = 'none';
+  }
+
+  updateBillingUI();
+  renderFrameworkGuides();
+}
 
     if (roleSelect) roleSelect.addEventListener('change', updateRoleUI);
     if (billingSelect) billingSelect.addEventListener('change', updateBillingUI);
@@ -807,10 +847,35 @@
       const roleVal = document.getElementById('role').value;
       if (!roleVal) return 'Please tell us what ProofRepo is helping you with today.';
 
-      const email = $('#email').value.trim();
-      const company = $('#company').value.trim();
-      if (!email) return 'Please enter a valid work email.';
-      if (!company) return 'Please enter your company name.';
+const email = $('#email').value.trim().toLowerCase();
+const company = $('#company').value.trim();
+
+// 1) allowlist your own test emails
+const ALLOWLIST = new Set([
+  'atucker5@alumni.nd.edu',
+  // add more if you want:
+  // 'you@proofrepo.com',
+]);
+
+// 2) basic email format check
+const looksLikeEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+if (!looksLikeEmail) return 'Please enter a valid email address.';
+
+// 3) “work email” check for everyone else (block common personal domains)
+const PERSONAL_DOMAINS = new Set([
+  'gmail.com','yahoo.com','outlook.com','hotmail.com','icloud.com','aol.com',
+  'proton.me','protonmail.com','gmx.com','mail.com','live.com','msn.com'
+]);
+
+const domain = email.split('@')[1] || '';
+const isPersonal = PERSONAL_DOMAINS.has(domain);
+
+// allow allowlist OR non-personal domains
+if (!ALLOWLIST.has(email) && isPersonal) {
+  return 'Please use a work email (or contact ops@proofrepo.com if you need an exception).';
+}
+
+if (!company) return 'Please enter your company name.';
 
       const frameworksSel = document.getElementById('frameworks');
       const fws = Array.from(frameworksSel.selectedOptions || []).map(o=>o.value);
@@ -833,22 +898,21 @@
         if (files.length > 50) return 'For large batches, split into multiple submissions.';
       }
 
-      // Enforce minimums for each configured framework
-      const missing = [];
-      fws.forEach(key => {
-        const cfg = FRAMEWORK_CONFIG[key];
-        if (!cfg) return;
-        const sel = frameworkSelections[key] || {};
-        (cfg.items || []).forEach(item => {
-          if (!sel[item.id]) {
-            missing.push(`${cfg.label}: ${item.label}`);
-          }
-        });
-      });
+// Enforce *required* minimums ONLY for SOC2 (backend hard-blocks SOC2; others are guidance-only)
+const missing = [];
+const soc2Selected = fws.includes('SOC2');
 
-      if (missing.length) {
-        return 'Before we build your ProofPack, please tag files for these required items:\n• ' + missing.join('\n• ');
-      }
+if (soc2Selected) {
+  const cfg = FRAMEWORK_CONFIG.SOC2;
+  const sel = frameworkSelections.SOC2 || {};
+  (cfg.items || []).forEach(item => {
+    if (!sel[item.id]) missing.push(`${cfg.label}: ${item.label}`);
+  });
+}
+
+if (missing.length) {
+  return 'For SOC 2, please tag files for these required items:\n• ' + missing.join('\n• ');
+}
 
       return null;
     }
@@ -861,7 +925,7 @@
       fd.append('email', document.getElementById('email').value.trim());
       fd.append('company', document.getElementById('company').value.trim());
       fd.append('plan', planEl ? (planEl.value || 'Trial') : 'Trial');
-      fd.append('cadence', cadenceEl ? (cadenceEl.value || '') : '');
+      fd.append('cadence', (cadenceEl && cadenceEl.value) ? cadenceEl.value : '');
       fd.append('role', document.getElementById('role').value || 'client');
 
       if (billingSelect && billingSelect.value) {
