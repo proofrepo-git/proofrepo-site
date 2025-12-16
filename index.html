@@ -14,6 +14,10 @@
   <meta property="og:description" content="Built for boutique auditors and their clients. Guided evidence collection that reduces errors and back-and-forth, without the overhead of a full GRC platform.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://proofrepo.com/">
+  <meta property="og:image" content="https://proofrepo.com/og.png">
+
+  <link rel="canonical" href="https://proofrepo.com/">
+  <meta name="twitter:card" content="summary_large_image">
 
   <style>
     :root{
@@ -67,6 +71,7 @@
     .cols3{grid-template-columns:repeat(3,minmax(0,1fr))}
     .muted{color:var(--muted)}
     .small{font-size:.9rem;color:var(--muted)}
+    .tag{color:var(--muted);font-size:.9rem}
     .hint{font-size:.85rem;color:#9fb2ff;margin-top:6px}
 
     /* PRICING */
@@ -134,7 +139,8 @@
       <span>ProofRepo</span>
     </div>
     <nav class="row" aria-label="primary">
-      <a class="btn" href="#pricing">For auditors</a>
+      <a class="btn" href="#auditors">For auditors</a>
+      <a class="btn" href="#companies">For companies</a>
       <a class="btn" href="#how">How it works</a>
       <a class="btn" href="#request">Upload evidence</a>
     </nav>
@@ -161,6 +167,7 @@
           <a class="btn" href="mailto:ops@proofrepo.com?subject=Auditor%20beta" data-analytics="cta_auditor_beta">
             Auditor? Join the beta
           </a>
+         
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
           <span class="pill">Built for boutique audit firms</span>
@@ -202,8 +209,8 @@
   </div>
 
   <!-- PRICING / POSITIONING -->
-  <section id="pricing" class="wrap section pricing" aria-labelledby="pricing-h">
-    <h2 id="pricing-h">Built for auditors first, friendly for companies</h2>
+  <section id="auditors" class="wrap section pricing" aria-labelledby="auditors-h">
+    <h2 id="auditors-h">Built for auditors first, friendly for companies</h2>
 
     <div class="card" style="margin-bottom:18px;border-style:dashed">
       <strong>Beta stage:</strong>
@@ -258,6 +265,27 @@
         </ul>
         <div class="price small">Not live yet — we’re collecting feedback first.</div>
       </article>
+    </div>
+  </section>
+
+    <!-- FOR COMPANIES -->
+  <section id="companies" class="wrap section" aria-labelledby="companies-h">
+    <h2 id="companies-h">For companies</h2>
+
+    <div class="grid cols2">
+      <div class="card">
+        <h3>Get audit- and review-ready</h3>
+        <p class="muted">
+          Upload evidence once and keep a clean ProofPack you can reuse with auditors, customers, investors, and partners.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Reduce “please resend” loops</h3>
+        <p class="muted">
+          Guided prompts + required SOC 2 tagging helps prevent wrong exports, wrong date ranges, and missing artifacts.
+        </p>
+      </div>
     </div>
   </section>
 
@@ -319,7 +347,7 @@
       <div class="form-row" id="roleRow">
         <div>
           <label for="role">What is ProofRepo helping you with today?</label>
-          <select id="role" name="role">
+          <select id="role" name="role" required>
             <option value="" selected disabled>Choose one…</option>
             <option value="auditor">I’m an auditor or a third party collecting evidence from a company</option>
             <option value="client">A third party sent me here to upload evidence documentation to generate a ProofPack</option>
@@ -335,11 +363,11 @@
       <div class="form-row two step-after-role" id="contactRow" style="display:none">
         <div>
           <label id="emailLabel" for="email">Work email</label>
-          <input id="email" name="email" type="email" required placeholder="you@company.com"/>
+          <input id="email" name="email" type="email" required placeholder="you@company.com" autocomplete="email"/>
         </div>
         <div>
           <label id="companyLabel" for="company">Company</label>
-          <input id="company" name="company" required placeholder="Company Inc."/>
+          <input id="company" name="company" required placeholder="Company Inc." autocomplete="organization"/>
         </div>
       </div>
 
@@ -518,7 +546,28 @@
       }
     };
 
-    const $ = s => document.querySelector(s);
+const $ = s => document.querySelector(s);
+    
+// ===== PATCH UTILS (escape + safeUrl) =====
+const esc = (s = '') =>
+  String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+
+const safeUrl = (u) => {
+  try {
+    const url = new URL(String(u), window.location.href);
+    if (url.protocol !== 'https:' && url.protocol !== 'http:') return '';
+    return url.toString();
+  } catch {
+    return '';
+  }
+};    
+// ===== /PATCH UTILS =====
+
     const statusEl = $('#status');
     const submitBtn = $('#submitBtn');
     const fileInput = $('#files');
@@ -550,6 +599,13 @@
 
     // frameworkSelections[frameworkKey][itemId] = filename
     const frameworkSelections = {};
+    // ===== PATCH: always have SOC2 map ready =====
+frameworkSelections.SOC2 = frameworkSelections.SOC2 || {};
+// Pre-seed SOC2 required keys so validation is deterministic
+for (const item of (FRAMEWORK_CONFIG.SOC2?.items || [])) {
+  if (!(item.id in frameworkSelections.SOC2)) frameworkSelections.SOC2[item.id] = '';
+}
+// ===== /PATCH =====
 
     document.getElementById('y').textContent = new Date().getFullYear();
 
@@ -560,7 +616,7 @@ function showStatus(msg, ok=false){
 }
 function clearStatus(){
   statusEl.style.display = 'none';
-  statusEl.textContent = '';
+  statusEl.innerHTML = '';
 }
 
 // Ensure SOC2 is selected by default (even if the <select multiple> started hidden)
@@ -595,13 +651,15 @@ if (optionalDetails) {
     function renderFrameworkGuides() {
       if (!frameworkGuides) return;
       const selectedKeys = getSelectedFrameworkKeys().filter(k => FRAMEWORK_CONFIG[k]);
-      const files = Array.from(fileInput?.files || []);
+const files = Array.from(fileInput?.files || []);
 
-      if (!selectedKeys.length) {
-        frameworkGuides.style.display = 'none';
-        frameworkGuides.innerHTML = '';
-        return;
-      }
+// Hide until frameworks selected AND at least 1 file exists
+if (!selectedKeys.length || !files.length) {
+  frameworkGuides.style.display = 'none';
+  frameworkGuides.innerHTML = '';
+  return;
+}
+
 
       frameworkGuides.style.display = '';
       frameworkGuides.innerHTML = '';
@@ -725,14 +783,21 @@ function updateFileMeta() {
 
 
     function handleFilesList(list) {
-      if (!list || !list.length) return;
-      if (window.DataTransfer) {
-        const dt = new DataTransfer();
-        Array.from(list).forEach(f => dt.items.add(f));
-        fileInput.files = dt.files;
-      }
-      updateFileMeta();
+  if (!list || !list.length) return;
+
+  try {
+    if (window.DataTransfer) {
+      const dt = new DataTransfer();
+      Array.from(list).forEach(f => dt.items.add(f));
+      fileInput.files = dt.files;
     }
+  } catch (_) {
+    // Some browsers (older Safari/iOS) don't allow programmatic file assignment.
+    // We'll still update UI and let native input behavior handle selection.
+  }
+
+  updateFileMeta();
+}
 
     if (fileInput) {
       fileInput.addEventListener('change', () => handleFilesList(fileInput.files));
@@ -793,10 +858,11 @@ function updateRoleUI() {
   }
 
   // Show the post-role rows as usual…
-  laterRows.forEach(r => {
-    if (r.id === 'actionsRow') r.style.display = 'flex';
-    else r.style.display = '';
-  });
+laterRows.forEach(r => {
+  // override inline display:none
+  if (r.id === 'actionsRow') r.style.display = 'flex';
+  else r.style.display = 'block';
+});
 
   // ...but keep Optional Details hidden until files exist
   const hasFiles = (fileInput && fileInput.files && fileInput.files.length > 0);
@@ -842,7 +908,8 @@ function updateRoleUI() {
     updateRoleUI();
     updateBillingUI();
     renderFrameworkGuides();
-
+    updateFileMeta();
+    
     function validate(){
       const roleVal = document.getElementById('role').value;
       if (!roleVal) return 'Please tell us what ProofRepo is helping you with today.';
@@ -978,29 +1045,23 @@ if (missing.length) {
       return fd;
     }
 
-    document.getElementById('intakeForm').addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      clearStatus();
-      const err = validate();
-      if (err) { showStatus(err.replace(/\n/g,'<br>'), false); return; }
+document.getElementById('intakeForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  clearStatus();
 
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Uploading…';
+  const err = validate();
+  if (err) {
+    showStatus(esc(err).replace(/\n/g, '<br>'), false);
+    return;
+  }
 
-   try{
-  const res = await fetch(INTAKE_URL, { method:'POST', body: gather() });
-  const text = await res.text();
-  let json = null;
-  try { json = JSON.parse(text); } catch (_) {}
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Uploading…';
 
-  // simple HTML escape for messages we render
-  const esc = (s='') => (s+'')
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-
-  // Your worker returns needs like: [{ framework:"SOC2", missing:[...] }, ...]
-  function renderNeedsHtml(needs){
+  // Worker returns needs like: [{ framework:"SOC2", missing:[...] }, ...]
+  function renderNeedsHtml(needs) {
     if (!needs) return '';
+
     if (Array.isArray(needs)) {
       const lines = [];
       for (const n of needs) {
@@ -1011,7 +1072,8 @@ if (missing.length) {
       }
       return lines.join('<br>');
     }
-    // fallback support if needs is an object shape
+
+    // fallback if needs is an object shape
     if (typeof needs === 'object') {
       const parts = [];
       for (const fw in needs) {
@@ -1021,56 +1083,75 @@ if (missing.length) {
       }
       return parts.join('<br>');
     }
+
     return esc(String(needs));
   }
 
-  if (!res.ok || !json || json.ok === false) {
-    const msg = (json && json.error) ? json.error : `Upload failed (${res.status})`;
-    showStatus(esc(msg), false);
-  } else {
-    const filesCount = json?.usage?.files ?? (Array.isArray(json?.saved) ? json.saved.length : 0);
-    const viewer = json.viewerUrl || json.packUrl;
+  try {
+    const res = await fetch(INTAKE_URL, { method: 'POST', body: gather() });
+    const text = await res.text();
+
+    let json = null;
+    try { json = JSON.parse(text); } catch (_) {}
+
+    if (!res.ok || !json || json.ok === false) {
+      const msg = (json && json.error) ? json.error : `Upload failed (${res.status})`;
+      showStatus(esc(msg), false);
+      return;
+    }
+
+    const filesCount =
+      json?.usage?.files ??
+      (Array.isArray(json?.saved) ? json.saved.length : 0);
+
+    const viewer = safeUrl(json.viewerUrl || json.packUrl);
     const linkHtml = viewer
-      ? `<br><br><a href="${viewer}" target="_blank" rel="noopener">Open ProofPack viewer</a>`
+      ? `<br><br><a href="${esc(viewer)}" target="_blank" rel="noopener noreferrer">Open ProofPack viewer</a>`
       : '';
 
+    // IMPORTANT: never trust backend HTML; escape it
     const needsHtml = json.missingSummary
-      ? json.missingSummary
+      ? esc(String(json.missingSummary)).replace(/\n/g, '<br>')
       : renderNeedsHtml(json.needs);
 
     const missingBlock = needsHtml
       ? `<br><br><strong>Missing items (backend):</strong><br>${needsHtml}`
       : '';
 
-    const packUrl = json.packUrl
-      ? `<br><br><strong>Signed JSON:</strong> <a href="${json.packUrl}" target="_blank" rel="noopener">Open</a>`
+    const packUrl = safeUrl(json.packUrl);
+    const packUrlHtml = packUrl
+      ? `<br><br><strong>Signed JSON:</strong> <a href="${esc(packUrl)}" target="_blank" rel="noopener noreferrer">Open</a>`
       : '';
 
     const manifestKey = json.manifestKey
       ? `<br><strong>Manifest key:</strong> <code>${esc(json.manifestKey)}</code>`
       : '';
 
-    const emailOk = (json.emailOk === true) ? 'Yes' : (json.emailOk === false ? 'No (check email config)' : 'Unknown');
-    const emailBlock = `<br><strong>Email sent:</strong> ${emailOk}`;
+    const emailOk =
+      (json.emailOk === true) ? 'Yes' :
+      (json.emailOk === false) ? 'No (check email config)' :
+      'Unknown';
+
+    const emailBlock = `<br><strong>Email sent:</strong> ${esc(emailOk)}`;
 
     const fixEnds = json.fixWindowEndsAt
       ? `<br><strong>Fix window ends:</strong> ${esc(json.fixWindowEndsAt)}`
       : '';
 
     showStatus(
-      `✅ Received! <strong>${filesCount}</strong> file(s) saved.<br>
+      `✅ Received! <strong>${esc(filesCount)}</strong> file(s) saved.<br>
        A ProofPack email will arrive shortly.${missingBlock}${linkHtml}
-       <div class="small">${emailBlock}${fixEnds}${manifestKey}${packUrl}</div>`,
+       <div class="small">${emailBlock}${fixEnds}${manifestKey}${packUrlHtml}</div>`,
       true
     );
+  } catch (err) {
+    showStatus(esc(`Network error: ${err?.message || err}`), false);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Send and build ProofPack';
   }
-} catch(err){
-showStatus(esc(`Network error: ${err?.message || err}`), false);
-} finally {
-  submitBtn.disabled = false;
-  submitBtn.textContent = 'Send and build ProofPack';
-}
-    });
-  </script>
+});
+
+</script>
 </body>
 </html>
