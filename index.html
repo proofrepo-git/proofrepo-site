@@ -139,7 +139,7 @@
       <span>ProofRepo</span>
     </div>
     <nav class="row" aria-label="primary">
-      <a class="btn" href="#auditors">For auditors</a>
+      <a class="btn" href="#pricing">Pricing for auditors</a>
       <a class="btn" href="#companies">For companies</a>
       <a class="btn" href="#how">How it works</a>
       <a class="btn" href="#request">Upload evidence</a>
@@ -227,7 +227,8 @@
       <div class="form-row two step-after-role" id="contactRow" style="display:none">
         <div>
           <label id="emailLabel" for="email">Work email</label>
-          <input id="email" name="email" type="email" required placeholder="you@company.com" autocomplete="email"/>
+         <input id="email" name="email" type="email" required placeholder="you@company.com" autocomplete="email"/>
+<div class="hint" id="emailHint" style="margin-top:6px"></div>
         </div>
         <div>
           <label id="companyLabel" for="company">Company</label>
@@ -264,9 +265,36 @@
       <!-- Dynamic framework guidance / tagging -->
       <div id="frameworkGuides" class="guidance step-after-role" style="display:none"></div>
 
+            <!-- ROUTING (moved out of Optional so codes can be entered before upload) -->
+      <div class="form-row three step-after-role" id="routingRow" style="display:none">
+        <div id="auditorCodeCol">
+          <label for="auditorCode">Auditor / third-party code (optional)</label>
+          <input id="auditorCode" name="auditorCode" placeholder="Short code (e.g. TEST123)"/>
+          <div class="hint" id="auditorCodeHint">
+            If you have a code from an auditor / reviewer, enter it now so your ProofPack is routed correctly.
+          </div>
+        </div>
+
+        <div id="auditorEmailCol">
+          <label for="auditorEmail">Auditor / third-party email (optional)</label>
+          <input id="auditorEmail" name="auditorEmail" type="email" placeholder="reviewer@examplefirm.com"/>
+          <div class="hint" id="auditorEmailHint">
+            If you know the reviewer’s email, add it so we can route the ProofPack to them too.
+          </div>
+        </div>
+
+        <div id="clientEmailCol">
+          <label for="clientEmail">Client contact email (optional)</label>
+          <input id="clientEmail" name="clientEmail" type="email" placeholder="client@company.com"/>
+          <div class="hint" id="clientEmailHint">
+            If you’re an auditor, add your client contact so we can associate the pack with them.
+          </div>
+        </div>
+      </div>
+
       <!-- Optional block: everything else -->
       <details class="advanced step-after-role" id="optionalRow" style="display:none">
-        <summary>Optional details: codes, emails, context, and advanced mapping</summary>
+       <summary>Optional details: plan label, context, and advanced mapping</summary>
         <div style="margin-top:12px;display:grid;gap:16px">
           <!-- Plan & coverage (shown after files present) -->
           <div class="form-row two" id="planBillingRow" style="display:none">
@@ -289,31 +317,6 @@
               </select>
               <div class="hint" id="billingHint">
                 You can decide this later. In beta we mostly use codes or manual billing via ops@proofrepo.com.
-              </div>
-            </div>
-          </div>
-
-          <!-- Routing emails + codes -->
-          <div class="form-row three">
-            <div id="auditorCodeCol">
-              <label for="auditorCode">Auditor / third-party code (optional)</label>
-              <input id="auditorCode" name="auditorCode" placeholder="Short code (e.g. TEST123)"/>
-              <div class="hint" id="auditorCodeHint">
-                In the future, auditors and partners will get blocks of codes. For now, you can leave this blank or use test codes.
-              </div>
-            </div>
-            <div id="auditorEmailCol">
-              <label for="auditorEmail">Auditor / third-party email (optional)</label>
-              <input id="auditorEmail" name="auditorEmail" type="email" placeholder="reviewer@examplefirm.com"/>
-              <div class="hint" id="auditorEmailHint">
-                We can send the ProofPack link here as well as to your own email.
-              </div>
-            </div>
-            <div id="clientEmailCol">
-              <label for="clientEmail">Client contact email (optional)</label>
-              <input id="clientEmail" name="clientEmail" type="email" placeholder="client@company.com"/>
-              <div class="hint" id="clientEmailHint">
-                If you’re an auditor or third party, add your client contact so we can associate the pack with them (and later, email codes directly).
               </div>
             </div>
           </div>
@@ -346,15 +349,6 @@
       </div>
     </form>
   </section>
-
-  
-  <!-- STICKY BOTTOM MARQUEE -->
-  <div class="marquee-fixed" role="region" aria-label="Key highlights">
-    <div class="marquee"><div>
-      &nbsp;Guided SOC 2 evidence collection • Built for boutique auditors and their clients • Lightweight alternative to messy shared folders • No need for a full 5-figure compliance platform • Beta pricing and Stripe billing coming soon • Ask for complimentary auditor codes at ops@proofrepo.com •
-      Guided SOC 2 evidence collection • Built for boutique auditors and their clients • Lightweight alternative to messy shared folders • No need for a full 5-figure compliance platform • Beta pricing and Stripe billing coming soon • Ask for complimentary auditor codes at ops@proofrepo.com •
-    </div></div>
-  </div>
 
  <!-- PRICING -->
 <section id="pricing" class="wrap section pricing" aria-labelledby="pricing-h">
@@ -701,7 +695,9 @@ if (!selectedKeys.length || !files.length) {
         block.style.marginBottom = '12px';
 
         const h4 = document.createElement('h4');
-        h4.textContent = cfg.label + ' — recommended minimum evidence';
+        h4.textContent = (fwKey === 'SOC2')
+  ? (cfg.label + ' — required items (needed to build your ProofPack)')
+  : (cfg.label + ' — recommended minimum evidence');
         block.appendChild(h4);
 
         const ul = document.createElement('ul');
@@ -880,13 +876,28 @@ function updateFileMeta() {
 
 function updateRoleUI() {
   const role = roleSelect.value;
+  
+    // Email placeholder + hint helper
+  const emailHintEl = document.getElementById('emailHint');
+  const emailInput = document.getElementById('email');
 
-  if (!role) {
-    laterRows.forEach(r => r.style.display = 'none');
-    roleHint.textContent = "Start by telling us which side of the audit you're on.";
-    return;
+  if (emailHintEl && emailInput) {
+    if (role === 'auditor') {
+      emailInput.placeholder = 'you@auditfirm.com';
+      emailHintEl.textContent = 'Use your auditor / reviewer email here.';
+    } else {
+      emailInput.placeholder = 'you@company.com';
+      emailHintEl.textContent = '';
+    }
   }
 
+if (!role) {
+  laterRows.forEach(r => r.style.display = 'none');
+  const routingRow = document.getElementById('routingRow');
+  if (routingRow) routingRow.style.display = 'none';
+  roleHint.textContent = "Start by telling us which side of the audit you're on.";
+  return;
+}
   // Show the post-role rows as usual…
 laterRows.forEach(r => {
   // override inline display:none
@@ -1181,7 +1192,15 @@ document.getElementById('intakeForm').addEventListener('submit', async (e) => {
     submitBtn.textContent = 'Send and build ProofPack';
   }
 });
+  </script>
 
-</script>
+  <!-- STICKY BOTTOM MARQUEE -->
+  <div class="marquee-fixed" role="region" aria-label="Key highlights">
+    <div class="marquee"><div>
+      &nbsp;Guided SOC 2 evidence collection • Built for boutique auditors and their clients • Lightweight alternative to messy shared folders • No need for a full 5-figure compliance platform • Beta pricing and Stripe billing coming soon • Ask for complimentary auditor codes at ops@proofrepo.com •
+      Guided SOC 2 evidence collection • Built for boutique auditors and their clients • Lightweight alternative to messy shared folders • No need for a full 5-figure compliance platform • Beta pricing and Stripe billing coming soon • Ask for complimentary auditor codes at ops@proofrepo.com •
+    </div></div>
+  </div>
+
 </body>
 </html>
