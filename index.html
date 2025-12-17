@@ -916,35 +916,6 @@ if (routingRow) routingRow.style.display = (role === 'company') ? 'none' : 'bloc
     optionalDetails.open = false; // keep collapsed either way
   }
 
-  if (role === 'auditor') {
-    emailLabel.textContent = 'Auditor / third-party email';
-    companyLabel.textContent = 'Client company';
-    roleHint.textContent = 'You’re an auditor or third party driving this pack. You’ll get the ProofPack link and can forward it to your client or reviewers.';
-
-    auditorEmailCol.style.display = 'none';
-    clientEmailCol.style.display = 'block';
-    clientEmailHint.textContent = 'Add your client contact so we can associate the pack with them (and later, email codes directly).';
-  } else if (role === 'client') {
-    emailLabel.textContent = 'Your email';
-    companyLabel.textContent = 'Your company';
-    roleHint.textContent = 'Use this if an auditor or third party pointed you here to upload evidence.';
-
-    auditorEmailCol.style.display = 'block';
-    clientEmailCol.style.display = 'none';
-    auditorEmailHint.textContent = 'If you know the reviewer’s email, add it so we can also route the ProofPack to them.';
-  } else { // company
-    emailLabel.textContent = 'Your email';
-    companyLabel.textContent = 'Your company';
-    roleHint.textContent = 'Direct company use: preparing for an audit or vendor review without an auditor driving this yet.';
-
-    auditorEmailCol.style.display = 'none';
-    clientEmailCol.style.display = 'none';
-  }
-
-  updateBillingUI();
-  renderFrameworkGuides();
-}
-
     if (roleSelect) roleSelect.addEventListener('change', updateRoleUI);
     if (billingSelect) billingSelect.addEventListener('change', updateBillingUI);
     if (frameworksSelectEl) frameworksSelectEl.addEventListener('change', renderFrameworkGuides);
