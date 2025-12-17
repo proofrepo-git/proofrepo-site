@@ -164,9 +164,6 @@
         </p>
         <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px">
           <a class="btn primary" href="#request" data-analytics="cta_upload">Upload evidence</a>
-          <a class="btn" href="mailto:ops@proofrepo.com?subject=Auditor%20beta" data-analytics="cta_auditor_beta">
-            Auditor? Join the beta
-          </a>
          
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
@@ -200,140 +197,7 @@
     </div>
   </section>
 
-  <!-- STICKY BOTTOM MARQUEE -->
-  <div class="marquee-fixed" role="region" aria-label="Key highlights">
-    <div class="marquee"><div>
-      &nbsp;Guided SOC 2 evidence collection • Built for boutique auditors and their clients • Lightweight alternative to messy shared folders • No need for a full 5-figure compliance platform • Beta pricing and Stripe billing coming soon • Ask for complimentary auditor codes at ops@proofrepo.com •
-      Guided SOC 2 evidence collection • Built for boutique auditors and their clients • Lightweight alternative to messy shared folders • No need for a full 5-figure compliance platform • Beta pricing and Stripe billing coming soon • Ask for complimentary auditor codes at ops@proofrepo.com •
-    </div></div>
-  </div>
-
-  <!-- PRICING / POSITIONING -->
-  <section id="auditors" class="wrap section pricing" aria-labelledby="auditors-h">
-    <h2 id="auditors-h">Built for auditors first, friendly for companies</h2>
-
-    <div class="card" style="margin-bottom:18px;border-style:dashed">
-      <strong>Beta stage:</strong>
-      <span class="muted">
-        We’re working closely with boutique firms and early-stage companies.
-        Stripe billing and final pricing are not live yet; we’re proving out the workflow.
-      </span>
-      <a class="btn primary" style="margin-left:10px" href="mailto:ops@proofrepo.com?subject=Auditor%20beta">
-        Request complimentary client codes
-      </a>
-    </div>
-
-    <div class="grid cols3" role="list">
-      <article class="plan popular" role="listitem" aria-label="Auditor-led flows">
-        <h3>Auditor-led flows</h3>
-        <p class="muted">
-          You give companies a link and a short code. They see guided prompts for the right evidence.
-          You receive a ProofPack and JSON manifest that records what was provided and what’s missing.
-        </p>
-        <ul class="muted">
-          <li>Company upload, auditor or third party receives the ProofPack</li>
-          <li>Automatic hints for access reviews, change logs, vendor lists, and more</li>
-          <li>Ideal for small SOC 2 and vendor review engagements</li>
-        </ul>
-        <div class="price">Pricing: based on packs / codes (planned)</div>
-      </article>
-
-      <article class="plan" role="listitem" aria-label="Direct company uploads">
-        <h3>Companies (direct)</h3>
-        <p class="muted">
-          No auditor yet? Upload your evidence and get a ProofPack you can reuse with future auditors,
-          investors, or customers — without committing to a heavy compliance platform.
-        </p>
-        <ul class="muted">
-          <li>Great for “pre-SOC 2” or diligence prep</li>
-          <li>One-off packs now; refresh options later</li>
-          <li>Works alongside tools you already use</li>
-        </ul>
-        <div class="price">Pricing: per pack (planned)</div>
-      </article>
-
-      <article class="plan" role="listitem" aria-label="Future Stripe plans">
-        <h3>Stripe plans (later)</h3>
-        <p class="muted">
-          As we harden the flows, we’ll expose Stripe-backed tiers for firms (blocks of client codes
-          and packs) and for one-off company use.
-        </p>
-        <ul class="muted">
-          <li>Bundles of client codes for auditors</li>
-          <li>Upload-based pricing for companies</li>
-          <li>Optional refresh / follow-up flows</li>
-        </ul>
-        <div class="price small">Not live yet — we’re collecting feedback first.</div>
-      </article>
-    </div>
-  </section>
-
-    <!-- FOR COMPANIES -->
-  <section id="companies" class="wrap section" aria-labelledby="companies-h">
-    <h2 id="companies-h">For companies</h2>
-
-    <div class="grid cols2">
-      <div class="card">
-        <h3>Get audit- and review-ready</h3>
-        <p class="muted">
-          Upload evidence once and keep a clean ProofPack you can reuse with auditors, customers, investors, and partners.
-        </p>
-      </div>
-
-      <div class="card">
-        <h3>Reduce “please resend” loops</h3>
-        <p class="muted">
-          Guided prompts + required SOC 2 tagging helps prevent wrong exports, wrong date ranges, and missing artifacts.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- HOW IT WORKS -->
-  <section id="how" class="wrap section">
-    <h2>How ProofRepo works (today)</h2>
-    <div class="grid cols3">
-      <div class="card">
-        <h3>1) Share or open the link</h3>
-        <p class="muted">
-          An auditor, third party, or company goes to <strong>proofrepo.com</strong>.
-          Auditors can share the link plus a short code so uploads are routed and tracked to the right engagement.
-        </p>
-      </div>
-      <div class="card">
-        <h3>2) Guided upload</h3>
-        <p class="muted">
-          The form nudges uploaders toward the expected artifacts for the frameworks selected.
-          No shared drives, no random screenshots in Slack.
-        </p>
-      </div>
-      <div class="card">
-        <h3>3) ProofPack for reviewers</h3>
-        <p class="muted">
-          ProofRepo generates a structured manifest and a human-friendly viewer that groups files by what they
-          prove and flags missing items. You can keep using your own workpapers — just link to the pack.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- FAIR USE & CAPS -->
-  <section id="caps" class="wrap section">
-    <h2>Behind the scenes: technical limits (beta)</h2>
-    <div class="card">
-      <p class="muted">
-        Internally, we apply small limits to keep the beta stable (roughly “a handful of files” per submission).
-        That’s usually enough for SOC 2 evidence like access review exports, change logs, and vendor lists.
-      </p>
-      <p class="small">
-        Files are stored in Cloudflare R2 with an automatic delete rule after a short retention window.
-        Final caps and pricing will be based on the <strong>number of uploads / packs</strong>, not on
-        trying to meter every individual file.
-      </p>
-    </div>
-  </section>
-
-  <!-- REQUEST / INTAKE -->
+    <!-- REQUEST / INTAKE -->
   <section id="request" class="wrap section">
     <h2>Upload evidence and get a ProofPack</h2>
     <p class="muted">
@@ -481,6 +345,172 @@
         <button id="submitBtn" class="btn primary" type="submit">Send and build ProofPack</button>
       </div>
     </form>
+  </section>
+
+  
+  <!-- STICKY BOTTOM MARQUEE -->
+  <div class="marquee-fixed" role="region" aria-label="Key highlights">
+    <div class="marquee"><div>
+      &nbsp;Guided SOC 2 evidence collection • Built for boutique auditors and their clients • Lightweight alternative to messy shared folders • No need for a full 5-figure compliance platform • Beta pricing and Stripe billing coming soon • Ask for complimentary auditor codes at ops@proofrepo.com •
+      Guided SOC 2 evidence collection • Built for boutique auditors and their clients • Lightweight alternative to messy shared folders • No need for a full 5-figure compliance platform • Beta pricing and Stripe billing coming soon • Ask for complimentary auditor codes at ops@proofrepo.com •
+    </div></div>
+  </div>
+
+ <!-- PRICING -->
+<section id="pricing" class="wrap section pricing" aria-labelledby="pricing-h">
+  <h2 id="pricing-h">Simple pricing</h2>
+  <p class="muted">Pay per ProofPack. No subscriptions. Best for boutique auditors and lightweight vendor reviews.</p>
+
+  <div class="grid cols3" role="list">
+    <!-- Company one-off -->
+    <article class="plan" role="listitem" aria-label="Company one-off">
+      <h3>One-off ProofPack</h3>
+      <div class="price">$29</div>
+      <p class="muted">For companies prepping for diligence, vendor reviews, or “pre-SOC 2” readiness.</p>
+      <ul class="muted">
+        <li>Single ProofPack submission</li>
+        <li>Guided SOC 2 tagging</li>
+        <li>Reusable ProofPack output</li>
+      </ul>
+      <a class="btn primary" href="#request">Upload & build</a>
+      <div class="small">No login required.</div>
+    </article>
+
+    <!-- Auditor 25 -->
+    <article class="plan popular" role="listitem" aria-label="Auditor pack 25">
+      <h3>Auditor Pack — 25</h3>
+      <div class="price">$199 <span class="small muted">(~$8/pack)</span></div>
+      <p class="muted">For smaller firms or pilots. Great for a handful of clients.</p>
+      <ul class="muted">
+        <li>25 ProofPacks / client codes</li>
+        <li>Best for “try it with real clients”</li>
+        <li>Use anytime (no subscription)</li>
+      </ul>
+      <a class="btn primary" href="mailto:ops@proofrepo.com?subject=Auditor%20Pack%2025">Buy pack</a>
+      <div class="small">Stripe checkout coming next.</div>
+    </article>
+
+    <!-- Auditor 50 -->
+    <article class="plan" role="listitem" aria-label="Auditor pack 50">
+      <h3>Auditor Pack — 50</h3>
+      <div class="price">$349 <span class="small muted">(~$7/pack)</span></div>
+      <p class="muted">Most common fit: repeat usage without any procurement drama.</p>
+      <ul class="muted">
+        <li>50 ProofPacks / client codes</li>
+        <li>Better unit economics</li>
+        <li>Ideal for seasonal audit waves</li>
+      </ul>
+      <a class="btn" href="mailto:ops@proofrepo.com?subject=Auditor%20Pack%2050">Buy pack</a>
+    </article>
+
+    <!-- Auditor 75 -->
+    <article class="plan" role="listitem" aria-label="Auditor pack 75">
+      <h3>Auditor Pack — 75</h3>
+      <div class="price">$499 <span class="small muted">(~$6.65/pack)</span></div>
+      <p class="muted">For auditors doing volume vendor reviews or multiple SOC 2 clients.</p>
+      <ul class="muted">
+        <li>75 ProofPacks / client codes</li>
+        <li>Best price per pack</li>
+        <li>Designed for repeat workflows</li>
+      </ul>
+      <a class="btn" href="mailto:ops@proofrepo.com?subject=Auditor%20Pack%2075">Buy pack</a>
+    </article>
+  </div>
+
+  <div class="card" style="margin-top:18px">
+    <strong class="muted">How auditor codes work:</strong>
+    <div class="muted" style="margin-top:8px">
+      You send a client a link + code → they upload → you receive the ProofPack link and manifest.
+      (Automated code issuance will be part of the Stripe flow.)
+    </div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<section id="trust" class="wrap section" aria-labelledby="trust-h">
+  <h2 id="trust-h">Trust, privacy, and retention</h2>
+
+  <div class="grid cols2">
+    <div class="card">
+      <h3>Private by default</h3>
+      <p class="muted">
+        ProofPacks are shared via secure, unguessable links. No public indexing.
+      </p>
+      <p class="small">
+        Only people you share the link with can access the ProofPack.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>Storage + retention</h3>
+      <p class="muted">
+        Files are stored in Cloudflare R2 and automatically deleted after a short retention window.
+      </p>
+      <p class="small">
+        If you need different retention, email <a class="btn link" href="mailto:ops@proofrepo.com">ops@proofrepo.com</a>.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:18px">
+    <h3>We don’t “read your evidence”</h3>
+    <p class="muted">
+      The guided tagging uses filenames + your selections to organize what each file proves.
+      Reviewers use the ProofPack viewer to evaluate evidence in context.
+    </p>
+    <p class="small">
+      You control what you upload and who receives the ProofPack link.
+    </p>
+  </div>
+</section>
+  
+    <!-- FOR COMPANIES -->
+  <section id="companies" class="wrap section" aria-labelledby="companies-h">
+    <h2 id="companies-h">For companies</h2>
+
+    <div class="grid cols2">
+      <div class="card">
+        <h3>Get audit- and review-ready</h3>
+        <p class="muted">
+          Upload evidence once and keep a clean ProofPack you can reuse with auditors, customers, investors, and partners.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Reduce “please resend” loops</h3>
+        <p class="muted">
+          Guided prompts + required SOC 2 tagging helps prevent wrong exports, wrong date ranges, and missing artifacts.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how" class="wrap section">
+    <h2>How ProofRepo works (today)</h2>
+    <div class="grid cols3">
+      <div class="card">
+        <h3>1) Share or open the link</h3>
+        <p class="muted">
+          An auditor, third party, or company goes to <strong>proofrepo.com</strong>.
+          Auditors can share the link plus a short code so uploads are routed and tracked to the right engagement.
+        </p>
+      </div>
+      <div class="card">
+        <h3>2) Guided upload</h3>
+        <p class="muted">
+          The form nudges uploaders toward the expected artifacts for the frameworks selected.
+          No shared drives, no random screenshots in Slack.
+        </p>
+      </div>
+      <div class="card">
+        <h3>3) ProofPack for reviewers</h3>
+        <p class="muted">
+          ProofRepo generates a structured manifest and a human-friendly viewer that groups files by what they
+          prove and flags missing items. You can keep using your own workpapers — just link to the pack.
+        </p>
+      </div>
+    </div>
   </section>
 
   <!-- FOOTER -->
