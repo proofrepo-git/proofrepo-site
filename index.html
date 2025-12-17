@@ -854,25 +854,7 @@ function updateFileMeta() {
       });
     }
 
-    function updateBillingUI() {
-      if (!billingSelect) return;
-      const billing = billingSelect.value;
-      const role = roleSelect.value;
-
-      if (!billing) {
-        billingHint.textContent = 'You can decide this later. In beta we mostly use codes or manual billing via ops@proofrepo.com.';
-      } else if (billing === 'code') {
-        billingHint.textContent = 'Enter a code if you have one, or leave it blank in beta. We’ll mainly use codes for coverage.';
-      } else if (billing === 'card') {
-        billingHint.textContent = 'Card payment via Stripe will live here. For now this is a placeholder — use codes or email ops@proofrepo.com.';
-      }
-
-      if (billing === 'code' && role && role !== 'company') {
-        auditorCodeCol.style.display = 'block';
-      } else if (billing === 'code' && role === 'company') {
-        auditorCodeCol.style.display = 'none';
-      }
-    }
+function updateBillingUI
 
 function updateRoleUI() {
   const role = roleSelect.value;
