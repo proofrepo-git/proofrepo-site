@@ -898,12 +898,16 @@ if (!role) {
   roleHint.textContent = "Start by telling us which side of the audit you're on.";
   return;
 }
-  // Show the post-role rows as usual…
+// Show the post-role rows as usual…
 laterRows.forEach(r => {
   // override inline display:none
   if (r.id === 'actionsRow') r.style.display = 'flex';
   else r.style.display = 'block';
 });
+
+// Routing row special-case: hide for company
+const routingRow = document.getElementById('routingRow');
+if (routingRow) routingRow.style.display = (role === 'company') ? 'none' : 'block';
 
   // ...but keep Optional Details hidden until files exist
   const hasFiles = (fileInput && fileInput.files && fileInput.files.length > 0);
