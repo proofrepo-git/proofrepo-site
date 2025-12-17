@@ -854,12 +854,30 @@ function updateFileMeta() {
       });
     }
 
-function updateBillingUI
+function updateBillingUI() {
+  if (!billingSelect) return;
+  const billing = billingSelect.value;
+  const role = roleSelect.value;
+
+  if (!billing) {
+    billingHint.textContent = 'You can decide this later. In beta we mostly use codes or manual billing via ops@proofrepo.com.';
+  } else if (billing === 'code') {
+    billingHint.textContent = 'Enter a code if you have one, or leave it blank in beta. We’ll mainly use codes for coverage.';
+  } else if (billing === 'card') {
+    billingHint.textContent = 'Card payment via Stripe will live here. For now this is a placeholder — use codes or email ops@proofrepo.com.';
+  }
+
+  if (billing === 'code' && role && role !== 'company') {
+    auditorCodeCol.style.display = 'block';
+  } else if (billing === 'code' && role === 'company') {
+    auditorCodeCol.style.display = 'none';
+  }
+}
 
 function updateRoleUI() {
   const role = roleSelect.value;
-  
-    // Email placeholder + hint helper
+
+  // Email placeholder + hint helper
   const emailHintEl = document.getElementById('emailHint');
   const emailInput = document.getElementById('email');
 
@@ -873,23 +891,24 @@ function updateRoleUI() {
     }
   }
 
-if (!role) {
-  laterRows.forEach(r => r.style.display = 'none');
-  const routingRow = document.getElementById('routingRow');
-  if (routingRow) routingRow.style.display = 'none';
-  roleHint.textContent = "Start by telling us which side of the audit you're on.";
-  return;
-}
-// Show the post-role rows as usual…
-laterRows.forEach(r => {
-  // override inline display:none
-  if (r.id === 'actionsRow') r.style.display = 'flex';
-  else r.style.display = 'block';
-});
+  if (!role) {
+    laterRows.forEach(r => (r.style.display = 'none'));
+    const routingRow = document.getElementById('routingRow');
+    if (routingRow) routingRow.style.display = 'none';
+    roleHint.textContent = "Start by telling us which side of the audit you're on.";
+    return;
+  }
 
-// Routing row special-case: hide for company
-const routingRow = document.getElementById('routingRow');
-if (routingRow) routingRow.style.display = (role === 'company') ? 'none' : 'block';
+  // Show the post-role rows as usual…
+  laterRows.forEach(r => {
+    // override inline display:none
+    if (r.id === 'actionsRow') r.style.display = 'flex';
+    else r.style.display = 'block';
+  });
+
+  // Routing row special-case: hide for company
+  const routingRow = document.getElementById('routingRow');
+  if (routingRow) routingRow.style.display = (role === 'company') ? 'none' : 'block';
 
   // ...but keep Optional Details hidden until files exist
   const hasFiles = (fileInput && fileInput.files && fileInput.files.length > 0);
@@ -897,6 +916,40 @@ if (routingRow) routingRow.style.display = (role === 'company') ? 'none' : 'bloc
     optionalDetails.style.display = hasFiles ? '' : 'none';
     optionalDetails.open = false; // keep collapsed either way
   }
+
+  if (role === 'auditor') {
+    emailLabel.textContent = 'Auditor / third-party email';
+    companyLabel.textContent = 'Client company';
+    roleHint.textContent =
+      'You’re an auditor or third party driving this pack. You’ll get the ProofPack link and can forward it to your client or reviewers.';
+
+    auditorEmailCol.style.display = 'none';
+    clientEmailCol.style.display = 'block';
+    clientEmailHint.textContent =
+      'Add your client contact so we can associate the pack with them (and later, email codes directly).';
+  } else if (role === 'client') {
+    emailLabel.textContent = 'Your email';
+    companyLabel.textContent = 'Your company';
+    roleHint.textContent =
+      'Use this if an auditor or third party pointed you here to upload evidence.';
+
+    auditorEmailCol.style.display = 'block';
+    clientEmailCol.style.display = 'none';
+    auditorEmailHint.textContent =
+      'If you know the reviewer’s email, add it so we can also route the ProofPack to them.';
+  } else { // company
+    emailLabel.textContent = 'Your email';
+    companyLabel.textContent = 'Your company';
+    roleHint.textContent =
+      'Direct company use: preparing for an audit or vendor review without an auditor driving this yet.';
+
+    auditorEmailCol.style.display = 'none';
+    clientEmailCol.style.display = 'none';
+  }
+
+  updateBillingUI();
+  renderFrameworkGuides();
+}
 
     if (roleSelect) roleSelect.addEventListener('change', updateRoleUI);
     if (billingSelect) billingSelect.addEventListener('change', updateBillingUI);
