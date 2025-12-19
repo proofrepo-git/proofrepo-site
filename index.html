@@ -341,7 +341,7 @@
       </details>
 
       <!-- INLINE PRICING GATE (shown after clicking Start) -->
-<div id="pricingGate" class="guidance" style="display:none">
+<div id="pricingGate" class="guidance pricing" style="display:none">
   <h3 style="margin:0 0 6px">Choose how to unlock</h3>
   <p class="small muted" style="margin:0 0 12px">
     Pay per ProofPack. No subscriptions. Bundles are for repeated use across multiple companies/clients.
@@ -709,7 +709,56 @@ const applyUnlockCodeBtn = document.getElementById('applyUnlockCodeBtn');
 const unlockHint = document.getElementById('unlockHint');
 
 let isUnlocked = false;
+if (fileInput) fileInput.disabled = true;
 
+/* =======================
+   STEP 2: DROP-IN HELPERS
+   (easy to find + replace)
+   ======================= */
+
+// Single source of truth for "locked" UI state
+function resetUnlockState(opts = { clearFiles: true }) {
+  isUnlocked = false;
+
+  // Hide gate + swap buttons
+  if (pricingGate) pricingGate.style.display = 'none';
+  if (startBtn) startBtn.style.display = 'inline-flex';
+  if (submitBtn) submitBtn.style.display = 'none';
+
+  // Lock uploads and optionally clear files
+  if (fileInput) {
+    fileInput.disabled = true;
+    if (opts.clearFiles) fileInput.value = '';
+  }
+
+  // Hide anything that should not show while locked
+  if (frameworkGuides) {
+    frameworkGuides.style.display = 'none';
+    frameworkGuides.innerHTML = '';
+  }
+  if (optionalDetails) {
+    optionalDetails.style.display = 'none';
+    optionalDetails.open = false;
+  }
+  if (planBillingRow) planBillingRow.style.display = 'none';
+
+  // Refresh any lock messaging
+  if (typeof updateFileMeta === 'function') updateFileMeta();
+}
+
+function requireRoleOrExplain() {
+  const role = roleSelect?.value || '';
+  if (!role) {
+    showStatus('Please choose a role first.', false);
+    return false;
+  }
+  return true;
+}
+
+/* =======================
+   END STEP 2 HELPERS
+   ======================= */
+    
 function openPricingGate() {
   if (pricingGate) pricingGate.style.display = 'block';
   if (unlockHint) unlockHint.textContent = '';
@@ -718,6 +767,8 @@ function openPricingGate() {
 
 function setUnlocked(planLabel) {
   isUnlocked = true;
+  if (fileInput) fileInput.disabled = false;
+
 
   // Optional: store chosen plan label in existing hidden plan selector (keeps your backend labeling)
   const planEl = document.getElementById('plan');
@@ -733,13 +784,20 @@ function setUnlocked(planLabel) {
   renderFrameworkGuides();
 }
 
-// Start button => show pricing gate (don’t submit)
+/* =======================
+   STEP 3: START BTN HANDLER
+   ======================= */
 if (startBtn) {
   startBtn.addEventListener('click', () => {
     clearStatus();
+    if (!requireRoleOrExplain()) return;
     openPricingGate();
   });
 }
+/* =======================
+   END STEP 3
+   ======================= */
+
 
 // Click one-off "Continue" => unlock (bundle buttons are mailto for now)
 if (pricingGate) {
@@ -940,6 +998,7 @@ function updateFileMeta() {
       optionalDetails.style.display = 'none';
       optionalDetails.open = false;
     }
+    if (fileInput) fileInput.disabled = true;
     return;
   }
 
@@ -1040,13 +1099,13 @@ function updateBillingUI() {
   }
 }
 
+// ===== DROP-IN REPLACEMENT: updateRoleUI (no redundant reset blocks) =====
 function updateRoleUI() {
-  const role = roleSelect.value;
+  const role = roleSelect?.value || '';
 
   // Email placeholder + hint helper
   const emailHintEl = document.getElementById('emailHint');
   const emailInput = document.getElementById('email');
-
   if (emailHintEl && emailInput) {
     if (role === 'auditor') {
       emailInput.placeholder = 'you@auditfirm.com';
@@ -1057,31 +1116,67 @@ function updateRoleUI() {
     }
   }
 
+  // Always hide the big pricing section (you’re using inline gate)
+  if (pricingSection) pricingSection.style.display = 'none';
+
+  // Helper: one single reset path (kills redundancy)
+  const resetLockAndUi = ({ clearFiles } = { clearFiles: true }) => {
+    isUnlocked = false;
+
+    // Gate + buttons
+    if (pricingGate) pricingGate.style.display = 'none';
+    if (startBtn) startBtn.style.display = 'inline-flex';
+    if (submitBtn) submitBtn.style.display = 'none';
+
+    // Lock uploads + optionally clear
+    if (fileInput) {
+      fileInput.disabled = true;
+      if (clearFiles) fileInput.value = '';
+    }
+
+    // Optional details should stay hidden until files exist (and unlocked)
+    if (optionalDetails) {
+      optionalDetails.style.display = 'none';
+      optionalDetails.open = false;
+    }
+    if (planBillingRow) planBillingRow.style.display = 'none';
+
+    // Tagging guidance shouldn’t show when locked
+    if (frameworkGuides) {
+      frameworkGuides.style.display = 'none';
+      frameworkGuides.innerHTML = '';
+    }
+
+    // Keep file meta accurate (will show “Unlock…” text in your updateFileMeta)
+    updateFileMeta();
+  };
+
+  // If role is not selected: hide everything and reset
   if (!role) {
     laterRows.forEach(r => (r.style.display = 'none'));
+
     const routingRow = document.getElementById('routingRow');
     if (routingRow) routingRow.style.display = 'none';
+
     roleHint.textContent = "Start by telling us which side of the audit you're on.";
 
-    // Update CTA wording based on role
-if (startBtn) {
-  if (role === 'auditor') {
-    startBtn.textContent = 'Request guided evidence collection from client';
-  } else {
-    startBtn.textContent = 'Start guided ProofPack';
-  }
-}
-
-    if (pricingSection) pricingSection.style.display = 'none';
-    
+    resetLockAndUi({ clearFiles: true });
     return;
   }
 
-  if (pricingSection) pricingSection.style.display = 'none';
+  // Role IS selected: always reset lock state (prevents cross-role leakage)
+  resetLockAndUi({ clearFiles: true });
 
-  // Show the post-role rows as usual…
+  // Set CTA wording by role
+  if (startBtn) {
+    startBtn.textContent =
+      (role === 'auditor')
+        ? 'Request guided evidence collection from client'
+        : 'Start guided ProofPack';
+  }
+
+  // Show the post-role rows as usual
   laterRows.forEach(r => {
-    // override inline display:none
     if (r.id === 'actionsRow') r.style.display = 'flex';
     else r.style.display = 'block';
   });
@@ -1090,13 +1185,7 @@ if (startBtn) {
   const routingRow = document.getElementById('routingRow');
   if (routingRow) routingRow.style.display = (role === 'company') ? 'none' : 'block';
 
-  // ...but keep Optional Details hidden until files exist
-  const hasFiles = (fileInput && fileInput.files && fileInput.files.length > 0);
-  if (optionalDetails) {
-    optionalDetails.style.display = hasFiles ? '' : 'none';
-    optionalDetails.open = false; // keep collapsed either way
-  }
-
+  // Role-specific copy + which routing fields show
   if (role === 'auditor') {
     emailLabel.textContent = 'Auditor / third-party email';
     companyLabel.textContent = 'Client company';
@@ -1127,26 +1216,11 @@ if (startBtn) {
     clientEmailCol.style.display = 'none';
   }
 
+  // Billing + guides should remain coherent with role
   updateBillingUI();
   renderFrameworkGuides();
 }
-
-    if (roleSelect) roleSelect.addEventListener('change', updateRoleUI);
-    if (billingSelect) billingSelect.addEventListener('change', updateBillingUI);
-    if (frameworksSelectEl) frameworksSelectEl.addEventListener('change', renderFrameworkGuides);
-
-    // Initial UI
-    updateRoleUI();
-    updateBillingUI();
-    renderFrameworkGuides();
-    updateFileMeta();
-    
-    function validate(){
-      const roleVal = document.getElementById('role').value;
-      if (!roleVal) return 'Please tell us what ProofRepo is helping you with today.';
-
-const email = $('#email').value.trim().toLowerCase();
-const company = $('#company').value.trim();
+// ===== END DROP-IN REPLACEMENT =====
 
 // 1) allowlist your own test emails
 const ALLOWLIST = new Set([
