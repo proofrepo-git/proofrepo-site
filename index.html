@@ -138,7 +138,6 @@
       <span>ProofRepo</span>
     </div>
     <nav class="row" aria-label="primary">
-      <a class="btn" href="#pricing">How pricing works</a>
       <a class="btn" href="#companies">For companies</a>
       <a class="btn" href="#how">How it works</a>
       <a class="btn" href="#request">Upload evidence</a>
@@ -621,6 +620,8 @@ const safeUrl = (u) => {
     const frameworkGuides = $('#frameworkGuides');
 
     const laterRows = document.querySelectorAll('.step-after-role');
+    const pricingSection = document.getElementById('pricing');
+
 
     // frameworkSelections[frameworkKey][itemId] = filename
     const frameworkSelections = {};
@@ -897,8 +898,14 @@ function updateRoleUI() {
     const routingRow = document.getElementById('routingRow');
     if (routingRow) routingRow.style.display = 'none';
     roleHint.textContent = "Start by telling us which side of the audit you're on.";
+    
+    if (pricingSection) pricingSection.style.display = 'none';
+    
     return;
   }
+
+  if (pricingSection) pricingSection.style.display = 'block';
+
 
   // Show the post-role rows as usual…
   laterRows.forEach(r => {
