@@ -79,7 +79,6 @@
     .pricing h3{margin:0}
     .price{font-size:1.4rem;font-weight:700}
     .popular{border-color:#2b5cff;box-shadow:0 12px 36px rgba(43,92,255,.25)}
-    .popular::before{content:"Auditor-focused beta";position:absolute;top:-12px;left:16px;background:#1a2a6b;color:#cfe0ff;padding:4px 10px;border-radius:999px;border:1px solid #27419e;font-size:.78rem}
 
     /* FORM */
     form{display:grid;gap:14px}
@@ -350,77 +349,77 @@
     </form>
   </section>
 
-<!-- PRICING -->
-<section id="pricing" class="wrap section pricing" aria-labelledby="pricing-h">
+<!-- PRICING (hidden until role selected) -->
+<section id="pricing" class="wrap section pricing" aria-labelledby="pricing-h" style="display:none">
   <h2 id="pricing-h">Pricing</h2>
   <p class="small muted">
     Pay per ProofPack. No subscriptions. Purchase bundles for use across multiple companies, clients, or internal evidence requests.
   </p>
 
   <div class="grid cols3" role="list">
-    <!-- Company one-off -->
-    <article class="plan" role="listitem" aria-label="Company one-off">
+    <!-- One-off -->
+    <article class="plan" role="listitem" aria-label="One-off ProofPack">
       <h3>One-off ProofPack</h3>
       <div class="price">$29</div>
-      <p class="muted">For companies prepping for diligence, vendor reviews, or “pre-SOC 2” readiness.</p>
+      <p class="muted">For a single ProofPack—either to request evidence from a company or to generate one directly.</p>
       <ul class="muted">
-        <li>Single ProofPack submission</li>
+        <li>1 ProofPack credit</li>
         <li>Guided SOC 2 tagging</li>
         <li>Reusable ProofPack output</li>
       </ul>
-      <a class="btn" href="#request">Continue</a>
-      <div class="small">No login required.</div>
+      <a class="btn primary" href="mailto:ops@proofrepo.com?subject=One-off%20ProofPack">Buy pack</a>
+      <div class="small">Checkout flow coming next.</div>
     </article>
 
-    <!-- Auditor 25 -->
-    <article class="plan popular" role="listitem" aria-label="Auditor pack 25">
-      <h3>Auditor Pack — 25</h3>
+    <!-- Bundle 25 -->
+    <article class="plan popular" role="listitem" aria-label="ProofPack bundle 25">
+      <h3>ProofPack Bundle — 25</h3>
       <div class="price">$199</div>
-      <p class="muted">For smaller firms or pilots. Great for a handful of clients.</p>
+      <p class="muted">Best for pilots and smaller teams running evidence requests across multiple engagements.</p>
       <ul class="muted">
-        <li>25 ProofPacks / client codes</li>
-        <li>Best for “try it with real clients”</li>
-        <li>Use anytime (no subscription)</li>
+        <li>25 ProofPack credits</li>
+        <li>Designed for repeat client workflows</li>
+        <li>No subscription required</li>
       </ul>
-      <a class="btn" href="mailto:ops@proofrepo.com?subject=ProofPack%20bundle">Contact us</a>
-      <div class="small">Stripe checkout coming next.</div>
+      <a class="btn primary" href="mailto:ops@proofrepo.com?subject=ProofPack%20Bundle%2025">Buy pack</a>
+      <div class="small">Checkout flow coming next.</div>
     </article>
 
-    <!-- Auditor 50 -->
-    <article class="plan" role="listitem" aria-label="Auditor pack 50">
-      <h3>Auditor Pack — 50</h3>
+    <!-- Bundle 50 -->
+    <article class="plan" role="listitem" aria-label="ProofPack bundle 50">
+      <h3>ProofPack Bundle — 50</h3>
       <div class="price">$349</div>
-      <p class="muted">Most common fit: repeat usage without any procurement drama.</p>
+      <p class="muted">Most common fit for teams who want a clean, repeatable evidence collection motion.</p>
       <ul class="muted">
-        <li>50 ProofPacks / client codes</li>
-        <li>Better unit economics</li>
-        <li>Ideal for seasonal audit waves</li>
+        <li>50 ProofPack credits</li>
+        <li>Great for seasonal audit waves</li>
+        <li>No subscription required</li>
       </ul>
-      <a class="btn primary" href="mailto:ops@proofrepo.com?subject=Auditor%20Pack%2050">Buy pack</a>
+      <a class="btn primary" href="mailto:ops@proofrepo.com?subject=ProofPack%20Bundle%2050">Buy pack</a>
     </article>
 
-    <!-- Auditor 75 -->
-    <article class="plan" role="listitem" aria-label="Auditor pack 75">
-      <h3>Auditor Pack — 75</h3>
+    <!-- Bundle 75 -->
+    <article class="plan" role="listitem" aria-label="ProofPack bundle 75">
+      <h3>ProofPack Bundle — 75</h3>
       <div class="price">$499</div>
-      <p class="muted">For auditors doing volume vendor reviews or multiple SOC 2 clients.</p>
+      <p class="muted">Designed for higher-volume workflows across many clients or recurring vendor reviews.</p>
       <ul class="muted">
-        <li>75 ProofPacks / client codes</li>
-        <li>Best price per pack</li>
-        <li>Designed for repeat workflows</li>
+        <li>75 ProofPack credits</li>
+        <li>Built for repeat workflows</li>
+        <li>No subscription required</li>
       </ul>
-      <a class="btn" href="mailto:ops@proofrepo.com?subject=Auditor%20Pack%2075">Buy pack</a>
+      <a class="btn primary" href="mailto:ops@proofrepo.com?subject=ProofPack%20Bundle%2075">Buy pack</a>
     </article>
   </div>
 
   <div class="card" style="margin-top:18px">
-    <strong class="muted">How auditor codes work:</strong>
+    <strong class="muted">How it works:</strong>
     <div class="muted" style="margin-top:8px">
-      You send a client a link + code → they upload → you receive the ProofPack link and manifest.
-      (Automated code issuance will be part of the Stripe flow.)
+      Use a ProofPack credit to request evidence or generate a ProofPack. Bundles are for repeated use across multiple engagements.
     </div>
   </div>
 </section>
+
 
 <!-- TRUST -->
 <section id="trust" class="wrap section" aria-labelledby="trust-h">
