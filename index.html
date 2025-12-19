@@ -340,11 +340,90 @@
         </div>
       </details>
 
+      <!-- INLINE PRICING GATE (shown after clicking Start) -->
+<div id="pricingGate" class="guidance" style="display:none">
+  <h3 style="margin:0 0 6px">Choose how to unlock</h3>
+  <p class="small muted" style="margin:0 0 12px">
+    Pay per ProofPack. No subscriptions. Bundles are for repeated use across multiple companies/clients.
+  </p>
+
+  <div class="grid cols3" role="list" style="margin-top:10px">
+    <!-- One-off -->
+    <article class="plan" role="listitem" aria-label="One-off ProofPack">
+      <h3>One-off ProofPack</h3>
+      <div class="price">$29</div>
+      <p class="muted">Single ProofPack for one company submission or one client request.</p>
+      <ul class="muted">
+        <li>1 ProofPack credit</li>
+        <li>Guided tagging + ProofPack output</li>
+        <li>No subscription</li>
+      </ul>
+      <button type="button" class="btn primary" data-unlock-plan="OneOff">Continue</button>
+      <div class="small">Checkout flow coming next.</div>
+    </article>
+
+    <!-- Bundle 25 -->
+    <article class="plan" role="listitem" aria-label="ProofPack bundle 25">
+      <h3>ProofPack Bundle — 25</h3>
+      <div class="price">$199</div>
+      <p class="muted">Great for repeat evidence requests across multiple engagements.</p>
+      <ul class="muted">
+        <li>25 ProofPack credits</li>
+        <li>Designed for repeat workflows</li>
+        <li>No subscription</li>
+      </ul>
+      <a class="btn primary" href="mailto:ops@proofrepo.com?subject=ProofPack%20Bundle%2025">Buy pack</a>
+    </article>
+
+    <!-- Bundle 50 -->
+    <article class="plan" role="listitem" aria-label="ProofPack bundle 50">
+      <h3>ProofPack Bundle — 50</h3>
+      <div class="price">$349</div>
+      <p class="muted">Most common fit for seasonal waves and ongoing evidence requests.</p>
+      <ul class="muted">
+        <li>50 ProofPack credits</li>
+        <li>Use across multiple clients</li>
+        <li>No subscription</li>
+      </ul>
+      <a class="btn primary" href="mailto:ops@proofrepo.com?subject=ProofPack%20Bundle%2050">Buy pack</a>
+    </article>
+
+    <!-- Bundle 75 -->
+    <article class="plan" role="listitem" aria-label="ProofPack bundle 75">
+      <h3>ProofPack Bundle — 75</h3>
+      <div class="price">$499</div>
+      <p class="muted">Designed for higher-volume workflows across many clients.</p>
+      <ul class="muted">
+        <li>75 ProofPack credits</li>
+        <li>Repeat workflows</li>
+        <li>No subscription</li>
+      </ul>
+      <a class="btn primary" href="mailto:ops@proofrepo.com?subject=ProofPack%20Bundle%2075">Buy pack</a>
+    </article>
+  </div>
+
+  <div style="margin-top:12px">
+    <strong class="muted">Have a code?</strong>
+    <div class="form-row two" style="margin-top:8px">
+      <div>
+        <input id="unlockCode" placeholder="Enter code (if you have one)" />
+      </div>
+      <div>
+        <button type="button" class="btn primary" id="applyUnlockCodeBtn">Apply code</button>
+      </div>
+    </div>
+    <div class="hint" id="unlockHint"></div>
+  </div>
+</div>
+<!-- /INLINE PRICING GATE -->
+
+
       <div id="status" class="status" style="display:none"></div>
 
       <div class="wiz-actions step-after-role" id="actionsRow" style="display:none;gap:10px;justify-content:flex-end">
-        <button id="submitBtn" class="btn primary" type="submit">Send and build ProofPack</button>
-      </div>
+  <button id="startBtn" class="btn primary" type="button">Start guided ProofPack</button>
+  <button id="submitBtn" class="btn primary" type="submit" style="display:none">Send and build ProofPack</button>
+</div>
     </form>
   </section>
 
@@ -622,6 +701,71 @@ const safeUrl = (u) => {
     const laterRows = document.querySelectorAll('.step-after-role');
     const pricingSection = document.getElementById('pricing');
 
+    // ===== PRICING GATE (inline) =====
+const pricingGate = document.getElementById('pricingGate');
+const startBtn = document.getElementById('startBtn');
+const unlockCodeEl = document.getElementById('unlockCode');
+const applyUnlockCodeBtn = document.getElementById('applyUnlockCodeBtn');
+const unlockHint = document.getElementById('unlockHint');
+
+let isUnlocked = false;
+
+function openPricingGate() {
+  if (pricingGate) pricingGate.style.display = 'block';
+  if (unlockHint) unlockHint.textContent = '';
+  if (pricingGate) pricingGate.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function setUnlocked(planLabel) {
+  isUnlocked = true;
+
+  // Optional: store chosen plan label in existing hidden plan selector (keeps your backend labeling)
+  const planEl = document.getElementById('plan');
+  if (planEl && planLabel) planEl.value = planLabel;
+
+  // Hide gate, swap buttons
+  if (pricingGate) pricingGate.style.display = 'none';
+  if (startBtn) startBtn.style.display = 'none';
+  if (submitBtn) submitBtn.style.display = 'inline-flex';
+
+  // Now allow guidance + file meta to render
+  updateFileMeta();
+  renderFrameworkGuides();
+}
+
+// Start button => show pricing gate (don’t submit)
+if (startBtn) {
+  startBtn.addEventListener('click', () => {
+    clearStatus();
+    openPricingGate();
+  });
+}
+
+// Click one-off "Continue" => unlock (bundle buttons are mailto for now)
+if (pricingGate) {
+  pricingGate.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-unlock-plan]');
+    if (!btn) return;
+    const plan = btn.getAttribute('data-unlock-plan') || 'OneOff';
+    setUnlocked(plan);
+  });
+}
+
+// Apply code => unlock (client-side for now; later you’ll verify server-side)
+if (applyUnlockCodeBtn) {
+  applyUnlockCodeBtn.addEventListener('click', () => {
+    const code = (unlockCodeEl?.value || '').trim();
+    if (!code) {
+      if (unlockHint) unlockHint.textContent = 'Enter a code.';
+      return;
+    }
+    if (unlockHint) unlockHint.textContent = 'Code applied.';
+    setUnlocked('Code');
+  });
+}
+// ===== /PRICING GATE =====
+
+
 
     // frameworkSelections[frameworkKey][itemId] = filename
     const frameworkSelections = {};
@@ -675,9 +819,18 @@ if (optionalDetails) {
     }
 
     function renderFrameworkGuides() {
-      if (!frameworkGuides) return;
-      const selectedKeys = getSelectedFrameworkKeys().filter(k => FRAMEWORK_CONFIG[k]);
-const files = Array.from(fileInput?.files || []);
+  if (!frameworkGuides) return;
+
+  // Don’t show guidance until user unlocks (prevents “free checklist” use)
+  if (!isUnlocked) {
+    frameworkGuides.style.display = 'none';
+    frameworkGuides.innerHTML = '';
+    return;
+  }
+
+  const selectedKeys = getSelectedFrameworkKeys().filter(k => FRAMEWORK_CONFIG[k]);
+  const files = Array.from(fileInput?.files || []);
+
 
 // Hide until frameworks selected AND at least 1 file exists
 if (!selectedKeys.length || !files.length) {
@@ -778,6 +931,17 @@ if (!selectedKeys.length || !files.length) {
 // File handling & drag/drop
 function updateFileMeta() {
   const files = Array.from(fileInput?.files || []);
+
+  // Don’t show file stats or optional plan/billing until unlocked
+  if (!isUnlocked) {
+    if (fileMeta) fileMeta.textContent = 'Unlock guided ProofPack to proceed with uploads.';
+    if (planBillingRow) planBillingRow.style.display = 'none';
+    if (optionalDetails) {
+      optionalDetails.style.display = 'none';
+      optionalDetails.open = false;
+    }
+    return;
+  }
 
   if (!files.length) {
     if (fileMeta) fileMeta.textContent = 'No files selected.';
@@ -898,14 +1062,22 @@ function updateRoleUI() {
     const routingRow = document.getElementById('routingRow');
     if (routingRow) routingRow.style.display = 'none';
     roleHint.textContent = "Start by telling us which side of the audit you're on.";
-    
+
+    // Update CTA wording based on role
+if (startBtn) {
+  if (role === 'auditor') {
+    startBtn.textContent = 'Request guided evidence collection from client';
+  } else {
+    startBtn.textContent = 'Start guided ProofPack';
+  }
+}
+
     if (pricingSection) pricingSection.style.display = 'none';
     
     return;
   }
 
-  if (pricingSection) pricingSection.style.display = 'block';
-
+  if (pricingSection) pricingSection.style.display = 'none';
 
   // Show the post-role rows as usual…
   laterRows.forEach(r => {
