@@ -1099,9 +1099,9 @@ function updateBillingUI() {
   }
 }
 
-// ===== DROP-IN REPLACEMENT: updateRoleUI (no redundant reset blocks) =====
+// ===== DROP-IN REPLACEMENT: updateRoleUI (fixed + minimal) =====
 function updateRoleUI() {
-  const role = roleSelect?.value || '';
+  const role = (roleSelect?.value || '').trim();
 
   // Email placeholder + hint helper
   const emailHintEl = document.getElementById('emailHint');
@@ -1119,34 +1119,6 @@ function updateRoleUI() {
   // Always hide the big pricing section (you’re using inline gate)
   if (pricingSection) pricingSection.style.display = 'none';
 
-    // Gate + buttons
-    if (pricingGate) pricingGate.style.display = 'none';
-    if (startBtn) startBtn.style.display = 'inline-flex';
-    if (submitBtn) submitBtn.style.display = 'none';
-
-    // Lock uploads + optionally clear
-    if (fileInput) {
-      fileInput.disabled = true;
-      if (clearFiles) fileInput.value = '';
-    }
-
-    // Optional details should stay hidden until files exist (and unlocked)
-    if (optionalDetails) {
-      optionalDetails.style.display = 'none';
-      optionalDetails.open = false;
-    }
-    if (planBillingRow) planBillingRow.style.display = 'none';
-
-    // Tagging guidance shouldn’t show when locked
-    if (frameworkGuides) {
-      frameworkGuides.style.display = 'none';
-      frameworkGuides.innerHTML = '';
-    }
-
-    // Keep file meta accurate (will show “Unlock…” text in your updateFileMeta)
-    updateFileMeta();
-  };
-
   // If role is not selected: hide everything and reset
   if (!role) {
     laterRows.forEach(r => (r.style.display = 'none'));
@@ -1154,14 +1126,14 @@ function updateRoleUI() {
     const routingRow = document.getElementById('routingRow');
     if (routingRow) routingRow.style.display = 'none';
 
-    roleHint.textContent = "Start by telling us which side of the audit you're on.";
+    if (roleHint) roleHint.textContent = "Start by telling us which side of the audit you're on.";
 
     resetUnlockState({ clearFiles: true });
     return;
   }
 
-  // Role IS selected: always reset lock state (prevents cross-role leakage)
-  resetLockAndUi({ clearFiles: true });
+  // Role IS selected: reset lock state (prevents cross-role leakage)
+  resetUnlockState({ clearFiles: true });
 
   // Set CTA wording by role
   if (startBtn) {
@@ -1212,32 +1184,12 @@ function updateRoleUI() {
     clientEmailCol.style.display = 'none';
   }
 
-  // Billing + guides should remain coherent with role
+  // Keep billing + guide UI coherent with role
   updateBillingUI();
   renderFrameworkGuides();
+  updateFileMeta();
 }
 // ===== END DROP-IN REPLACEMENT =====
-
-      const frameworksSel = document.getElementById('frameworks');
-      const fws = Array.from(frameworksSel.selectedOptions || []).map(o=>o.value);
-      if (fws.length === 0) return 'Please select at least one framework.';
-
-      const files = Array.from(fileInput.files || []);
-      const planEl = document.getElementById('plan');
-      const plan = planEl ? (planEl.value || 'Trial') : 'Trial';
-
-      const total = files.reduce((n,f)=> n + (f.size || 0), 0);
-
-      if (files.length === 0) {
-        return 'Please upload at least one file so we can build a ProofPack.';
-      }
-
-      if (plan === 'Trial') {
-        if (files.length > 10) return 'Trial is tuned for roughly 10 files. If needed, zip extras together.';
-        if (total > 5 * 1024 * 1024) return 'Right now the trial is tuned for small uploads (~5 MB). Please zip or trim your upload.';
-      } else {
-        if (files.length > 50) return 'For large batches, split into multiple submissions.';
-      }
 
 // Enforce *required* minimums ONLY for SOC2 (backend hard-blocks SOC2; others are guidance-only)
 const missing = [];
