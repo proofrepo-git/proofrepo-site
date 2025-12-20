@@ -1191,24 +1191,6 @@ function updateRoleUI() {
 }
 // ===== END DROP-IN REPLACEMENT =====
 
-// Enforce *required* minimums ONLY for SOC2 (backend hard-blocks SOC2; others are guidance-only)
-const missing = [];
-const soc2Selected = fws.includes('SOC2');
-
-if (soc2Selected) {
-  const cfg = FRAMEWORK_CONFIG.SOC2;
-  const sel = frameworkSelections.SOC2 || {};
-  (cfg.items || []).forEach(item => {
-    if (!sel[item.id]) missing.push(`${cfg.label}: ${item.label}`);
-  });
-}
-
-if (missing.length) {
-  return 'For SOC 2, please tag files for these required items:\n• ' + missing.join('\n• ');
-}
-
-      return null;
-    }
 /* =======================
    DROP-IN: validate()
    ======================= */
