@@ -812,7 +812,9 @@ if (pricingGate) {
 // Apply code => unlock (client-side for now; later you’ll verify server-side)
 if (applyUnlockCodeBtn) {
   applyUnlockCodeBtn.addEventListener('click', () => {
-    const code = (unlockCodeEl?.value || '').trim();
+    const code =
+  (unlockCodeEl?.value || '').trim() ||
+  (document.getElementById('auditorCode')?.value || '').trim();
     if (!code) {
       if (unlockHint) unlockHint.textContent = 'Enter a code.';
       return;
@@ -998,7 +1000,6 @@ function updateFileMeta() {
       optionalDetails.style.display = 'none';
       optionalDetails.open = false;
     }
-    if (fileInput) fileInput.disabled = true;
     return;
   }
 
@@ -1080,7 +1081,7 @@ function updateFileMeta() {
     }
 
 function updateBillingUI() {
-  if (!billingSelect) return;
+  if (!billingSelect || !billingHint) return;
   const billing = billingSelect.value;
   const role = roleSelect.value;
 
