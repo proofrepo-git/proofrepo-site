@@ -1119,10 +1119,6 @@ function updateRoleUI() {
   // Always hide the big pricing section (you’re using inline gate)
   if (pricingSection) pricingSection.style.display = 'none';
 
-  // Helper: one single reset path (kills redundancy)
-  const resetLockAndUi = ({ clearFiles } = { clearFiles: true }) => {
-    isUnlocked = false;
-
     // Gate + buttons
     if (pricingGate) pricingGate.style.display = 'none';
     if (startBtn) startBtn.style.display = 'inline-flex';
@@ -1160,7 +1156,7 @@ function updateRoleUI() {
 
     roleHint.textContent = "Start by telling us which side of the audit you're on.";
 
-    resetLockAndUi({ clearFiles: true });
+    resetUnlockState({ clearFiles: true });
     return;
   }
 
@@ -1222,33 +1218,6 @@ function updateRoleUI() {
 }
 // ===== END DROP-IN REPLACEMENT =====
 
-// 1) allowlist your own test emails
-const ALLOWLIST = new Set([
-  'atucker5@alumni.nd.edu',
-  // add more if you want:
-  // 'you@proofrepo.com',
-]);
-
-// 2) basic email format check
-const looksLikeEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-if (!looksLikeEmail) return 'Please enter a valid email address.';
-
-// 3) “work email” check for everyone else (block common personal domains)
-const PERSONAL_DOMAINS = new Set([
-  'gmail.com','yahoo.com','outlook.com','hotmail.com','icloud.com','aol.com',
-  'proton.me','protonmail.com','gmx.com','mail.com','live.com','msn.com'
-]);
-
-const domain = email.split('@')[1] || '';
-const isPersonal = PERSONAL_DOMAINS.has(domain);
-
-// allow allowlist OR non-personal domains
-if (!ALLOWLIST.has(email) && isPersonal) {
-  return 'Please use a work email (or contact ops@proofrepo.com if you need an exception).';
-}
-
-if (!company) return 'Please enter your company name.';
-
       const frameworksSel = document.getElementById('frameworks');
       const fws = Array.from(frameworksSel.selectedOptions || []).map(o=>o.value);
       if (fws.length === 0) return 'Please select at least one framework.';
@@ -1288,7 +1257,89 @@ if (missing.length) {
 
       return null;
     }
+/* =======================
+   DROP-IN: validate()
+   ======================= */
+function validate() {
+  // Must have role
+  const role = (roleSelect?.value || '').trim();
+  if (!role) return 'Please choose a role first.';
 
+  // Must be unlocked (gate)
+  if (!isUnlocked) return 'Please click “Start guided ProofPack” to unlock uploads.';
+
+  const email = (document.getElementById('email')?.value || '').trim().toLowerCase();
+  const company = (document.getElementById('company')?.value || '').trim();
+
+  // Allowlist your own test emails
+  const ALLOWLIST = new Set([
+    'atucker5@alumni.nd.edu',
+    // 'you@proofrepo.com',
+  ]);
+
+  // Basic email format
+  const looksLikeEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  if (!looksLikeEmail) return 'Please enter a valid email address.';
+
+  // Block common personal domains (unless allowlisted)
+  const PERSONAL_DOMAINS = new Set([
+    'gmail.com','yahoo.com','outlook.com','hotmail.com','icloud.com','aol.com',
+    'proton.me','protonmail.com','gmx.com','mail.com','live.com','msn.com'
+  ]);
+
+  const domain = (email.split('@')[1] || '').toLowerCase();
+  const isPersonal = PERSONAL_DOMAINS.has(domain);
+  if (!ALLOWLIST.has(email) && isPersonal) {
+    return 'Please use a work email (or contact ops@proofrepo.com if you need an exception).';
+  }
+
+  if (!company) return 'Please enter your company name.';
+
+  // Frameworks
+  const frameworksSel = document.getElementById('frameworks');
+  const fws = Array.from(frameworksSel?.selectedOptions || []).map(o => o.value);
+  if (fws.length === 0) return 'Please select at least one framework.';
+
+  // Files
+  const files = Array.from(fileInput?.files || []);
+  const planEl = document.getElementById('plan');
+  const plan = planEl ? (planEl.value || 'Trial') : 'Trial';
+  const total = files.reduce((n, f) => n + (f.size || 0), 0);
+
+  if (files.length === 0) {
+    return 'Please upload at least one file so we can build a ProofPack.';
+  }
+
+  // Lightweight client caps (worker should enforce real limits later)
+  if (plan === 'Trial') {
+    if (files.length > 10) return 'Trial is tuned for roughly 10 files. If needed, zip extras together.';
+    if (total > 5 * 1024 * 1024) return 'Right now the trial is tuned for small uploads (~5 MB). Please zip or trim your upload.';
+  } else {
+    if (files.length > 50) return 'For large batches, split into multiple submissions.';
+  }
+
+  // Enforce required SOC2 tagging ONLY
+  const missing = [];
+  const soc2Selected = fws.includes('SOC2');
+
+  if (soc2Selected) {
+    const cfg = FRAMEWORK_CONFIG.SOC2;
+    const sel = frameworkSelections.SOC2 || {};
+    (cfg.items || []).forEach(item => {
+      if (!sel[item.id]) missing.push(`${cfg.label}: ${item.label}`);
+    });
+  }
+
+  if (missing.length) {
+    return 'For SOC 2, please tag files for these required items:\n• ' + missing.join('\n• ');
+  }
+
+  return null;
+}
+/* =======================
+   END DROP-IN: validate()
+   ======================= */
+    
     function gather(){
       const fd = new FormData();
       const planEl = document.getElementById('plan');
@@ -1301,8 +1352,13 @@ if (missing.length) {
       fd.append('role', document.getElementById('role').value || 'client');
 
       if (billingSelect && billingSelect.value) {
-        fd.append('billingMode', billingSelect.value);
-      }
+  fd.append('billingMode', billingSelect.value);
+}
+
+// Optional: if user used a code in the inline gate, send it along
+if (unlockCodeEl && unlockCodeEl.value.trim()) {
+  fd.append('unlockCode', unlockCodeEl.value.trim());
+}
 
       const frameworksSel = document.getElementById('frameworks');
       Array.from(frameworksSel.selectedOptions || []).forEach(o => fd.append('frameworks', o.value));
@@ -1456,6 +1512,23 @@ document.getElementById('intakeForm').addEventListener('submit', async (e) => {
     submitBtn.textContent = 'Send and build ProofPack';
   }
 });
+
+/* =======================
+   DROP-IN: wiring
+   ======================= */
+if (roleSelect) roleSelect.addEventListener('change', updateRoleUI);
+if (billingSelect) billingSelect.addEventListener('change', updateBillingUI);
+if (frameworksSelectEl) frameworksSelectEl.addEventListener('change', renderFrameworkGuides);
+
+// Initial render
+updateRoleUI();
+updateBillingUI();
+renderFrameworkGuides();
+updateFileMeta();
+/* =======================
+   END DROP-IN: wiring
+   ======================= */
+
   </script>
 
   <!-- STICKY BOTTOM MARQUEE -->
