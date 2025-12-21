@@ -793,6 +793,10 @@ function setUnlocked(planLabel) {
   isUnlocked = true;
   if (fileInput) fileInput.disabled = false;
 
+    // Show uploads now that we’re unlocked
+  if (fileBox) fileBox.style.display = 'block';
+  if (fileBox) fileBox.style.display = 'block';
+
 
   // Optional: store chosen plan label in existing hidden plan selector (keeps your backend labeling)
   const planEl = document.getElementById('plan');
@@ -1124,18 +1128,25 @@ function updateBillingUI() {
   }
 }
 
-// ===== DROP-IN REPLACEMENT: updateRoleUI (fixed + minimal) =====
+// ===== DROP-IN REPLACEMENT: updateRoleUI (auditor flow fixed, no progress lost) =====
 function updateRoleUI() {
   const role = (roleSelect?.value || '').trim();
 
-  // --- NEW: field refs we will toggle (no markup changes required) ---
+  // --- field refs we will toggle (no markup changes required) ---
   const contactRow = document.getElementById('contactRow');
   const companyInput = document.getElementById('company');
   const companyLabelEl = document.getElementById('companyLabel');
+
+  // Routing row bits
   const clientEmailInput = document.getElementById('clientEmail');
-  const clientEmailLabelEl = document.querySelector('label[for="clientEmail"]'); // existing label
+  const clientEmailLabelEl = document.querySelector('label[for="clientEmail"]');
   const auditorCodeInput = document.getElementById('auditorCode');
-  // --- /NEW ---
+
+  // Contact-row swap: company vs client contact
+  const companyColEl = document.getElementById('companyCol');
+  const clientContactColEl = document.getElementById('clientContactCol');
+  const clientContactEmailInput = document.getElementById('clientContactEmail');
+  // --- /refs ---
 
   // Email placeholder + hint helper
   const emailHintEl = document.getElementById('emailHint');
@@ -1157,13 +1168,16 @@ function updateRoleUI() {
   if (!role) {
     laterRows.forEach(r => (r.style.display = 'none'));
 
-    const routingRow = document.getElementById('routingRow');
-    if (routingRow) routingRow.style.display = 'none';
+    const routingRow0 = document.getElementById('routingRow');
+    if (routingRow0) routingRow0.style.display = 'none';
 
     if (roleHint) roleHint.textContent = "Start by telling us which side of the audit you're on.";
 
-    // Make sure contact row is hidden too (it has step-after-role but be explicit)
     if (contactRow) contactRow.style.display = 'none';
+
+    // Reset contact sub-columns
+    if (clientContactColEl) clientContactColEl.style.display = 'none';
+    if (companyColEl) companyColEl.style.display = 'block';
 
     resetUnlockState({ clearFiles: true });
     return;
@@ -1180,64 +1194,89 @@ function updateRoleUI() {
         : 'Start guided ProofPack';
   }
 
-  // Show the post-role rows as usual
+  // Show the post-role rows, BUT keep locked-only sections hidden until unlocked/files
   laterRows.forEach(r => {
-    if (r.id === 'actionsRow') r.style.display = 'flex';
-    else r.style.display = 'block';
+    if (r.id === 'actionsRow') {
+      r.style.display = 'flex';
+      return;
+    }
+    // Keep these hidden until unlock + (optionally) files exist
+    if (r.id === 'filesRow' || r.id === 'frameworkGuides' || r.id === 'optionalRow') {
+      r.style.display = 'none';
+      return;
+    }
+    r.style.display = 'block';
   });
 
   // Routing row special-case: hide for company
   const routingRow = document.getElementById('routingRow');
   if (routingRow) routingRow.style.display = (role === 'company') ? 'none' : 'block';
 
-  // --- NEW: default contact row shown (since it’s step-after-role + display:none in HTML) ---
+  // Contact row shown
   if (contactRow) contactRow.style.display = 'grid';
-  // --- /NEW ---
 
-  // Role-specific copy + which routing fields show
+  // Role-specific copy + which fields show
   if (role === 'auditor') {
-    // a) Company should be optional/hidden-ish; client contact email should be the primary “client info”
     emailLabel.textContent = 'Auditor / third-party email';
 
-    // Prefer the client email input as the “client info” (no markup move required)
-    if (clientEmailLabelEl) clientEmailLabelEl.textContent = 'Client contact email';
-    if (clientEmailHint) {
-      clientEmailHint.textContent =
-        'Enter your client contact so we can associate the pack with them (and later, email codes directly).';
-    }
-
-    // Make company optional (and de-emphasize label). You can also hide the field completely if you want.
-    if (companyLabelEl) companyLabelEl.textContent = 'Client company (optional)';
+    // IMPORTANT: auditor flow should collect client contact email in CONTACT row (validate() requires it)
+    if (clientContactColEl) clientContactColEl.style.display = 'block';
+    if (companyColEl) companyColEl.style.display = 'none';
     if (companyInput) companyInput.required = false;
 
+    // Make routing row "clientEmail" redundant for auditors -> hide it to avoid confusion
+    // (you already have clientContactEmail above, and validate() checks that one)
+    if (clientEmailCol) clientEmailCol.style.display = 'none';
+    if (clientEmailInput) clientEmailInput.value = '';
+
+    // If you still want a label for clientEmail elsewhere, keep it consistent anyway:
+    if (clientEmailLabelEl) clientEmailLabelEl.textContent = 'Client contact email';
+
+    // Helpful hint (your existing hint element is in routing row; keep message for future, but it will be hidden)
+    if (clientEmailHint) {
+      clientEmailHint.textContent =
+        'Client contact is collected above so we can associate the ProofPack with the right company.';
+    }
+
+    // Make sure the required field is visually clear (optional: tweak placeholder)
+    if (clientContactEmailInput) clientContactEmailInput.placeholder = 'client@company.com';
+
+    if (companyLabelEl) companyLabelEl.textContent = 'Client company (optional)';
+
     roleHint.textContent =
-      'You’re an auditor or third party driving this pack. You’ll get the ProofPack link and can forward it to your client or reviewers.';
+      'You’re an auditor or third party driving this pack. Enter your email + the client contact, then unlock to upload evidence.';
 
+    // Auditor role: hide auditorEmail (self) routing field; it’s already captured in email
     auditorEmailCol.style.display = 'none';
-    clientEmailCol.style.display = 'block';
 
-    // b) Auditor code should be hidden by default (used as alternate unlock)
-    // (Shown later only when they pick “code” billing mode / unlock path)
+    // Auditor code hidden by default (shown only if they choose the code path)
     if (auditorCodeCol) auditorCodeCol.style.display = 'none';
-    if (auditorCodeInput) auditorCodeInput.value = ''; // avoid stale codes
+    if (auditorCodeInput) auditorCodeInput.value = '';
 
   } else if (role === 'client') {
     emailLabel.textContent = 'Your email';
     roleHint.textContent =
       'Use this if an auditor or third party pointed you here to upload evidence.';
 
-    // Company optional for client too (you said maybe hide/optional for now)
+    // Client/company should show company, hide client contact email
+    if (clientContactColEl) clientContactColEl.style.display = 'none';
+    if (companyColEl) companyColEl.style.display = 'block';
+
     if (companyLabelEl) companyLabelEl.textContent = 'Your company (optional)';
     if (companyInput) companyInput.required = false;
 
-    // Client flow: they are the company contact, so hide clientEmail field
+    // In this flow you CAN optionally add reviewer email
     auditorEmailCol.style.display = 'block';
-    clientEmailCol.style.display = 'none';
 
-    auditorEmailHint.textContent =
-      'If you know the reviewer’s email, add it so we can also route the ProofPack to them.';
+    // Hide routing clientEmail (it’s ambiguous next to reviewer email; not needed)
+    if (clientEmailCol) clientEmailCol.style.display = 'none';
+    if (clientEmailInput) clientEmailInput.value = '';
 
-    // Auditor code hidden unless they choose code path
+    if (auditorEmailHint) {
+      auditorEmailHint.textContent =
+        'If you know the reviewer’s email, add it so we can also route the ProofPack to them.';
+    }
+
     if (auditorCodeCol) auditorCodeCol.style.display = 'none';
     if (auditorCodeInput) auditorCodeInput.value = '';
 
@@ -1246,14 +1285,16 @@ function updateRoleUI() {
     roleHint.textContent =
       'Direct company use: preparing for an audit or vendor review without an auditor driving this yet.';
 
-    // Company role: company is still useful but you said it can be optional/hidden for now
+    if (clientContactColEl) clientContactColEl.style.display = 'none';
+    if (companyColEl) companyColEl.style.display = 'block';
+
     if (companyLabelEl) companyLabelEl.textContent = 'Your company (optional)';
     if (companyInput) companyInput.required = false;
 
     auditorEmailCol.style.display = 'none';
-    clientEmailCol.style.display = 'none';
+    if (clientEmailCol) clientEmailCol.style.display = 'none';
+    if (clientEmailInput) clientEmailInput.value = '';
 
-    // Auditor code hidden unless they choose code path
     if (auditorCodeCol) auditorCodeCol.style.display = 'none';
     if (auditorCodeInput) auditorCodeInput.value = '';
   }
