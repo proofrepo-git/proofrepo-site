@@ -228,10 +228,19 @@
          <input id="email" name="email" type="email" required placeholder="you@company.com" autocomplete="email"/>
 <div class="hint" id="emailHint" style="margin-top:6px"></div>
         </div>
-        <div>
-          <label id="companyLabel" for="company">Company</label>
-          <input id="company" name="company" required placeholder="Company Inc." autocomplete="organization"/>
-        </div>
+        <!-- Company (optional) -->
+<div id="companyCol">
+  <label id="companyLabel" for="company">Company (optional)</label>
+  <input id="company" name="company" placeholder="Company Inc." autocomplete="organization"/>
+</div>
+
+<!-- Client contact email (shown for auditor role instead of company) -->
+<div id="clientContactCol" style="display:none">
+  <label for="clientContactEmail">Client contact email</label>
+  <input id="clientContactEmail" name="clientContactEmail" type="email" placeholder="client@company.com" autocomplete="email"/>
+  <div class="hint">Use this instead of “Client company”.</div>
+</div>
+
       </div>
 
       <!-- Frameworks -->
@@ -403,7 +412,7 @@
   </div>
 
   <div style="margin-top:12px">
-    <strong class="muted">Have a code?</strong>
+    <strong class="muted">Have an auditor / reviewer code? (Use this instead of buying)</strong>
     <div class="form-row two" style="margin-top:8px">
       <div>
         <input id="unlockCode" placeholder="Enter code (if you have one)" />
@@ -673,9 +682,11 @@ const safeUrl = (u) => {
 
     const statusEl = $('#status');
     const submitBtn = $('#submitBtn');
-    const fileInput = $('#files');
-    const fileMeta = $('#fileMeta');
-    const fileBox = $('#filesRow');
+    const companyCol = document.getElementById('companyCol');
+    const clientContactCol = document.getElementById('clientContactCol');
+    const clientContactEmailEl = document.getElementById('clientContactEmail');
+    const companyEl = document.getElementById('company');
+
 
     const roleSelect = $('#role');
     const emailLabel = $('#emailLabel');
@@ -700,6 +711,13 @@ const safeUrl = (u) => {
 
     const laterRows = document.querySelectorAll('.step-after-role');
     const pricingSection = document.getElementById('pricing');
+
+    // ===== STEP 1 FIX: define file DOM refs BEFORE any use =====
+const fileInput = document.getElementById('files');     // <input type="file" id="files">
+const fileBox   = document.getElementById('filesRow');  // <div id="filesRow"> ... </div>
+const fileMeta  = document.getElementById('fileMeta');  // <div id="fileMeta"> ... </div>
+// ===== /STEP 1 FIX =====
+
 
     // ===== PRICING GATE (inline) =====
 const pricingGate = document.getElementById('pricingGate');
@@ -731,6 +749,11 @@ function resetUnlockState(opts = { clearFiles: true }) {
     if (opts.clearFiles) fileInput.value = '';
   }
 
+  // IMPORTANT: hide the entire upload artifacts box while locked
+  // (so it’s not just disabled — it disappears until unlocked)
+  if (fileBox) fileBox.style.display = 'none';
+  if (fileMeta) fileMeta.textContent = 'Unlock guided ProofPack to proceed with uploads.';
+
   // Hide anything that should not show while locked
   if (frameworkGuides) {
     frameworkGuides.style.display = 'none';
@@ -758,6 +781,7 @@ function requireRoleOrExplain() {
 /* =======================
    END STEP 2 HELPERS
    ======================= */
+
     
 function openPricingGate() {
   if (pricingGate) pricingGate.style.display = 'block';
@@ -1104,6 +1128,15 @@ function updateBillingUI() {
 function updateRoleUI() {
   const role = (roleSelect?.value || '').trim();
 
+  // --- NEW: field refs we will toggle (no markup changes required) ---
+  const contactRow = document.getElementById('contactRow');
+  const companyInput = document.getElementById('company');
+  const companyLabelEl = document.getElementById('companyLabel');
+  const clientEmailInput = document.getElementById('clientEmail');
+  const clientEmailLabelEl = document.querySelector('label[for="clientEmail"]'); // existing label
+  const auditorCodeInput = document.getElementById('auditorCode');
+  // --- /NEW ---
+
   // Email placeholder + hint helper
   const emailHintEl = document.getElementById('emailHint');
   const emailInput = document.getElementById('email');
@@ -1128,6 +1161,9 @@ function updateRoleUI() {
     if (routingRow) routingRow.style.display = 'none';
 
     if (roleHint) roleHint.textContent = "Start by telling us which side of the audit you're on.";
+
+    // Make sure contact row is hidden too (it has step-after-role but be explicit)
+    if (contactRow) contactRow.style.display = 'none';
 
     resetUnlockState({ clearFiles: true });
     return;
@@ -1154,35 +1190,72 @@ function updateRoleUI() {
   const routingRow = document.getElementById('routingRow');
   if (routingRow) routingRow.style.display = (role === 'company') ? 'none' : 'block';
 
+  // --- NEW: default contact row shown (since it’s step-after-role + display:none in HTML) ---
+  if (contactRow) contactRow.style.display = 'grid';
+  // --- /NEW ---
+
   // Role-specific copy + which routing fields show
   if (role === 'auditor') {
+    // a) Company should be optional/hidden-ish; client contact email should be the primary “client info”
     emailLabel.textContent = 'Auditor / third-party email';
-    companyLabel.textContent = 'Client company';
+
+    // Prefer the client email input as the “client info” (no markup move required)
+    if (clientEmailLabelEl) clientEmailLabelEl.textContent = 'Client contact email';
+    if (clientEmailHint) {
+      clientEmailHint.textContent =
+        'Enter your client contact so we can associate the pack with them (and later, email codes directly).';
+    }
+
+    // Make company optional (and de-emphasize label). You can also hide the field completely if you want.
+    if (companyLabelEl) companyLabelEl.textContent = 'Client company (optional)';
+    if (companyInput) companyInput.required = false;
+
     roleHint.textContent =
       'You’re an auditor or third party driving this pack. You’ll get the ProofPack link and can forward it to your client or reviewers.';
 
     auditorEmailCol.style.display = 'none';
     clientEmailCol.style.display = 'block';
-    clientEmailHint.textContent =
-      'Add your client contact so we can associate the pack with them (and later, email codes directly).';
+
+    // b) Auditor code should be hidden by default (used as alternate unlock)
+    // (Shown later only when they pick “code” billing mode / unlock path)
+    if (auditorCodeCol) auditorCodeCol.style.display = 'none';
+    if (auditorCodeInput) auditorCodeInput.value = ''; // avoid stale codes
+
   } else if (role === 'client') {
     emailLabel.textContent = 'Your email';
-    companyLabel.textContent = 'Your company';
     roleHint.textContent =
       'Use this if an auditor or third party pointed you here to upload evidence.';
 
+    // Company optional for client too (you said maybe hide/optional for now)
+    if (companyLabelEl) companyLabelEl.textContent = 'Your company (optional)';
+    if (companyInput) companyInput.required = false;
+
+    // Client flow: they are the company contact, so hide clientEmail field
     auditorEmailCol.style.display = 'block';
     clientEmailCol.style.display = 'none';
+
     auditorEmailHint.textContent =
       'If you know the reviewer’s email, add it so we can also route the ProofPack to them.';
+
+    // Auditor code hidden unless they choose code path
+    if (auditorCodeCol) auditorCodeCol.style.display = 'none';
+    if (auditorCodeInput) auditorCodeInput.value = '';
+
   } else { // company
     emailLabel.textContent = 'Your email';
-    companyLabel.textContent = 'Your company';
     roleHint.textContent =
       'Direct company use: preparing for an audit or vendor review without an auditor driving this yet.';
 
+    // Company role: company is still useful but you said it can be optional/hidden for now
+    if (companyLabelEl) companyLabelEl.textContent = 'Your company (optional)';
+    if (companyInput) companyInput.required = false;
+
     auditorEmailCol.style.display = 'none';
     clientEmailCol.style.display = 'none';
+
+    // Auditor code hidden unless they choose code path
+    if (auditorCodeCol) auditorCodeCol.style.display = 'none';
+    if (auditorCodeInput) auditorCodeInput.value = '';
   }
 
   // Keep billing + guide UI coherent with role
@@ -1191,6 +1264,7 @@ function updateRoleUI() {
   updateFileMeta();
 }
 // ===== END DROP-IN REPLACEMENT =====
+
 
 /* =======================
    DROP-IN: validate()
@@ -1216,6 +1290,13 @@ function validate() {
   const looksLikeEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   if (!looksLikeEmail) return 'Please enter a valid email address.';
 
+    // If auditor role, require client contact email
+  if (role === 'auditor') {
+    const clientContact = (document.getElementById('clientContactEmail')?.value || '').trim();
+    const looksLikeEmail2 = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clientContact);
+    if (!looksLikeEmail2) return 'Please enter a valid client contact email.';
+  }
+
   // Block common personal domains (unless allowlisted)
   const PERSONAL_DOMAINS = new Set([
     'gmail.com','yahoo.com','outlook.com','hotmail.com','icloud.com','aol.com',
@@ -1227,8 +1308,6 @@ function validate() {
   if (!ALLOWLIST.has(email) && isPersonal) {
     return 'Please use a work email (or contact ops@proofrepo.com if you need an exception).';
   }
-
-  if (!company) return 'Please enter your company name.';
 
   // Frameworks
   const frameworksSel = document.getElementById('frameworks');
@@ -1291,9 +1370,12 @@ function validate() {
 }
 
 // Optional: if user used a code in the inline gate, send it along
-if (unlockCodeEl && unlockCodeEl.value.trim()) {
-  fd.append('unlockCode', unlockCodeEl.value.trim());
-}
+const codeFromGate = (unlockCodeEl?.value || '').trim();
+const codeFromAuditorField = (document.getElementById('auditorCode')?.value || '').trim();
+const finalCode = codeFromGate || codeFromAuditorField;
+
+if (finalCode) fd.append('unlockCode', finalCode);
+
 
       const frameworksSel = document.getElementById('frameworks');
       Array.from(frameworksSel.selectedOptions || []).forEach(o => fd.append('frameworks', o.value));
