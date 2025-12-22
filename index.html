@@ -272,9 +272,9 @@
       <!-- Dynamic framework guidance / tagging -->
       <div id="frameworkGuides" class="guidance step-after-role" style="display:none"></div>
 
-            <!-- ROUTING (moved out of Optional so codes can be entered before upload) -->
+            <!-- ROUTING (non-payment routing fields only; codes are entered in the unlock gate) -->
       <div class="form-row three step-after-role" id="routingRow" style="display:none">
-        <div id="auditorCodeCol">
+        <div id="auditorCodeCol" style="display:none">
           <label for="auditorCode">Auditor / third-party code (optional)</label>
           <input id="auditorCode" name="auditorCode" placeholder="Short code (e.g. TEST123)"/>
           <div class="hint" id="auditorCodeHint">
@@ -743,6 +743,11 @@ function resetUnlockState(opts = { clearFiles: true }) {
   if (startBtn) startBtn.style.display = 'inline-flex';
   if (submitBtn) submitBtn.style.display = 'none';
 
+  // Clear unlock UI
+if (unlockCodeEl) unlockCodeEl.value = '';
+if (unlockHint) unlockHint.textContent = '';
+
+
   // Lock uploads and optionally clear files
   if (fileInput) {
     fileInput.disabled = true;
@@ -795,7 +800,6 @@ function setUnlocked(planLabel) {
 
     // Show uploads now that we’re unlocked
   if (fileBox) fileBox.style.display = 'block';
-  if (fileBox) fileBox.style.display = 'block';
 
 
   // Optional: store chosen plan label in existing hidden plan selector (keeps your backend labeling)
@@ -840,15 +844,21 @@ if (pricingGate) {
 // Apply code => unlock (client-side for now; later you’ll verify server-side)
 if (applyUnlockCodeBtn) {
   applyUnlockCodeBtn.addEventListener('click', () => {
-    const code =
-  (unlockCodeEl?.value || '').trim() ||
-  (document.getElementById('auditorCode')?.value || '').trim();
+    const code = (unlockCodeEl?.value || '').trim();
+
     if (!code) {
       if (unlockHint) unlockHint.textContent = 'Enter a code.';
       return;
     }
-    if (unlockHint) unlockHint.textContent = 'Code applied.';
-    setUnlocked('Code');
+
+    // Optional micro-improvement:
+    // briefly acknowledge, then fully transition to unlocked state
+    if (unlockHint) unlockHint.textContent = 'Code applied. Unlocking…';
+
+    setUnlocked('OneOff');
+
+    // Clean up gate UI so code path matches paid path exactly
+    if (unlockHint) unlockHint.textContent = '';
   });
 }
 // ===== /PRICING GATE =====
@@ -1110,27 +1120,31 @@ function updateFileMeta() {
 
 function updateBillingUI() {
   if (!billingSelect || !billingHint) return;
+
   const billing = billingSelect.value;
-  const role = roleSelect.value;
 
   if (!billing) {
-    billingHint.textContent = 'You can decide this later. In beta we mostly use codes or manual billing via ops@proofrepo.com.';
+    billingHint.textContent =
+      'You can decide this later. In beta we mostly use codes or manual billing via ops@proofrepo.com.';
   } else if (billing === 'code') {
-    billingHint.textContent = 'Enter a code if you have one, or leave it blank in beta. We’ll mainly use codes for coverage.';
+    billingHint.textContent =
+      'If you have a code, you’ll enter it during the unlock step (right before upload).';
   } else if (billing === 'card') {
-    billingHint.textContent = 'Card payment via Stripe will live here. For now this is a placeholder — use codes or email ops@proofrepo.com.';
+    billingHint.textContent =
+      'Card payment via Stripe will live here. For now this is a placeholder — use codes or email ops@proofrepo.com.';
   }
 
-  if (billing === 'code' && role && role !== 'company') {
-    auditorCodeCol.style.display = 'block';
-  } else if (billing === 'code' && role === 'company') {
-    auditorCodeCol.style.display = 'none';
-  }
+  // Routing-row code input is NEVER shown.
+  // Codes are entered ONLY in the inline pay/unlock gate.
+  if (auditorCodeCol) auditorCodeCol.style.display = 'none';
 }
 
-// ===== DROP-IN REPLACEMENT: updateRoleUI (auditor flow fixed, no progress lost) =====
+// ===== DROP-IN REPLACEMENT: updateRoleUI (auditor flow + unlock-safe) =====
 function updateRoleUI() {
   const role = (roleSelect?.value || '').trim();
+  // Codes are entered ONLY at unlock time (pricing gate)
+if (auditorCodeCol) auditorCodeCol.style.display = 'none';
+
 
   // --- field refs we will toggle (no markup changes required) ---
   const contactRow = document.getElementById('contactRow');
@@ -1215,39 +1229,37 @@ function updateRoleUI() {
   // Contact row shown
   if (contactRow) contactRow.style.display = 'grid';
 
+  // ---------------------------------------------------------------
+
   // Role-specific copy + which fields show
   if (role === 'auditor') {
     emailLabel.textContent = 'Auditor / third-party email';
 
-    // IMPORTANT: auditor flow should collect client contact email in CONTACT row (validate() requires it)
+    // Auditor flow: require client contact email in CONTACT row (validate() requires it)
     if (clientContactColEl) clientContactColEl.style.display = 'block';
     if (companyColEl) companyColEl.style.display = 'none';
     if (companyInput) companyInput.required = false;
 
-    // Make routing row "clientEmail" redundant for auditors -> hide it to avoid confusion
-    // (you already have clientContactEmail above, and validate() checks that one)
+    // IMPORTANT: auditor flow should NOT show the routing-row "clientEmail" (redundant/confusing)
     if (clientEmailCol) clientEmailCol.style.display = 'none';
     if (clientEmailInput) clientEmailInput.value = '';
 
-    // If you still want a label for clientEmail elsewhere, keep it consistent anyway:
-    if (clientEmailLabelEl) clientEmailLabelEl.textContent = 'Client contact email';
-
-    // Helpful hint (your existing hint element is in routing row; keep message for future, but it will be hidden)
-    if (clientEmailHint) {
-      clientEmailHint.textContent =
-        'Client contact is collected above so we can associate the ProofPack with the right company.';
+    // Ensure required client contact field is obvious
+    if (clientContactEmailInput) {
+      clientContactEmailInput.placeholder = 'client@company.com';
+      clientContactEmailInput.required = true;
     }
 
-    // Make sure the required field is visually clear (optional: tweak placeholder)
-    if (clientContactEmailInput) clientContactEmailInput.placeholder = 'client@company.com';
+    // Keep label text consistent (even though routing clientEmail is hidden)
+    if (clientEmailLabelEl) clientEmailLabelEl.textContent = 'Client contact email';
 
     if (companyLabelEl) companyLabelEl.textContent = 'Client company (optional)';
 
     roleHint.textContent =
       'You’re an auditor or third party driving this pack. Enter your email + the client contact, then unlock to upload evidence.';
 
-    // Auditor role: hide auditorEmail (self) routing field; it’s already captured in email
-    auditorEmailCol.style.display = 'none';
+    // Auditor role: hide auditorEmail routing field (email is already captured)
+    if (auditorEmailCol) auditorEmailCol.style.display = 'none';
 
     // Auditor code hidden by default (shown only if they choose the code path)
     if (auditorCodeCol) auditorCodeCol.style.display = 'none';
@@ -1260,15 +1272,19 @@ function updateRoleUI() {
 
     // Client/company should show company, hide client contact email
     if (clientContactColEl) clientContactColEl.style.display = 'none';
+    if (clientContactEmailInput) {
+      clientContactEmailInput.required = false;
+      clientContactEmailInput.value = '';
+    }
     if (companyColEl) companyColEl.style.display = 'block';
 
     if (companyLabelEl) companyLabelEl.textContent = 'Your company (optional)';
     if (companyInput) companyInput.required = false;
 
-    // In this flow you CAN optionally add reviewer email
-    auditorEmailCol.style.display = 'block';
+    // Client can optionally add reviewer email
+    if (auditorEmailCol) auditorEmailCol.style.display = 'block';
 
-    // Hide routing clientEmail (it’s ambiguous next to reviewer email; not needed)
+    // Hide routing clientEmail (not needed)
     if (clientEmailCol) clientEmailCol.style.display = 'none';
     if (clientEmailInput) clientEmailInput.value = '';
 
@@ -1286,12 +1302,16 @@ function updateRoleUI() {
       'Direct company use: preparing for an audit or vendor review without an auditor driving this yet.';
 
     if (clientContactColEl) clientContactColEl.style.display = 'none';
+    if (clientContactEmailInput) {
+      clientContactEmailInput.required = false;
+      clientContactEmailInput.value = '';
+    }
     if (companyColEl) companyColEl.style.display = 'block';
 
     if (companyLabelEl) companyLabelEl.textContent = 'Your company (optional)';
     if (companyInput) companyInput.required = false;
 
-    auditorEmailCol.style.display = 'none';
+    if (auditorEmailCol) auditorEmailCol.style.display = 'none';
     if (clientEmailCol) clientEmailCol.style.display = 'none';
     if (clientEmailInput) clientEmailInput.value = '';
 
@@ -1306,10 +1326,6 @@ function updateRoleUI() {
 }
 // ===== END DROP-IN REPLACEMENT =====
 
-
-/* =======================
-   DROP-IN: validate()
-   ======================= */
 function validate() {
   // Must have role
   const role = (roleSelect?.value || '').trim();
@@ -1319,7 +1335,6 @@ function validate() {
   if (!isUnlocked) return 'Please click “Start guided ProofPack” to unlock uploads.';
 
   const email = (document.getElementById('email')?.value || '').trim().toLowerCase();
-  const company = (document.getElementById('company')?.value || '').trim();
 
   // Allowlist your own test emails
   const ALLOWLIST = new Set([
@@ -1395,74 +1410,87 @@ function validate() {
    END DROP-IN: validate()
    ======================= */
     
-    function gather(){
-      const fd = new FormData();
-      const planEl = document.getElementById('plan');
-      const cadenceEl = document.getElementById('cadence');
+function gather() {
+  const fd = new FormData();
+  const planEl = document.getElementById('plan');
+  const cadenceEl = document.getElementById('cadence');
 
-      fd.append('email', document.getElementById('email').value.trim());
-      fd.append('company', document.getElementById('company').value.trim());
-      fd.append('plan', planEl ? (planEl.value || 'Trial') : 'Trial');
-      fd.append('cadence', (cadenceEl && cadenceEl.value) ? cadenceEl.value : '');
-      fd.append('role', document.getElementById('role').value || 'client');
+  fd.append('email', (document.getElementById('email')?.value || '').trim());
+  fd.append('company', (document.getElementById('company')?.value || '').trim());
+  fd.append('plan', planEl ? (planEl.value || 'Trial') : 'Trial');
+  fd.append('cadence', (cadenceEl && cadenceEl.value) ? cadenceEl.value : '');
+  fd.append('role', (document.getElementById('role')?.value || 'client'));
 
-      if (billingSelect && billingSelect.value) {
-  fd.append('billingMode', billingSelect.value);
-}
+  // Auditor flow: send required client contact email
+  const clientContactEmail = (document.getElementById('clientContactEmail')?.value || '').trim();
+  if (clientContactEmail) fd.append('clientContactEmail', clientContactEmail);
 
-// Optional: if user used a code in the inline gate, send it along
-const codeFromGate = (unlockCodeEl?.value || '').trim();
-const codeFromAuditorField = (document.getElementById('auditorCode')?.value || '').trim();
-const finalCode = codeFromGate || codeFromAuditorField;
+  // Optional compatibility: also send as clientEmail if routing clientEmail empty
+  const routingClientEmail = (document.getElementById('clientEmail')?.value || '').trim();
+  if (clientContactEmail && !routingClientEmail) {
+    fd.append('clientEmail', clientContactEmail);
+  }
 
+  if (billingSelect && billingSelect.value) {
+    fd.append('billingMode', billingSelect.value);
+  }
+
+// Unlock code
+const finalCode = (unlockCodeEl?.value || '').trim();
 if (finalCode) fd.append('unlockCode', finalCode);
 
 
-      const frameworksSel = document.getElementById('frameworks');
-      Array.from(frameworksSel.selectedOptions || []).forEach(o => fd.append('frameworks', o.value));
+  // Frameworks
+  const frameworksSel = document.getElementById('frameworks');
+  Array.from(frameworksSel?.selectedOptions || []).forEach(o => fd.append('frameworks', o.value));
 
-      const notesEl = document.getElementById('notes');
-      fd.append('notes', notesEl ? notesEl.value.trim() : '');
+  // Notes
+  const notesEl = document.getElementById('notes');
+  fd.append('notes', notesEl ? notesEl.value.trim() : '');
 
-      const auditorCode = document.getElementById('auditorCode').value.trim();
-      const auditorEmail = document.getElementById('auditorEmail').value.trim();
-      const clientEmail = document.getElementById('clientEmail').value.trim();
-      if (auditorCode) fd.append('auditorCode', auditorCode);
-      if (auditorEmail) fd.append('auditorEmail', auditorEmail);
-      if (clientEmail) fd.append('clientEmail', clientEmail);
+// Routing fields (NO auditorCode — codes are only entered in pricing gate)
+const auditorEmail = (document.getElementById('auditorEmail')?.value || '').trim();
+const clientEmail  = (document.getElementById('clientEmail')?.value || '').trim();
+if (auditorEmail) fd.append('auditorEmail', auditorEmail);
+if (clientEmail)  fd.append('clientEmail', clientEmail);
 
-      const mapEl = document.getElementById('map');
-      let mapVal = mapEl ? mapEl.value.trim() : '';
 
-      // If user didn't hand-write JSON, synthesize from frameworkSelections
-      if (!mapVal) {
-        const autoMap = {};
-        Object.keys(frameworkSelections).forEach(fwKey => {
-          const cfg = FRAMEWORK_CONFIG[fwKey];
-          const sel = frameworkSelections[fwKey] || {};
-          if (!cfg) return;
-          (cfg.items || []).forEach(item => {
-            const filename = sel[item.id];
-            if (!filename) return;
-            if (fwKey === 'SOC2' && item.mapKey) {
-              // flat keys for compatibility with existing worker
-              autoMap[item.mapKey] = filename;
-            } else {
-              if (!autoMap[fwKey]) autoMap[fwKey] = {};
-              autoMap[fwKey][item.id] = filename;
-            }
-          });
-        });
-        if (Object.keys(autoMap).length) {
-          mapVal = JSON.stringify(autoMap);
+  // Map JSON (manual or synthesized from frameworkSelections)
+  const mapEl = document.getElementById('map');
+  let mapVal = mapEl ? mapEl.value.trim() : '';
+
+  if (!mapVal) {
+    const autoMap = {};
+    Object.keys(frameworkSelections).forEach(fwKey => {
+      const cfg = FRAMEWORK_CONFIG[fwKey];
+      const sel = frameworkSelections[fwKey] || {};
+      if (!cfg) return;
+
+      (cfg.items || []).forEach(item => {
+        const filename = sel[item.id];
+        if (!filename) return;
+
+        if (fwKey === 'SOC2' && item.mapKey) {
+          autoMap[item.mapKey] = filename; // flat keys for worker compatibility
+        } else {
+          if (!autoMap[fwKey]) autoMap[fwKey] = {};
+          autoMap[fwKey][item.id] = filename;
         }
-      }
+      });
+    });
 
-      if (mapVal) fd.append('map', mapVal);
-
-      Array.from(fileInput.files || []).forEach(f => fd.append('files', f, f.name));
-      return fd;
+    if (Object.keys(autoMap).length) {
+      mapVal = JSON.stringify(autoMap);
     }
+  }
+
+  if (mapVal) fd.append('map', mapVal);
+
+  // Files
+  Array.from(fileInput?.files || []).forEach(f => fd.append('files', f, f.name));
+
+  return fd;
+}
 
 document.getElementById('intakeForm').addEventListener('submit', async (e) => {
   e.preventDefault();
