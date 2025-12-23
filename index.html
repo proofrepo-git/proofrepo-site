@@ -851,19 +851,14 @@ if (applyUnlockCodeBtn) {
       return;
     }
 
-    // Optional micro-improvement:
-    // briefly acknowledge, then fully transition to unlocked state
-    if (unlockHint) unlockHint.textContent = 'Code applied. Unlocking…';
-
-    setUnlocked('OneOff');
-
-    // Clean up gate UI so code path matches paid path exactly
-    if (unlockHint) unlockHint.textContent = '';
+    // Delay unlock so the message is visible (150–300ms)
+const delay = 150 + Math.floor(Math.random() * 151); // 150..300
+setTimeout(() => {
+  setUnlocked('OneOff');
+  if (unlockHint) unlockHint.textContent = '';
+}, delay);
   });
 }
-// ===== /PRICING GATE =====
-
-
 
     // frameworkSelections[frameworkKey][itemId] = filename
     const frameworkSelections = {};
