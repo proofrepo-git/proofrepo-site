@@ -611,7 +611,12 @@
 
   <script>
     // IMPORTANT: stays pointed at your existing Intake Worker.
-    const INTAKE_URL = 'https://proofrepo-intake.atucker5.workers.dev/intake';
+    const WORKER_BASE = 'https://proofrepo-intake.atucker5.workers.dev';
+
+...
+
+const res = await fetch(`${WORKER_BASE}/intake`, { method: 'POST', body: gather() });
+
 
     const FRAMEWORK_CONFIG = {
       SOC2: {
@@ -734,6 +739,43 @@ if (fileInput) fileInput.disabled = true;
    (easy to find + replace)
    ======================= */
 
+async function submitAuditorRequest() {
+  const auditorEmail = (document.getElementById('email')?.value || '').trim();
+  const clientEmail  = (document.getElementById('clientContactEmail')?.value || '').trim();
+  const company      = (document.getElementById('company')?.value || '').trim();
+
+  const frameworks = Array.from(document.getElementById('frameworks')?.selectedOptions || [])
+    .map(o => o.value)
+    .filter(Boolean);
+
+  // minimal validation (keep it blunt)
+  const looksLikeEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(auditorEmail);
+  const looksLikeEmail2 = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clientEmail);
+  if (!looksLikeEmail) throw new Error('Enter a valid auditor email.');
+  if (!looksLikeEmail2) throw new Error('Enter a valid client email.');
+  if (!company) throw new Error('Enter the client company (required).');
+  if (!frameworks.length) throw new Error('Select at least one framework.');
+
+  const payload = {
+    auditorEmail,
+    clientEmail,
+    company,
+    frameworks,
+    deadlineISO: "" // ignore for now
+  };
+
+  const res = await fetch(`${WORKER_BASE}/request`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+
+  const j = await res.json().catch(() => null);
+  if (!res.ok || !j?.ok) throw new Error(j?.error || `Request failed (${res.status})`);
+  return j; // { ok, token, magicLink, emailedClient }
+}
+
+    
 // Single source of truth for "locked" UI state
 function resetUnlockState(opts = { clearFiles: true }) {
   isUnlocked = false;
@@ -820,12 +862,43 @@ function setUnlocked(planLabel) {
    STEP 3: START BTN HANDLER
    ======================= */
 if (startBtn) {
-  startBtn.addEventListener('click', () => {
+  startBtn.addEventListener('click', async () => {
     clearStatus();
     if (!requireRoleOrExplain()) return;
+
+    const role = (roleSelect?.value || '').trim();
+
+    // AUDITOR: send magic link request (no unlock, no upload)
+    if (role === 'auditor') {
+      startBtn.disabled = true;
+      const prev = startBtn.textContent;
+      startBtn.textContent = 'Sending…';
+      try {
+        const j = await submitAuditorRequest();
+        const emailed = j.emailedClient ? 'Yes' : 'No (email config issue)';
+        const link = safeUrl(j.magicLink) || j.magicLink || '';
+
+        showStatus(
+          `✅ Request created.<br>
+           <strong>Client emailed:</strong> ${esc(emailed)}<br><br>
+           <strong>Magic link (copy):</strong><br>
+           <a href="${esc(link)}" target="_blank" rel="noopener noreferrer">${esc(link)}</a>`,
+          true
+        );
+      } catch (e) {
+        showStatus(esc(e?.message || e), false);
+      } finally {
+        startBtn.disabled = false;
+        startBtn.textContent = prev;
+      }
+      return;
+    }
+
+    // NON-AUDITOR: keep your existing unlock flow
     openPricingGate();
   });
 }
+
 /* =======================
    END STEP 3
    ======================= */
@@ -1230,10 +1303,16 @@ if (auditorCodeCol) auditorCodeCol.style.display = 'none';
   if (role === 'auditor') {
     emailLabel.textContent = 'Auditor / third-party email';
 
-    // Auditor flow: require client contact email in CONTACT row (validate() requires it)
-    if (clientContactColEl) clientContactColEl.style.display = 'block';
-    if (companyColEl) companyColEl.style.display = 'none';
-    if (companyInput) companyInput.required = false;
+    // Auditor needs BOTH: client contact email + client company (worker requires company)
+if (clientContactColEl) clientContactColEl.style.display = 'block';
+if (companyColEl) companyColEl.style.display = 'block';
+
+if (companyInput) {
+  companyInput.required = true;
+  companyInput.placeholder = 'Client Company Inc.';
+}
+if (clientContactEmailInput) clientContactEmailInput.required = true;
+
 
     // IMPORTANT: auditor flow should NOT show the routing-row "clientEmail" (redundant/confusing)
     if (clientEmailCol) clientEmailCol.style.display = 'none';
@@ -1251,7 +1330,7 @@ if (auditorCodeCol) auditorCodeCol.style.display = 'none';
     if (companyLabelEl) companyLabelEl.textContent = 'Client company (optional)';
 
     roleHint.textContent =
-      'You’re an auditor or third party driving this pack. Enter your email + the client contact, then unlock to upload evidence.';
+  'You’re an auditor / third party. Enter your email + client email + client company, then we’ll email the client a secure upload link.';
 
     // Auditor role: hide auditorEmail routing field (email is already captured)
     if (auditorEmailCol) auditorEmailCol.style.display = 'none';
@@ -1530,7 +1609,7 @@ document.getElementById('intakeForm').addEventListener('submit', async (e) => {
   }
 
   try {
-    const res = await fetch(INTAKE_URL, { method: 'POST', body: gather() });
+    const res = await fetch(`${WORKER_BASE}/intake`, { method: 'POST', body: gather() });
     const text = await res.text();
 
     let json = null;
