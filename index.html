@@ -230,7 +230,7 @@
         </div>
         <!-- Company (optional) -->
 <div id="companyCol">
-  <label id="companyLabel" for="company">Company (optional)</label>
+  <label id="companyLabel" for="company">Company</label>
   <input id="company" name="company" placeholder="Company Inc." autocomplete="organization"/>
 </div>
 
@@ -612,10 +612,6 @@
   <script>
     // IMPORTANT: stays pointed at your existing Intake Worker.
     const WORKER_BASE = 'https://proofrepo-intake.atucker5.workers.dev';
-
-...
-
-const res = await fetch(`${WORKER_BASE}/intake`, { method: 'POST', body: gather() });
 
 
     const FRAMEWORK_CONFIG = {
