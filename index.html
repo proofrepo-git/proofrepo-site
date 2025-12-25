@@ -330,6 +330,7 @@
 
           <!-- Context (hidden cadence, visible notes) -->
           <input type="hidden" id="cadence" name="cadence" value="">
+          <input type="hidden" id="requestToken" name="requestToken" value="">
           <div class="form-row">
             <div>
               <label for="notes">Anything we should know?</label>
@@ -693,6 +694,15 @@ const safeUrl = (u) => {
 };    
 // ===== /PATCH UTILS =====
 
+// Read a query parameter from the URL, e.g. ?t=...
+function getQueryParam(name) {
+  const params = new URLSearchParams(window.location.search);
+  return params.get(name);
+}
+// ===== /QUERY PARAM HELPER =====
+
+
+    
     const statusEl = $('#status');
     const submitBtn = $('#submitBtn');
     const companyCol = document.getElementById('companyCol');
@@ -1446,6 +1456,66 @@ if (clientContactEmailInput) clientContactEmailInput.required = true;
 }
 // ===== END DROP-IN REPLACEMENT =====
 
+async function prefillFromRequestToken() {
+  const token = getQueryParam('t');
+  if (!token) return; // normal visitors: nothing to do
+
+  // Remember token so we can send it with the upload
+  const requestTokenInput = document.getElementById('requestToken');
+  if (requestTokenInput) requestTokenInput.value = token;
+
+  // Ask the Worker for details about this request
+  let res;
+  try {
+    res = await fetch(`${WORKER_BASE}/request?t=${encodeURIComponent(token)}`, {
+      method: 'GET',
+      headers: { 'accept': 'application/json' }
+    });
+  } catch (err) {
+    console.warn('Prefill lookup failed:', err);
+    return;
+  }
+
+  let j = null;
+  try {
+    j = await res.json();
+  } catch (_) {
+    return;
+  }
+
+  if (!res.ok || !j || j.ok === false) {
+    // Invalid / expired token => don't prefill
+    return;
+  }
+
+  // Treat this visitor as "client from link"
+  if (roleSelect) {
+    roleSelect.value = 'client';
+    updateRoleUI();
+  }
+
+  const emailInput   = document.getElementById('email');
+  const companyInput = document.getElementById('company');
+  const auditorEmailRouting = document.getElementById('auditorEmail');
+
+  if (emailInput && j.clientEmail)   emailInput.value   = j.clientEmail;
+  if (companyInput && j.company)     companyInput.value = j.company;
+  if (auditorEmailRouting && j.auditorEmail) {
+    auditorEmailRouting.value = j.auditorEmail;
+  }
+
+  // Preselect frameworks if provided (e.g. ["SOC2","ISO27001"])
+  if (Array.isArray(j.frameworks) && frameworksSelectEl) {
+    const wanted = new Set(j.frameworks);
+    Array.from(frameworksSelectEl.options).forEach(opt => {
+      opt.selected = wanted.has(opt.value);
+    });
+  }
+
+  // Client came from a paid request, so skip pricing gate and unlock uploads
+  setUnlocked(j.planLabel || 'OneOff');
+}
+    
 function validate() {
   // Must have role
   const role = (roleSelect?.value || '').trim();
@@ -1534,12 +1604,18 @@ function gather() {
   const fd = new FormData();
   const planEl = document.getElementById('plan');
   const cadenceEl = document.getElementById('cadence');
+  const requestTokenEl = document.getElementById('requestToken');
 
   fd.append('email', (document.getElementById('email')?.value || '').trim());
   fd.append('company', (document.getElementById('company')?.value || '').trim());
   fd.append('plan', planEl ? (planEl.value || 'Trial') : 'Trial');
   fd.append('cadence', (cadenceEl && cadenceEl.value) ? cadenceEl.value : '');
   fd.append('role', (document.getElementById('role')?.value || 'client'));
+
+    // If this upload came from an emailed request, include the request token
+  if (requestTokenEl && requestTokenEl.value) {
+    fd.append('requestToken', requestTokenEl.value);
+  }
 
   // Auditor flow: send required client contact email
   const clientContactEmail = (document.getElementById('clientContactEmail')?.value || '').trim();
@@ -1731,9 +1807,11 @@ updateRoleUI();
 updateBillingUI();
 renderFrameworkGuides();
 updateFileMeta();
+prefillFromRequestToken();  // prefill if this is a client coming from an emailed link
 /* =======================
    END DROP-IN: wiring
    ======================= */
+
 
   </script>
 
