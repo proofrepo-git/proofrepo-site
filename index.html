@@ -430,9 +430,21 @@
       <div id="status" class="status" style="display:none"></div>
 
       <div class="wiz-actions step-after-role" id="actionsRow" style="display:none;gap:10px;justify-content:flex-end">
-  <button id="startBtn" class="btn primary" type="button">Start guided ProofPack</button>
-  <button id="submitBtn" class="btn primary" type="submit" style="display:none">Send and build ProofPack</button>
+  <button id="startBtn" class="btn primary" type="button">
+    Start guided ProofPack
+  </button>
+
+  <!-- Auditor-only, shown AFTER unlock -->
+  <button id="sendReqBtn" class="btn primary" type="button" style="display:none">
+    Send request to client
+  </button>
+
+  <!-- Normal upload submit (client/company & client-from-link) -->
+  <button id="submitBtn" class="btn primary" type="submit" style="display:none">
+    Send and build ProofPack
+  </button>
 </div>
+
     </form>
   </section>
 
@@ -688,6 +700,8 @@ const safeUrl = (u) => {
     const clientContactEmailEl = document.getElementById('clientContactEmail');
     const companyEl = document.getElementById('company');
 
+    const startBtn   = document.getElementById('startBtn');
+    const sendReqBtn = document.getElementById('sendReqBtn');
 
     const roleSelect = $('#role');
     const emailLabel = $('#emailLabel');
@@ -722,7 +736,6 @@ const fileMeta  = document.getElementById('fileMeta');  // <div id="fileMeta"> .
 
     // ===== PRICING GATE (inline) =====
 const pricingGate = document.getElementById('pricingGate');
-const startBtn = document.getElementById('startBtn');
 const unlockCodeEl = document.getElementById('unlockCode');
 const applyUnlockCodeBtn = document.getElementById('applyUnlockCodeBtn');
 const unlockHint = document.getElementById('unlockHint');
@@ -780,6 +793,7 @@ function resetUnlockState(opts = { clearFiles: true }) {
   if (pricingGate) pricingGate.style.display = 'none';
   if (startBtn) startBtn.style.display = 'inline-flex';
   if (submitBtn) submitBtn.style.display = 'none';
+  if (sendReqBtn) sendReqBtn.style.display = 'none';
 
   // Clear unlock UI
 if (unlockCodeEl) unlockCodeEl.value = '';
@@ -834,72 +848,108 @@ function openPricingGate() {
 
 function setUnlocked(planLabel) {
   isUnlocked = true;
-  if (fileInput) fileInput.disabled = false;
 
-    // Show uploads now that we’re unlocked
-  if (fileBox) fileBox.style.display = 'block';
+  const role = (roleSelect?.value || '').trim();
 
-
-  // Optional: store chosen plan label in existing hidden plan selector (keeps your backend labeling)
+  // Optional: store chosen plan label in existing hidden plan selector
   const planEl = document.getElementById('plan');
   if (planEl && planLabel) planEl.value = planLabel;
 
-  // Hide gate, swap buttons
+  // Close the pricing gate, hide the start button
   if (pricingGate) pricingGate.style.display = 'none';
   if (startBtn) startBtn.style.display = 'none';
-  if (submitBtn) submitBtn.style.display = 'inline-flex';
 
-  // Now allow guidance + file meta to render
-  updateFileMeta();
-  renderFrameworkGuides();
+  if (role === 'auditor') {
+    // AUDITOR FLOW: no uploads here, just send client request
+    if (fileInput) {
+      fileInput.disabled = true;
+      fileInput.value = '';
+    }
+    if (fileBox) fileBox.style.display = 'none';
+
+    if (sendReqBtn) sendReqBtn.style.display = 'inline-flex';
+    if (submitBtn) submitBtn.style.display = 'none';
+
+    // No need to render upload guidance for auditors
+    if (frameworkGuides) {
+      frameworkGuides.style.display = 'none';
+      frameworkGuides.innerHTML = '';
+    }
+  } else {
+    // CLIENT / COMPANY FLOW: normal uploads
+    if (fileInput) fileInput.disabled = false;
+    if (fileBox) fileBox.style.display = 'block';
+
+    if (submitBtn) submitBtn.style.display = 'inline-flex';
+    if (sendReqBtn) sendReqBtn.style.display = 'none';
+
+    // Now allow guidance + file meta to render
+    updateFileMeta();
+    renderFrameworkGuides();
+  }
 }
 
 /* =======================
    STEP 3: START BTN HANDLER
    ======================= */
 if (startBtn) {
-  startBtn.addEventListener('click', async () => {
+  startBtn.addEventListener('click', () => {
     clearStatus();
     if (!requireRoleOrExplain()) return;
 
-    const role = (roleSelect?.value || '').trim();
-
-    // AUDITOR: send magic link request (no unlock, no upload)
-    if (role === 'auditor') {
-      startBtn.disabled = true;
-      const prev = startBtn.textContent;
-      startBtn.textContent = 'Sending…';
-      try {
-        const j = await submitAuditorRequest();
-        const emailed = j.emailedClient ? 'Yes' : 'No (email config issue)';
-        const link = safeUrl(j.magicLink) || j.magicLink || '';
-
-        showStatus(
-          `✅ Request created.<br>
-           <strong>Client emailed:</strong> ${esc(emailed)}<br><br>
-           <strong>Magic link (copy):</strong><br>
-           <a href="${esc(link)}" target="_blank" rel="noopener noreferrer">${esc(link)}</a>`,
-          true
-        );
-      } catch (e) {
-        showStatus(esc(e?.message || e), false);
-      } finally {
-        startBtn.disabled = false;
-        startBtn.textContent = prev;
-      }
-      return;
-    }
-
-    // NON-AUDITOR: keep your existing unlock flow
+    // For ALL roles, first open pricing / code gate.
+    // After unlock, auditors will see "Send request to client",
+    // others will see the normal upload submit button.
     openPricingGate();
   });
 }
-
 /* =======================
    END STEP 3
    ======================= */
 
+// AUDITOR-ONLY: after unlock, actually send the client request
+if (sendReqBtn) {
+  sendReqBtn.addEventListener('click', async () => {
+    clearStatus();
 
+    const role = (roleSelect?.value || '').trim();
+    if (role !== 'auditor') {
+      // Safety: this button is only meaningful for auditors
+      return;
+    }
+
+    sendReqBtn.disabled = true;
+    const prev = sendReqBtn.textContent;
+    sendReqBtn.textContent = 'Sending request…';
+
+    try {
+      const j = await submitAuditorRequest();
+
+      const emailed = j?.emailedClient ? 'Yes' : 'No (email config issue)';
+
+      // Backend currently returns j.magicLink; we just label it clearly
+      const link =
+        safeUrl(j?.clientUploadLink || j?.magicLink) ||
+        j?.clientUploadLink ||
+        j?.magicLink ||
+        '';
+
+      showStatus(
+        `✅ Client upload request created.<br>
+         <strong>Client emailed:</strong> ${esc(emailed)}<br><br>
+         <strong>Client upload link (copy):</strong><br>
+         <a href="${esc(link)}" target="_blank" rel="noopener noreferrer">${esc(link)}</a>`,
+        true
+      );
+    } catch (e) {
+      showStatus(esc(e?.message || e), false);
+    } finally {
+      sendReqBtn.disabled = false;
+      sendReqBtn.textContent = prev;
+    }
+  });
+}
+    
 // Click one-off "Continue" => unlock (bundle buttons are mailto for now)
 if (pricingGate) {
   pricingGate.addEventListener('click', (e) => {
