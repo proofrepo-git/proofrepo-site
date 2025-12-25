@@ -1357,17 +1357,20 @@ if (auditorCodeCol) auditorCodeCol.style.display = 'none';
 
   // Role-specific copy + which fields show
   if (role === 'auditor') {
-    emailLabel.textContent = 'Auditor / third-party email';
+  emailLabel.textContent = 'Auditor / third-party email';
 
-    // Auditor needs BOTH: client contact email + client company (worker requires company)
-if (clientContactColEl) clientContactColEl.style.display = 'block';
-if (companyColEl) companyColEl.style.display = 'block';
+  // Auditor needs BOTH: client contact email + client company (worker requires company)
+  if (clientContactColEl) clientContactColEl.style.display = 'block';
+  if (companyColEl) companyColEl.style.display = 'block';
 
-if (companyInput) {
-  companyInput.required = true;
-  companyInput.placeholder = 'Client Company Inc.';
-}
-if (clientContactEmailInput) clientContactEmailInput.required = true;
+  if (companyInput) {
+    companyInput.required = true;
+    companyInput.placeholder = 'Client Company Inc.';
+  }
+  // 🔴 FIX: label should not say "(optional)" if it's required
+  if (companyLabelEl) companyLabelEl.textContent = 'Client company';
+
+  if (clientContactEmailInput) clientContactEmailInput.required = true;
 
 
     // IMPORTANT: auditor flow should NOT show the routing-row "clientEmail" (redundant/confusing)
