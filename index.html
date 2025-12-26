@@ -1415,70 +1415,59 @@ if (auditorCodeCol) auditorCodeCol.style.display = 'none';
   if (auditorCodeCol) auditorCodeCol.style.display = 'none';
   if (auditorCodeInput) auditorCodeInput.value = '';
 
+} else if (role === 'client') {
+  emailLabel.textContent = 'Your email';
+  roleHint.textContent =
+    'Use this if an auditor or third party pointed you here to upload evidence.';
 
-    roleHint.textContent =
-  'You’re an auditor / third party. Enter your email + client email + client company, then we’ll email the client a secure upload link.';
-
-    // Auditor role: hide auditorEmail routing field (email is already captured)
-    if (auditorEmailCol) auditorEmailCol.style.display = 'none';
-
-    // Auditor code hidden by default (shown only if they choose the code path)
-    if (auditorCodeCol) auditorCodeCol.style.display = 'none';
-    if (auditorCodeInput) auditorCodeInput.value = '';
-
-  } else if (role === 'client') {
-    emailLabel.textContent = 'Your email';
-    roleHint.textContent =
-      'Use this if an auditor or third party pointed you here to upload evidence.';
-
-    // Client/company should show company, hide client contact email
-    if (clientContactColEl) clientContactColEl.style.display = 'none';
-    if (clientContactEmailInput) {
-      clientContactEmailInput.required = false;
-      clientContactEmailInput.value = '';
-    }
-    if (companyColEl) companyColEl.style.display = 'block';
-
-    if (companyLabelEl) companyLabelEl.textContent = 'Your company (optional)';
-    if (companyInput) companyInput.required = false;
-
-    // Client can optionally add reviewer email
-    if (auditorEmailCol) auditorEmailCol.style.display = 'block';
-
-    // Hide routing clientEmail (not needed)
-    if (clientEmailCol) clientEmailCol.style.display = 'none';
-    if (clientEmailInput) clientEmailInput.value = '';
-
-    if (auditorEmailHint) {
-      auditorEmailHint.textContent =
-        'If you know the reviewer’s email, add it so we can also route the ProofPack to them.';
-    }
-
-    if (auditorCodeCol) auditorCodeCol.style.display = 'none';
-    if (auditorCodeInput) auditorCodeInput.value = '';
-
-  } else { // company
-    emailLabel.textContent = 'Your email';
-    roleHint.textContent =
-      'Direct company use: preparing for an audit or vendor review without an auditor driving this yet.';
-
-    if (clientContactColEl) clientContactColEl.style.display = 'none';
-    if (clientContactEmailInput) {
-      clientContactEmailInput.required = false;
-      clientContactEmailInput.value = '';
-    }
-    if (companyColEl) companyColEl.style.display = 'block';
-
-    if (companyLabelEl) companyLabelEl.textContent = 'Your company (optional)';
-    if (companyInput) companyInput.required = false;
-
-    if (auditorEmailCol) auditorEmailCol.style.display = 'none';
-    if (clientEmailCol) clientEmailCol.style.display = 'none';
-    if (clientEmailInput) clientEmailInput.value = '';
-
-    if (auditorCodeCol) auditorCodeCol.style.display = 'none';
-    if (auditorCodeInput) auditorCodeInput.value = '';
+  // Client/company should show company, hide client contact email
+  if (clientContactColEl) clientContactColEl.style.display = 'none';
+  if (clientContactEmailInput) {
+    clientContactEmailInput.required = false;
+    clientContactEmailInput.value = '';
   }
+  if (companyColEl) companyColEl.style.display = 'block';
+
+  if (companyLabelEl) companyLabelEl.textContent = 'Your company (optional)';
+  if (companyInput) companyInput.required = false;
+
+  // Client can optionally add reviewer email
+  if (auditorEmailCol) auditorEmailCol.style.display = 'block';
+
+  // Hide routing clientEmail (not needed)
+  if (clientEmailCol) clientEmailCol.style.display = 'none';
+  if (clientEmailInput) clientEmailInput.value = '';
+
+  if (auditorEmailHint) {
+    auditorEmailHint.textContent =
+      'If you know the reviewer’s email, add it so we can also route the ProofPack to them.';
+  }
+
+  if (auditorCodeCol) auditorCodeCol.style.display = 'none';
+  if (auditorCodeInput) auditorCodeInput.value = '';
+
+} else { // company
+  emailLabel.textContent = 'Your email';
+  roleHint.textContent =
+    'Direct company use: preparing for an audit or vendor review without an auditor driving this yet.';
+
+  if (clientContactColEl) clientContactColEl.style.display = 'none';
+  if (clientContactEmailInput) {
+    clientContactEmailInput.required = false;
+    clientContactEmailInput.value = '';
+  }
+  if (companyColEl) companyColEl.style.display = 'block';
+
+  if (companyLabelEl) companyLabelEl.textContent = 'Your company (optional)';
+  if (companyInput) companyInput.required = false;
+
+  if (auditorEmailCol) auditorEmailCol.style.display = 'none';
+  if (clientEmailCol) clientEmailCol.style.display = 'none';
+  if (clientEmailInput) clientEmailInput.value = '';
+
+  if (auditorCodeCol) auditorCodeCol.style.display = 'none';
+  if (auditorCodeInput) auditorCodeInput.value = '';
+}
 
   // Keep billing + guide UI coherent with role
   updateBillingUI();
