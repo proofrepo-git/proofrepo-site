@@ -694,12 +694,33 @@ const safeUrl = (u) => {
 };    
 // ===== /PATCH UTILS =====
 
-// Read a query parameter from the URL, e.g. ?t=...
-function getQueryParam(name) {
-  const params = new URLSearchParams(window.location.search);
-  return params.get(name);
+// Try hard to pull a request token from the URL, in multiple shapes.
+function getRequestTokenFromUrl() {
+  try {
+    const url = new URL(window.location.href);
+
+    // 1) Look in normal query params under a few possible names
+    const params = url.searchParams;
+    const names = ['t', 'token', 'requestToken', 'request', 'r'];
+    for (const name of names) {
+      const v = params.get(name);
+      if (v) return v;
+    }
+
+    // 2) Look in the hash (e.g. #t=..., #token=...)
+    const hash = url.hash || '';
+    const hashMatch = hash.match(/(?:t|token|requestToken|request|r)=([^&]+)/i);
+    if (hashMatch) return decodeURIComponent(hashMatch[1]);
+
+    // 3) Look in the path (e.g. /r/ABC123, /request/ABC123)
+    const pathMatch = url.pathname.match(/\/(?:r|t|request)\/([^/]+)/i);
+    if (pathMatch) return pathMatch[1];
+  } catch (e) {
+    console.warn('Token parse error:', e);
+  }
+  return null;
 }
-// ===== /QUERY PARAM HELPER =====
+
 
 
     
@@ -1367,26 +1388,33 @@ if (auditorCodeCol) auditorCodeCol.style.display = 'none';
     companyInput.required = true;
     companyInput.placeholder = 'Client Company Inc.';
   }
-  // 🔴 FIX: label should not say "(optional)" if it's required
   if (companyLabelEl) companyLabelEl.textContent = 'Client company';
 
   if (clientContactEmailInput) clientContactEmailInput.required = true;
 
+  // IMPORTANT: auditor flow should NOT show the routing-row "clientEmail" (redundant/confusing)
+  if (clientEmailCol) clientEmailCol.style.display = 'none';
+  if (clientEmailInput) clientEmailInput.value = '';
 
-    // IMPORTANT: auditor flow should NOT show the routing-row "clientEmail" (redundant/confusing)
-    if (clientEmailCol) clientEmailCol.style.display = 'none';
-    if (clientEmailInput) clientEmailInput.value = '';
+  // Ensure required client contact field is obvious
+  if (clientContactEmailInput) {
+    clientContactEmailInput.placeholder = 'client@company.com';
+    clientContactEmailInput.required = true;
+  }
 
-    // Ensure required client contact field is obvious
-    if (clientContactEmailInput) {
-      clientContactEmailInput.placeholder = 'client@company.com';
-      clientContactEmailInput.required = true;
-    }
+  // Keep label text consistent (even though routing clientEmail is hidden)
+  if (clientEmailLabelEl) clientEmailLabelEl.textContent = 'Client contact email';
 
-    // Keep label text consistent (even though routing clientEmail is hidden)
-    if (clientEmailLabelEl) clientEmailLabelEl.textContent = 'Client contact email';
+  roleHint.textContent =
+    'You’re an auditor / third party. Enter your email + client email + client company, then we’ll email the client a secure upload link.';
 
-    if (companyLabelEl) companyLabelEl.textContent = 'Client company (optional)';
+  // Auditor role: hide auditorEmail routing field (email is already captured)
+  if (auditorEmailCol) auditorEmailCol.style.display = 'none';
+
+  // Auditor code hidden by default (shown only if they choose the code path)
+  if (auditorCodeCol) auditorCodeCol.style.display = 'none';
+  if (auditorCodeInput) auditorCodeInput.value = '';
+
 
     roleHint.textContent =
   'You’re an auditor / third party. Enter your email + client email + client company, then we’ll email the client a secure upload link.';
@@ -1460,7 +1488,8 @@ if (auditorCodeCol) auditorCodeCol.style.display = 'none';
 // ===== END DROP-IN REPLACEMENT =====
 
 async function prefillFromRequestToken() {
-  const token = getQueryParam('t');
+  const token = getRequestTokenFromUrl();
+  console.log('Request token from URL:', token);
   if (!token) return; // normal visitors: nothing to do
 
   // Remember token so we can send it with the upload
@@ -1483,12 +1512,50 @@ async function prefillFromRequestToken() {
   try {
     j = await res.json();
   } catch (_) {
+    console.warn('Prefill JSON parse failed');
     return;
   }
 
   if (!res.ok || !j || j.ok === false) {
-    // Invalid / expired token => don't prefill
-    return;
+  console.warn('Prefill response not ok:', j);
+  // Uncomment while debugging:
+  // showStatus('This request link is invalid or expired. Ask your auditor to resend.', false);
+  return;
+}
+
+  // Normalize possible field names from the worker
+    const clientEmailVal =
+    j.clientEmail ||
+    j.clientContactEmail ||
+    j.client_email ||
+    j.client ||
+    j.email ||
+    '';
+
+  const companyVal =
+    j.company ||
+    j.clientCompany ||
+    j.client_company ||
+    j.org ||
+    '';
+
+  const auditorEmailVal =
+    j.auditorEmail ||
+    j.auditor_email ||
+    j.reviewerEmail ||
+    j.reviewer_email ||
+    '';
+
+    // Normalize frameworks: either array or comma-separated string
+  let frameworkVals = [];
+  if (Array.isArray(j.frameworks)) {
+    frameworkVals = j.frameworks;
+  } else if (typeof j.frameworks === 'string') {
+    frameworkVals = j.frameworks.split(',').map(s => s.trim()).filter(Boolean);
+  } else if (Array.isArray(j.framework_ids)) {
+    frameworkVals = j.framework_ids;
+  } else if (typeof j.framework_ids === 'string') {
+    frameworkVals = j.framework_ids.split(',').map(s => s.trim()).filter(Boolean);
   }
 
   // Treat this visitor as "client from link"
@@ -1501,15 +1568,15 @@ async function prefillFromRequestToken() {
   const companyInput = document.getElementById('company');
   const auditorEmailRouting = document.getElementById('auditorEmail');
 
-  if (emailInput && j.clientEmail)   emailInput.value   = j.clientEmail;
-  if (companyInput && j.company)     companyInput.value = j.company;
-  if (auditorEmailRouting && j.auditorEmail) {
-    auditorEmailRouting.value = j.auditorEmail;
+  if (emailInput && clientEmailVal)   emailInput.value   = clientEmailVal;
+  if (companyInput && companyVal)     companyInput.value = companyVal;
+  if (auditorEmailRouting && auditorEmailVal) {
+    auditorEmailRouting.value = auditorEmailVal;
   }
 
-  // Preselect frameworks if provided (e.g. ["SOC2","ISO27001"])
-  if (Array.isArray(j.frameworks) && frameworksSelectEl) {
-    const wanted = new Set(j.frameworks);
+  // Preselect frameworks if provided
+  if (frameworkVals.length && frameworksSelectEl) {
+    const wanted = new Set(frameworkVals);
     Array.from(frameworksSelectEl.options).forEach(opt => {
       opt.selected = wanted.has(opt.value);
     });
