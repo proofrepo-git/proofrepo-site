@@ -1510,69 +1510,6 @@ async function prefillFromRequestToken() {
   }
 
   // Normalize possible field names from the worker
-  const clientEmailVal =
-    j.clientEmail ||
-    j.clientContactEmail ||
-    j.client_email ||
-    j.client ||
-    j.email ||
-    '';
-
-  const companyVal =
-    j.company ||
-    j.clientCompany ||
-    j.client_company ||
-    j.org ||
-    '';
-
-  const auditorEmailVal =
-    j.auditorEmail ||
-    j.auditor_email ||
-    j.reviewerEmail ||
-    j.reviewer_email ||
-    '';
-
-  // Normalize frameworks: either array or comma-separated string
-  let frameworkVals = [];
-  if (Array.isArray(j.frameworks)) {
-    frameworkVals = j.frameworks;
-  } else if (typeof j.frameworks === 'string') {
-    frameworkVals = j.frameworks.split(',').map(s => s.trim()).filter(Boolean);
-  } else if (Array.isArray(j.framework_ids)) {
-    frameworkVals = j.framework_ids;
-  } else if (typeof j.framework_ids === 'string') {
-    frameworkVals = j.framework_ids.split(',').map(s => s.trim()).filter(Boolean);
-  }
-
-  // Treat this visitor as "client from link"
-  if (roleSelect) {
-    roleSelect.value = 'client';
-    updateRoleUI();
-  }
-
-  const emailInput   = document.getElementById('email');
-  const companyInput = document.getElementById('company');
-  const auditorEmailRouting = document.getElementById('auditorEmail');
-
-  if (emailInput && clientEmailVal)   emailInput.value   = clientEmailVal;
-  if (companyInput && companyVal)     companyInput.value = companyVal;
-  if (auditorEmailRouting && auditorEmailVal) {
-    auditorEmailRouting.value = auditorEmailVal;
-  }
-
-  // Preselect frameworks if provided
-  if (frameworkVals.length && frameworksSelectEl) {
-    const wanted = new Set(frameworkVals);
-    Array.from(frameworksSelectEl.options).forEach(opt => {
-      opt.selected = wanted.has(opt.value);
-    });
-  }
-
-  // Client came from a paid request, so skip pricing gate and unlock uploads
-  setUnlocked(j.planLabel || 'OneOff');
-}
-
-  // Normalize possible field names from the worker
     const clientEmailVal =
     j.clientEmail ||
     j.clientContactEmail ||
