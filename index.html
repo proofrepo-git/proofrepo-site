@@ -768,6 +768,11 @@ const applyUnlockCodeBtn = document.getElementById('applyUnlockCodeBtn');
 const unlockHint = document.getElementById('unlockHint');
 
 let isUnlocked = false;
+let isFromRequestLink = false;        // NEW
+let hasFrameworkOverride = false;     // NEW
+let hasCompanyOverride   = false;     // NEW
+let hasAuditorOverride   = false;     // NEW
+
 if (fileInput) fileInput.disabled = true;
 
 /* =======================
@@ -1509,8 +1514,11 @@ async function prefillFromRequestToken() {
     return;
   }
 
+  // This visitor came from an emailed request link
+  isFromRequestLink = true;
+
   // Normalize possible field names from the worker
-    const clientEmailVal =
+  const clientEmailVal =
     j.clientEmail ||
     j.clientContactEmail ||
     j.client_email ||
@@ -1532,7 +1540,7 @@ async function prefillFromRequestToken() {
     j.reviewer_email ||
     '';
 
-    // Normalize frameworks: either array or comma-separated string
+  // Normalize frameworks: either array or comma-separated string
   let frameworkVals = [];
   if (Array.isArray(j.frameworks)) {
     frameworkVals = j.frameworks;
@@ -1568,10 +1576,96 @@ async function prefillFromRequestToken() {
     });
   }
 
+  // Attach soft-lock guards now that we know what was set by the auditor
+  attachPrefillGuards({
+    companyVal,
+    auditorEmailVal,
+    frameworkVals
+  });
+
   // Client came from a paid request, so skip pricing gate and unlock uploads
   setUnlocked(j.planLabel || 'OneOff');
 }
 
+function attachPrefillGuards(prefill) {
+  if (!isFromRequestLink || !prefill) return;
+
+  const { companyVal, auditorEmailVal, frameworkVals } = prefill;
+
+  // --- Frameworks multi-select guard ---
+  if (frameworksSelectEl && Array.isArray(frameworkVals) && frameworkVals.length) {
+    const original = [...frameworkVals];
+    const originalSet = new Set(original);
+
+    frameworksSelectEl.addEventListener('change', () => {
+      if (hasFrameworkOverride) return;
+
+      const current = Array.from(frameworksSelectEl.selectedOptions || []).map(o => o.value);
+      const changed =
+        current.length !== original.length ||
+        current.some(v => !originalSet.has(v));
+
+      if (!changed) return;
+
+      const ok = window.confirm(
+        'These frameworks were set by your auditor. Are you sure you want to change them?'
+      );
+
+      if (!ok) {
+        // Revert to original selection
+        Array.from(frameworksSelectEl.options).forEach(opt => {
+          opt.selected = originalSet.has(opt.value);
+        });
+        renderFrameworkGuides();
+        return;
+      }
+
+      hasFrameworkOverride = true;
+    });
+  }
+
+  // --- Company guard ---
+  const companyInput = document.getElementById('company');
+  if (companyInput && companyVal) {
+    const originalCompany = companyVal;
+    companyInput.addEventListener('change', () => {
+      if (hasCompanyOverride) return;
+      const now = (companyInput.value || '').trim();
+      if (now === originalCompany.trim()) return;
+
+      const ok = window.confirm(
+        'The client company was set by your auditor. Are you sure you want to change it?'
+      );
+      if (!ok) {
+        companyInput.value = originalCompany;
+        return;
+      }
+      hasCompanyOverride = true;
+    });
+  }
+
+  // --- Auditor / reviewer email guard ---
+  const auditorEmailRouting = document.getElementById('auditorEmail');
+  if (auditorEmailRouting && auditorEmailVal) {
+    const originalAud = auditorEmailVal;
+    auditorEmailRouting.addEventListener('change', () => {
+      if (hasAuditorOverride) return;
+      const now = (auditorEmailRouting.value || '').trim();
+      if (now === originalAud.trim()) return;
+
+      const ok = window.confirm(
+        'The reviewer email was set by your auditor. Are you sure you want to change it?'
+      );
+      if (!ok) {
+        auditorEmailRouting.value = originalAud;
+        return;
+      }
+      hasAuditorOverride = true;
+    });
+  }
+}
+
+    
 function validate() {
   // Must have role
   const role = (roleSelect?.value || '').trim();
