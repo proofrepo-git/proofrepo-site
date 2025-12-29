@@ -1076,12 +1076,14 @@ if (optionalDetails) {
   const files = Array.from(fileInput?.files || []);
 
 
-// Hide until frameworks selected AND at least 1 file exists
-if (!selectedKeys.length || !files.length) {
-  frameworkGuides.style.display = 'none';
-  frameworkGuides.innerHTML = '';
-  return;
-}
+  // Hide until at least one framework is selected
+  // (we now allow showing the checklist even before files are uploaded)
+  if (!selectedKeys.length) {
+    frameworkGuides.style.display = 'none';
+    frameworkGuides.innerHTML = '';
+    return;
+  }
+
 
 
       frameworkGuides.style.display = '';
@@ -1552,11 +1554,22 @@ async function prefillFromRequestToken() {
     frameworkVals = j.framework_ids.split(',').map(s => s.trim()).filter(Boolean);
   }
 
-  // Treat this visitor as "client from link"
-  if (roleSelect) {
-    roleSelect.value = 'client';
-    updateRoleUI();
+  // Treat this visitor as "client from link" (HARD LOCK)
+if (roleSelect) {
+  roleSelect.value = 'client';
+  updateRoleUI();
+
+  // Prevent switching roles if link came from auditor email
+  if (typeof isFromRequestLink !== 'undefined' && isFromRequestLink === true) {
+    roleSelect.disabled = true; // LOCKED FIELD
+
+    // Update the helper text so the client knows why it's locked
+    if (roleHint) {
+      roleHint.textContent =
+        'Your auditor sent you this link. Your role is set as the client for guided evidence upload.';
+    }
   }
+}
 
   const emailInput   = document.getElementById('email');
   const companyInput = document.getElementById('company');
