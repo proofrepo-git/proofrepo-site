@@ -823,6 +823,7 @@ async function submitAuditorRequest() {
 // Single source of truth for "locked" UI state
 function resetUnlockState(opts = { clearFiles: true }) {
   isUnlocked = false;
+  appliedCode = null; 
 
   // Hide gate + swap buttons
   if (pricingGate) pricingGate.style.display = 'none';
