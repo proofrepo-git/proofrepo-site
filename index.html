@@ -767,6 +767,9 @@ const unlockCodeEl = document.getElementById('unlockCode');
 const applyUnlockCodeBtn = document.getElementById('applyUnlockCodeBtn');
 const unlockHint = document.getElementById('unlockHint');
 
+// Remember a code that successfully passed /check-code
+let appliedCode = null;
+
 let isUnlocked = false;
 let isFromRequestLink = false;        // NEW
 let hasFrameworkOverride = false;     // NEW
@@ -992,24 +995,53 @@ if (pricingGate) {
   });
 }
 
-// Apply code => unlock (client-side for now; later you’ll verify server-side)
+// Apply code => validate against Worker, then unlock + remember code
 if (applyUnlockCodeBtn) {
-  applyUnlockCodeBtn.addEventListener('click', () => {
-    const code = (unlockCodeEl?.value || '').trim();
+  applyUnlockCodeBtn.addEventListener('click', async () => {
+    clearStatus?.();
+
+    const raw = (unlockCodeEl?.value || '').trim();
+    const code = raw.toUpperCase();
 
     if (!code) {
       if (unlockHint) unlockHint.textContent = 'Enter a code.';
       return;
     }
 
-    // Delay unlock so the message is visible (150–300ms)
-const delay = 150 + Math.floor(Math.random() * 151); // 150..300
-setTimeout(() => {
-  setUnlocked('OneOff');
-  if (unlockHint) unlockHint.textContent = '';
-}, delay);
+    let j;
+    try {
+      const res = await fetch(
+        `${WORKER_BASE}/check-code?code=${encodeURIComponent(code)}`,
+        { method: 'GET', headers: { accept: 'application/json' } }
+      );
+
+      j = await res.json().catch(() => null);
+
+      if (!res.ok || !j || j.ok === false) {
+        const msg = (j && j.error) ? j.error : 'Code is not valid.';
+        throw new Error(msg);
+      }
+    } catch (e) {
+      appliedCode = null;
+      if (unlockHint) unlockHint.textContent = e.message || 'Code is not valid.';
+      return;
+    }
+
+    // Store accepted code so gather() can send it as auditorCode
+    appliedCode = j.code || code;
+
+    if (unlockHint) {
+      const rem = (typeof j.remaining === 'number') ? j.remaining : '?';
+      const bundle = (typeof j.bundleSize === 'number') ? j.bundleSize : null;
+      const tail = bundle != null ? ` ${rem} of ${bundle}` : ` ${rem}`;
+      unlockHint.textContent = `Code accepted.${tail ? ` Remaining credits:${tail}.` : ''}`;
+    }
+
+    // Unlock main flow using "Code" as the plan label
+    setUnlocked('Code');
   });
 }
+
 
     // frameworkSelections[frameworkKey][itemId] = filename
     const frameworkSelections = {};
@@ -1794,13 +1826,15 @@ function gather() {
     fd.append('clientEmail', clientContactEmail);
   }
 
-  if (billingSelect && billingSelect.value) {
+    if (billingSelect && billingSelect.value) {
     fd.append('billingMode', billingSelect.value);
   }
 
-// Unlock code
-const finalCode = (unlockCodeEl?.value || '').trim();
-if (finalCode) fd.append('unlockCode', finalCode);
+  // If a code was successfully applied at the pricing gate, send it through
+  if (appliedCode) {
+    fd.append('auditorCode', appliedCode);
+  }
+
 
 
   // Frameworks
@@ -1937,12 +1971,29 @@ document.getElementById('intakeForm').addEventListener('submit', async (e) => {
       ? `<br><strong>Manifest key:</strong> <code>${esc(json.manifestKey)}</code>`
       : '';
 
-    const emailOk =
+        const emailOk =
       (json.emailOk === true) ? 'Yes' :
       (json.emailOk === false) ? 'No (check email config)' :
       'Unknown';
 
     const emailBlock = `<br><strong>Email sent:</strong> ${esc(emailOk)}`;
+
+    // NEW: credit status, if present
+    let creditBlock = '';
+    const c = json.credit;
+    if (c && c.code) {
+      if (c.error) {
+        creditBlock =
+          `<br><strong>Code:</strong> ${esc(c.code)} — ` +
+          `<span style="color:#fca5a5">${esc(c.error)}</span>`;
+      } else {
+        const rem = (typeof c.remaining === 'number') ? c.remaining : '?';
+        const bundle = (typeof c.bundleSize === 'number') ? c.bundleSize : null;
+        const tail = bundle != null ? `${rem} of ${bundle}` : `${rem}`;
+        creditBlock =
+          `<br><strong>Code:</strong> ${esc(c.code)} — remaining credits: ${esc(String(tail))}`;
+      }
+    }
 
     const fixEnds = json.fixWindowEndsAt
       ? `<br><strong>Fix window ends:</strong> ${esc(json.fixWindowEndsAt)}`
@@ -1951,9 +2002,10 @@ document.getElementById('intakeForm').addEventListener('submit', async (e) => {
     showStatus(
       `✅ Received! <strong>${esc(filesCount)}</strong> file(s) saved.<br>
        A ProofPack email will arrive shortly.${missingBlock}${linkHtml}
-       <div class="small">${emailBlock}${fixEnds}${manifestKey}${packUrlHtml}</div>`,
+       <div class="small">${emailBlock}${creditBlock}${fixEnds}${manifestKey}${packUrlHtml}</div>`,
       true
     );
+
   } catch (err) {
     showStatus(esc(`Network error: ${err?.message || err}`), false);
   } finally {
