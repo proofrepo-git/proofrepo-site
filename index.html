@@ -275,11 +275,6 @@
             <!-- ROUTING (non-payment routing fields only; codes are entered in the unlock gate) -->
       <div class="form-row three step-after-role" id="routingRow" style="display:none">
         <div id="auditorCodeCol" style="display:none">
-          <label for="auditorCode">Auditor / third-party code (optional)</label>
-          <input id="auditorCode" name="auditorCode" placeholder="Short code (e.g. TEST123)"/>
-          <div class="hint" id="auditorCodeHint">
-            If you have a code from an auditor / reviewer, enter it now so your ProofPack is routed correctly.
-          </div>
         </div>
 
         <div id="auditorEmailCol">
@@ -1719,6 +1714,12 @@ function validate() {
 
   // Must be unlocked (gate)
   if (!isUnlocked) return 'Please click “Start guided ProofPack” to unlock uploads.';
+
+  // Auditors should not submit uploads from this screen — they use the
+  // "Send request to client" button instead.
+  if (role === 'auditor') {
+    return 'As an auditor, use “Send request to client” above to email your client a secure upload link.';
+  }
 
   const email = (document.getElementById('email')?.value || '').trim().toLowerCase();
 
