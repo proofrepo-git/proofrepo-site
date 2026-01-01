@@ -803,6 +803,11 @@ async function submitAuditorRequest() {
     deadlineISO: "" // ignore for now
   };
 
+  // 🔹 NEW: attach the applied bundle code so /request can store it
+  if (appliedCode) {
+    payload.auditorCode = appliedCode;
+  }
+
   const res = await fetch(`${WORKER_BASE}/request`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
@@ -813,6 +818,7 @@ async function submitAuditorRequest() {
   if (!res.ok || !j?.ok) throw new Error(j?.error || `Request failed (${res.status})`);
   return j; // { ok, token, magicLink, emailedClient }
 }
+
 
     
 // Single source of truth for "locked" UI state
