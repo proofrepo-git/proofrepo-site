@@ -696,7 +696,7 @@ function getRequestTokenFromUrl() {
 
     // 1) Look in normal query params under a few possible names
     const params = url.searchParams;
-    const names = ['t', 'token', 'requestToken', 'request', 'r'];
+    const names = ['t', 'token', 'requestToken', 'request', 'r', 'prev']; // <-- added prev
     for (const name of names) {
       const v = params.get(name);
       if (v) return v;
@@ -704,18 +704,17 @@ function getRequestTokenFromUrl() {
 
     // 2) Look in the hash (e.g. #t=..., #token=...)
     const hash = url.hash || '';
-    const hashMatch = hash.match(/(?:t|token|requestToken|request|r)=([^&]+)/i);
+    const hashMatch = hash.match(/(?:t|token|requestToken|request|r|prev)=([^&]+)/i); // <-- added prev
     if (hashMatch) return decodeURIComponent(hashMatch[1]);
 
     // 3) Look in the path (e.g. /r/ABC123, /request/ABC123)
-    const pathMatch = url.pathname.match(/\/(?:r|t|request)\/([^/]+)/i);
+    const pathMatch = url.pathname.match(/\/(?:r|t|request|prev)\/([^/]+)/i); // <-- added prev
     if (pathMatch) return pathMatch[1];
   } catch (e) {
     console.warn('Token parse error:', e);
   }
   return null;
 }
-
 
 
     
@@ -1550,18 +1549,106 @@ if (auditorCodeCol) auditorCodeCol.style.display = 'none';
 // ===== END DROP-IN REPLACEMENT =====
 
 async function prefillFromRequestToken() {
-  const token = getRequestTokenFromUrl();
+  const url = new URL(window.location.href);
+
+  // Two modes:
+  //  A) Client magic link:   ?t=<token>  (or token/requestToken/etc) => resolve() + lock as client
+  //  B) Auditor resend link: ?prev=<token>&auditorEmail=...&clientEmail=...&company=...&frameworks=... => lock as auditor + prefill
+
+  const token =
+    url.searchParams.get('t') ||
+    url.searchParams.get('token') ||
+    url.searchParams.get('requestToken') ||
+    url.searchParams.get('request') ||
+    url.searchParams.get('r') ||
+    null;
+
+  const prev =
+    url.searchParams.get('prev') ||
+    url.searchParams.get('previous') ||
+    null;
+
+  // Helper to parse frameworks from query or from worker response
+  const parseFrameworks = (v) => {
+    if (!v) return [];
+    if (Array.isArray(v)) return v.filter(Boolean);
+    if (typeof v === 'string') {
+      return v
+        .split(',')
+        .map(s => s.trim())
+        .filter(Boolean);
+    }
+    return [];
+  };
+
+  // =========================
+  // MODE B: Auditor prefill
+  // =========================
+  if (prev) {
+    isFromRequestLink = true;
+
+    const auditorEmailVal = (url.searchParams.get('auditorEmail') || '').trim();
+    const clientEmailVal  = (url.searchParams.get('clientEmail') || '').trim();
+    const companyVal      = (url.searchParams.get('company') || '').trim();
+    const frameworkVals   = parseFrameworks(url.searchParams.get('frameworks'));
+
+    // Force auditor role + lock it
+    if (roleSelect) {
+      roleSelect.value = 'auditor';
+      updateRoleUI();
+
+      roleSelect.disabled = true;
+      if (roleHint) {
+        roleHint.textContent =
+          'This link is for your auditor flow. Review the details below, set a new deadline, then resend.';
+      }
+    }
+
+    // Fill auditor email into the main email field
+    const emailInput = document.getElementById('email');
+    if (emailInput && auditorEmailVal) emailInput.value = auditorEmailVal;
+
+    // Auditor flow uses clientContactEmail (NOT routing clientEmail)
+    const clientContact = document.getElementById('clientContactEmail');
+    if (clientContact && clientEmailVal) clientContact.value = clientEmailVal;
+
+    // Company is required for auditor role
+    const companyInput = document.getElementById('company');
+    if (companyInput && companyVal) companyInput.value = companyVal;
+
+    // Frameworks selection
+    if (frameworkVals.length && frameworksSelectEl) {
+      const wanted = new Set(frameworkVals);
+      Array.from(frameworksSelectEl.options).forEach(opt => {
+        opt.selected = wanted.has(opt.value);
+      });
+    }
+
+    // Keep the old token around so backend can associate resend -> original thread (optional)
+    const requestTokenInput = document.getElementById('requestToken');
+    if (requestTokenInput) requestTokenInput.value = prev;
+
+    // IMPORTANT:
+    // We do NOT auto-unlock (pricing gate) for auditors.
+    // Auditors should click Start -> apply code/unlock -> then Send request to client.
+    // So we stop here.
+    return;
+  }
+
+  // =========================
+  // MODE A: Client magic link
+  // =========================
+  if (!token) return; // normal visitors
+
   console.log('Request token from URL:', token);
-  if (!token) return; // normal visitors: nothing to do
 
   // Remember token so we can send it with the upload
   const requestTokenInput = document.getElementById('requestToken');
   if (requestTokenInput) requestTokenInput.value = token;
 
-  // Ask the Worker for details about this request
+  // Fetch details from intake worker
   let res;
   try {
-    // Hit the resolver directly; Worker maps t -> KV record
     res = await fetch(`${WORKER_BASE}/resolve?t=${encodeURIComponent(token)}`, {
       method: 'GET',
       headers: { accept: 'application/json' },
@@ -1581,15 +1668,11 @@ async function prefillFromRequestToken() {
 
   if (!res.ok || !j || j.ok === false) {
     console.warn('Prefill response not ok:', j);
-    // Uncomment while debugging if you want to surface this to the user:
-    // showStatus('This request link is invalid or expired. Ask your auditor to resend.', false);
     return;
   }
 
-  // This visitor came from an emailed request link
   isFromRequestLink = true;
 
-  // Normalize possible field names from the worker
   const clientEmailVal =
     j.clientEmail ||
     j.clientContactEmail ||
@@ -1612,34 +1695,42 @@ async function prefillFromRequestToken() {
     j.reviewer_email ||
     '';
 
-  // Normalize frameworks: either array or comma-separated string
-  let frameworkVals = [];
-  if (Array.isArray(j.frameworks)) {
-    frameworkVals = j.frameworks;
-  } else if (typeof j.frameworks === 'string') {
-    frameworkVals = j.frameworks.split(',').map(s => s.trim()).filter(Boolean);
-  } else if (Array.isArray(j.framework_ids)) {
-    frameworkVals = j.framework_ids;
-  } else if (typeof j.framework_ids === 'string') {
-    frameworkVals = j.framework_ids.split(',').map(s => s.trim()).filter(Boolean);
-  }
+  const frameworkVals = parseFrameworks(j.frameworks || j.framework_ids);
 
-  // Treat this visitor as "client from link" (HARD LOCK)
-if (roleSelect) {
-  roleSelect.value = 'client';
-  updateRoleUI();
+  // Force client role + lock it (client upload flow)
+  if (roleSelect) {
+    roleSelect.value = 'client';
+    updateRoleUI();
 
-  // Prevent switching roles if link came from auditor email
-  if (typeof isFromRequestLink !== 'undefined' && isFromRequestLink === true) {
-    roleSelect.disabled = true; // LOCKED FIELD
-
-    // Update the helper text so the client knows why it's locked
+    roleSelect.disabled = true;
     if (roleHint) {
       roleHint.textContent =
         'Your auditor sent you this link. Your role is set as the client for guided evidence upload.';
     }
   }
+
+  const emailInput = document.getElementById('email');
+  const companyInput = document.getElementById('company');
+  const auditorEmailRouting = document.getElementById('auditorEmail');
+
+  if (emailInput && clientEmailVal) emailInput.value = clientEmailVal;
+  if (companyInput && companyVal) companyInput.value = companyVal;
+  if (auditorEmailRouting && auditorEmailVal) auditorEmailRouting.value = auditorEmailVal;
+
+  if (frameworkVals.length && frameworksSelectEl) {
+    const wanted = new Set(frameworkVals);
+    Array.from(frameworksSelectEl.options).forEach(opt => {
+      opt.selected = wanted.has(opt.value);
+    });
+  }
+
+  // Guards (optional but fine to keep)
+  attachPrefillGuards({ companyVal, auditorEmailVal, frameworkVals });
+
+  // Client came from a paid request (or auditor code), so skip pricing gate and unlock uploads
+  setUnlocked(j.planLabel || 'OneOff');
 }
+
 async function prefillFromAuditorResendLink() {
   let url;
   try { url = new URL(window.location.href); } catch { return; }
