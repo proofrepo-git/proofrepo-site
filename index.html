@@ -222,7 +222,7 @@
       </div>
 
       <!-- Contact -->
-      <div class="form-row two step-after-role" id="contactRow" style="display:none">
+      <div class="form-row three step-after-role" id="contactRow" style="display:none">
         <div>
           <label id="emailLabel" for="email">Work email</label>
          <input id="email" name="email" type="email" required placeholder="you@company.com" autocomplete="email"/>
@@ -242,6 +242,31 @@
 </div>
 
       </div>
+
+<!-- Deadline (AUDITOR only) -->
+<div class="form-row step-after-role" id="deadlineRow" style="display:none">
+  <div class="form-row two">
+    <div>
+      <label for="deadlineDays">Evidence deadline</label>
+      <select id="deadlineDays" name="deadlineDays">
+        <option value="3">3 days</option>
+        <option value="5" selected>5 days</option>
+        <option value="7">7 days</option>
+        <option value="10">10 days</option>
+        <option value="14">14 days</option>
+        <option value="21">21 days</option>
+        <option value="30">30 days</option>
+      </select>
+      <div class="hint">This powers automatic reminder + deadline follow-ups.</div>
+    </div>
+
+    <div>
+      <label for="deadlineTimeLocal">Time (local)</label>
+      <input id="deadlineTimeLocal" name="deadlineTimeLocal" type="time" value="17:00" />
+      <div class="hint">Defaults to 5:00pm your local time.</div>
+    </div>
+  </div>
+</div>
 
       <!-- Frameworks -->
       <div class="form-row step-after-role" id="frameworkRow" style="display:none">
@@ -796,13 +821,25 @@ async function submitAuditorRequest() {
   if (!company) throw new Error('Enter the client company (required).');
   if (!frameworks.length) throw new Error('Select at least one framework.');
 
+  // Build deadlineISO from "days from now" + local time
+  const days = parseInt((document.getElementById('deadlineDays')?.value || '5'), 10);
+  const timeStr = (document.getElementById('deadlineTimeLocal')?.value || '17:00').trim(); // HH:MM
+  const [hh, mm] = timeStr.split(':').map(x => parseInt(x, 10));
+
+  const d = new Date();
+  d.setDate(d.getDate() + (Number.isFinite(days) ? days : 5));
+  d.setHours(Number.isFinite(hh) ? hh : 17, Number.isFinite(mm) ? mm : 0, 0, 0);
+
+  const deadlineISO = d.toISOString();
+
   const payload = {
     auditorEmail,
     clientEmail,
     company,
     frameworks,
-    deadlineISO: "" // ignore for now
+    deadlineISO
   };
+
 
   // 🔹 NEW: attach the applied bundle code so /request can store it
   if (appliedCode) {
@@ -1456,6 +1493,11 @@ if (auditorCodeCol) auditorCodeCol.style.display = 'none';
   if (clientContactColEl) clientContactColEl.style.display = 'block';
   if (companyColEl) companyColEl.style.display = 'block';
 
+  // Deadline row is auditor-only
+  const deadlineRow = document.getElementById('deadlineRow');
+  if (deadlineRow) deadlineRow.style.display = 'block';
+
+
   if (companyInput) {
     companyInput.required = true;
     companyInput.placeholder = 'Client Company Inc.';
@@ -1492,6 +1534,10 @@ if (auditorCodeCol) auditorCodeCol.style.display = 'none';
   roleHint.textContent =
     'Use this if an auditor or third party pointed you here to upload evidence.';
 
+  const deadlineRow = document.getElementById('deadlineRow');
+  if (deadlineRow) deadlineRow.style.display = 'none';
+
+
   // Client/company should show company, hide client contact email
   if (clientContactColEl) clientContactColEl.style.display = 'none';
   if (clientContactEmailInput) {
@@ -1522,6 +1568,9 @@ if (auditorCodeCol) auditorCodeCol.style.display = 'none';
   emailLabel.textContent = 'Your email';
   roleHint.textContent =
     'Direct company use: preparing for an audit or vendor review without an auditor driving this yet.';
+
+  const deadlineRow = document.getElementById('deadlineRow');
+  if (deadlineRow) deadlineRow.style.display = 'none';
 
   if (clientContactColEl) clientContactColEl.style.display = 'none';
   if (clientContactEmailInput) {
@@ -1755,35 +1804,6 @@ async function prefillFromAuditorResendLink() {
 
   // If we have a stored code, auto-apply it to skip the pricing gate
   await autoUnlockFromStoredCodeIfPossible();
-}
-
-  const emailInput   = document.getElementById('email');
-  const companyInput = document.getElementById('company');
-  const auditorEmailRouting = document.getElementById('auditorEmail');
-
-  if (emailInput && clientEmailVal)   emailInput.value   = clientEmailVal;
-  if (companyInput && companyVal)     companyInput.value = companyVal;
-  if (auditorEmailRouting && auditorEmailVal) {
-    auditorEmailRouting.value = auditorEmailVal;
-  }
-
-  // Preselect frameworks if provided
-  if (frameworkVals.length && frameworksSelectEl) {
-    const wanted = new Set(frameworkVals);
-    Array.from(frameworksSelectEl.options).forEach(opt => {
-      opt.selected = wanted.has(opt.value);
-    });
-  }
-
-  // Attach soft-lock guards now that we know what was set by the auditor
-  attachPrefillGuards({
-    companyVal,
-    auditorEmailVal,
-    frameworkVals
-  });
-
-  // Client came from a paid request, so skip pricing gate and unlock uploads
-  setUnlocked(j.planLabel || 'OneOff');
 }
 
 function attachPrefillGuards(prefill) {
