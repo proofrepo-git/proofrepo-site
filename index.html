@@ -1582,60 +1582,6 @@ async function prefillFromRequestToken() {
   };
 
   // =========================
-  // MODE B: Auditor prefill
-  // =========================
-  if (prev) {
-    isFromRequestLink = true;
-
-    const auditorEmailVal = (url.searchParams.get('auditorEmail') || '').trim();
-    const clientEmailVal  = (url.searchParams.get('clientEmail') || '').trim();
-    const companyVal      = (url.searchParams.get('company') || '').trim();
-    const frameworkVals   = parseFrameworks(url.searchParams.get('frameworks'));
-
-    // Force auditor role + lock it
-    if (roleSelect) {
-      roleSelect.value = 'auditor';
-      updateRoleUI();
-
-      roleSelect.disabled = true;
-      if (roleHint) {
-        roleHint.textContent =
-          'This link is for your auditor flow. Review the details below, set a new deadline, then resend.';
-      }
-    }
-
-    // Fill auditor email into the main email field
-    const emailInput = document.getElementById('email');
-    if (emailInput && auditorEmailVal) emailInput.value = auditorEmailVal;
-
-    // Auditor flow uses clientContactEmail (NOT routing clientEmail)
-    const clientContact = document.getElementById('clientContactEmail');
-    if (clientContact && clientEmailVal) clientContact.value = clientEmailVal;
-
-    // Company is required for auditor role
-    const companyInput = document.getElementById('company');
-    if (companyInput && companyVal) companyInput.value = companyVal;
-
-    // Frameworks selection
-    if (frameworkVals.length && frameworksSelectEl) {
-      const wanted = new Set(frameworkVals);
-      Array.from(frameworksSelectEl.options).forEach(opt => {
-        opt.selected = wanted.has(opt.value);
-      });
-    }
-
-    // Keep the old token around so backend can associate resend -> original thread (optional)
-    const requestTokenInput = document.getElementById('requestToken');
-    if (requestTokenInput) requestTokenInput.value = prev;
-
-    // IMPORTANT:
-    // We do NOT auto-unlock (pricing gate) for auditors.
-    // Auditors should click Start -> apply code/unlock -> then Send request to client.
-    // So we stop here.
-    return;
-  }
-
-  // =========================
   // MODE A: Client magic link
   // =========================
   if (!token) return; // normal visitors
@@ -1738,8 +1684,14 @@ async function prefillFromAuditorResendLink() {
   const role = (url.searchParams.get('role') || '').toLowerCase();
   const flow = (url.searchParams.get('flow') || '').toLowerCase();
 
-  // Only run for auditor resend links
-  if (role !== 'auditor' && flow !== 'request') return;
+  const mode = (url.searchParams.get('mode') || '').toLowerCase();
+
+  const isAuditorResend =
+    (role === 'auditor' && flow === 'request') ||
+    (mode === 'auditor' && url.searchParams.get('prev'));
+
+  if (!isAuditorResend) return;
+
 
   // Pull fields from query params (from follow-up worker link)
   const auditorEmailVal = url.searchParams.get('auditorEmail') || '';
