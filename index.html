@@ -764,6 +764,8 @@ const unlockHint = document.getElementById('unlockHint');
 
 // Remember a code that successfully passed /check-code
 let appliedCode = null;
+const CODE_STORAGE_KEY = 'proofrepo_applied_code';
+
 
 let isUnlocked = false;
 let isFromRequestLink = false;        // NEW
@@ -883,6 +885,38 @@ function openPricingGate() {
   if (pricingGate) pricingGate.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+async function autoUnlockFromStoredCodeIfPossible() {
+  // Only helpful for auditor resend links
+  const role = (roleSelect?.value || '').trim();
+  if (role !== 'auditor') return;
+
+  let stored = null;
+  try { stored = (localStorage.getItem(CODE_STORAGE_KEY) || '').trim(); } catch {}
+  if (!stored) return;
+
+  // If already unlocked, do nothing
+  if (isUnlocked) return;
+
+  // Fill the UI field for visibility
+  if (unlockCodeEl) unlockCodeEl.value = stored;
+
+  // Attempt to validate + unlock automatically
+  try {
+    const res = await fetch(
+      `${WORKER_BASE}/check-code?code=${encodeURIComponent(stored)}`,
+      { method: 'GET', headers: { accept: 'application/json' } }
+    );
+    const j = await res.json().catch(() => null);
+    if (!res.ok || !j || j.ok === false) return;
+
+    appliedCode = j.code || stored;
+    setUnlocked('Code');
+  } catch {
+    // Silent: if this fails, auditor can still manually press Start + Apply code
+  }
+}
+
+    
 function setUnlocked(planLabel) {
   isUnlocked = true;
 
@@ -1031,6 +1065,8 @@ if (applyUnlockCodeBtn) {
 
     // Store accepted code so gather() can send it as auditorCode
     appliedCode = j.code || code;
+    try { localStorage.setItem(CODE_STORAGE_KEY, appliedCode); } catch {}
+
 
     if (unlockHint) {
       const rem = (typeof j.remaining === 'number') ? j.remaining : '?';
@@ -1604,6 +1640,79 @@ if (roleSelect) {
     }
   }
 }
+async function prefillFromAuditorResendLink() {
+  let url;
+  try { url = new URL(window.location.href); } catch { return; }
+
+  const role = (url.searchParams.get('role') || '').toLowerCase();
+  const flow = (url.searchParams.get('flow') || '').toLowerCase();
+
+  // Only run for auditor resend links
+  if (role !== 'auditor' && flow !== 'request') return;
+
+  // Pull fields from query params (from follow-up worker link)
+  const auditorEmailVal = url.searchParams.get('auditorEmail') || '';
+  const clientEmailVal  = url.searchParams.get('clientEmail') || '';
+  const companyVal      = url.searchParams.get('company') || '';
+  const frameworksRaw   = url.searchParams.get('frameworks') || '';
+  const expanded        = url.searchParams.get('expanded') || '0';
+  const prevToken       = url.searchParams.get('prev') || '';
+
+  const frameworkVals = frameworksRaw
+    ? frameworksRaw.split(',').map(s => s.trim()).filter(Boolean)
+    : [];
+
+  // Set role to auditor and build the correct UI
+  if (roleSelect) {
+    roleSelect.value = 'auditor';
+    updateRoleUI();
+
+    // Optional: prevent changing roles when coming from resend link
+    roleSelect.disabled = true;
+
+    if (roleHint) {
+      roleHint.textContent =
+        'Prefilled from your previous request. Update the deadline (coming soon) and click “Send request to client”.';
+    }
+  }
+
+  // Fill auditor + client fields
+  const auditorEmailInput = document.getElementById('email'); // auditor email for auditor role
+  const clientContactEmailInput = document.getElementById('clientContactEmail'); // shown for auditor role
+  const companyInput = document.getElementById('company');
+
+  if (auditorEmailInput && auditorEmailVal) auditorEmailInput.value = auditorEmailVal;
+  if (clientContactEmailInput && clientEmailVal) clientContactEmailInput.value = clientEmailVal;
+  if (companyInput && companyVal) companyInput.value = companyVal;
+
+  // Preselect frameworks
+  if (frameworkVals.length && frameworksSelectEl) {
+    const wanted = new Set(frameworkVals);
+    Array.from(frameworksSelectEl.options).forEach(opt => {
+      opt.selected = wanted.has(opt.value);
+    });
+  }
+
+  // Store prev token for later (if you add deadline + resend API, you’ll use this)
+  const requestTokenInput = document.getElementById('requestToken');
+  if (requestTokenInput && prevToken) requestTokenInput.value = prevToken;
+
+  // Expand optional details if requested
+  if (expanded === '1') {
+    const optionalRow = document.getElementById('optionalRow');
+    if (optionalRow) {
+      optionalRow.style.display = '';
+      optionalRow.open = true;
+    }
+  }
+
+  // Scroll user to the form
+  const requestSection = document.getElementById('request');
+  if (requestSection) requestSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // If we have a stored code, auto-apply it to skip the pricing gate
+  await autoUnlockFromStoredCodeIfPossible();
+}
 
   const emailInput   = document.getElementById('email');
   const companyInput = document.getElementById('company');
@@ -2034,7 +2143,9 @@ updateRoleUI();
 updateBillingUI();
 renderFrameworkGuides();
 updateFileMeta();
-prefillFromRequestToken();  // prefill if this is a client coming from an emailed link
+prefillFromAuditorResendLink(); // auditor resend link prefill (role=auditor&flow=request...)
+prefillFromRequestToken();      // client magic link prefill (t=...)
+
 /* =======================
    END DROP-IN: wiring
    ======================= */
