@@ -1643,11 +1643,8 @@ if (auditorCodeCol) auditorCodeCol.style.display = 'none';
 // ===== END DROP-IN REPLACEMENT =====
 
 async function prefillFromRequestToken() {
-  const url = new URL(window.location.href);
-
-  // Two modes:
-  //  A) Client magic link:   ?t=<token>  (or token/requestToken/etc) => resolve() + lock as client
-  //  B) Auditor resend link: ?prev=<token>&auditorEmail=...&clientEmail=...&company=...&frameworks=... => lock as auditor + prefill
+  let url;
+  try { url = new URL(window.location.href); } catch { return; }
 
   // If this is an auditor resend link (?prev=...), do NOT treat it like a client token link.
   const isAuditorResend = !!(url.searchParams.get('prev') || url.searchParams.get('previous'));
@@ -1661,74 +1658,47 @@ async function prefillFromRequestToken() {
     url.searchParams.get('r') ||
     null;
 
-
   // Helper to parse frameworks from query or from worker response
   const parseFrameworks = (v) => {
     if (!v) return [];
     if (Array.isArray(v)) return v.filter(Boolean);
     if (typeof v === 'string') {
-      return v
-        .split(',')
-        .map(s => s.trim())
-        .filter(Boolean);
+      return v.split(',').map(s => s.trim()).filter(Boolean);
     }
     return [];
   };
 
-  // =========================
-  // MODE A: Client magic link
-  // =========================
-  if (!token) return; // normal visitors
+  // If no token, do nothing (normal visitor)
+  if (!token) return;
 
-  // HARD HIDE unlock UI immediately for token visitors (even before /resolve returns)
+  // Token visitors should NEVER see pricing / unlock.
   isFromRequestLink = true;
-
-  // Hide the pricing gate + Start button while we resolve
   if (pricingGate) pricingGate.style.display = 'none';
   if (startBtn) startBtn.style.display = 'none';
 
-  // Optional: give a tiny status message so it doesn’t feel broken
+  // Also hide the standalone pricing section just in case
+  if (pricingSection) pricingSection.style.display = 'none';
+
   showStatus('Verifying your link…', true);
 
-
-  // Hide the pricing gate + Start button while we resolve
-  if (pricingGate) pricingGate.style.display = 'none';
-  if (startBtn) startBtn.style.display = 'none';
-
-  // Optional: give a tiny status message so it doesn’t feel broken
-  showStatus('Verifying your link…', true);
-
-
-  console.log('Request token from URL:', token);
-
-  // Remember token so we can send it with the upload
+  // Store token so gather() can attach it as fd.append('t', token)
   const requestTokenInput = document.getElementById('requestToken');
   if (requestTokenInput) requestTokenInput.value = token;
 
-  // Fetch details from intake worker
-  let res;
+  // Call worker resolve
+  let res, j;
   try {
     res = await fetch(`${WORKER_BASE}/resolve?t=${encodeURIComponent(token)}`, {
       method: 'GET',
       headers: { accept: 'application/json' },
     });
+    j = await res.json().catch(() => null);
   } catch (err) {
-    console.warn('Prefill lookup failed:', err);
-    return;
-  }
-
-  let j = null;
-  try {
-    j = await res.json();
-  } catch (_) {
-    console.warn('Prefill JSON parse failed');
+    showStatus(`⚠️ ${esc('Could not verify link. Please try again or ask your auditor to resend.')}`, false);
     return;
   }
 
   if (!res.ok || !j || j.ok === false) {
-    clearStatus();
-
-    // Try to detect "already used" / "expired" / "invalid"
     const rawMsg = String((j && (j.error || j.message)) || '').toLowerCase();
 
     const isUsed =
@@ -1748,23 +1718,46 @@ async function prefillFromRequestToken() {
     if (isUsed) msg = 'This upload link has already been used.';
     else if (isExpired) msg = 'This upload link is expired or invalid.';
 
-    // Show a clear message
     showStatus(
       `⚠️ ${esc(msg)}<br><br>` +
       `Please ask your auditor / third party to send a new upload link.`,
       false
     );
 
-    // IMPORTANT: if we arrived via ?t=..., hide unlock UI so they never see pricing/code
+    // Ensure pricing gate never appears for token links
     if (pricingGate) pricingGate.style.display = 'none';
     if (startBtn) startBtn.style.display = 'none';
 
     return;
   }
-}
 
-  isFromRequestLink = true;
+  // ✅ If worker tells us it's already submitted, show viewer + hide form.
+  // (Supports multiple shapes so we don't depend on one exact worker JSON.)
+  const status = String(j.status || '').toLowerCase();
+  const looksSubmitted =
+    status === 'submitted' ||
+    j.submitted === true ||
+    j.idempotent === true ||
+    (!!j.manifestKey && (j.viewerUrl || j.packUrl));
 
+  if (looksSubmitted) {
+    const viewer = safeUrl(j.viewerUrl || j.packUrl);
+    const linkHtml = viewer
+      ? `<br><br><a class="btn primary" href="${esc(viewer)}" target="_blank" rel="noopener noreferrer">Open existing ProofPack viewer</a>`
+      : '';
+
+    showStatus(
+      `⚠️ This link was already used. No new upload is needed (and no new emails should be sent).${linkHtml}`,
+      false
+    );
+
+    // Hide the entire form UI to prevent re-upload confusion
+    const form = document.getElementById('intakeForm');
+    if (form) form.style.display = 'none';
+    return;
+  }
+
+  // If pending, prefill and force client role
   const clientEmailVal =
     j.clientEmail ||
     j.clientContactEmail ||
@@ -1789,11 +1782,10 @@ async function prefillFromRequestToken() {
 
   const frameworkVals = parseFrameworks(j.frameworks || j.framework_ids);
 
-  // Force client role + lock it (client upload flow)
+  // Force client role + lock it
   if (roleSelect) {
     roleSelect.value = 'client';
     updateRoleUI();
-
     roleSelect.disabled = true;
     if (roleHint) {
       roleHint.textContent =
@@ -1801,6 +1793,7 @@ async function prefillFromRequestToken() {
     }
   }
 
+  // Fill fields
   const emailInput = document.getElementById('email');
   const companyInput = document.getElementById('company');
   const auditorEmailRouting = document.getElementById('auditorEmail');
@@ -1809,6 +1802,7 @@ async function prefillFromRequestToken() {
   if (companyInput && companyVal) companyInput.value = companyVal;
   if (auditorEmailRouting && auditorEmailVal) auditorEmailRouting.value = auditorEmailVal;
 
+  // Preselect frameworks (if provided)
   if (frameworkVals.length && frameworksSelectEl) {
     const wanted = new Set(frameworkVals);
     Array.from(frameworksSelectEl.options).forEach(opt => {
@@ -1816,15 +1810,14 @@ async function prefillFromRequestToken() {
     });
   }
 
-  // Guards (optional but fine to keep)
+  // Guard changes (optional)
   attachPrefillGuards({ companyVal, auditorEmailVal, frameworkVals });
 
-  // Client came from a paid request (or auditor code), so skip pricing gate and unlock uploads
+  // Token link means "already unlocked" (no pricing gate)
   clearStatus();
   setUnlocked(j.planLabel || 'OneOff');
 
-
-  // Ensure the upload box is visible immediately after unlock (client flow)
+  // Ensure upload UI appears
   if (fileBox) fileBox.style.display = 'block';
   updateFileMeta();
   renderFrameworkGuides();
@@ -2305,12 +2298,16 @@ document.getElementById('intakeForm').addEventListener('submit', async (e) => {
       ? `<br><strong>Fix window ends:</strong> ${esc(json.fixWindowEndsAt)}`
       : '';
 
+    const alreadyUsedMsg = (json.idempotent === true)
+      ? `⚠️ This link was already used. Showing the existing ProofPack (no new emails should be sent).`
+      : `✅ Received! <strong>${esc(filesCount)}</strong> file(s) saved.<br> A ProofPack email will arrive shortly.`;
+
     showStatus(
-      `✅ Received! <strong>${esc(filesCount)}</strong> file(s) saved.<br>
-       A ProofPack email will arrive shortly.${missingBlock}${linkHtml}
+      `${alreadyUsedMsg}${missingBlock}${linkHtml}
        <div class="small">${emailBlock}${creditBlock}${fixEnds}${manifestKey}${packUrlHtml}</div>`,
       true
     );
+
 
   } catch (err) {
     showStatus(esc(`Network error: ${err?.message || err}`), false);
