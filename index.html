@@ -1680,6 +1680,25 @@ async function prefillFromRequestToken() {
   // =========================
   if (!token) return; // normal visitors
 
+  // HARD HIDE unlock UI immediately for token visitors (even before /resolve returns)
+  isFromRequestLink = true;
+
+  // Hide the pricing gate + Start button while we resolve
+  if (pricingGate) pricingGate.style.display = 'none';
+  if (startBtn) startBtn.style.display = 'none';
+
+  // Optional: give a tiny status message so it doesn’t feel broken
+  showStatus('Verifying your link…', true);
+
+
+  // Hide the pricing gate + Start button while we resolve
+  if (pricingGate) pricingGate.style.display = 'none';
+  if (startBtn) startBtn.style.display = 'none';
+
+  // Optional: give a tiny status message so it doesn’t feel broken
+  showStatus('Verifying your link…', true);
+
+
   console.log('Request token from URL:', token);
 
   // Remember token so we can send it with the upload
@@ -1768,7 +1787,9 @@ async function prefillFromRequestToken() {
   attachPrefillGuards({ companyVal, auditorEmailVal, frameworkVals });
 
   // Client came from a paid request (or auditor code), so skip pricing gate and unlock uploads
-    setUnlocked(j.planLabel || 'OneOff');
+  clearStatus();
+  setUnlocked(j.planLabel || 'OneOff');
+
 
   // Ensure the upload box is visible immediately after unlock (client flow)
   if (fileBox) fileBox.style.display = 'block';
