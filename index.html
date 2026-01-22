@@ -1030,6 +1030,10 @@ if (sendReqBtn) {
     sendReqBtn.textContent = 'Sending request…';
 
     try {
+      if (!appliedCode) {
+        throw new Error('Enter and apply your auditor bundle code first (Stripe isn’t live yet).');
+      }
+      
       const j = await submitAuditorRequest();
 
       const emailed = j?.emailedClient ? 'Yes' : 'No (email config issue)';
@@ -1057,15 +1061,34 @@ if (sendReqBtn) {
   });
 }
     
-// Click one-off "Continue" => unlock (bundle buttons are mailto for now)
+// Click one-off "Continue" => Stripe NOT live yet.
+// For now, force "code-only" unlock (except request-token links which auto-unlock).
 if (pricingGate) {
   pricingGate.addEventListener('click', (e) => {
     const btn = e.target.closest('button[data-unlock-plan]');
     if (!btn) return;
-    const plan = btn.getAttribute('data-unlock-plan') || 'OneOff';
-    setUnlocked(plan);
+
+    clearStatus();
+
+    // If they’re on a request link, ignore OneOff purchase entirely (token unlock path)
+    if (isFromRequestLink) return;
+
+    // If they already applied a code, unlock immediately
+    if (appliedCode) {
+      setUnlocked('Code');
+      return;
+    }
+
+    // Otherwise: show a clear message
+    showStatus(
+      'Checkout is not live yet. Please enter an auditor/reviewer code below and click “Apply code”. ' +
+      'If you don’t have one, email <a href="mailto:ops@proofrepo.com">ops@proofrepo.com</a>.',
+      false
+    );
   });
 }
+
+
 
 // Apply code => validate against Worker, then unlock + remember code
 if (applyUnlockCodeBtn) {
@@ -1138,6 +1161,28 @@ function clearStatus(){
   statusEl.style.display = 'none';
   statusEl.innerHTML = '';
 }
+
+async function maybeUnlockFromStripeReturn() {
+  const url = new URL(window.location.href);
+  const sessionId = url.searchParams.get('session_id');
+  if (!sessionId) return;
+
+  const res = await fetch(`${WORKER_BASE}/verify-checkout-session`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ sessionId }),
+  });
+  const j = await res.json().catch(() => null);
+  if (!res.ok || !j?.ok) return;
+
+  // Unlock based on Stripe-confirmed purchase
+  setUnlocked(j.planLabel || 'OneOff');
+
+  // Clean URL (remove ?session_id=...)
+  url.searchParams.delete('session_id');
+  window.history.replaceState({}, '', url.toString());
+}
+
 
 // Ensure SOC2 is selected by default (even if the <select multiple> started hidden)
 if (frameworksSelectEl && frameworksSelectEl.selectedOptions.length === 0) {
@@ -1604,6 +1649,10 @@ async function prefillFromRequestToken() {
   //  A) Client magic link:   ?t=<token>  (or token/requestToken/etc) => resolve() + lock as client
   //  B) Auditor resend link: ?prev=<token>&auditorEmail=...&clientEmail=...&company=...&frameworks=... => lock as auditor + prefill
 
+  // If this is an auditor resend link (?prev=...), do NOT treat it like a client token link.
+  const isAuditorResend = !!(url.searchParams.get('prev') || url.searchParams.get('previous'));
+  if (isAuditorResend) return;
+
   const token =
     url.searchParams.get('t') ||
     url.searchParams.get('token') ||
@@ -1612,10 +1661,6 @@ async function prefillFromRequestToken() {
     url.searchParams.get('r') ||
     null;
 
-  const prev =
-    url.searchParams.get('prev') ||
-    url.searchParams.get('previous') ||
-    null;
 
   // Helper to parse frameworks from query or from worker response
   const parseFrameworks = (v) => {
@@ -1723,7 +1768,12 @@ async function prefillFromRequestToken() {
   attachPrefillGuards({ companyVal, auditorEmailVal, frameworkVals });
 
   // Client came from a paid request (or auditor code), so skip pricing gate and unlock uploads
-  setUnlocked(j.planLabel || 'OneOff');
+    setUnlocked(j.planLabel || 'OneOff');
+
+  // Ensure the upload box is visible immediately after unlock (client flow)
+  if (fileBox) fileBox.style.display = 'block';
+  updateFileMeta();
+  renderFrameworkGuides();
 }
 
 async function prefillFromAuditorResendLink() {
@@ -1804,6 +1854,11 @@ async function prefillFromAuditorResendLink() {
 
   // If we have a stored code, auto-apply it to skip the pricing gate
   await autoUnlockFromStoredCodeIfPossible();
+
+  // If we couldn't auto-unlock, open the pricing/code gate so the auditor sees where to enter the code.
+  if (!isUnlocked) {
+    openPricingGate();
+  }
 }
 
 function attachPrefillGuards(prefill) {
@@ -2010,6 +2065,11 @@ function gather() {
     fd.append('billingMode', billingSelect.value);
   }
 
+  // If a code was applied but billingMode wasn't selected, force it to "code"
+  if (appliedCode && !(billingSelect && billingSelect.value)) {
+    fd.append('billingMode', 'code');
+  }
+
   // If a code was successfully applied at the pricing gate, send it through
   if (appliedCode) {
     fd.append('auditorCode', appliedCode);
@@ -2119,10 +2179,22 @@ document.getElementById('intakeForm').addEventListener('submit', async (e) => {
     try { json = JSON.parse(text); } catch (_) {}
 
     if (!res.ok || !json || json.ok === false) {
-      const msg = (json && json.error) ? json.error : `Upload failed (${res.status})`;
-      showStatus(esc(msg), false);
+      const msg = (json && (json.error || json.message)) ? (json.error || json.message) : `Upload failed (${res.status})`;
+
+      // If worker returns an actionable "problem" response, show it as a link/button
+      const actionUrl = safeUrl(json?.action?.url);
+      const actionLabel = json?.action?.label ? String(json.action.label) : 'Fix this';
+
+      const actionHtml = actionUrl
+        ? `<br><br><a class="btn primary" href="${esc(actionUrl)}" target="_blank" rel="noopener noreferrer">${esc(actionLabel)}</a>`
+        : '';
+
+      const detailHtml = json?.detail ? `<br><br><div class="small muted">${esc(String(json.detail))}</div>` : '';
+
+      showStatus(`${esc(msg)}${actionHtml}${detailHtml}`, false);
       return;
     }
+
 
     const filesCount =
       json?.usage?.files ??
@@ -2208,6 +2280,8 @@ renderFrameworkGuides();
 updateFileMeta();
 prefillFromAuditorResendLink(); // auditor resend link prefill (role=auditor&flow=request...)
 prefillFromRequestToken();      // client magic link prefill (t=...)
+maybeUnlockFromStripeReturn();
+
 
 /* =======================
    END DROP-IN: wiring
