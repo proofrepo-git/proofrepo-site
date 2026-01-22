@@ -1726,9 +1726,42 @@ async function prefillFromRequestToken() {
   }
 
   if (!res.ok || !j || j.ok === false) {
-    console.warn('Prefill response not ok:', j);
+    clearStatus();
+
+    // Try to detect "already used" / "expired" / "invalid"
+    const rawMsg = String((j && (j.error || j.message)) || '').toLowerCase();
+
+    const isUsed =
+      rawMsg.includes('used') ||
+      rawMsg.includes('already') ||
+      rawMsg.includes('submitted') ||
+      rawMsg.includes('completed') ||
+      rawMsg.includes('consumed');
+
+    const isExpired =
+      rawMsg.includes('expired') ||
+      rawMsg.includes('invalid') ||
+      rawMsg.includes('not found') ||
+      rawMsg.includes('unknown');
+
+    let msg = 'This upload link is not valid.';
+    if (isUsed) msg = 'This upload link has already been used.';
+    else if (isExpired) msg = 'This upload link is expired or invalid.';
+
+    // Show a clear message
+    showStatus(
+      `⚠️ ${esc(msg)}<br><br>` +
+      `Please ask your auditor / third party to send a new upload link.`,
+      false
+    );
+
+    // IMPORTANT: if we arrived via ?t=..., hide unlock UI so they never see pricing/code
+    if (pricingGate) pricingGate.style.display = 'none';
+    if (startBtn) startBtn.style.display = 'none';
+
     return;
   }
+}
 
   isFromRequestLink = true;
 
