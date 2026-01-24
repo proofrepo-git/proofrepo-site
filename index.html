@@ -4,2766 +4,1218 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>ProofRepo — Compliance ProofPacks in seconds</title>
-
-  <!-- SEO -->
-  <meta name="description" content="Compliance ProofPacks in seconds. Auditors and third parties use ProofRepo to collect SOC 2 and other framework evidence without messy folders or endless correction emails. Companies use it to stay audit- or event-ready without buying a full automation suite." />
-  <meta name="keywords" content="SOC 2 evidence, ISO 27001 evidence, HIPAA evidence, GDPR evidence, vendor security review, compliance proof, audit readiness" />
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="ProofRepo — Compliance ProofPacks in seconds">
-  <meta property="og:description" content="Built for boutique auditors and their clients. Guided evidence collection that reduces errors and back-and-forth, without the overhead of a full GRC platform.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://proofrepo.com/">
-  <meta property="og:image" content="https://proofrepo.com/og.png">
-
-  <link rel="canonical" href="https://proofrepo.com/">
-  <meta name="twitter:card" content="summary_large_image">
-
+  <meta name="description" content="Compliance ProofPacks in seconds. Guided evidence collection for auditors and their clients." />
   <style>
-    :root{
-      --bg:#0b1020; --gradA:#0b1020; --gradB:#0d1b3d;
-      --panel:#10183a; --panel2:#0e1532; --text:#e8edff; --muted:#a7b6e7; --line:#1d2857;
-      --primary:#2563eb; --primary2:#3b82f6; --accent:#22c55e; --ring:rgba(37,99,235,.35);
-      --r:16px; --rs:12px; --shadow:0 14px 40px rgba(3,7,18,.35); --max:1200px;
-      --marqueeH:54px;
-    }
+    :root{--bg:#0b1020;--gradA:#0b1020;--gradB:#0d1b3d;--panel:#10183a;--panel2:#0e1532;--text:#e8edff;--muted:#a7b6e7;--line:#1d2857;--primary:#2563eb;--primary2:#3b82f6;--accent:#22c55e;--danger:#ef4444;--r:16px;--shadow:0 14px 40px rgba(3,7,18,.35);--max:1200px;--marqueeH:54px}
     *{box-sizing:border-box}
     html,body{margin:0;background:linear-gradient(180deg,var(--gradA),var(--gradB));color:var(--text);font:16px/1.55 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
     body{padding-bottom:calc(var(--marqueeH) + env(safe-area-inset-bottom,0px))}
     a{color:inherit;text-decoration:none}
-    img{max-width:100%;height:auto}
     .wrap{max-width:var(--max);margin:0 auto;padding:28px}
     .row{display:flex;align-items:center;justify-content:space-between;gap:16px}
-
-    /* NAV */
     .logo{display:flex;align-items:center;gap:10px;font-weight:800}
     .glyph{width:34px;height:34px;border-radius:10px;background:conic-gradient(from 210deg,var(--primary),var(--primary2));box-shadow:var(--shadow)}
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:999px;border:1px solid #2a3766;cursor:pointer;transition:transform .12s ease, background .12s ease, filter .12s ease}
-    .btn:hover{background:#111b3e; transform:translateY(-1px)}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:999px;border:1px solid #2a3766;cursor:pointer;transition:all .12s;background:transparent;color:var(--text);font-size:1rem}
+    .btn:hover{background:#111b3e;transform:translateY(-1px)}
     .btn.primary{background:linear-gradient(135deg,var(--primary),var(--primary2));border-color:transparent;color:#fff;box-shadow:var(--shadow)}
     .btn.primary[disabled]{opacity:.6;cursor:not-allowed;transform:none}
-    .btn.link{padding:0;border:0;color:#9db0ff}
-    .nav{backdrop-filter:saturate(120%) blur(4px)}
-
-    /* HERO */
+    .btn.sm{padding:8px 14px;font-size:.9rem}
+    .btn.ghost{background:transparent;border:1px dashed #3a4a86}
+    .btn.danger{background:#7f1d1d;border-color:#991b1b;color:#fecaca}
     .hero{padding:56px 28px}
     .heroGrid{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center}
     .kicker{color:var(--accent);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.8rem}
     h1{font-size:clamp(28px,4vw,46px);line-height:1.15;margin:10px 0 12px}
     .sub{color:var(--muted);font-size:1.05rem;max-width:60ch}
-    .card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--r);padding:22px;transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease}
-    .card:hover{transform:translateY(-2px); box-shadow:0 18px 45px rgba(20,40,120,.35); border-color:#2b3e7a}
+    .card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--r);padding:22px}
     .ticks{display:grid;gap:10px;margin-top:12px}
     .li{display:flex;gap:10px}
     .tick{width:20px;height:20px;border-radius:999px;display:inline-grid;place-items:center;background:linear-gradient(135deg,#34d399,#86efac);color:#062312;font-weight:900;font-size:.8rem}
-    .pill{display:inline-block;padding:6px 10px;border:1px solid #2a3766;border-radius:999px;background:#0c1636;color:#a7b9ff;font-size:.85rem}
-
-    /* STICKY BOTTOM MARQUEE */
-    .marquee-fixed{position:fixed;left:0;right:0;bottom:0;height:var(--marqueeH);display:flex;align-items:center;border-top:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0));backdrop-filter:saturate(120%) blur(6px);z-index:9999;padding-bottom:env(safe-area-inset-bottom,0px)}
+    .pill{display:inline-block;padding:4px 8px;border:1px solid #2a3766;border-radius:999px;background:#0c1636;color:#a7b9ff;font-size:.75rem;margin-left:6px}
+    .pill.req{border-color:#f87171;color:#fca5a5;background:#2b1520}
+    .pill.on{border-color:#22c55e;color:#86efac;background:#0f2a1a}
+    .pill.off{border-color:#6b7280;color:#9ca3af;background:#1f2937}
+    .marquee-fixed{position:fixed;left:0;right:0;bottom:0;height:var(--marqueeH);display:flex;align-items:center;border-top:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0));backdrop-filter:blur(6px);z-index:9999}
     .marquee{white-space:nowrap;overflow:hidden;width:100%}
     .marquee > div{display:inline-block;padding-left:100%;animation:scroll 24s linear infinite;color:#b9c6ff;opacity:.95}
     @keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
-
-    /* SECTIONS / GRID */
     .section{padding:40px 28px}
     .grid{display:grid;gap:18px}
     .cols2{grid-template-columns:repeat(2,minmax(0,1fr))}
     .cols3{grid-template-columns:repeat(3,minmax(0,1fr))}
     .muted{color:var(--muted)}
     .small{font-size:.9rem;color:var(--muted)}
-    .tag{color:var(--muted);font-size:.9rem}
     .hint{font-size:.85rem;color:#9fb2ff;margin-top:6px}
-
-    /* PRICING */
-    .pricing .plan{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:10px; position:relative}
-    .pricing h3{margin:0}
-    .price{font-size:1.4rem;font-weight:700}
-    .popular{border-color:#2b5cff;box-shadow:0 12px 36px rgba(43,92,255,.25)}
-
-    /* FORM */
     form{display:grid;gap:14px}
     label{font-weight:600}
-    input, select, textarea{width:100%; padding:12px 12px; border-radius:10px; border:1px solid #2a3766; background:#0e1634; color:var(--text)}
-    textarea{min-height:110px;resize:vertical}
+    input,select,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid #2a3766;background:#0e1634;color:var(--text);font-size:1rem}
+    input::placeholder,textarea::placeholder{color:#6b7a9a}
+    textarea{min-height:60px;resize:vertical}
     .form-row{display:grid;gap:12px}
     .two{grid-template-columns:1fr 1fr}
-    .three{grid-template-columns:1fr 1fr 1fr}
     .status{margin-top:8px;padding:10px;border-radius:10px;background:#0d193c;border:1px solid #27356b}
     .status.ok{border-color:#195d3a;background:#0f2a22}
     .status.err{border-color:#7a1a2a;background:#2b0e16}
-    .filebox{border:1px dashed #3a4a86;border-radius:12px;padding:14px;transition:border-color .15s ease, background .15s ease}
+    .filebox{border:1px dashed #3a4a86;border-radius:12px;padding:14px}
     .filebox.dragover{border-style:solid;border-color:#4b65ff;background:#0f1a3d}
     .filemeta{font-size:.9rem;color:#a9b8ef}
 
-    .guidance{margin-top:12px;padding:12px 14px;border-radius:10px;border:1px solid #27356b;background:#0d1736;font-size:.9rem}
-    .guidance h4{margin:0 0 6px;font-size:.95rem}
-    .guidance ul{margin:0;padding-left:18px}
-    .guidance li{margin:6px 0}
-    .guidance .ok{color:#4ade80}
-    .guidance .missing{color:#fca5a5}
+    /* COMPOSER */
+    .composer{margin-top:12px;border-radius:12px;border:1px solid #27356b;background:#0d1736;overflow:hidden}
+    .fw-list{display:flex;flex-wrap:wrap;gap:8px;padding:14px;border-bottom:1px solid #1d2857;background:#0a1020}
+    .fw-chip{display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:8px;border:1px solid #2a3766;background:#0e1634;cursor:pointer;user-select:none;transition:all .15s}
+    .fw-chip:hover{border-color:#4060a0}
+    .fw-chip.active{border-color:var(--primary);background:#1a2a5a}
+    .fw-chip input{width:16px;height:16px;accent-color:var(--primary)}
+    .fw-chip-label{font-weight:600;font-size:.95rem}
+    .add-fw-btn{border-style:dashed;color:var(--muted)}
+    .fw-body{padding:14px}
 
-    details.advanced{margin-top:8px}
-    details.advanced summary{cursor:pointer;font-weight:600;color:#9fb2ff}
+    /* CONTROL GROUP */
+    .control-group{margin-bottom:16px;border:1px solid #1d2857;border-radius:10px;overflow:hidden}
+    .control-group.excluded{opacity:.5;border-style:dashed}
+    .cg-header{display:flex;align-items:center;gap:10px;padding:12px 14px;background:#0c1428;cursor:pointer;user-select:none}
+    .cg-header:hover{background:#101a35}
+    .cg-title{font-weight:600;flex:1}
+    .cg-status{display:flex;align-items:center;gap:8px}
+    .cg-count{font-size:.85rem;color:var(--muted)}
+    .cg-toggle{color:var(--muted);font-size:.9rem;width:20px;text-align:center}
+    .cg-exclude{width:24px;height:24px;border-radius:6px;border:1px solid #374151;background:#1f2937;color:#9ca3af;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer}
+    .cg-exclude:hover{background:#7f1d1d;border-color:#991b1b;color:#fecaca}
+    .cg-include{width:24px;height:24px;border-radius:6px;border:1px solid #166534;background:#14532d;color:#86efac;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer}
+    .cg-include:hover{background:#166534}
+    .cg-body{display:none;padding:12px 14px;background:#080e20}
+    .cg-body.open{display:block}
 
-    @media (max-width:980px){
-      .heroGrid{grid-template-columns:1fr}
-      .cols3,.cols2{grid-template-columns:1fr}
-    }
-    .focusable:focus-visible,.btn:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--ring);outline-offset:2px;border-radius:10px}
+    /* EVIDENCE ITEM */
+    .evidence-item{display:flex;gap:10px;align-items:flex-start;padding:12px;margin-bottom:8px;border:1px solid #1a2545;border-radius:8px;background:#0a1225}
+    .evidence-item.included{border-color:#1d4ed8;background:#0c1a3a}
+    .evidence-item input[type="checkbox"]{width:18px;height:18px;margin-top:2px;accent-color:var(--primary);flex-shrink:0}
+    .ei-content{flex:1;min-width:0}
+    .ei-title{font-weight:500;margin-bottom:4px}
+    .ei-hint{font-size:.85rem;color:#6b7a9a;margin-bottom:6px}
+    .ei-instr{margin-top:8px}
+    .ei-instr textarea{min-height:50px;font-size:.9rem;background:#060d1a}
+
+    /* MORE TOGGLE */
+    .more-toggle{margin:12px 0;padding:10px 14px;font-size:.9rem;color:#7a9bff;cursor:pointer;background:#0a1225;border:1px dashed #2a3a60;border-radius:8px;text-align:center}
+    .more-toggle:hover{background:#0c1530;border-color:#4060a0}
+
+    /* ADD CUSTOM */
+    .add-custom-section{margin-top:16px;padding:16px;border:1px dashed #2a3a60;border-radius:10px;background:#080e1a}
+    .add-custom-section h4{margin:0 0 12px;font-size:.95rem;color:var(--muted)}
+    .custom-form{display:grid;gap:10px}
+    .custom-form input,.custom-form textarea{background:#060d1a}
+    .custom-form .form-row{margin-bottom:0}
+
+    /* GLOBAL INSTRUCTIONS */
+    .global-instructions{padding:14px;border-top:1px solid #1d2857}
+    .global-instructions textarea{min-height:60px}
+
+    /* CLIENT VIEW */
+    .client-checklist{padding:14px}
+    .cli-group{margin-bottom:16px}
+    .cli-group-title{font-weight:700;margin-bottom:8px;padding:8px 10px;background:#0c1428;border-radius:6px}
+    .cli-item{padding:10px;margin-bottom:6px;border:1px solid #1a2545;border-radius:8px;background:#0a1225}
+    .cli-item-title{font-weight:500}
+    .cli-item-instr{font-size:.9rem;color:var(--muted);margin-top:6px;padding:8px;background:#060d1a;border-radius:6px;border-left:3px solid #2a3766}
+
+    /* MODAL */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:10000}
+    .modal-overlay.hidden{display:none}
+    .modal{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px;max-width:500px;width:90%}
+    .modal h3{margin:0 0 16px}
+    .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
+
+    @media(max-width:980px){.heroGrid{grid-template-columns:1fr}.cols3,.cols2{grid-template-columns:1fr}}
   </style>
-
-  <!-- JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"Organization",
-    "name":"ProofRepo",
-    "url":"https://proofrepo.com",
-    "email":"ops@proofrepo.com",
-    "description":"Compliance ProofPacks in seconds. Guided evidence collection for boutique auditors and their clients.",
-    "address":{
-      "@type":"PostalAddress",
-      "addressLocality":"Jacksonville",
-      "addressRegion":"FL",
-      "addressCountry":"US"
-    }
-  }
-  </script>
 </head>
 <body>
-  <!-- NAV -->
-  <header class="wrap row nav" role="banner">
-    <div class="logo">
-      <div class="glyph" aria-hidden="true"></div>
-      <span>ProofRepo</span>
-    </div>
-    <nav class="row" aria-label="primary">
-      <a class="btn" href="#companies">For companies</a>
+  <header class="wrap row nav">
+    <div class="logo"><div class="glyph"></div><span>ProofRepo</span></div>
+    <nav class="row">
       <a class="btn" href="#how">How it works</a>
-      <a class="btn" href="#request">Upload evidence</a>
+      <a class="btn" href="#request">Get started</a>
     </nav>
   </header>
 
-  <!-- HERO -->
   <section class="wrap hero">
     <div class="heroGrid">
       <div>
         <div class="kicker">Compliance ProofPacks in seconds</div>
-        <h1>Streamlined evidence collection — without Drive, Dropbox, or email chaos</h1>
+        <h1>Streamlined evidence collection — without the chaos</h1>
         <p class="sub">
-          ProofRepo replaces scattered Google Drive folders, ad-hoc Dropbox links, and
-          long email threads with a single guided flow for compliance evidence.
-          <br><br>
-          <strong>Auditors and third parties</strong> use ProofRepo to collect the right
-          artifacts from clients — mapped to controls and ready for workpapers.
-          <br><br>
-          <strong>Companies</strong> use ProofRepo to be audit- or review-ready with clean,
-          correctly labeled inputs, without buying a big-ticket compliance suite.
+          <strong>Auditors:</strong> Define exactly what evidence you need. Send your client a guided upload link.<br><br>
+          <strong>Companies:</strong> Upload evidence with clear guidance. No more "wrong file" corrections.
         </p>
-        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px">
-          <a class="btn primary" href="#request" data-analytics="cta_upload">Upload evidence</a>
-         
-        </div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
-          <span class="pill">Built for boutique audit firms</span>
-          <span class="pill">SOC 2, ISO 27001, HIPAA, GDPR, NIST CSF</span>
-          <span class="pill">Cleaner than ad-hoc Google Drives</span>
-          <span class="pill">No $20k “all-in-one” suite required</span>
-        </div>
+        <div style="margin-top:16px"><a class="btn primary" href="#request">Get started</a></div>
       </div>
-
-      <aside class="card" aria-label="Highlights">
+      <aside class="card">
         <div class="ticks">
-          <div class="li">
-            <span class="tick">✓</span>
-            <div><strong>Guided for clients:</strong> fewer wrong files, fewer “oops, wrong export” corrections.</div>
-          </div>
-          <div class="li">
-            <span class="tick">✓</span>
-            <div><strong>Reviewer-first view:</strong> ProofPack groups files by what they prove (e.g., access review, change log, vendors).</div>
-          </div>
-          <div class="li">
-            <span class="tick">✓</span>
-            <div><strong>Lightweight by design:</strong> no agents, no dashboards — just evidence in → ProofPack out.</div>
-          </div>
+          <div class="li"><span class="tick">✓</span><div><strong>Auditor-defined requests:</strong> Specify exactly what you need.</div></div>
+          <div class="li"><span class="tick">✓</span><div><strong>Guided for clients:</strong> Clear checklist shows what to upload.</div></div>
+          <div class="li"><span class="tick">✓</span><div><strong>Structured output:</strong> Files mapped to controls, ready for workpapers.</div></div>
         </div>
-        <p class="muted" style="margin-top:12px">
-          Today’s beta supports <strong>SOC 2</strong> plus guided minimums for ISO 27001, HIPAA,
-          GDPR, and NIST CSF so you can keep everything organized as your program grows.
-        </p>
       </aside>
     </div>
   </section>
 
-    <!-- REQUEST / INTAKE -->
   <section id="request" class="wrap section">
     <h2>Upload evidence and get a ProofPack</h2>
-    <p class="muted">
-      Use this form to send SOC 2 and related evidence. You’ll receive a confirmation email with a
-      secure ProofPack link. During beta we’re focused on correctness and reviewer experience —
-      payments (Stripe, etc.) will plug in later.
-    </p>
+    <p class="muted">Choose your role to get started.</p>
 
     <form id="intakeForm" class="card" novalidate>
-      <!-- STEP 0: role first -->
-      <div class="form-row" id="roleRow">
+      <div class="form-row">
+        <label for="role">What brings you here?</label>
+        <select id="role" required>
+          <option value="" selected disabled>Choose one…</option>
+          <option value="auditor">I'm an auditor requesting evidence from a client</option>
+          <option value="client">My auditor sent me here to upload evidence</option>
+          <option value="company">I'm building a ProofPack proactively</option>
+        </select>
+        <div class="hint" id="roleHint">This determines your workflow.</div>
+      </div>
+
+      <div class="form-row two step-after-role" id="contactRow" style="display:none">
         <div>
-          <label for="role">What is ProofRepo helping you with today?</label>
-          <select id="role" name="role" required>
-            <option value="" selected disabled>Choose one…</option>
-            <option value="auditor">I’m an auditor or a third party collecting evidence from a company</option>
-            <option value="client">A third party sent me here to upload evidence documentation to generate a ProofPack</option>
-            <option value="company">I’m a company proactively updating my ProofPack</option>
+          <label id="emailLabel" for="email">Your email</label>
+          <input id="email" type="email" required placeholder="you@company.com"/>
+        </div>
+        <div id="companyCol">
+          <label id="companyLabel" for="company">Company</label>
+          <input id="company" placeholder="Company Inc."/>
+        </div>
+      </div>
+
+      <div id="clientContactCol" class="form-row step-after-role" style="display:none">
+        <label for="clientContactEmail">Client's email (where to send the upload link)</label>
+        <input id="clientContactEmail" type="email" placeholder="client@company.com"/>
+      </div>
+
+      <div class="form-row two step-after-role" id="deadlineRow" style="display:none">
+        <div>
+          <label for="deadlineDays">Deadline</label>
+          <select id="deadlineDays">
+            <option value="0.33">8 hours</option>
+            <option value="0.5">12 hours</option>
+            <option value="1">1 day</option>
+            <option value="2">2 days</option>
+            <option value="3">3 days</option>
+            <option value="5" selected>5 days</option>
+            <option value="7">1 week</option>
+            <option value="10">10 days</option>
+            <option value="14">2 weeks</option>
+            <option value="21">3 weeks</option>
+            <option value="30">1 month</option>
+            <option value="45">45 days</option>
+            <option value="60">2 months</option>
           </select>
-          <div class="hint" id="roleHint">
-            We use this for routing, wording, and which fields show up — not for billing.
-          </div>
         </div>
-      </div>
-
-      <!-- Contact -->
-      <div class="form-row three step-after-role" id="contactRow" style="display:none">
         <div>
-          <label id="emailLabel" for="email">Work email</label>
-         <input id="email" name="email" type="email" required placeholder="you@company.com" autocomplete="email"/>
-<div class="hint" id="emailHint" style="margin-top:6px"></div>
-        </div>
-        <!-- Company (optional) -->
-<div id="companyCol">
-  <label id="companyLabel" for="company">Company</label>
-  <input id="company" name="company" placeholder="Company Inc." autocomplete="organization"/>
-</div>
-
-<!-- Client contact email (shown for auditor role instead of company) -->
-<div id="clientContactCol" style="display:none">
-  <label for="clientContactEmail">Client contact email</label>
-  <input id="clientContactEmail" name="clientContactEmail" type="email" placeholder="client@company.com" autocomplete="email"/>
-  <div class="hint">Use this instead of “Client company”.</div>
-</div>
-
-      </div>
-
-<!-- Deadline (AUDITOR only) -->
-<div class="form-row step-after-role" id="deadlineRow" style="display:none">
-  <div class="form-row two">
-    <div>
-      <label for="deadlineDays">Evidence deadline</label>
-      <select id="deadlineDays" name="deadlineDays">
-        <option value="3">3 days</option>
-        <option value="5" selected>5 days</option>
-        <option value="7">7 days</option>
-        <option value="10">10 days</option>
-        <option value="14">14 days</option>
-        <option value="21">21 days</option>
-        <option value="30">30 days</option>
-      </select>
-      <div class="hint">This powers automatic reminder + deadline follow-ups.</div>
-    </div>
-
-    <div>
-      <label for="deadlineTimeLocal">Time (local)</label>
-      <input id="deadlineTimeLocal" name="deadlineTimeLocal" type="time" value="17:00" />
-      <div class="hint">Defaults to 5:00pm your local time.</div>
-    </div>
-  </div>
-</div>
-
-      <!-- Frameworks -->
-      <div class="form-row step-after-role" id="frameworkRow" style="display:none">
-        <div>
-          <label for="frameworks">Framework(s)</label>
-          <select id="frameworks" name="frameworks" multiple required>
-            <option value="SOC2" selected>SOC 2</option>
-            <option value="ISO27001">ISO 27001</option>
-            <option value="HIPAA">HIPAA</option>
-            <option value="GDPR">GDPR</option>
-            <option value="NIST CSF">NIST CSF</option>
-            <option value="Other">Other</option>
-          </select>
-          <div class="hint">Select all that apply. The guided checklist will show minimum evidence for each framework.</div>
+          <label for="deadlineTime">Time</label>
+          <input id="deadlineTime" type="time" value="17:00"/>
         </div>
       </div>
 
-      <!-- REQUEST COMPOSER (Auditor) + Requested Items (Client view) -->
-<div id="requestedEvidenceBlock" class="guidance step-after-role" style="display:none">
-  <h4 style="margin:0 0 6px">Requested evidence (SOC 2 Security baseline)</h4>
-  <div class="small muted" style="margin:0 0 10px">
-    Auditors: customize what you want your client to upload. Clients: this is what your auditor requested.
-  </div>
-
-  <!-- Global instructions -->
-  <div style="margin-top:8px">
-    <label for="globalInstructions"><strong>Instructions for your client (optional)</strong></label>
-    <textarea id="globalInstructions" placeholder="Example: Provide evidence covering Jan–Dec 2025. Screenshots acceptable. Please redact secrets."></textarea>
-    <div class="hint">Shown in the email + on the upload page + in the final manifest.</div>
-  </div>
-
-  <!-- Container for grouped checklist -->
-  <div id="requestedEvidenceList" style="margin-top:12px"></div>
-
-  <!-- Add controls (auditor only) -->
-  <div id="requestedEvidenceAddControls" style="margin-top:12px;display:none">
-    <div class="form-row two">
-      <div>
-        <label for="commonEvidenceSearch">Add common request</label>
-        <input id="commonEvidenceSearch" placeholder="Search common items (e.g., MFA, risk assessment, incident response)…" />
-        <div class="hint">Click a result to add instantly.</div>
-        <div id="commonEvidenceResults" class="card" style="margin-top:8px;padding:12px;display:none"></div>
+      <div id="composerBlock" class="step-after-role" style="display:none">
+        <label><strong>Evidence Request</strong></label>
+        <div class="hint" id="composerHint">Check the frameworks that apply, then customize what evidence you need. Items with ✓ are included by default.</div>
+        <div id="composer" class="composer"></div>
       </div>
 
-      <div>
-        <label>Add custom request</label>
-        <div class="form-row" style="gap:8px">
-          <input id="customEvidenceTitle" placeholder="Request title (required)" />
-          <textarea id="customEvidenceInstructions" placeholder="Optional instructions (example: last 30 days; include reviewer sign-off + date)"></textarea>
-          <button type="button" class="btn" id="addCustomEvidenceBtn">Add custom item</button>
-          <div class="hint">Use for edge cases or nonstandard controls.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- /REQUEST COMPOSER -->
-
-
-      <!-- Files (drag & drop) -->
       <div class="filebox step-after-role" id="filesRow" style="display:none">
-        <label for="files">
-          <strong>Upload artifacts</strong>
-          <span class="muted">(Drag and drop or choose files — zip archives are fine.)</span>
-        </label>
-        <input id="files" name="files" type="file" multiple />
+        <label for="files"><strong>Upload files</strong> <span class="muted">(drag & drop or click)</span></label>
+        <input id="files" type="file" multiple/>
         <div id="fileMeta" class="filemeta">No files selected.</div>
       </div>
 
-      <!-- Dynamic framework guidance / tagging -->
-      <div id="frameworkGuides" class="guidance step-after-role" style="display:none"></div>
-
-            <!-- ROUTING (non-payment routing fields only; codes are entered in the unlock gate) -->
-      <div class="form-row three step-after-role" id="routingRow" style="display:none">
-        <div id="auditorCodeCol" style="display:none">
-        </div>
-
-        <div id="auditorEmailCol">
-          <label for="auditorEmail">Auditor / third-party email (optional)</label>
-          <input id="auditorEmail" name="auditorEmail" type="email" placeholder="reviewer@examplefirm.com"/>
-          <div class="hint" id="auditorEmailHint">
-            If you know the reviewer’s email, add it so we can route the ProofPack to them too.
-          </div>
-        </div>
-
-        <div id="clientEmailCol">
-          <label for="clientEmail">Client contact email (optional)</label>
-          <input id="clientEmail" name="clientEmail" type="email" placeholder="client@company.com"/>
-          <div class="hint" id="clientEmailHint">
-            If you’re an auditor, add your client contact so we can associate the pack with them.
-          </div>
-        </div>
+      <div class="form-row step-after-role" id="routingRow" style="display:none">
+        <label for="auditorEmail">Auditor email (optional - to CC on the ProofPack)</label>
+        <input id="auditorEmail" type="email" placeholder="reviewer@firm.com"/>
       </div>
 
-      <!-- Optional block: everything else -->
-      <details class="advanced step-after-role" id="optionalRow" style="display:none">
-       <summary>Optional details: plan label, context, and advanced mapping</summary>
-        <div style="margin-top:12px;display:grid;gap:16px">
-          <!-- Plan & coverage (shown after files present) -->
-          <div class="form-row two" id="planBillingRow" style="display:none">
-            <div>
-              <label for="plan">Plan label (beta)</label>
-              <select id="plan" name="plan">
-                <option value="Trial" selected>Trial</option>
-                <option value="OneOff">One-off pack</option>
-                <option value="Starter">Starter (planned)</option>
-                <option value="Pro">Pro (planned)</option>
-              </select>
-              <div class="hint">Backend uses this as a label plus simple caps. Real pricing will be upload-based.</div>
-            </div>
-            <div>
-              <label for="billingMode">How will this ProofPack be covered?</label>
-              <select id="billingMode" name="billingMode">
-                <option value="">Not decided yet</option>
-                <option value="code">I have a code from an auditor / third party</option>
-                <option value="card">I want to pay by card (Stripe)</option>
-              </select>
-              <div class="hint" id="billingHint">
-                You can decide this later. In beta we mostly use codes or manual billing via ops@proofrepo.com.
-              </div>
-            </div>
-          </div>
+      <input type="hidden" id="requestToken" value="">
 
-          <!-- Context (hidden cadence, visible notes) -->
-          <input type="hidden" id="cadence" name="cadence" value="">
-          <input type="hidden" id="requestToken" name="requestToken" value="">
-          <div class="form-row">
-            <div>
-              <label for="notes">Anything we should know?</label>
-              <textarea id="notes" name="notes" placeholder="Deadlines, specific controls, output preferences…"></textarea>
-            </div>
-          </div>
-
-          <!-- Advanced manual map -->
-          <details class="advanced">
-            <summary>Advanced: Manual map JSON (optional)</summary>
-            <div style="margin-top:8px">
-              <label for="map">Manual Map JSON</label>
-              <textarea id="map" name="map" class="muted" placeholder='{"AccessReview":"access.csv","ChangeLog":"change.txt","Vendors":"vendors.json"}'></textarea>
-              <div class="hint">Most people can ignore this. It overrides the auto-mapping engine for specific files.</div>
-            </div>
-          </details>
+      <div id="pricingGate" class="card" style="display:none;margin-top:12px">
+        <h3 style="margin:0 0 8px">Enter your code to continue</h3>
+        <p class="small muted">Auditor codes unlock the request flow. Contact ops@proofrepo.com for codes.</p>
+        <div class="form-row two" style="margin-top:10px">
+          <input id="unlockCode" placeholder="Enter code"/>
+          <button type="button" class="btn primary" id="applyCodeBtn">Apply</button>
         </div>
-      </details>
-
-      <!-- INLINE PRICING GATE (shown after clicking Start) -->
-<div id="pricingGate" class="guidance pricing" style="display:none">
-  <h3 style="margin:0 0 6px">Choose how to unlock</h3>
-  <p class="small muted" style="margin:0 0 12px">
-    Pay per ProofPack. No subscriptions. Bundles are for repeated use across multiple companies/clients.
-  </p>
-
-  <div class="grid cols3" role="list" style="margin-top:10px">
-    <!-- One-off -->
-    <article class="plan" role="listitem" aria-label="One-off ProofPack">
-      <h3>One-off ProofPack</h3>
-      <div class="price">$29</div>
-      <p class="muted">Single ProofPack for one company submission or one client request.</p>
-      <ul class="muted">
-        <li>1 ProofPack credit</li>
-        <li>Guided tagging + ProofPack output</li>
-        <li>No subscription</li>
-      </ul>
-      <button type="button" class="btn primary" data-unlock-plan="OneOff">Continue</button>
-      <div class="small">Checkout flow coming next.</div>
-    </article>
-
-    <!-- Bundle 25 -->
-    <article class="plan" role="listitem" aria-label="ProofPack bundle 25">
-      <h3>ProofPack Bundle — 25</h3>
-      <div class="price">$199</div>
-      <p class="muted">Great for repeat evidence requests across multiple engagements.</p>
-      <ul class="muted">
-        <li>25 ProofPack credits</li>
-        <li>Designed for repeat workflows</li>
-        <li>No subscription</li>
-      </ul>
-      <a class="btn primary" href="mailto:ops@proofrepo.com?subject=ProofPack%20Bundle%2025">Buy pack</a>
-    </article>
-
-    <!-- Bundle 50 -->
-    <article class="plan" role="listitem" aria-label="ProofPack bundle 50">
-      <h3>ProofPack Bundle — 50</h3>
-      <div class="price">$349</div>
-      <p class="muted">Most common fit for seasonal waves and ongoing evidence requests.</p>
-      <ul class="muted">
-        <li>50 ProofPack credits</li>
-        <li>Use across multiple clients</li>
-        <li>No subscription</li>
-      </ul>
-      <a class="btn primary" href="mailto:ops@proofrepo.com?subject=ProofPack%20Bundle%2050">Buy pack</a>
-    </article>
-
-    <!-- Bundle 75 -->
-    <article class="plan" role="listitem" aria-label="ProofPack bundle 75">
-      <h3>ProofPack Bundle — 75</h3>
-      <div class="price">$499</div>
-      <p class="muted">Designed for higher-volume workflows across many clients.</p>
-      <ul class="muted">
-        <li>75 ProofPack credits</li>
-        <li>Repeat workflows</li>
-        <li>No subscription</li>
-      </ul>
-      <a class="btn primary" href="mailto:ops@proofrepo.com?subject=ProofPack%20Bundle%2075">Buy pack</a>
-    </article>
-  </div>
-
-  <div style="margin-top:12px">
-    <strong class="muted">Have an auditor / reviewer code? (Use this instead of buying)</strong>
-    <div class="form-row two" style="margin-top:8px">
-      <div>
-        <input id="unlockCode" placeholder="Enter code (if you have one)" />
+        <div class="hint" id="unlockHint"></div>
       </div>
-      <div>
-        <button type="button" class="btn primary" id="applyUnlockCodeBtn">Apply code</button>
-      </div>
-    </div>
-    <div class="hint" id="unlockHint"></div>
-  </div>
-</div>
-<!-- /INLINE PRICING GATE -->
-
 
       <div id="status" class="status" style="display:none"></div>
 
-      <div class="wiz-actions step-after-role" id="actionsRow" style="display:none;gap:10px;justify-content:flex-end">
-  <button id="startBtn" class="btn primary" type="button">
-    Start guided ProofPack
-  </button>
-
-  <!-- Auditor-only, shown AFTER unlock -->
-  <button id="sendReqBtn" class="btn primary" type="button" style="display:none">
-    Send request to client
-  </button>
-
-  <!-- Normal upload submit (client/company & client-from-link) -->
-  <button id="submitBtn" class="btn primary" type="submit" style="display:none">
-    Send and build ProofPack
-  </button>
-</div>
-
+      <div class="step-after-role" id="actionsRow" style="display:none;gap:10px;justify-content:flex-end">
+        <button id="startBtn" class="btn primary" type="button">Continue</button>
+        <button id="sendReqBtn" class="btn primary" type="button" style="display:none">Send request to client</button>
+        <button id="submitBtn" class="btn primary" type="submit" style="display:none">Upload & build ProofPack</button>
+      </div>
     </form>
   </section>
 
-<!-- PRICING (hidden until role selected) -->
-<section id="pricing" class="wrap section pricing" aria-labelledby="pricing-h" style="display:none">
-  <h2 id="pricing-h">Pricing</h2>
-  <p class="small muted">
-    Pay per ProofPack. No subscriptions. Purchase bundles for use across multiple companies, clients, or internal evidence requests.
-  </p>
-
-  <div class="grid cols3" role="list">
-    <!-- One-off -->
-    <article class="plan" role="listitem" aria-label="One-off ProofPack">
-      <h3>One-off ProofPack</h3>
-      <div class="price">$29</div>
-      <p class="muted">For a single ProofPack—either to request evidence from a company or to generate one directly.</p>
-      <ul class="muted">
-        <li>1 ProofPack credit</li>
-        <li>Guided SOC 2 tagging</li>
-        <li>Reusable ProofPack output</li>
-      </ul>
-      <a class="btn primary" href="mailto:ops@proofrepo.com?subject=One-off%20ProofPack">Buy pack</a>
-      <div class="small">Checkout flow coming next.</div>
-    </article>
-
-    <!-- Bundle 25 -->
-    <article class="plan popular" role="listitem" aria-label="ProofPack bundle 25">
-      <h3>ProofPack Bundle — 25</h3>
-      <div class="price">$199</div>
-      <p class="muted">Best for pilots and smaller teams running evidence requests across multiple engagements.</p>
-      <ul class="muted">
-        <li>25 ProofPack credits</li>
-        <li>Designed for repeat client workflows</li>
-        <li>No subscription required</li>
-      </ul>
-      <a class="btn primary" href="mailto:ops@proofrepo.com?subject=ProofPack%20Bundle%2025">Buy pack</a>
-      <div class="small">Checkout flow coming next.</div>
-    </article>
-
-    <!-- Bundle 50 -->
-    <article class="plan" role="listitem" aria-label="ProofPack bundle 50">
-      <h3>ProofPack Bundle — 50</h3>
-      <div class="price">$349</div>
-      <p class="muted">Most common fit for teams who want a clean, repeatable evidence collection motion.</p>
-      <ul class="muted">
-        <li>50 ProofPack credits</li>
-        <li>Great for seasonal audit waves</li>
-        <li>No subscription required</li>
-      </ul>
-      <a class="btn primary" href="mailto:ops@proofrepo.com?subject=ProofPack%20Bundle%2050">Buy pack</a>
-    </article>
-
-    <!-- Bundle 75 -->
-    <article class="plan" role="listitem" aria-label="ProofPack bundle 75">
-      <h3>ProofPack Bundle — 75</h3>
-      <div class="price">$499</div>
-      <p class="muted">Designed for higher-volume workflows across many clients or recurring vendor reviews.</p>
-      <ul class="muted">
-        <li>75 ProofPack credits</li>
-        <li>Built for repeat workflows</li>
-        <li>No subscription required</li>
-      </ul>
-      <a class="btn primary" href="mailto:ops@proofrepo.com?subject=ProofPack%20Bundle%2075">Buy pack</a>
-    </article>
-  </div>
-
-  <div class="card" style="margin-top:18px">
-    <strong class="muted">How it works:</strong>
-    <div class="muted" style="margin-top:8px">
-      Use a ProofPack credit to request evidence or generate a ProofPack. Bundles are for repeated use across multiple engagements.
-    </div>
-  </div>
-</section>
-
-
-<!-- TRUST -->
-<section id="trust" class="wrap section" aria-labelledby="trust-h">
-  <h2 id="trust-h">Trust, privacy, and retention</h2>
-
-  <div class="grid cols2">
-    <div class="card">
-      <h3>Private by default</h3>
-      <p class="muted">
-        ProofPacks are shared via secure, unguessable links. No public indexing.
-      </p>
-      <p class="small">
-        Only people you share the link with can access the ProofPack.
-      </p>
-    </div>
-
-    <div class="card">
-      <h3>Storage + retention</h3>
-      <p class="muted">
-        Files are stored in Cloudflare R2 and automatically deleted after a short retention window.
-      </p>
-      <p class="small">
-        If you need different retention, email <a class="btn link" href="mailto:ops@proofrepo.com">ops@proofrepo.com</a>.
-      </p>
-    </div>
-  </div>
-
-  <div class="card" style="margin-top:18px">
-    <h3>We don’t “read your evidence”</h3>
-    <p class="muted">
-      The guided tagging uses filenames + your selections to organize what each file proves.
-      Reviewers use the ProofPack viewer to evaluate evidence in context.
-    </p>
-    <p class="small">
-      You control what you upload and who receives the ProofPack link.
-    </p>
-  </div>
-</section>
-  
-    <!-- FOR COMPANIES -->
-  <section id="companies" class="wrap section" aria-labelledby="companies-h">
-    <h2 id="companies-h">For companies</h2>
-
-    <div class="grid cols2">
-      <div class="card">
-        <h3>Get audit- and review-ready</h3>
-        <p class="muted">
-          Upload evidence once and keep a clean ProofPack you can reuse with auditors, customers, investors, and partners.
-        </p>
+  <!-- ADD FRAMEWORK MODAL -->
+  <div id="addFwModal" class="modal-overlay hidden">
+    <div class="modal">
+      <h3>Add Custom Framework</h3>
+      <div class="form-row" style="margin-bottom:12px">
+        <label for="customFwName">Framework name</label>
+        <input id="customFwName" placeholder="e.g., PCI DSS, FedRAMP, Internal Audit"/>
       </div>
-
-      <div class="card">
-        <h3>Reduce “please resend” loops</h3>
-        <p class="muted">
-          Guided prompts + required SOC 2 tagging helps prevent wrong exports, wrong date ranges, and missing artifacts.
-        </p>
+      <div class="form-row">
+        <label for="customFwDesc">Description (optional)</label>
+        <input id="customFwDesc" placeholder="Brief description of this framework"/>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn" id="cancelFwBtn">Cancel</button>
+        <button type="button" class="btn primary" id="saveFwBtn">Add Framework</button>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- HOW IT WORKS -->
+  <!-- ADD CONTROL GROUP MODAL -->
+  <div id="addGroupModal" class="modal-overlay hidden">
+    <div class="modal">
+      <h3>Add Control Group</h3>
+      <div class="form-row" style="margin-bottom:12px">
+        <label for="customGroupName">Control group name</label>
+        <input id="customGroupName" placeholder="e.g., Network Security, Physical Security"/>
+      </div>
+      <div class="form-row">
+        <label for="customGroupDesc">Description (optional)</label>
+        <input id="customGroupDesc" placeholder="What this control group covers"/>
+      </div>
+      <input type="hidden" id="customGroupFwKey" value=""/>
+      <div class="modal-actions">
+        <button type="button" class="btn" id="cancelGroupBtn">Cancel</button>
+        <button type="button" class="btn primary" id="saveGroupBtn">Add Control Group</button>
+      </div>
+    </div>
+  </div>
+
   <section id="how" class="wrap section">
-    <h2>How ProofRepo works (today)</h2>
+    <h2>How it works</h2>
     <div class="grid cols3">
-      <div class="card">
-        <h3>1) Share or open the link</h3>
-        <p class="muted">
-          An auditor, third party, or company goes to <strong>proofrepo.com</strong>.
-          Auditors can share the link plus a short code so uploads are routed and tracked to the right engagement.
-        </p>
-      </div>
-      <div class="card">
-        <h3>2) Guided upload</h3>
-        <p class="muted">
-          The form nudges uploaders toward the expected artifacts for the frameworks selected.
-          No shared drives, no random screenshots in Slack.
-        </p>
-      </div>
-      <div class="card">
-        <h3>3) ProofPack for reviewers</h3>
-        <p class="muted">
-          ProofRepo generates a structured manifest and a human-friendly viewer that groups files by what they
-          prove and flags missing items. You can keep using your own workpapers — just link to the pack.
-        </p>
-      </div>
+      <div class="card"><h3>1. Auditor creates request</h3><p class="muted">Select frameworks, customize evidence items, add instructions.</p></div>
+      <div class="card"><h3>2. Client uploads</h3><p class="muted">Client receives a link with a clear checklist of what to provide.</p></div>
+      <div class="card"><h3>3. ProofPack ready</h3><p class="muted">Files organized by control area with a manifest for workpapers.</p></div>
     </div>
   </section>
 
-  <!-- FOOTER -->
-  <footer class="wrap">
-    <div class="row" style="margin-bottom:8px">
-      <div>
-        © <span id="y"></span> ProofRepo •
-        <a class="btn link" href="mailto:ops@proofrepo.com" data-analytics="cta_mail_footer">ops@proofrepo.com</a>
-      </div>
-      <div class="tag">Based in Jacksonville, Florida</div>
-    </div>
-    <div class="small">
-      Disclaimer: ProofRepo prepares materials to assist with audits and vendor reviews; it is not a certification or attestation body.
-    </div>
-  </footer>
+  <footer class="wrap"><div class="row"><div>© <span id="y"></span> ProofRepo • <a style="color:#9db0ff" href="mailto:ops@proofrepo.com">ops@proofrepo.com</a></div></div></footer>
 
-  <script>
-    // IMPORTANT: stays pointed at your existing Intake Worker.
-    const WORKER_BASE = 'https://proofrepo-intake.atucker5.workers.dev';
+  <div class="marquee-fixed"><div class="marquee"><div>&nbsp;Guided compliance evidence collection • Built for auditors • SOC 2, ISO 27001, HIPAA, GDPR & more • Contact ops@proofrepo.com for codes •</div></div></div>
 
+<script>
+const WORKER_BASE = 'https://proofrepo-intake.atucker5.workers.dev';
 
-    const FRAMEWORK_CONFIG = {
-      SOC2: {
-        label: 'SOC 2',
-        key: 'SOC2',
+// COMPREHENSIVE EVIDENCE LIBRARY
+const FRAMEWORK_LIBRARY = {
+  SOC2: {
+    label: 'SOC 2', description: 'Service Organization Control 2', defaultOn: true,
+    controlGroups: [
+      { id: 'governance', title: 'Governance & Policies', description: 'Security policies and organizational governance',
         items: [
-          { id: 'AccessReview', label: 'Access review', mapKey: 'AccessReview', patterns: [/access/i, /user.*review/i] },
-          { id: 'ChangeLog',    label: 'Change log',    mapKey: 'ChangeLog',    patterns: [/change/i, /deploy|release/i] },
-          { id: 'Vendors',      label: 'Vendor list',   mapKey: 'Vendors',      patterns: [/vendor|supplier|third[-_ ]party/i] }
-        ]
-      },
-      ISO27001: {
-        label: 'ISO 27001',
-        key: 'ISO27001',
+          { id: 'info_sec_policy', title: 'Information Security Policy', common: true, hint: 'Current policy document with approval date' },
+          { id: 'security_roles', title: 'Security Roles & Responsibilities', common: true, hint: 'Org chart or RACI showing security ownership' },
+          { id: 'acceptable_use', title: 'Acceptable Use Policy', common: true, hint: 'Employee IT usage guidelines' },
+          { id: 'code_of_conduct', title: 'Code of Conduct', common: false, hint: 'Ethics and conduct expectations' },
+          { id: 'data_classification', title: 'Data Classification Policy', common: false, hint: 'How data is categorized by sensitivity' },
+          { id: 'remote_work', title: 'Remote Work Policy', common: false, hint: 'Security requirements for remote workers' },
+          { id: 'board_oversight', title: 'Board/Leadership Security Oversight', common: false, hint: 'Meeting minutes showing security discussions' },
+        ]},
+      { id: 'risk', title: 'Risk Assessment', description: 'How risks are identified and managed',
         items: [
-          { id: 'AssetRegister', label: 'Asset inventory / register', patterns: [/asset/i, /inventory/i] },
-          { id: 'RiskRegister',  label: 'Risk register',              patterns: [/risk/i] },
-          { id: 'SoA',           label: 'Statement of Applicability (SoA)', patterns: [/soa/i, /statement.*applicability/i] }
-        ]
-      },
-      HIPAA: {
-        label: 'HIPAA',
-        key: 'HIPAA',
+          { id: 'risk_assessment', title: 'Risk Assessment', common: true, hint: 'Most recent risk assessment with ratings' },
+          { id: 'risk_register', title: 'Risk Register', common: true, hint: 'List of risks with owners and status' },
+          { id: 'risk_treatment', title: 'Risk Treatment Plan', common: true, hint: 'How identified risks are being addressed' },
+          { id: 'risk_acceptance', title: 'Risk Acceptance Documentation', common: false, hint: 'Formal acceptance of residual risks' },
+        ]},
+      { id: 'awareness', title: 'Security Awareness & Training', description: 'Employee security education',
         items: [
-          { id: 'BAAList',   label: 'Business Associate Agreements (BAAs)', patterns: [/baa/i, /business.*associate/i] },
-          { id: 'PHIAccess', label: 'PHI access log',                       patterns: [/phi/i, /access.*log/i] }
-        ]
-      },
-      GDPR: {
-        label: 'GDPR',
-        key: 'GDPR',
+          { id: 'security_training', title: 'Security Awareness Training', common: true, hint: 'Training completion report or LMS screenshot' },
+          { id: 'training_materials', title: 'Training Materials', common: false, hint: 'Topics covered in training' },
+          { id: 'phishing_testing', title: 'Phishing Test Results', common: false, hint: 'Simulated phishing campaign results' },
+        ]},
+      { id: 'incident', title: 'Incident Response', description: 'How security incidents are handled',
         items: [
-          { id: 'RoPA', label: 'Record of Processing Activities (RoPA)', patterns: [/ropa/i, /processing.*activities/i] },
-          { id: 'DPA',  label: 'Data processing agreements',            patterns: [/dpa/i, /processing.*agreement/i] }
-        ]
-      },
-      'NIST CSF': {
-        label: 'NIST CSF',
-        key: 'NIST CSF',
+          { id: 'ir_plan', title: 'Incident Response Plan', common: true, hint: 'IR procedures and escalation paths' },
+          { id: 'ir_team', title: 'IR Team Contacts', common: true, hint: 'Who is on the IR team' },
+          { id: 'incident_log', title: 'Security Incident Log', common: true, hint: 'Record of incidents (or attestation of none)' },
+          { id: 'ir_testing', title: 'IR Plan Testing', common: false, hint: 'Tabletop exercises or IR tests' },
+          { id: 'postmortem', title: 'Incident Postmortems', common: false, hint: 'Post-incident review samples' },
+        ]},
+      { id: 'access', title: 'Access Control', description: 'How user access is managed',
         items: [
-          { id: 'Policies',       label: 'Core security policies', patterns: [/policy/i] },
-          { id: 'RiskAssessment', label: 'Risk assessment',        patterns: [/risk.*assessment/i] }
-        ]
-      }
-    };
-
-    // ===== SOC2 SECURITY REQUEST COMPOSER (V1) =====
-const SOC2_SECURITY_BASELINE = [
-  {
-    group: "CC1–CC2 Governance & Policies",
-    items: [
-      { id: "sec_policy", title: "Information Security Policy / Program Overview", defaultOn: true, required: true },
-      { id: "roles_responsibilities", title: "Security roles & responsibilities (owner/admin roles)", defaultOn: true, required: true },
-      { id: "acceptable_use", title: "Acceptable Use / Code of Conduct (if exists)", defaultOn: true, required: false },
+          { id: 'access_review', title: 'User Access Review', common: true, hint: 'Periodic access review with approvals' },
+          { id: 'mfa_evidence', title: 'MFA Enforcement', common: true, hint: 'Screenshot showing MFA is required' },
+          { id: 'access_policy', title: 'Access Control Policy', common: true, hint: 'Policy defining access principles' },
+          { id: 'jml_process', title: 'Joiner/Mover/Leaver Process', common: true, hint: 'How access is granted and revoked' },
+          { id: 'jml_samples', title: 'JML Process Samples', common: false, hint: '2-3 onboarding/offboarding examples' },
+          { id: 'privileged_list', title: 'Privileged Access List', common: true, hint: 'Admin users and justification' },
+          { id: 'privileged_controls', title: 'Privileged Access Controls', common: false, hint: 'PAM, just-in-time access, etc.' },
+          { id: 'sso_config', title: 'SSO Configuration', common: false, hint: 'Single sign-on setup' },
+          { id: 'password_policy', title: 'Password Policy', common: false, hint: 'Password requirements' },
+          { id: 'service_accounts', title: 'Service Account Inventory', common: false, hint: 'Non-human accounts list' },
+        ]},
+      { id: 'operations', title: 'System Operations & Monitoring', description: 'How systems are monitored and maintained',
+        items: [
+          { id: 'logging', title: 'Logging & Audit Trails', common: true, hint: 'What is logged, where, retention period' },
+          { id: 'monitoring', title: 'Monitoring & Alerting', common: true, hint: 'Tools used and how alerts are handled' },
+          { id: 'siem', title: 'SIEM / Log Aggregation', common: false, hint: 'Centralized logging solution' },
+          { id: 'vuln_scanning', title: 'Vulnerability Scanning', common: true, hint: 'Scan results or summary' },
+          { id: 'vuln_remediation', title: 'Vulnerability Remediation', common: false, hint: 'How vulns are tracked to fix' },
+          { id: 'patch_mgmt', title: 'Patch Management', common: false, hint: 'How patches are applied' },
+          { id: 'endpoint', title: 'Endpoint Protection', common: false, hint: 'Antivirus/EDR coverage' },
+          { id: 'encryption_rest', title: 'Encryption at Rest', common: false, hint: 'Evidence data is encrypted' },
+          { id: 'encryption_transit', title: 'Encryption in Transit', common: false, hint: 'TLS configuration' },
+          { id: 'backups', title: 'Backup & Recovery', common: false, hint: 'Backup config and testing' },
+        ]},
+      { id: 'change', title: 'Change Management', description: 'How changes are controlled',
+        items: [
+          { id: 'change_log', title: 'Change Log / Deployments', common: true, hint: 'Record of recent changes' },
+          { id: 'change_policy', title: 'Change Management Policy', common: true, hint: 'Change control requirements' },
+          { id: 'code_review', title: 'Code Review Evidence', common: true, hint: 'PR approvals, branch protection' },
+          { id: 'change_approval', title: 'Change Approval Process', common: false, hint: 'How changes are approved' },
+          { id: 'emergency_change', title: 'Emergency Change Process', common: false, hint: 'How urgent changes work' },
+          { id: 'sdlc', title: 'SDLC Documentation', common: false, hint: 'Development lifecycle docs' },
+        ]},
+      { id: 'vendor', title: 'Vendor Management', description: 'How third-party risks are managed',
+        items: [
+          { id: 'vendor_list', title: 'Vendor Inventory', common: true, hint: 'List with risk tiers' },
+          { id: 'vendor_policy', title: 'Vendor Management Policy', common: true, hint: 'Policy for vendor evaluation' },
+          { id: 'vendor_assessments', title: 'Vendor Assessments', common: false, hint: 'Sample security questionnaires' },
+          { id: 'critical_vendors', title: 'Critical Vendors List', common: false, hint: 'Cloud providers, key dependencies' },
+        ]},
+      { id: 'bcdr', title: 'Business Continuity', description: 'Continuity and disaster recovery',
+        items: [
+          { id: 'bcp', title: 'Business Continuity Plan', common: false, hint: 'Continuity procedures' },
+          { id: 'drp', title: 'Disaster Recovery Plan', common: false, hint: 'IT recovery procedures' },
+          { id: 'bcdr_testing', title: 'BCP/DR Testing', common: false, hint: 'Test results' },
+        ]},
     ]
   },
-  {
-    group: "CC3 Risk Assessment",
-    items: [
-      { id: "risk_assessment", title: "Risk assessment or risk register excerpt (latest)", defaultOn: true, required: true },
-      { id: "risk_remediation", title: "Risk treatment / remediation tracking (open items list)", defaultOn: true, required: false },
+  ISO27001: {
+    label: 'ISO 27001', description: 'Information Security Management System', defaultOn: false,
+    controlGroups: [
+      { id: 'isms', title: 'ISMS Documentation', description: 'Core ISMS documents',
+        items: [
+          { id: 'scope', title: 'ISMS Scope', common: true, hint: 'Boundaries of ISMS' },
+          { id: 'policy', title: 'ISMS Policy', common: true, hint: 'Top-level security policy' },
+          { id: 'soa', title: 'Statement of Applicability', common: true, hint: 'Which controls apply' },
+          { id: 'risk_iso', title: 'Risk Assessment', common: true, hint: 'ISO 27001 risk assessment' },
+          { id: 'risk_treatment_iso', title: 'Risk Treatment Plan', common: true, hint: 'How risks are treated' },
+          { id: 'internal_audit', title: 'Internal Audit Results', common: true, hint: 'Recent ISMS audit' },
+          { id: 'mgmt_review', title: 'Management Review', common: true, hint: 'Management review minutes' },
+        ]},
+      { id: 'annex', title: 'Annex A Controls', description: 'Evidence for applicable controls',
+        items: [
+          { id: 'asset_inventory', title: 'Asset Inventory', common: true, hint: 'Information assets list' },
+          { id: 'access_iso', title: 'Access Control', common: true, hint: 'Access control implementation' },
+          { id: 'crypto', title: 'Cryptography', common: false, hint: 'Encryption controls' },
+          { id: 'physical', title: 'Physical Security', common: false, hint: 'Physical access controls' },
+          { id: 'supplier', title: 'Supplier Security', common: false, hint: 'Third-party management' },
+        ]},
     ]
   },
-  {
-    group: "CC4 Monitoring",
-    items: [
-      { id: "monitoring_overview", title: "Monitoring/alerting overview (tools + review cadence)", defaultOn: true, required: false },
-      { id: "periodic_reviews", title: "Periodic security/access reviews schedule or evidence", defaultOn: false, required: false },
+  HIPAA: {
+    label: 'HIPAA', description: 'Health Insurance Portability and Accountability Act', defaultOn: false,
+    controlGroups: [
+      { id: 'admin', title: 'Administrative Safeguards', description: 'Administrative controls for PHI',
+        items: [
+          { id: 'risk_hipaa', title: 'Security Risk Analysis', common: true, hint: 'HIPAA risk analysis' },
+          { id: 'policies_hipaa', title: 'HIPAA Policies', common: true, hint: 'Security policies' },
+          { id: 'training_hipaa', title: 'Workforce Training', common: true, hint: 'HIPAA training records' },
+          { id: 'sanctions', title: 'Sanction Policy', common: false, hint: 'Violation consequences' },
+        ]},
+      { id: 'technical', title: 'Technical Safeguards', description: 'Technical controls for PHI',
+        items: [
+          { id: 'access_hipaa', title: 'Access Controls', common: true, hint: 'PHI access controls' },
+          { id: 'audit_hipaa', title: 'Audit Controls', common: true, hint: 'PHI access logging' },
+          { id: 'integrity', title: 'Integrity Controls', common: false, hint: 'PHI integrity mechanisms' },
+          { id: 'transmission', title: 'Transmission Security', common: false, hint: 'PHI encryption in transit' },
+        ]},
+      { id: 'ba', title: 'Business Associates', description: 'BA agreements',
+        items: [
+          { id: 'baa_list', title: 'BAA Inventory', common: true, hint: 'List of BAAs' },
+          { id: 'baa_samples', title: 'Sample BAAs', common: false, hint: 'Executed BAA examples' },
+        ]},
     ]
   },
-  {
-    group: "CC5 Security Awareness & Incident Response",
-    items: [
-      { id: "security_training", title: "Security awareness training evidence", defaultOn: true, required: false },
-      { id: "incident_response", title: "Incident response process + how incidents are tracked", defaultOn: true, required: true },
-    ]
-  },
-  {
-    group: "CC6 Logical Access",
-    items: [
-      { id: "access_review", title: "User access review (export + reviewer sign-off)", defaultOn: true, required: true },
-      { id: "jml_process", title: "User provisioning/deprovisioning (JML) process + sample tickets (if available)", defaultOn: true, required: false },
-      { id: "mfa_enforcement", title: "MFA enforcement evidence (IdP settings screenshot or policy)", defaultOn: true, required: true },
-      { id: "privileged_access", title: "Privileged/admin access controls (admin list + how controlled)", defaultOn: true, required: false },
-    ]
-  },
-  {
-    group: "CC7 System Operations",
-    items: [
-      { id: "vuln_mgmt", title: "Vulnerability management (scan summary or ticket view)", defaultOn: true, required: false },
-      { id: "logging_retention", title: "Logging/audit trail evidence (what’s logged + retention)", defaultOn: true, required: true },
-      { id: "backups", title: "Backups & recovery basics (evidence they run)", defaultOn: false, required: false },
-    ]
-  },
-  {
-    group: "CC8 Change Management",
-    items: [
-      { id: "change_log", title: "Change management log / deployments evidence", defaultOn: true, required: true },
-      { id: "code_review_controls", title: "SDLC / code review controls (branch protections screenshot or policy)", defaultOn: false, required: false },
-    ]
-  },
-  {
-    group: "CC9 Vendor Risk",
-    items: [
-      { id: "vendor_list", title: "Vendor list + vendor risk approach", defaultOn: true, required: true },
-      { id: "subservice_orgs", title: "Critical vendors / subservice orgs list (cloud providers, key processors)", defaultOn: false, required: false },
+  GDPR: {
+    label: 'GDPR', description: 'General Data Protection Regulation', defaultOn: false,
+    controlGroups: [
+      { id: 'core', title: 'Core Requirements', description: 'Fundamental GDPR compliance',
+        items: [
+          { id: 'ropa', title: 'Record of Processing Activities', common: true, hint: 'Article 30 records' },
+          { id: 'privacy_notice', title: 'Privacy Notice', common: true, hint: 'Public privacy policy' },
+          { id: 'lawful_basis', title: 'Lawful Basis Documentation', common: true, hint: 'Legal basis per activity' },
+          { id: 'dpia', title: 'Data Protection Impact Assessments', common: false, hint: 'DPIAs for high-risk processing' },
+        ]},
+      { id: 'rights', title: 'Data Subject Rights', description: 'Handling data subject requests',
+        items: [
+          { id: 'dsar', title: 'DSAR Process', common: true, hint: 'How requests are handled' },
+          { id: 'consent', title: 'Consent Records', common: false, hint: 'Consent mechanisms' },
+        ]},
+      { id: 'processors', title: 'Processors & Transfers', description: 'Third parties and transfers',
+        items: [
+          { id: 'dpa', title: 'Data Processing Agreements', common: true, hint: 'DPAs with processors' },
+          { id: 'transfers', title: 'Transfer Mechanisms', common: false, hint: 'SCCs, adequacy, etc.' },
+        ]},
     ]
   }
-];
+};
 
-// Common-add library (searchable)
-const SOC2_COMMON_LIBRARY = [
-  "Access Control Policy",
-  "Change Management Policy",
-  "Vendor Management Policy",
-  "Data Classification / Handling Policy",
-  "BCP/DR Policy",
-  "DR test evidence (if performed)",
-  "Pen test report (if available)",
-  "Security exception log",
-  "Endpoint/EDR coverage screenshot",
-  "Encryption at rest evidence",
-  "Encryption in transit evidence",
-  "Key management approach (KMS)",
-  "Background check policy/evidence (if applicable)",
-  "Onboarding/offboarding samples (2–3 examples)",
-  "SIEM/alert review evidence (weekly/monthly)",
-];
-
-let requestedEvidenceState = []; // normalized list sent to worker
-// Each item: { id, group, title, instructions, required, defaultOn, included }
-
-function buildDefaultRequestedEvidence() {
-  const out = [];
-  for (const g of SOC2_SECURITY_BASELINE) {
-    for (const it of g.items) {
-      out.push({
-        id: it.id,
-        group: g.group,
-        title: it.title,
-        instructions: "",
-        required: !!it.required,
-        defaultOn: !!it.defaultOn,
-        included: !!it.defaultOn
-      });
-    }
-  }
-  return out;
-}
-
-function ensureRequestedEvidenceInitialized() {
-  // Only initialize once per page-load unless we explicitly set from /resolve
-  if (!requestedEvidenceState || !requestedEvidenceState.length) {
-    requestedEvidenceState = buildDefaultRequestedEvidence();
-  }
-}
-
-function renderRequestedEvidenceUI({ mode }) {
-  // mode: "auditor" | "client"
-  const block = document.getElementById("requestedEvidenceBlock");
-  const list = document.getElementById("requestedEvidenceList");
-  const addControls = document.getElementById("requestedEvidenceAddControls");
-
-  if (!block || !list) return;
-
-  const role = (document.getElementById("role")?.value || "").trim();
-  const selectedFrameworks = Array.from(document.getElementById("frameworks")?.selectedOptions || []).map(o => o.value);
-
-  const isSOC2Selected = selectedFrameworks.includes("SOC2");
-  if (!isSOC2Selected) {
-    block.style.display = "none";
-    return;
-  }
-
-  // Show block when SOC2 selected; hide add controls for client mode
-  block.style.display = "";
-  if (addControls) addControls.style.display = (mode === "auditor" && role === "auditor") ? "" : "none";
-
-  // Group items
-  const byGroup = new Map();
-  for (const item of requestedEvidenceState) {
-    const g = item.group || "Other";
-    if (!byGroup.has(g)) byGroup.set(g, []);
-    byGroup.get(g).push(item);
-  }
-
-  // Render
-  list.innerHTML = "";
-  for (const [groupName, items] of byGroup.entries()) {
-    const groupDiv = document.createElement("div");
-    groupDiv.style.marginTop = "10px";
-
-    const h = document.createElement("div");
-    h.innerHTML = `<strong>${esc(groupName)}</strong>`;
-    groupDiv.appendChild(h);
-
-    const ul = document.createElement("ul");
-    ul.style.margin = "8px 0 0";
-    ul.style.paddingLeft = "18px";
-
-    for (const item of items) {
-      const li = document.createElement("li");
-      li.style.margin = "8px 0";
-
-      const isAuditor = (mode === "auditor" && role === "auditor");
-      const chkId = `req-${item.id}-included`;
-      const txtId = `req-${item.id}-instr`;
-
-      // Checkbox (auditor only). Client sees a read-only list of included items.
-      const included = !!item.included;
-      if (isAuditor) {
-        li.innerHTML = `
-          <div style="display:flex;gap:10px;align-items:flex-start">
-            <input type="checkbox" id="${esc(chkId)}" ${included ? "checked" : ""} />
-            <div style="flex:1">
-              <label for="${esc(chkId)}"><strong>${esc(item.title)}</strong>${item.required ? ' <span class="pill" style="margin-left:6px">required</span>' : ""}</label>
-              <details class="advanced" style="margin-top:6px">
-                <summary>Instructions (optional)</summary>
-                <textarea id="${esc(txtId)}" placeholder="Example: last 30 days; include reviewer sign-off + date" style="margin-top:8px">${esc(item.instructions || "")}</textarea>
-              </details>
-            </div>
-          </div>
-        `;
-      } else {
-        if (!included) continue; // clients only see what auditor included
-        li.innerHTML = `
-          <div>
-            <strong>${esc(item.title)}</strong>${item.required ? ' <span class="pill" style="margin-left:6px">required</span>' : ""}
-            ${item.instructions ? `<div class="hint" style="margin-top:6px">${esc(item.instructions)}</div>` : ""}
-          </div>
-        `;
-      }
-
-      ul.appendChild(li);
-
-      // Wire events (auditor mode)
-      if (isAuditor) {
-        const chk = li.querySelector(`#${CSS.escape(chkId)}`);
-        const txt = li.querySelector(`#${CSS.escape(txtId)}`);
-        if (chk) {
-          chk.addEventListener("change", () => {
-            item.included = !!chk.checked;
-          });
-        }
-        if (txt) {
-          txt.addEventListener("input", () => {
-            item.instructions = txt.value || "";
-          });
-        }
-      }
-    }
-
-    if (ul.childNodes.length) {
-      groupDiv.appendChild(ul);
-      list.appendChild(groupDiv);
-    }
-  }
-}
-
-function getRequestedEvidencePayload() {
-  // Only send included items
-  return requestedEvidenceState
-    .filter(x => x && x.included)
-    .map(x => ({
-      id: x.id,
-      group: x.group,
-      title: x.title,
-      instructions: x.instructions || "",
-      required: !!x.required
-    }));
-}
-
-// Searchable common-add UI
-function wireCommonEvidenceSearch() {
-  const search = document.getElementById("commonEvidenceSearch");
-  const results = document.getElementById("commonEvidenceResults");
-  if (!search || !results) return;
-
-  function renderResults(q) {
-    const query = (q || "").trim().toLowerCase();
-    if (!query) {
-      results.style.display = "none";
-      results.innerHTML = "";
-      return;
-    }
-    const matches = SOC2_COMMON_LIBRARY
-      .filter(t => t.toLowerCase().includes(query))
-      .slice(0, 12);
-
-    if (!matches.length) {
-      results.style.display = "";
-      results.innerHTML = `<div class="small muted">No matches.</div>`;
-      return;
-    }
-
-    results.style.display = "";
-    results.innerHTML = matches
-      .map(t => `<div class="btn" data-add-common="${esc(t)}" style="justify-content:flex-start;width:100%;margin:6px 0">${esc(t)}</div>`)
-      .join("");
-  }
-
-  search.addEventListener("input", () => renderResults(search.value));
-
-  results.addEventListener("click", (e) => {
-    const btn = e.target.closest("[data-add-common]");
-    if (!btn) return;
-    const title = btn.getAttribute("data-add-common") || "";
-    if (!title) return;
-
-    // Avoid duplicates by title
-    const exists = requestedEvidenceState.some(x => (x.title || "").toLowerCase() === title.toLowerCase());
-    if (!exists) {
-      requestedEvidenceState.push({
-        id: "common_" + Math.random().toString(36).slice(2, 10),
-        group: "Common adds",
-        title,
-        instructions: "",
-        required: false,
-        defaultOn: false,
-        included: true
-      });
-    }
-    renderRequestedEvidenceUI({ mode: "auditor" });
-  });
-}
-
-function wireCustomEvidenceAdd() {
-  const btn = document.getElementById("addCustomEvidenceBtn");
-  const titleEl = document.getElementById("customEvidenceTitle");
-  const instrEl = document.getElementById("customEvidenceInstructions");
-  if (!btn || !titleEl) return;
-
-  btn.addEventListener("click", () => {
-    const title = (titleEl.value || "").trim();
-    const instructions = (instrEl?.value || "").trim();
-    if (!title) {
-      showStatus("Enter a custom request title.", false);
-      return;
-    }
-
-    requestedEvidenceState.push({
-      id: "custom_" + Math.random().toString(36).slice(2, 10),
-      group: "Custom requests",
-      title,
-      instructions,
-      required: false,
-      defaultOn: false,
-      included: true
-    });
-
-    titleEl.value = "";
-    if (instrEl) instrEl.value = "";
-    renderRequestedEvidenceUI({ mode: "auditor" });
-  });
-}
-// ===== /SOC2 SECURITY REQUEST COMPOSER =====
-
+let composerState = {};
+let customFrameworks = [];
+let isUnlocked = false;
+let isFromRequestLink = false;
+let appliedCode = null;
 
 const $ = s => document.querySelector(s);
-    
-// ===== PATCH UTILS (escape + safeUrl) =====
-const esc = (s = '') =>
-  String(s)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
+const esc = (s='') => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const safeUrl = u => { try { const url = new URL(String(u), location.href); return ['https:','http:'].includes(url.protocol) ? url.toString() : ''; } catch { return ''; } };
 
-const safeUrl = (u) => {
-  try {
-    const url = new URL(String(u), window.location.href);
-    if (url.protocol !== 'https:' && url.protocol !== 'http:') return '';
-    return url.toString();
-  } catch {
-    return '';
-  }
-};    
-// ===== /PATCH UTILS =====
+function showStatus(msg, ok=false) { const el=$('#status'); el.style.display='block'; el.className='status '+(ok?'ok':'err'); el.innerHTML=msg; }
+function clearStatus() { $('#status').style.display='none'; }
 
-// Try hard to pull a request token from the URL, in multiple shapes.
-function getRequestTokenFromUrl() {
-  try {
-    const url = new URL(window.location.href);
-
-    // 1) Look in normal query params under a few possible names
-    const params = url.searchParams;
-    const names = ['t', 'token', 'requestToken', 'request', 'r', 'prev']; // <-- added prev
-    for (const name of names) {
-      const v = params.get(name);
-      if (v) return v;
+function initComposerState() {
+  composerState = {};
+  for (const [fwKey, fw] of Object.entries(FRAMEWORK_LIBRARY)) {
+    composerState[fwKey] = { enabled: fw.defaultOn, groups: {} };
+    for (const g of fw.controlGroups) {
+      composerState[fwKey].groups[g.id] = { 
+        expanded: false, 
+        showMore: false, 
+        excluded: false,
+        items: {} 
+      };
+      for (const item of g.items) {
+        composerState[fwKey].groups[g.id].items[item.id] = { 
+          included: item.common, 
+          instructions: '' 
+        };
+      }
     }
-
-    // 2) Look in the hash (e.g. #t=..., #token=...)
-    const hash = url.hash || '';
-    const hashMatch = hash.match(/(?:t|token|requestToken|request|r|prev)=([^&]+)/i); // <-- added prev
-    if (hashMatch) return decodeURIComponent(hashMatch[1]);
-
-    // 3) Look in the path (e.g. /r/ABC123, /request/ABC123)
-    const pathMatch = url.pathname.match(/\/(?:r|t|request|prev)\/([^/]+)/i); // <-- added prev
-    if (pathMatch) return pathMatch[1];
-  } catch (e) {
-    console.warn('Token parse error:', e);
   }
-  return null;
 }
 
+function getAllFrameworks() {
+  const all = { ...FRAMEWORK_LIBRARY };
+  customFrameworks.forEach(f => all[f.id] = f);
+  return all;
+}
 
-    
-    const statusEl = $('#status');
-    const submitBtn = $('#submitBtn');
-   
-    const startBtn   = document.getElementById('startBtn');
-    const sendReqBtn = document.getElementById('sendReqBtn');
+function renderComposer() {
+  const c = $('#composer'); 
+  if (!c) return;
+  const role = ($('#role')?.value || '').trim();
+  if (role !== 'auditor') { c.innerHTML = ''; return; }
 
-    const roleSelect = $('#role');
-    const emailLabel = $('#emailLabel');
-    const companyLabel = $('#companyLabel');
-    const roleHint = $('#roleHint');
+  const allFw = getAllFrameworks();
+  let html = '<div class="fw-list">';
+  
+  // Framework chips
+  for (const [fwKey, fw] of Object.entries(allFw)) {
+    const on = composerState[fwKey]?.enabled;
+    html += `<label class="fw-chip ${on ? 'active' : ''}" data-fw="${esc(fwKey)}">
+      <input type="checkbox" ${on ? 'checked' : ''} data-fw-toggle="${esc(fwKey)}"/>
+      <span class="fw-chip-label">${esc(fw.label)}</span>
+    </label>`;
+  }
+  html += '<button type="button" class="fw-chip add-fw-btn" id="addFwChip">+ Add framework</button></div>';
 
-    const auditorCodeCol = $('#auditorCodeCol');
-    const auditorEmailCol = $('#auditorEmailCol');
-    const clientEmailCol = $('#clientEmailCol');
-
-    const auditorEmailHint = $('#auditorEmailHint');
-    const clientEmailHint = $('#clientEmailHint');
-
-    const billingHint = $('#billingHint');
-    const billingSelect = $('#billingMode');
-
-    const optionalDetails = $('#optionalRow');
-    const planBillingRow = $('#planBillingRow');
-
-    const frameworksSelectEl = $('#frameworks');
-    const frameworkGuides = $('#frameworkGuides');
-
-    const laterRows = document.querySelectorAll('.step-after-role');
-    const pricingSection = document.getElementById('pricing');
-
-    // ===== STEP 1 FIX: define file DOM refs BEFORE any use =====
-const fileInput = document.getElementById('files');     // <input type="file" id="files">
-const fileBox   = document.getElementById('filesRow');  // <div id="filesRow"> ... </div>
-const fileMeta  = document.getElementById('fileMeta');  // <div id="fileMeta"> ... </div>
-// ===== /STEP 1 FIX =====
-
-
-    // ===== PRICING GATE (inline) =====
-const pricingGate = document.getElementById('pricingGate');
-const unlockCodeEl = document.getElementById('unlockCode');
-const applyUnlockCodeBtn = document.getElementById('applyUnlockCodeBtn');
-const unlockHint = document.getElementById('unlockHint');
-
-// Remember a code that successfully passed /check-code
-let appliedCode = null;
-const CODE_STORAGE_KEY = 'proofrepo_applied_code';
-
-
-let isUnlocked = false;
-let isFromRequestLink = false;        // NEW
-let hasFrameworkOverride = false;     // NEW
-let hasCompanyOverride   = false;     // NEW
-let hasAuditorOverride   = false;     // NEW
-
-if (fileInput) fileInput.disabled = true;
-
-/* =======================
-   STEP 2: DROP-IN HELPERS
-   (easy to find + replace)
-   ======================= */
-
-async function submitAuditorRequest() {
-  const auditorEmail = (document.getElementById('email')?.value || '').trim();
-  const clientEmail  = (document.getElementById('clientContactEmail')?.value || '').trim();
-  const company      = (document.getElementById('company')?.value || '').trim();
-
-  const frameworks = Array.from(document.getElementById('frameworks')?.selectedOptions || [])
-    .map(o => o.value)
-    .filter(Boolean);
-
-  // minimal validation (keep it blunt)
-  const looksLikeEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(auditorEmail);
-  const looksLikeEmail2 = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clientEmail);
-  if (!looksLikeEmail) throw new Error('Enter a valid auditor email.');
-  if (!looksLikeEmail2) throw new Error('Enter a valid client email.');
-  if (!company) throw new Error('Enter the client company (required).');
-  if (!frameworks.length) throw new Error('Select at least one framework.');
-
-  // Build deadlineISO from "days from now" + local time
-  const days = parseInt((document.getElementById('deadlineDays')?.value || '5'), 10);
-  const timeStr = (document.getElementById('deadlineTimeLocal')?.value || '17:00').trim(); // HH:MM
-  const [hh, mm] = timeStr.split(':').map(x => parseInt(x, 10));
-
-  const d = new Date();
-  d.setDate(d.getDate() + (Number.isFinite(days) ? days : 5));
-  d.setHours(Number.isFinite(hh) ? hh : 17, Number.isFinite(mm) ? mm : 0, 0, 0);
-
-  const deadlineISO = d.toISOString();
-
-  const payload = {
-    auditorEmail,
-    clientEmail,
-    company,
-    frameworks,
-    deadlineISO
-  };
-
-
-  // 🔹 NEW: attach the applied bundle code so /request can store it
-  if (appliedCode) {
-    payload.auditorCode = appliedCode;
+  // Framework bodies
+  for (const [fwKey, fw] of Object.entries(allFw)) {
+    if (!composerState[fwKey]?.enabled) continue;
+    html += renderFwBody(fwKey, fw);
   }
 
-  // NEW: requested evidence payload (SOC2)
-  ensureRequestedEvidenceInitialized();
-  const globalInstructions = (document.getElementById("globalInstructions")?.value || "").trim();
+  // Global instructions
+  html += `<div class="global-instructions">
+    <label for="globalInstructions"><strong>Overall instructions for client</strong></label>
+    <textarea id="globalInstructions" placeholder="Example: Please provide evidence covering Jan–Dec 2025. Screenshots acceptable. Redact any secrets or credentials."></textarea>
+    <div class="hint">Shown prominently to your client above the checklist.</div>
+  </div>`;
 
-  payload.globalInstructions = globalInstructions;
-  payload.requestedEvidence = getRequestedEvidencePayload();
+  c.innerHTML = html;
+  wireComposer();
+}
 
+function renderFwBody(fwKey, fw) {
+  const isCustom = !!customFrameworks.find(f => f.id === fwKey);
+  let html = `<div class="fw-body" data-fw-body="${esc(fwKey)}">
+    <div style="margin-bottom:12px;display:flex;justify-content:space-between;align-items:center">
+      <div><strong>${esc(fw.label)}</strong>${fw.description ? ` <span class="muted">— ${esc(fw.description)}</span>` : ''}</div>
+    </div>`;
+  
+  for (const g of (fw.controlGroups || [])) {
+    html += renderGroup(fwKey, g);
+  }
+  
+  // Add control group button
+  html += `<button type="button" class="btn sm ghost" style="width:100%;margin-top:8px" data-add-group-btn="${esc(fwKey)}">+ Add control group</button>`;
+  
+  return html + '</div>';
+}
 
+function renderGroup(fwKey, g) {
+  const gs = composerState[fwKey]?.groups?.[g.id];
+  const exp = gs?.expanded;
+  const more = gs?.showMore;
+  const excluded = gs?.excluded;
+  
+  const common = (g.items || []).filter(i => i.common);
+  const extra = (g.items || []).filter(i => !i.common);
+  const includedCount = (g.items || []).filter(i => gs?.items?.[i.id]?.included && !excluded).length;
+  const totalCount = (g.items || []).length;
+
+  let html = `<div class="control-group ${excluded ? 'excluded' : ''}" data-fw="${esc(fwKey)}" data-group="${esc(g.id)}">
+    <div class="cg-header">
+      <span class="cg-title">${esc(g.title)}</span>
+      <div class="cg-status">
+        ${excluded 
+          ? `<span class="pill off">Excluded</span><button type="button" class="cg-include" data-include-group="${esc(fwKey)}-${esc(g.id)}" title="Include this group">+</button>`
+          : `<span class="cg-count">${includedCount} of ${totalCount} selected</span><button type="button" class="cg-exclude" data-exclude-group="${esc(fwKey)}-${esc(g.id)}" title="Exclude this group">×</button>`
+        }
+        <span class="cg-toggle">${exp ? '▼' : '▶'}</span>
+      </div>
+    </div>
+    <div class="cg-body ${exp ? 'open' : ''}">`;
+  
+  if (excluded) {
+    html += `<div class="muted" style="padding:12px;text-align:center">This control group is excluded from the request.</div>`;
+  } else {
+    if (g.description) {
+      html += `<div class="muted small" style="margin-bottom:12px">${esc(g.description)}</div>`;
+    }
+    
+    // Common items
+    for (const item of common) {
+      html += renderItem(fwKey, g.id, item, gs);
+    }
+    
+    // Extra items (hidden by default)
+    if (extra.length) {
+      html += `<div class="extra-items" style="display:${more ? 'block' : 'none'}">`;
+      for (const item of extra) {
+        html += renderItem(fwKey, g.id, item, gs);
+      }
+      html += '</div>';
+      html += `<div class="more-toggle" data-fw="${esc(fwKey)}" data-group="${esc(g.id)}">${more ? '− Show fewer options' : `+ Show ${extra.length} more options`}</div>`;
+    }
+    
+    // Add custom item section
+    html += `<div class="add-custom-section">
+      <h4>Add custom request to "${esc(g.title)}"</h4>
+      <div class="custom-form">
+        <div class="form-row">
+          <label class="small">Request name</label>
+          <input placeholder="e.g., Network Diagram, Encryption Key Rotation Log" data-custom-name="${esc(fwKey)}-${esc(g.id)}"/>
+        </div>
+        <div class="form-row">
+          <label class="small">Instructions for client (optional)</label>
+          <textarea placeholder="Describe what you need, date ranges, format preferences, etc." data-custom-instr="${esc(fwKey)}-${esc(g.id)}"></textarea>
+        </div>
+        <button type="button" class="btn sm" data-add-item="${esc(fwKey)}" data-group="${esc(g.id)}">+ Add request</button>
+      </div>
+    </div>`;
+  }
+  
+  return html + '</div></div>';
+}
+
+function renderItem(fwKey, gid, item, gs) {
+  const st = gs?.items?.[item.id];
+  const inc = st?.included ?? item.common;
+  const instr = st?.instructions || '';
+  
+  return `<div class="evidence-item ${inc ? 'included' : ''}" data-fw="${esc(fwKey)}" data-group="${esc(gid)}" data-item="${esc(item.id)}">
+    <input type="checkbox" ${inc ? 'checked' : ''}/>
+    <div class="ei-content">
+      <div class="ei-title">
+        ${esc(item.title)}
+        
+        
+      </div>
+      ${item.hint ? `<div class="ei-hint">${esc(item.hint)}</div>` : ''}
+      <div class="ei-instr">
+        <label class="small muted">Instructions for client (optional)</label>
+        <textarea placeholder="e.g., Please include date range, reviewer sign-off, specific format..." data-item-instr="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">${esc(instr)}</textarea>
+      </div>
+    </div>
+  </div>`;
+}
+
+function wireComposer() {
+  // Framework toggle
+  document.querySelectorAll('[data-fw-toggle]').forEach(cb => {
+    cb.addEventListener('change', e => {
+      const k = e.target.dataset.fwToggle;
+      if (!composerState[k]) {
+        composerState[k] = { enabled: false, groups: {} };
+      }
+      composerState[k].enabled = e.target.checked;
+      renderComposer();
+    });
+  });
+  
+  // Control group header click (expand/collapse)
+  document.querySelectorAll('.cg-header').forEach(h => {
+    h.addEventListener('click', e => {
+      // Don't toggle if clicking exclude/include button
+      if (e.target.closest('.cg-exclude') || e.target.closest('.cg-include')) return;
+      const g = h.closest('.control-group');
+      const fk = g.dataset.fw, gid = g.dataset.group;
+      composerState[fk].groups[gid].expanded = !composerState[fk].groups[gid].expanded;
+      renderComposer();
+    });
+  });
+  
+  // Exclude group
+  document.querySelectorAll('[data-exclude-group]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const [fk, gid] = btn.dataset.excludeGroup.split('-');
+      composerState[fk].groups[gid].excluded = true;
+      renderComposer();
+    });
+  });
+  
+  // Include group
+  document.querySelectorAll('[data-include-group]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const [fk, gid] = btn.dataset.includeGroup.split('-');
+      composerState[fk].groups[gid].excluded = false;
+      renderComposer();
+    });
+  });
+  
+  // Show more/fewer toggle
+  document.querySelectorAll('.more-toggle').forEach(t => {
+    t.addEventListener('click', e => {
+      e.stopPropagation();
+      const fk = t.dataset.fw, gid = t.dataset.group;
+      composerState[fk].groups[gid].showMore = !composerState[fk].groups[gid].showMore;
+      renderComposer();
+    });
+  });
+  
+  // Evidence item checkbox
+  document.querySelectorAll('.evidence-item input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', e => {
+      const el = e.target.closest('.evidence-item');
+      const { fw, group, item } = el.dataset;
+      composerState[fw].groups[group].items[item].included = e.target.checked;
+      renderComposer();
+    });
+  });
+  
+  // Evidence item instructions
+  document.querySelectorAll('[data-item-instr]').forEach(ta => {
+    ta.addEventListener('input', e => {
+      const [fw, group, item] = ta.dataset.itemInstr.split('-');
+      if (composerState[fw]?.groups?.[group]?.items?.[item]) {
+        composerState[fw].groups[group].items[item].instructions = e.target.value;
+      }
+    });
+  });
+  
+  // Add custom item
+  document.querySelectorAll('[data-add-item]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const fk = btn.dataset.addItem;
+      const gid = btn.dataset.group;
+      const nameInput = document.querySelector(`[data-custom-name="${fk}-${gid}"]`);
+      const instrInput = document.querySelector(`[data-custom-instr="${fk}-${gid}"]`);
+      const title = (nameInput?.value || '').trim();
+      const instructions = (instrInput?.value || '').trim();
+      
+      if (!title) {
+        showStatus('Please enter a request name.', false);
+        return;
+      }
+      
+      const cid = 'c_' + Math.random().toString(36).slice(2, 8);
+      const allFw = getAllFrameworks();
+      const fw = allFw[fk];
+      const grp = fw?.controlGroups?.find(g => g.id === gid);
+      
+      if (grp) {
+        grp.items.push({ id: cid, title, common: true, hint: '' });
+      }
+      
+      composerState[fk].groups[gid].items[cid] = { included: true, instructions };
+      
+      nameInput.value = '';
+      instrInput.value = '';
+      clearStatus();
+      renderComposer();
+    });
+  });
+  
+  // Add framework
+  $('#addFwChip')?.addEventListener('click', () => $('#addFwModal').classList.remove('hidden'));
+  
+  // Add control group button
+  document.querySelectorAll('[data-add-group-btn]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      $('#customGroupFwKey').value = btn.dataset.addGroupBtn;
+      $('#addGroupModal').classList.remove('hidden');
+    });
+  });
+}
+
+// Add Framework Modal
+$('#cancelFwBtn')?.addEventListener('click', () => {
+  $('#addFwModal').classList.add('hidden');
+  $('#customFwName').value = '';
+  $('#customFwDesc').value = '';
+});
+
+$('#saveFwBtn')?.addEventListener('click', () => {
+  const name = ($('#customFwName')?.value || '').trim();
+  const desc = ($('#customFwDesc')?.value || '').trim();
+  if (!name) return;
+  
+  const id = 'cf_' + Math.random().toString(36).slice(2, 8);
+  customFrameworks.push({
+    id,
+    label: name,
+    description: desc || 'Custom framework',
+    controlGroups: []
+  });
+  
+  composerState[id] = { enabled: true, groups: {} };
+  
+  $('#addFwModal').classList.add('hidden');
+  $('#customFwName').value = '';
+  $('#customFwDesc').value = '';
+  renderComposer();
+});
+
+// Add Control Group Modal
+$('#cancelGroupBtn')?.addEventListener('click', () => {
+  $('#addGroupModal').classList.add('hidden');
+  $('#customGroupName').value = '';
+  $('#customGroupDesc').value = '';
+  $('#customGroupFwKey').value = '';
+});
+
+$('#saveGroupBtn')?.addEventListener('click', () => {
+  const name = ($('#customGroupName')?.value || '').trim();
+  const desc = ($('#customGroupDesc')?.value || '').trim();
+  const fwKey = $('#customGroupFwKey')?.value;
+  
+  if (!name || !fwKey) return;
+  
+  const gid = 'g_' + Math.random().toString(36).slice(2, 8);
+  const allFw = getAllFrameworks();
+  const fw = allFw[fwKey];
+  
+  if (fw) {
+    fw.controlGroups.push({
+      id: gid,
+      title: name,
+      description: desc,
+      items: []
+    });
+    
+    composerState[fwKey].groups[gid] = {
+      expanded: true,
+      showMore: false,
+      excluded: false,
+      items: {}
+    };
+  }
+  
+  $('#addGroupModal').classList.add('hidden');
+  $('#customGroupName').value = '';
+  $('#customGroupDesc').value = '';
+  $('#customGroupFwKey').value = '';
+  renderComposer();
+});
+
+function getPayload() {
+  const result = [];
+  const allFw = getAllFrameworks();
+  
+  for (const [fk, fs] of Object.entries(composerState)) {
+    if (!fs.enabled) continue;
+    const fw = allFw[fk];
+    if (!fw) continue;
+    
+    for (const g of (fw.controlGroups || [])) {
+      const gs = fs.groups?.[g.id];
+      if (!gs || gs.excluded) continue;
+      
+      for (const item of (g.items || [])) {
+        const is = gs.items?.[item.id];
+        if (!is?.included) continue;
+        
+        result.push({
+          id: item.id,
+          framework: fw.label || fk,
+          group: g.title,
+          title: item.title,
+          instructions: is.instructions || '',
+          
+        });
+      }
+    }
+  }
+  
+  return result;
+}
+
+function renderClientChecklist(items, globalInstr) {
+  const c = $('#composer');
+  if (!c) return;
+  
+  if (!items?.length) {
+    c.innerHTML = '<div class="client-checklist"><div class="muted">No specific evidence requested.</div></div>';
+    return;
+  }
+  
+  const byFw = new Map();
+  for (const i of items) {
+    const fw = i.framework || 'Requested';
+    if (!byFw.has(fw)) byFw.set(fw, new Map());
+    const bg = byFw.get(fw);
+    const g = i.group || 'General';
+    if (!bg.has(g)) bg.set(g, []);
+    bg.get(g).push(i);
+  }
+  
+  let html = '<div class="client-checklist">';
+  
+  if (globalInstr) {
+    html += `<div style="margin-bottom:16px;padding:14px;background:#0a1020;border-radius:10px;border-left:4px solid var(--accent)">
+      <strong style="color:var(--accent)">📋 Instructions from your auditor:</strong>
+      <div class="muted" style="margin-top:8px;white-space:pre-wrap">${esc(globalInstr)}</div>
+    </div>`;
+  }
+  
+  for (const [fw, groups] of byFw.entries()) {
+    html += `<div style="margin-bottom:20px"><strong style="font-size:1.1rem">${esc(fw)}</strong></div>`;
+    
+    for (const [gn, its] of groups.entries()) {
+      html += `<div class="cli-group"><div class="cli-group-title">${esc(gn)}</div>`;
+      for (const i of its) {
+        html += `<div class="cli-item">
+          <div class="cli-item-title">${esc(i.title)}</div>
+          ${i.instructions ? `<div class="cli-item-instr">${esc(i.instructions)}</div>` : ''}
+        </div>`;
+      }
+      html += '</div>';
+    }
+  }
+  
+  c.innerHTML = html + '</div>';
+}
+
+function updateRoleUI() {
+  const role = ($('#role')?.value || '').trim();
+  const later = document.querySelectorAll('.step-after-role');
+  
+  if (!role) {
+    later.forEach(r => r.style.display = 'none');
+    return;
+  }
+  
+  later.forEach(r => {
+    if (['filesRow'].includes(r.id)) r.style.display = 'none';
+    else if (r.id === 'actionsRow') r.style.display = 'flex';
+    else r.style.display = 'block';
+  });
+  
+  const cc = $('#clientContactCol'), dl = $('#deadlineRow'), cb = $('#composerBlock'), rr = $('#routingRow');
+  const el = $('#emailLabel'), cl = $('#companyLabel'), rh = $('#roleHint'), sb = $('#startBtn');
+  
+  if (role === 'auditor') {
+    el.textContent = 'Your email (auditor)';
+    cl.textContent = 'Client company';
+    cc.style.display = 'block';
+    dl.style.display = 'grid';
+    cb.style.display = 'block';
+    rr.style.display = 'none';
+    sb.textContent = 'Continue';
+    $('#composerHint').textContent = 'Check frameworks, then customize what evidence you need. Items marked ✓ are included by default.';
+    initComposerState();
+    renderComposer();
+  } else if (role === 'client') {
+    el.textContent = 'Your email';
+    cl.textContent = 'Your company';
+    cc.style.display = 'none';
+    dl.style.display = 'none';
+    cb.style.display = 'none';
+    rr.style.display = 'block';
+    sb.textContent = 'Continue';
+  } else {
+    el.textContent = 'Your email';
+    cl.textContent = 'Your company';
+    cc.style.display = 'none';
+    dl.style.display = 'none';
+    cb.style.display = 'none';
+    rr.style.display = 'none';
+    sb.textContent = 'Continue';
+  }
+  
+  rh.textContent = {
+    auditor: "Define what evidence you need, then we'll email your client a guided upload link.",
+    client: 'Your auditor sent you here. Upload the requested evidence.',
+    company: 'Build a ProofPack proactively for future audits.'
+  }[role] || '';
+}
+
+function setUnlocked() {
+  isUnlocked = true;
+  const role = ($('#role')?.value || '').trim();
+  $('#pricingGate').style.display = 'none';
+  $('#startBtn').style.display = 'none';
+  
+  if (role === 'auditor') {
+    $('#sendReqBtn').style.display = 'inline-flex';
+    $('#submitBtn').style.display = 'none';
+    $('#filesRow').style.display = 'none';
+  } else {
+    $('#sendReqBtn').style.display = 'none';
+    $('#submitBtn').style.display = 'inline-flex';
+    $('#filesRow').style.display = 'block';
+  }
+}
+
+async function submitAuditorRequest() {
+  const ae = ($('#email')?.value || '').trim();
+  const ce = ($('#clientContactEmail')?.value || '').trim();
+  const co = ($('#company')?.value || '').trim();
+  
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(ae)) throw new Error('Enter a valid auditor email.');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(ce)) throw new Error('Enter a valid client email.');
+  if (!co) throw new Error('Enter the client company name.');
+  
+  const daysVal = parseFloat($('#deadlineDays')?.value || '5');
+  const ts = ($('#deadlineTime')?.value || '17:00').trim();
+  const [hh, mm] = ts.split(':').map(x => parseInt(x, 10));
+  
+  const d = new Date();
+  d.setTime(d.getTime() + daysVal * 24 * 60 * 60 * 1000);
+  d.setHours(hh || 17, mm || 0, 0, 0);
+  
+  const fws = Object.entries(composerState)
+    .filter(([_, s]) => s.enabled)
+    .map(([k]) => {
+      const allFw = getAllFrameworks();
+      return allFw[k]?.label || k;
+    });
+  
+  if (!fws.length) throw new Error('Select at least one framework.');
+  
+  const re = getPayload();
+  if (!re.length) throw new Error('Select at least one evidence item to request.');
+  
+  const payload = {
+    auditorEmail: ae,
+    clientEmail: ce,
+    company: co,
+    frameworks: fws,
+    deadlineISO: d.toISOString(),
+    auditorCode: appliedCode,
+    globalInstructions: ($('#globalInstructions')?.value || '').trim(),
+    requestedEvidence: re
+  };
+  
   const res = await fetch(`${WORKER_BASE}/request`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify(payload),
+    body: JSON.stringify(payload)
   });
-
+  
   const j = await res.json().catch(() => null);
-  if (!res.ok || !j?.ok) throw new Error(j?.error || `Request failed (${res.status})`);
-  return j; // { ok, token, magicLink, emailedClient }
+  if (!res.ok || !j?.ok) throw new Error(j?.error || 'Request failed');
+  return j;
 }
 
-
-    
-// Single source of truth for "locked" UI state
-function resetUnlockState(opts = { clearFiles: true }) {
-  isUnlocked = false;
-  appliedCode = null; 
-
-  // Hide gate + swap buttons
-  if (pricingGate) pricingGate.style.display = 'none';
-  if (startBtn) startBtn.style.display = 'inline-flex';
-  if (submitBtn) submitBtn.style.display = 'none';
-  if (sendReqBtn) sendReqBtn.style.display = 'none';
-
-  // Clear unlock UI
-if (unlockCodeEl) unlockCodeEl.value = '';
-if (unlockHint) unlockHint.textContent = '';
-
-
-  // Lock uploads and optionally clear files
-  if (fileInput) {
-    fileInput.disabled = true;
-    if (opts.clearFiles) fileInput.value = '';
-  }
-
-  // IMPORTANT: hide the entire upload artifacts box while locked
-  // (so it’s not just disabled — it disappears until unlocked)
-  if (fileBox) fileBox.style.display = 'none';
-  if (fileMeta) fileMeta.textContent = 'Unlock guided ProofPack to proceed with uploads.';
-
-  // Hide anything that should not show while locked
-  if (frameworkGuides) {
-    frameworkGuides.style.display = 'none';
-    frameworkGuides.innerHTML = '';
-  }
-  if (optionalDetails) {
-    optionalDetails.style.display = 'none';
-    optionalDetails.open = false;
-  }
-  if (planBillingRow) planBillingRow.style.display = 'none';
-
-  // Refresh any lock messaging
-  if (typeof updateFileMeta === 'function') updateFileMeta();
-}
-
-function requireRoleOrExplain() {
-  const role = roleSelect?.value || '';
-  if (!role) {
-    showStatus('Please choose a role first.', false);
-    return false;
-  }
-  return true;
-}
-
-/* =======================
-   END STEP 2 HELPERS
-   ======================= */
-
-    
-function openPricingGate() {
-  if (pricingGate) pricingGate.style.display = 'block';
-  if (unlockHint) unlockHint.textContent = '';
-  if (pricingGate) pricingGate.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-async function autoUnlockFromStoredCodeIfPossible() {
-  // Only helpful for auditor resend links
-  const role = (roleSelect?.value || '').trim();
-  if (role !== 'auditor') return;
-
-  let stored = null;
-  try { stored = (localStorage.getItem(CODE_STORAGE_KEY) || '').trim(); } catch {}
-  if (!stored) return;
-
-  // If already unlocked, do nothing
-  if (isUnlocked) return;
-
-  // Fill the UI field for visibility
-  if (unlockCodeEl) unlockCodeEl.value = stored;
-
-  // Attempt to validate + unlock automatically
-  try {
-    const res = await fetch(
-      `${WORKER_BASE}/check-code?code=${encodeURIComponent(stored)}`,
-      { method: 'GET', headers: { accept: 'application/json' } }
-    );
-    const j = await res.json().catch(() => null);
-    if (!res.ok || !j || j.ok === false) return;
-
-    appliedCode = j.code || stored;
-    setUnlocked('Code');
-  } catch {
-    // Silent: if this fails, auditor can still manually press Start + Apply code
-  }
-}
-
-    
-function setUnlocked(planLabel) {
-  isUnlocked = true;
-
-  const role = (roleSelect?.value || '').trim();
-
-  // Optional: store chosen plan label in existing hidden plan selector
-  const planEl = document.getElementById('plan');
-  if (planEl && planLabel) planEl.value = planLabel;
-
-  // Close the pricing gate, hide the start button
-  if (pricingGate) pricingGate.style.display = 'none';
-  if (startBtn) startBtn.style.display = 'none';
-
-  if (role === 'auditor') {
-    // AUDITOR FLOW: no uploads here, just send client request
-    if (fileInput) {
-      fileInput.disabled = true;
-      fileInput.value = '';
-    }
-    if (fileBox) fileBox.style.display = 'none';
-
-    if (sendReqBtn) sendReqBtn.style.display = 'inline-flex';
-    if (submitBtn) submitBtn.style.display = 'none';
-
-    // No need to render upload guidance for auditors
-    if (frameworkGuides) {
-      frameworkGuides.style.display = 'none';
-      frameworkGuides.innerHTML = '';
-    }
-  } else {
-    // CLIENT / COMPANY FLOW: normal uploads
-    if (fileInput) fileInput.disabled = false;
-    if (fileBox) fileBox.style.display = 'block';
-
-    if (submitBtn) submitBtn.style.display = 'inline-flex';
-    if (sendReqBtn) sendReqBtn.style.display = 'none';
-
-    // Now allow guidance + file meta to render
-    updateFileMeta();
-    renderFrameworkGuides();
-  }
-}
-
-/* =======================
-   STEP 3: START BTN HANDLER
-   ======================= */
-if (startBtn) {
-  startBtn.addEventListener('click', () => {
-    clearStatus();
-    if (!requireRoleOrExplain()) return;
-
-    // For ALL roles, first open pricing / code gate.
-    // After unlock, auditors will see "Send request to client",
-    // others will see the normal upload submit button.
-    openPricingGate();
-  });
-}
-/* =======================
-   END STEP 3
-   ======================= */
-
-// AUDITOR-ONLY: after unlock, actually send the client request
-if (sendReqBtn) {
-  sendReqBtn.addEventListener('click', async () => {
-    clearStatus();
-
-    const role = (roleSelect?.value || '').trim();
-    if (role !== 'auditor') {
-      // Safety: this button is only meaningful for auditors
-      return;
-    }
-
-    sendReqBtn.disabled = true;
-    const prev = sendReqBtn.textContent;
-    sendReqBtn.textContent = 'Sending request…';
-
-    try {
-      if (!appliedCode) {
-        throw new Error('Enter and apply your auditor bundle code first (Stripe isn’t live yet).');
-      }
-      
-      const j = await submitAuditorRequest();
-
-      const emailed = j?.emailedClient ? 'Yes' : 'No (email config issue)';
-
-      // Backend currently returns j.magicLink; we just label it clearly
-      const link =
-        safeUrl(j?.clientUploadLink || j?.magicLink) ||
-        j?.clientUploadLink ||
-        j?.magicLink ||
-        '';
-
-      showStatus(
-        `✅ Client upload request created.<br>
-         <strong>Client emailed:</strong> ${esc(emailed)}<br><br>
-         <strong>Client upload link (copy):</strong><br>
-         <a href="${esc(link)}" target="_blank" rel="noopener noreferrer">${esc(link)}</a>`,
-        true
-      );
-    } catch (e) {
-      showStatus(esc(e?.message || e), false);
-    } finally {
-      sendReqBtn.disabled = false;
-      sendReqBtn.textContent = prev;
-    }
-  });
-}
-    
-// Click one-off "Continue" => Stripe NOT live yet.
-// For now, force "code-only" unlock (except request-token links which auto-unlock).
-if (pricingGate) {
-  pricingGate.addEventListener('click', (e) => {
-    const btn = e.target.closest('button[data-unlock-plan]');
-    if (!btn) return;
-
-    clearStatus();
-
-    // If they’re on a request link, ignore OneOff purchase entirely (token unlock path)
-    if (isFromRequestLink) return;
-
-    // If they already applied a code, unlock immediately
-    if (appliedCode) {
-      setUnlocked('Code');
-      return;
-    }
-
-    // Otherwise: show a clear message
-    showStatus(
-      'Checkout is not live yet. Please enter an auditor/reviewer code below and click “Apply code”. ' +
-      'If you don’t have one, email <a href="mailto:ops@proofrepo.com">ops@proofrepo.com</a>.',
-      false
-    );
-  });
-}
-
-
-
-// Apply code => validate against Worker, then unlock + remember code
-if (applyUnlockCodeBtn) {
-  applyUnlockCodeBtn.addEventListener('click', async () => {
-    clearStatus?.();
-
-    const raw = (unlockCodeEl?.value || '').trim();
-    const code = raw.toUpperCase();
-
-    if (!code) {
-      if (unlockHint) unlockHint.textContent = 'Enter a code.';
-      return;
-    }
-
-    let j;
-    try {
-      const res = await fetch(
-        `${WORKER_BASE}/check-code?code=${encodeURIComponent(code)}`,
-        { method: 'GET', headers: { accept: 'application/json' } }
-      );
-
-      j = await res.json().catch(() => null);
-
-      if (!res.ok || !j || j.ok === false) {
-        const msg = (j && j.error) ? j.error : 'Code is not valid.';
-        throw new Error(msg);
-      }
-    } catch (e) {
-      appliedCode = null;
-      if (unlockHint) unlockHint.textContent = e.message || 'Code is not valid.';
-      return;
-    }
-
-    // Store accepted code so gather() can send it as auditorCode
-    appliedCode = j.code || code;
-    try { localStorage.setItem(CODE_STORAGE_KEY, appliedCode); } catch {}
-
-
-    if (unlockHint) {
-      const rem = (typeof j.remaining === 'number') ? j.remaining : '?';
-      const bundle = (typeof j.bundleSize === 'number') ? j.bundleSize : null;
-      const tail = bundle != null ? ` ${rem} of ${bundle}` : ` ${rem}`;
-      unlockHint.textContent = `Code accepted.${tail ? ` Remaining credits:${tail}.` : ''}`;
-    }
-
-    // Unlock main flow using "Code" as the plan label
-    setUnlocked('Code');
-  });
-}
-
-
-    // frameworkSelections[frameworkKey][itemId] = filename
-    const frameworkSelections = {};
-    // ===== PATCH: always have SOC2 map ready =====
-frameworkSelections.SOC2 = frameworkSelections.SOC2 || {};
-// Pre-seed SOC2 required keys so validation is deterministic
-for (const item of (FRAMEWORK_CONFIG.SOC2?.items || [])) {
-  if (!(item.id in frameworkSelections.SOC2)) frameworkSelections.SOC2[item.id] = '';
-}
-// ===== /PATCH =====
-
-    document.getElementById('y').textContent = new Date().getFullYear();
-
-function showStatus(msg, ok=false){
-  statusEl.style.display = 'block';
-  statusEl.className = 'status ' + (ok ? 'ok' : 'err');
-  statusEl.innerHTML = msg;
-}
-function clearStatus(){
-  statusEl.style.display = 'none';
-  statusEl.innerHTML = '';
-}
-
-async function maybeUnlockFromStripeReturn() {
-  const url = new URL(window.location.href);
-  const sessionId = url.searchParams.get('session_id');
-  if (!sessionId) return;
-
-  const res = await fetch(`${WORKER_BASE}/verify-checkout-session`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ sessionId }),
-  });
-  const j = await res.json().catch(() => null);
-  if (!res.ok || !j?.ok) return;
-
-  // Unlock based on Stripe-confirmed purchase
-  setUnlocked(j.planLabel || 'OneOff');
-
-  // Clean URL (remove ?session_id=...)
-  url.searchParams.delete('session_id');
-  window.history.replaceState({}, '', url.toString());
-}
-
-
-// Ensure SOC2 is selected by default (even if the <select multiple> started hidden)
-if (frameworksSelectEl && frameworksSelectEl.selectedOptions.length === 0) {
-  const soc2Opt = Array.from(frameworksSelectEl.options).find(o => o.value === 'SOC2');
-  if (soc2Opt) soc2Opt.selected = true;
-}
-
-
-// Keep Optional Details hidden until files are added (pre-GTM simpler flow)
-if (optionalDetails) {
-  optionalDetails.style.display = 'none';
-  optionalDetails.open = false;
-}
-
-    function getSelectedFrameworkKeys() {
-      const fs = Array.from(frameworksSelectEl?.selectedOptions || []).map(o => o.value);
-      return fs;
-    }
-
-    function updateItemStatusSpan(span, label, selectedName) {
-      if (!span) return;
-      if (selectedName) {
-        span.textContent = '✔ ' + label + ' — tagged as ' + selectedName;
-        span.className = 'ok';
-      } else {
-        span.textContent = label + ' — not tagged yet';
-        span.className = 'missing';
-      }
-    }
-
-    function renderFrameworkGuides() {
-  if (!frameworkGuides) return;
-
-  // Don’t show guidance until user unlocks (prevents “free checklist” use)
-  if (!isUnlocked) {
-    frameworkGuides.style.display = 'none';
-    frameworkGuides.innerHTML = '';
-    return;
-  }
-
-  const selectedKeys = getSelectedFrameworkKeys().filter(k => FRAMEWORK_CONFIG[k]);
-  const files = Array.from(fileInput?.files || []);
-
-
-  // Hide until at least one framework is selected
-  // (we now allow showing the checklist even before files are uploaded)
-  if (!selectedKeys.length) {
-    frameworkGuides.style.display = 'none';
-    frameworkGuides.innerHTML = '';
-    return;
-  }
-
-
-
-      frameworkGuides.style.display = '';
-      frameworkGuides.innerHTML = '';
-
-      selectedKeys.forEach(fwKey => {
-        const cfg = FRAMEWORK_CONFIG[fwKey];
-        if (!cfg) return;
-        const block = document.createElement('div');
-        block.style.marginBottom = '12px';
-
-        const h4 = document.createElement('h4');
-        h4.textContent = (fwKey === 'SOC2')
-  ? (cfg.label + ' — required items (needed to build your ProofPack)')
-  : (cfg.label + ' — recommended minimum evidence');
-        block.appendChild(h4);
-
-        const ul = document.createElement('ul');
-
-        cfg.items.forEach(item => {
-          if (!frameworkSelections[fwKey]) frameworkSelections[fwKey] = {};
-
-          const li = document.createElement('li');
-
-          const statusSpan = document.createElement('span');
-          statusSpan.id = `fw-${fwKey}-${item.id}-status`;
-          statusSpan.className = 'missing';
-          statusSpan.textContent = item.label + ' — not tagged yet';
-          li.appendChild(statusSpan);
-
-          const div = document.createElement('div');
-          const label = document.createElement('label');
-          label.className = 'small';
-          label.htmlFor = `fw-${fwKey}-${item.id}-select`;
-          label.textContent = `Which file is your ${item.label.toLowerCase()}?`;
-          div.appendChild(label);
-
-          const select = document.createElement('select');
-          select.id = `fw-${fwKey}-${item.id}-select`;
-          select.dataset.framework = fwKey;
-          select.dataset.item = item.id;
-
-          const noneOpt = document.createElement('option');
-          noneOpt.value = '';
-          noneOpt.textContent = 'Not set / not sure yet';
-          select.appendChild(noneOpt);
-
-          files.forEach(f => {
-            const opt = document.createElement('option');
-            opt.value = f.name;
-            opt.textContent = f.name;
-            select.appendChild(opt);
-          });
-
-          // restore or auto-guess
-          const prev = frameworkSelections[fwKey][item.id] || '';
-          let selectedName = prev && files.some(f => f.name === prev) ? prev : '';
-
-          if (!selectedName && files.length && item.patterns && item.patterns.length) {
-            const guess = files.find(f => item.patterns.some(re => re.test(f.name || '')));
-            if (guess) selectedName = guess.name;
-          }
-
-          select.value = selectedName;
-          frameworkSelections[fwKey][item.id] = selectedName;
-          updateItemStatusSpan(statusSpan, item.label, selectedName);
-
-          select.addEventListener('change', () => {
-            const fw = select.dataset.framework;
-            const it = select.dataset.item;
-            if (!frameworkSelections[fw]) frameworkSelections[fw] = {};
-            frameworkSelections[fw][it] = select.value;
-            updateItemStatusSpan(statusSpan, item.label, select.value);
-          });
-
-          div.appendChild(select);
-          li.appendChild(div);
-          ul.appendChild(li);
-        });
-
-        block.appendChild(ul);
-        frameworkGuides.appendChild(block);
-      });
-
-      const info = document.createElement('div');
-      info.className = 'small';
-      info.textContent = 'We auto-suggest based on filenames. If something is named weirdly, just pick it so we treat it as the right artifact.';
-      frameworkGuides.appendChild(info);
-    }
-
-// File handling & drag/drop
-function updateFileMeta() {
-  const files = Array.from(fileInput?.files || []);
-
-  // Don’t show file stats or optional plan/billing until unlocked
-  if (!isUnlocked) {
-    if (fileMeta) fileMeta.textContent = 'Unlock guided ProofPack to proceed with uploads.';
-    if (planBillingRow) planBillingRow.style.display = 'none';
-    if (optionalDetails) {
-      optionalDetails.style.display = 'none';
-      optionalDetails.open = false;
-    }
-    return;
-  }
-
-  if (!files.length) {
-    if (fileMeta) fileMeta.textContent = 'No files selected.';
-    if (planBillingRow) planBillingRow.style.display = 'none';
-
-    // Hide optional details until files exist
-    if (optionalDetails) {
-      optionalDetails.style.display = 'none';
-      optionalDetails.open = false;
-    }
-
-    renderFrameworkGuides();
-    return;
-  }
-
-  const total = files.reduce((n, f) => n + (f.size || 0), 0);
-  const totalMB = (total / 1024 / 1024).toFixed(2);
-
-  if (fileMeta) fileMeta.textContent = `${files.length} file(s), ${totalMB} MB total`;
-
-  if (planBillingRow) planBillingRow.style.display = '';
-
-  // Show optional details once files exist, but keep it collapsed
-  if (optionalDetails) {
-    optionalDetails.style.display = '';
-    optionalDetails.open = false;
-  }
-
-  renderFrameworkGuides();
-}
-
-
-    function handleFilesList(list) {
-  if (!list || !list.length) return;
-
-  try {
-    if (window.DataTransfer) {
-      const dt = new DataTransfer();
-      Array.from(list).forEach(f => dt.items.add(f));
-      fileInput.files = dt.files;
-    }
-  } catch (_) {
-    // Some browsers (older Safari/iOS) don't allow programmatic file assignment.
-    // We'll still update UI and let native input behavior handle selection.
-  }
-
-  updateFileMeta();
-}
-
-    if (fileInput) {
-      fileInput.addEventListener('change', () => handleFilesList(fileInput.files));
-    }
-
-    if (fileBox) {
-      ['dragenter','dragover'].forEach(evt => {
-        fileBox.addEventListener(evt, e => {
-          e.preventDefault();
-          e.stopPropagation();
-          fileBox.classList.add('dragover');
-        });
-      });
-      ['dragleave','dragend'].forEach(evt => {
-        fileBox.addEventListener(evt, e => {
-          e.preventDefault();
-          e.stopPropagation();
-          fileBox.classList.remove('dragover');
-        });
-      });
-      fileBox.addEventListener('drop', e => {
-        e.preventDefault();
-        e.stopPropagation();
-        fileBox.classList.remove('dragover');
-        if (e.dataTransfer && e.dataTransfer.files) {
-          handleFilesList(e.dataTransfer.files);
-        }
-      });
-    }
-
-function updateBillingUI() {
-  if (!billingSelect || !billingHint) return;
-
-  const billing = billingSelect.value;
-
-  if (!billing) {
-    billingHint.textContent =
-      'You can decide this later. In beta we mostly use codes or manual billing via ops@proofrepo.com.';
-  } else if (billing === 'code') {
-    billingHint.textContent =
-      'If you have a code, you’ll enter it during the unlock step (right before upload).';
-  } else if (billing === 'card') {
-    billingHint.textContent =
-      'Card payment via Stripe will live here. For now this is a placeholder — use codes or email ops@proofrepo.com.';
-  }
-
-  // Routing-row code input is NEVER shown.
-  // Codes are entered ONLY in the inline pay/unlock gate.
-  if (auditorCodeCol) auditorCodeCol.style.display = 'none';
-}
-
-// ===== DROP-IN REPLACEMENT: updateRoleUI (auditor flow + unlock-safe) =====
-function updateRoleUI() {
-  const role = (roleSelect?.value || '').trim();
-  // Codes are entered ONLY at unlock time (pricing gate)
-if (auditorCodeCol) auditorCodeCol.style.display = 'none';
-
-
-  // --- field refs we will toggle (no markup changes required) ---
-  const contactRow = document.getElementById('contactRow');
-  const companyInput = document.getElementById('company');
-  const companyLabelEl = document.getElementById('companyLabel');
-
-  // Routing row bits
-  const clientEmailInput = document.getElementById('clientEmail');
-  const clientEmailLabelEl = document.querySelector('label[for="clientEmail"]');
-  const auditorCodeInput = document.getElementById('auditorCode');
-
-  // Contact-row swap: company vs client contact
-  const companyColEl = document.getElementById('companyCol');
-  const clientContactColEl = document.getElementById('clientContactCol');
-  const clientContactEmailInput = document.getElementById('clientContactEmail');
-  // --- /refs ---
-
-  // Email placeholder + hint helper
-  const emailHintEl = document.getElementById('emailHint');
-  const emailInput = document.getElementById('email');
-  if (emailHintEl && emailInput) {
-    if (role === 'auditor') {
-      emailInput.placeholder = 'you@auditfirm.com';
-      emailHintEl.textContent = 'Use your auditor / reviewer email here.';
-    } else {
-      emailInput.placeholder = 'you@company.com';
-      emailHintEl.textContent = '';
-    }
-  }
-
-  // Always hide the big pricing section (you’re using inline gate)
-  if (pricingSection) pricingSection.style.display = 'none';
-
-  // If role is not selected: hide everything and reset
-  if (!role) {
-    laterRows.forEach(r => (r.style.display = 'none'));
-
-    const routingRow0 = document.getElementById('routingRow');
-    if (routingRow0) routingRow0.style.display = 'none';
-
-    if (roleHint) roleHint.textContent = "Start by telling us which side of the audit you're on.";
-
-    if (contactRow) contactRow.style.display = 'none';
-
-    // Reset contact sub-columns
-    if (clientContactColEl) clientContactColEl.style.display = 'none';
-    if (companyColEl) companyColEl.style.display = 'block';
-
-    resetUnlockState({ clearFiles: true });
-    return;
-  }
-
-  // Role IS selected: reset lock state (prevents cross-role leakage)
-  resetUnlockState({ clearFiles: true });
-
-  // Set CTA wording by role
-  if (startBtn) {
-    startBtn.textContent =
-      (role === 'auditor')
-        ? 'Request guided evidence collection from client'
-        : 'Start guided ProofPack';
-  }
-
-  // Show the post-role rows, BUT keep locked-only sections hidden until unlocked/files
-  laterRows.forEach(r => {
-    if (r.id === 'actionsRow') {
-      r.style.display = 'flex';
-      return;
-    }
-    // Keep these hidden until unlock + (optionally) files exist
-    if (r.id === 'filesRow' || r.id === 'frameworkGuides' || r.id === 'optionalRow') {
-      r.style.display = 'none';
-      return;
-    }
-    r.style.display = 'block';
-  });
-
-  // Routing row special-case: hide for company
-  const routingRow = document.getElementById('routingRow');
-  if (routingRow) routingRow.style.display = (role === 'company') ? 'none' : 'block';
-
-  // Contact row shown
-  if (contactRow) contactRow.style.display = 'grid';
-
-  // ---------------------------------------------------------------
-
-  // Role-specific copy + which fields show
-  if (role === 'auditor') {
-  emailLabel.textContent = 'Auditor / third-party email';
-
-  // Auditor needs BOTH: client contact email + client company (worker requires company)
-  if (clientContactColEl) clientContactColEl.style.display = 'block';
-  if (companyColEl) companyColEl.style.display = 'block';
-
-  // Deadline row is auditor-only
-  const deadlineRow = document.getElementById('deadlineRow');
-  if (deadlineRow) deadlineRow.style.display = 'block';
-
-
-  if (companyInput) {
-    companyInput.required = true;
-    companyInput.placeholder = 'Client Company Inc.';
-  }
-  if (companyLabelEl) companyLabelEl.textContent = 'Client company';
-
-  if (clientContactEmailInput) clientContactEmailInput.required = true;
-
-  // IMPORTANT: auditor flow should NOT show the routing-row "clientEmail" (redundant/confusing)
-  if (clientEmailCol) clientEmailCol.style.display = 'none';
-  if (clientEmailInput) clientEmailInput.value = '';
-
-  // Ensure required client contact field is obvious
-  if (clientContactEmailInput) {
-    clientContactEmailInput.placeholder = 'client@company.com';
-    clientContactEmailInput.required = true;
-  }
-
-  // Keep label text consistent (even though routing clientEmail is hidden)
-  if (clientEmailLabelEl) clientEmailLabelEl.textContent = 'Client contact email';
-
-  roleHint.textContent =
-    'You’re an auditor / third party. Enter your email + client email + client company, then we’ll email the client a secure upload link.';
-
-  // Auditor role: hide auditorEmail routing field (email is already captured)
-  if (auditorEmailCol) auditorEmailCol.style.display = 'none';
-
-  // Auditor code hidden by default (shown only if they choose the code path)
-  if (auditorCodeCol) auditorCodeCol.style.display = 'none';
-  if (auditorCodeInput) auditorCodeInput.value = '';
-
-} else if (role === 'client') {
-  emailLabel.textContent = 'Your email';
-  roleHint.textContent =
-    'Use this if an auditor or third party pointed you here to upload evidence.';
-
-  const deadlineRow = document.getElementById('deadlineRow');
-  if (deadlineRow) deadlineRow.style.display = 'none';
-
-
-  // Client/company should show company, hide client contact email
-  if (clientContactColEl) clientContactColEl.style.display = 'none';
-  if (clientContactEmailInput) {
-    clientContactEmailInput.required = false;
-    clientContactEmailInput.value = '';
-  }
-  if (companyColEl) companyColEl.style.display = 'block';
-
-  if (companyLabelEl) companyLabelEl.textContent = 'Your company (optional)';
-  if (companyInput) companyInput.required = false;
-
-  // Client can optionally add reviewer email
-  if (auditorEmailCol) auditorEmailCol.style.display = 'block';
-
-  // Hide routing clientEmail (not needed)
-  if (clientEmailCol) clientEmailCol.style.display = 'none';
-  if (clientEmailInput) clientEmailInput.value = '';
-
-  if (auditorEmailHint) {
-    auditorEmailHint.textContent =
-      'If you know the reviewer’s email, add it so we can also route the ProofPack to them.';
-  }
-
-  if (auditorCodeCol) auditorCodeCol.style.display = 'none';
-  if (auditorCodeInput) auditorCodeInput.value = '';
-
-} else { // company
-  emailLabel.textContent = 'Your email';
-  roleHint.textContent =
-    'Direct company use: preparing for an audit or vendor review without an auditor driving this yet.';
-
-  const deadlineRow = document.getElementById('deadlineRow');
-  if (deadlineRow) deadlineRow.style.display = 'none';
-
-  if (clientContactColEl) clientContactColEl.style.display = 'none';
-  if (clientContactEmailInput) {
-    clientContactEmailInput.required = false;
-    clientContactEmailInput.value = '';
-  }
-  if (companyColEl) companyColEl.style.display = 'block';
-
-  if (companyLabelEl) companyLabelEl.textContent = 'Your company (optional)';
-  if (companyInput) companyInput.required = false;
-
-  if (auditorEmailCol) auditorEmailCol.style.display = 'none';
-  if (clientEmailCol) clientEmailCol.style.display = 'none';
-  if (clientEmailInput) clientEmailInput.value = '';
-
-  if (auditorCodeCol) auditorCodeCol.style.display = 'none';
-  if (auditorCodeInput) auditorCodeInput.value = '';
-
-  // Show request composer for auditors (SOC2 only), hide for others unless token link sets it later
-  const reqBlock = document.getElementById("requestedEvidenceBlock");
-  const addControls = document.getElementById("requestedEvidenceAddControls");
-  if (reqBlock) {
-    if (role === "auditor") {
-      ensureRequestedEvidenceInitialized();
-      reqBlock.style.display = "";
-      if (addControls) addControls.style.display = "";
-      renderRequestedEvidenceUI({ mode: "auditor" });
-    } else {
-      // non-auditors: normally hide; token flow may show it as read-only
-      reqBlock.style.display = "none";
-      if (addControls) addControls.style.display = "none";
-    }
-  }
-}
-
-  // Keep billing + guide UI coherent with role
-  updateBillingUI();
-  renderFrameworkGuides();
-  updateFileMeta();
-}
-// ===== END DROP-IN REPLACEMENT =====
-
-async function prefillFromRequestToken() {
-  let url;
-  try { url = new URL(window.location.href); } catch { return; }
-
-  // If this is an auditor resend link (?prev=...), do NOT treat it like a client token link.
-  const isAuditorResend = !!(url.searchParams.get('prev') || url.searchParams.get('previous'));
-  if (isAuditorResend) return;
-
-  const token =
-    url.searchParams.get('t') ||
-    url.searchParams.get('token') ||
-    url.searchParams.get('requestToken') ||
-    url.searchParams.get('request') ||
-    url.searchParams.get('r') ||
-    null;
-
-  // Helper to parse frameworks from query or from worker response
-  const parseFrameworks = (v) => {
-    if (!v) return [];
-    if (Array.isArray(v)) return v.filter(Boolean);
-    if (typeof v === 'string') {
-      return v.split(',').map(s => s.trim()).filter(Boolean);
-    }
-    return [];
-  };
-
-  // If no token, do nothing (normal visitor)
+async function prefillFromToken() {
+  const url = new URL(location.href);
+  const token = url.searchParams.get('t') || url.searchParams.get('token');
   if (!token) return;
-
-  // Token visitors should NEVER see pricing / unlock.
+  
   isFromRequestLink = true;
-  if (pricingGate) pricingGate.style.display = 'none';
-  if (startBtn) startBtn.style.display = 'none';
-
-  // Also hide the standalone pricing section just in case
-  if (pricingSection) pricingSection.style.display = 'none';
-
-  showStatus('Verifying your link…', true);
-
-  // Store token so gather() can attach it as fd.append('t', token)
-  const requestTokenInput = document.getElementById('requestToken');
-  if (requestTokenInput) requestTokenInput.value = token;
-
-  // Call worker resolve
+  $('#pricingGate').style.display = 'none';
+  $('#startBtn').style.display = 'none';
+  showStatus('Verifying link…', true);
+  $('#requestToken').value = token;
+  
   let res, j;
   try {
-    res = await fetch(`${WORKER_BASE}/resolve?t=${encodeURIComponent(token)}`, {
-      method: 'GET',
-      headers: { accept: 'application/json' },
-    });
-    j = await res.json().catch(() => null);
-  } catch (err) {
-    showStatus(`⚠️ ${esc('Could not verify link. Please try again or ask your auditor to resend.')}`, false);
+    res = await fetch(`${WORKER_BASE}/resolve?t=${encodeURIComponent(token)}`);
+    j = await res.json();
+  } catch {
+    showStatus('Could not verify link.', false);
     return;
   }
-
-  if (!res.ok || !j || j.ok === false) {
-    const rawMsg = String((j && (j.error || j.message)) || '').toLowerCase();
-
-    const isUsed =
-      rawMsg.includes('used') ||
-      rawMsg.includes('already') ||
-      rawMsg.includes('submitted') ||
-      rawMsg.includes('completed') ||
-      rawMsg.includes('consumed');
-
-    const isExpired =
-      rawMsg.includes('expired') ||
-      rawMsg.includes('invalid') ||
-      rawMsg.includes('not found') ||
-      rawMsg.includes('unknown');
-
-    let msg = 'This upload link is not valid.';
-    if (isUsed) msg = 'This upload link has already been used.';
-    else if (isExpired) msg = 'This upload link is expired or invalid.';
-
-    showStatus(
-      `⚠️ ${esc(msg)}<br><br>` +
-      `Please ask your auditor / third party to send a new upload link.`,
-      false
-    );
-
-    // Ensure pricing gate never appears for token links
-    if (pricingGate) pricingGate.style.display = 'none';
-    if (startBtn) startBtn.style.display = 'none';
-
+  
+  if (!res.ok || !j?.ok) {
+    showStatus('Invalid or expired link.', false);
     return;
   }
-
-  // ✅ If worker tells us it's already submitted, show viewer + hide form.
-  // (Supports multiple shapes so we don't depend on one exact worker JSON.)
-  const status = String(j.status || '').toLowerCase();
-  const looksSubmitted =
-    status === 'submitted' ||
-    j.submitted === true ||
-    j.idempotent === true ||
-    (!!j.manifestKey && (j.viewerUrl || j.packUrl));
-
-  if (looksSubmitted) {
-    const viewer = safeUrl(j.viewerUrl || j.packUrl);
-    const linkHtml = viewer
-      ? `<br><br><a class="btn primary" href="${esc(viewer)}" target="_blank" rel="noopener noreferrer">Open existing ProofPack viewer</a>`
-      : '';
-
-    showStatus(
-      `⚠️ This link was already used. No new upload is needed (and no new emails should be sent).${linkHtml}`,
-      false
-    );
-
-    // Hide the entire form UI to prevent re-upload confusion
-    const form = document.getElementById('intakeForm');
-    if (form) form.style.display = 'none';
+  
+  if (j.status === 'submitted') {
+    const v = safeUrl(j.viewerUrl || j.packUrl);
+    showStatus(`Already used.${v ? ` <a href="${esc(v)}" target="_blank">Open ProofPack</a>` : ''}`, false);
+    $('#intakeForm').style.display = 'none';
     return;
   }
-
-  // If pending, prefill and force client role
-  const clientEmailVal =
-    j.clientEmail ||
-    j.clientContactEmail ||
-    j.client_email ||
-    j.client ||
-    j.email ||
-    '';
-
-  const companyVal =
-    j.company ||
-    j.clientCompany ||
-    j.client_company ||
-    j.org ||
-    '';
-
-  const auditorEmailVal =
-    j.auditorEmail ||
-    j.auditor_email ||
-    j.reviewerEmail ||
-    j.reviewer_email ||
-    '';
-
-  const frameworkVals = parseFrameworks(j.frameworks || j.framework_ids);
-
-  // Force client role + lock it
-  if (roleSelect) {
-    roleSelect.value = 'client';
-    updateRoleUI();
-    roleSelect.disabled = true;
-    if (roleHint) {
-      roleHint.textContent =
-        'Your auditor sent you this link. Your role is set as the client for guided evidence upload.';
-    }
+  
+  $('#role').value = 'client';
+  $('#role').disabled = true;
+  updateRoleUI();
+  
+  if (j.clientEmail) $('#email').value = j.clientEmail;
+  if (j.company) $('#company').value = j.company;
+  if (j.auditorEmail) $('#auditorEmail').value = j.auditorEmail;
+  
+  if (j.requestedEvidence?.length) {
+    $('#composerBlock').style.display = 'block';
+    $('#composerHint').textContent = 'Your auditor has requested the following evidence:';
+    renderClientChecklist(j.requestedEvidence, j.globalInstructions);
   }
-
-  // Fill fields
-  const emailInput = document.getElementById('email');
-  const companyInput = document.getElementById('company');
-  const auditorEmailRouting = document.getElementById('auditorEmail');
-
-  if (emailInput && clientEmailVal) emailInput.value = clientEmailVal;
-  if (companyInput && companyVal) companyInput.value = companyVal;
-  if (auditorEmailRouting && auditorEmailVal) auditorEmailRouting.value = auditorEmailVal;
-
-  // Preselect frameworks (if provided)
-  if (frameworkVals.length && frameworksSelectEl) {
-    const wanted = new Set(frameworkVals);
-    Array.from(frameworksSelectEl.options).forEach(opt => {
-      opt.selected = wanted.has(opt.value);
-    });
-  }
-
-  // Guard changes (optional)
-  attachPrefillGuards({ companyVal, auditorEmailVal, frameworkVals });
-
-    // If resolve contains requestedEvidence/globalInstructions, show it to client as read-only.
-  // This allows you to evolve beyond the old SOC2 3-item tagging without breaking old flows.
-  if (Array.isArray(j.requestedEvidence) && j.requestedEvidence.length) {
-    requestedEvidenceState = j.requestedEvidence.map(x => ({
-      id: x.id || ("req_" + Math.random().toString(36).slice(2, 10)),
-      group: x.group || "Requested",
-      title: x.title || "Request item",
-      instructions: x.instructions || "",
-      required: !!x.required,
-      defaultOn: true,
-      included: true
-    }));
-
-    const gi = document.getElementById("globalInstructions");
-    if (gi && j.globalInstructions) gi.value = String(j.globalInstructions);
-
-    // Show requested items block for client view
-    const reqBlock = document.getElementById("requestedEvidenceBlock");
-    const addControls = document.getElementById("requestedEvidenceAddControls");
-    if (reqBlock) reqBlock.style.display = "";
-    if (addControls) addControls.style.display = "none";
-    renderRequestedEvidenceUI({ mode: "client" });
-  }
-
-
-  // Token link means "already unlocked" (no pricing gate)
+  
   clearStatus();
-  setUnlocked(j.planLabel || 'OneOff');
-
-  // Ensure upload UI appears
-  if (fileBox) fileBox.style.display = 'block';
-  updateFileMeta();
-  renderFrameworkGuides();
+  setUnlocked();
+  $('#filesRow').style.display = 'block';
 }
 
-async function prefillFromAuditorResendLink() {
-  let url;
-  try { url = new URL(window.location.href); } catch { return; }
-
-  const role = (url.searchParams.get('role') || '').toLowerCase();
-  const flow = (url.searchParams.get('flow') || '').toLowerCase();
-
-  const mode = (url.searchParams.get('mode') || '').toLowerCase();
-
-  const isAuditorResend =
-    (role === 'auditor' && flow === 'request') ||
-    (mode === 'auditor' && url.searchParams.get('prev'));
-
-  if (!isAuditorResend) return;
-
-
-  // Pull fields from query params (from follow-up worker link)
-  const auditorEmailVal = url.searchParams.get('auditorEmail') || '';
-  const clientEmailVal  = url.searchParams.get('clientEmail') || '';
-  const companyVal      = url.searchParams.get('company') || '';
-  const frameworksRaw   = url.searchParams.get('frameworks') || '';
-  const expanded        = url.searchParams.get('expanded') || '0';
-  const prevToken       = url.searchParams.get('prev') || '';
-
-  const frameworkVals = frameworksRaw
-    ? frameworksRaw.split(',').map(s => s.trim()).filter(Boolean)
-    : [];
-
-  // Set role to auditor and build the correct UI
-  if (roleSelect) {
-    roleSelect.value = 'auditor';
-    updateRoleUI();
-
-    // Optional: prevent changing roles when coming from resend link
-    roleSelect.disabled = true;
-
-    if (roleHint) {
-      roleHint.textContent =
-        'Prefilled from your previous request. Update the deadline (coming soon) and click “Send request to client”.';
-    }
-  }
-
-  // Fill auditor + client fields
-  const auditorEmailInput = document.getElementById('email'); // auditor email for auditor role
-  const clientContactEmailInput = document.getElementById('clientContactEmail'); // shown for auditor role
-  const companyInput = document.getElementById('company');
-
-  if (auditorEmailInput && auditorEmailVal) auditorEmailInput.value = auditorEmailVal;
-  if (clientContactEmailInput && clientEmailVal) clientContactEmailInput.value = clientEmailVal;
-  if (companyInput && companyVal) companyInput.value = companyVal;
-
-  // Preselect frameworks
-  if (frameworkVals.length && frameworksSelectEl) {
-    const wanted = new Set(frameworkVals);
-    Array.from(frameworksSelectEl.options).forEach(opt => {
-      opt.selected = wanted.has(opt.value);
-    });
-  }
-
-  // Store prev token for later (if you add deadline + resend API, you’ll use this)
-  const requestTokenInput = document.getElementById('requestToken');
-  if (requestTokenInput && prevToken) requestTokenInput.value = prevToken;
-
-  // Expand optional details if requested
-  if (expanded === '1') {
-    const optionalRow = document.getElementById('optionalRow');
-    if (optionalRow) {
-      optionalRow.style.display = '';
-      optionalRow.open = true;
-    }
-  }
-
-  // Scroll user to the form
-  const requestSection = document.getElementById('request');
-  if (requestSection) requestSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-  // If we have a stored code, auto-apply it to skip the pricing gate
-  await autoUnlockFromStoredCodeIfPossible();
-
-  // If we couldn't auto-unlock, open the pricing/code gate so the auditor sees where to enter the code.
-  if (!isUnlocked) {
-    openPricingGate();
-  }
+function updateFileMeta() {
+  const f = Array.from($('#files')?.files || []);
+  const m = $('#fileMeta');
+  if (!f.length) { m.textContent = 'No files selected.'; return; }
+  const t = f.reduce((n, x) => n + (x.size || 0), 0);
+  const mb = (t / 1024 / 1024).toFixed(2);
+  m.textContent = `${f.length} file(s), ${mb} MB`;
 }
 
-function attachPrefillGuards(prefill) {
-  if (!isFromRequestLink || !prefill) return;
-
-  const { companyVal, auditorEmailVal, frameworkVals } = prefill;
-
-  // --- Frameworks multi-select guard ---
-  if (frameworksSelectEl && Array.isArray(frameworkVals) && frameworkVals.length) {
-    const original = [...frameworkVals];
-    const originalSet = new Set(original);
-
-    frameworksSelectEl.addEventListener('change', () => {
-      if (hasFrameworkOverride) return;
-
-      const current = Array.from(frameworksSelectEl.selectedOptions || []).map(o => o.value);
-      const changed =
-        current.length !== original.length ||
-        current.some(v => !originalSet.has(v));
-
-      if (!changed) return;
-
-      const ok = window.confirm(
-        'These frameworks were set by your auditor. Are you sure you want to change them?'
-      );
-
-      if (!ok) {
-        // Revert to original selection
-        Array.from(frameworksSelectEl.options).forEach(opt => {
-          opt.selected = originalSet.has(opt.value);
-        });
-        renderFrameworkGuides();
-        return;
-      }
-
-      hasFrameworkOverride = true;
-    });
-  }
-
-  // --- Company guard ---
-  const companyInput = document.getElementById('company');
-  if (companyInput && companyVal) {
-    const originalCompany = companyVal;
-    companyInput.addEventListener('change', () => {
-      if (hasCompanyOverride) return;
-      const now = (companyInput.value || '').trim();
-      if (now === originalCompany.trim()) return;
-
-      const ok = window.confirm(
-        'The client company was set by your auditor. Are you sure you want to change it?'
-      );
-      if (!ok) {
-        companyInput.value = originalCompany;
-        return;
-      }
-      hasCompanyOverride = true;
-    });
-  }
-
-  // --- Auditor / reviewer email guard ---
-  const auditorEmailRouting = document.getElementById('auditorEmail');
-  if (auditorEmailRouting && auditorEmailVal) {
-    const originalAud = auditorEmailVal;
-    auditorEmailRouting.addEventListener('change', () => {
-      if (hasAuditorOverride) return;
-      const now = (auditorEmailRouting.value || '').trim();
-      if (now === originalAud.trim()) return;
-
-      const ok = window.confirm(
-        'The reviewer email was set by your auditor. Are you sure you want to change it?'
-      );
-      if (!ok) {
-        auditorEmailRouting.value = originalAud;
-        return;
-      }
-      hasAuditorOverride = true;
-    });
-  }
-}
-
-    
 function validate() {
-  // Must have role
-  const role = (roleSelect?.value || '').trim();
-  if (!role) return 'Please choose a role first.';
-
-  // Must be unlocked (gate)
-  if (!isUnlocked) return 'Please click “Start guided ProofPack” to unlock uploads.';
-
-  // Auditors should not submit uploads from this screen — they use the
-  // "Send request to client" button instead.
-  if (role === 'auditor') {
-    return 'As an auditor, use “Send request to client” above to email your client a secure upload link.';
-  }
-
-  const email = (document.getElementById('email')?.value || '').trim().toLowerCase();
-
-  // Allowlist your own test emails
-  const ALLOWLIST = new Set([
-    'atucker5@alumni.nd.edu',
-    // 'you@proofrepo.com',
-  ]);
-
-  // Basic email format
-  const looksLikeEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  if (!looksLikeEmail) return 'Please enter a valid email address.';
-
-    // If auditor role, require client contact email
-  if (role === 'auditor') {
-    const clientContact = (document.getElementById('clientContactEmail')?.value || '').trim();
-    const looksLikeEmail2 = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clientContact);
-    if (!looksLikeEmail2) return 'Please enter a valid client contact email.';
-  }
-
-  // Block common personal domains (unless allowlisted)
-  const PERSONAL_DOMAINS = new Set([
-    'gmail.com','yahoo.com','outlook.com','hotmail.com','icloud.com','aol.com',
-    'proton.me','protonmail.com','gmx.com','mail.com','live.com','msn.com'
-  ]);
-
-  const domain = (email.split('@')[1] || '').toLowerCase();
-  const isPersonal = PERSONAL_DOMAINS.has(domain);
-  if (!ALLOWLIST.has(email) && isPersonal) {
-    return 'Please use a work email (or contact ops@proofrepo.com if you need an exception).';
-  }
-
-  // Frameworks
-  const frameworksSel = document.getElementById('frameworks');
-  const fws = Array.from(frameworksSel?.selectedOptions || []).map(o => o.value);
-  if (fws.length === 0) return 'Please select at least one framework.';
-
-  // Files
-  const files = Array.from(fileInput?.files || []);
-  const planEl = document.getElementById('plan');
-  const plan = planEl ? (planEl.value || 'Trial') : 'Trial';
-  const total = files.reduce((n, f) => n + (f.size || 0), 0);
-
-  if (files.length === 0) {
-    return 'Please upload at least one file so we can build a ProofPack.';
-  }
-
-  // Lightweight client caps (worker should enforce real limits later)
-  if (plan === 'Trial') {
-    if (files.length > 10) return 'Trial is tuned for roughly 10 files. If needed, zip extras together.';
-    if (total > 5 * 1024 * 1024) return 'Right now the trial is tuned for small uploads (~5 MB). Please zip or trim your upload.';
-  } else {
-    if (files.length > 50) return 'For large batches, split into multiple submissions.';
-  }
-
-  // Enforce required SOC2 tagging ONLY IF this is the legacy SOC2 flow
-  // (i.e., no request-driven requestedEvidence present from /resolve)
-  const soc2Selected = fws.includes('SOC2');
-
-  const hasRequestDrivenEvidence =
-    Array.isArray(requestedEvidenceState) &&
-    requestedEvidenceState.some(x => x && x.included);
-
-  // Only force the old 3-item tagging when we are NOT request-driven
-  if (soc2Selected && !hasRequestDrivenEvidence) {
-    const missing = [];
-    const cfg = FRAMEWORK_CONFIG.SOC2;
-    const sel = frameworkSelections.SOC2 || {};
-    (cfg.items || []).forEach(item => {
-      if (!sel[item.id]) missing.push(`${cfg.label}: ${item.label}`);
-    });
-    if (missing.length) {
-      return 'For SOC 2, please tag files for these required items:\n• ' + missing.join('\n• ');
-    }
-  }
-
-
-  if (missing.length) {
-    return 'For SOC 2, please tag files for these required items:\n• ' + missing.join('\n• ');
-  }
-
+  const role = ($('#role')?.value || '').trim();
+  if (!role) return 'Choose a role.';
+  if (!isUnlocked) return 'Click Continue.';
+  if (role === 'auditor') return 'Use Send request button.';
+  const e = ($('#email')?.value || '').trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) return 'Enter valid email.';
+  const f = Array.from($('#files')?.files || []);
+  if (!f.length) return 'Upload at least one file.';
   return null;
 }
-/* =======================
-   END DROP-IN: validate()
-   ======================= */
-    
+
 function gather() {
   const fd = new FormData();
-  const planEl = document.getElementById('plan');
-  const cadenceEl = document.getElementById('cadence');
-  const requestTokenEl = document.getElementById('requestToken');
-
-  fd.append('email', (document.getElementById('email')?.value || '').trim());
-  fd.append('company', (document.getElementById('company')?.value || '').trim());
-  fd.append('plan', planEl ? (planEl.value || 'Trial') : 'Trial');
-  fd.append('cadence', (cadenceEl && cadenceEl.value) ? cadenceEl.value : '');
-  fd.append('role', (document.getElementById('role')?.value || 'client'));
-
-      // If this upload came from an emailed request, include the request token
-  if (requestTokenEl && requestTokenEl.value) {
-    // This is what the Worker expects:
-    fd.append('t', requestTokenEl.value);
-
-    // (Optional) keep this line if you want the old field for debugging:
-    // fd.append('requestToken', requestTokenEl.value);
-  }
-
-  // Auditor flow: send required client contact email
-  const clientContactEmail = (document.getElementById('clientContactEmail')?.value || '').trim();
-  if (clientContactEmail) fd.append('clientContactEmail', clientContactEmail);
-
-  // Optional compatibility: also send as clientEmail if routing clientEmail empty
-  const routingClientEmail = (document.getElementById('clientEmail')?.value || '').trim();
-  if (clientContactEmail && !routingClientEmail) {
-    fd.append('clientEmail', clientContactEmail);
-  }
-
-    if (billingSelect && billingSelect.value) {
-    fd.append('billingMode', billingSelect.value);
-  }
-
-  // If a code was applied but billingMode wasn't selected, force it to "code"
-  if (appliedCode && !(billingSelect && billingSelect.value)) {
-    fd.append('billingMode', 'code');
-  }
-
-  // If a code was successfully applied at the pricing gate, send it through
+  fd.append('email', ($('#email')?.value || '').trim());
+  fd.append('company', ($('#company')?.value || '').trim());
+  fd.append('role', $('#role')?.value || 'client');
+  fd.append('frameworks', 'SOC2');
+  const t = $('#requestToken')?.value;
+  if (t) fd.append('t', t);
   if (appliedCode) {
     fd.append('auditorCode', appliedCode);
+    fd.append('billingMode', 'code');
   }
-
-
-
-  // Frameworks
-  const frameworksSel = document.getElementById('frameworks');
-  Array.from(frameworksSel?.selectedOptions || []).forEach(o => fd.append('frameworks', o.value));
-
-  // Notes
-  const notesEl = document.getElementById('notes');
-  fd.append('notes', notesEl ? notesEl.value.trim() : '');
-
-// Routing fields (NO auditorCode — codes are only entered in pricing gate)
-const auditorEmail = (document.getElementById('auditorEmail')?.value || '').trim();
-const clientEmail  = (document.getElementById('clientEmail')?.value || '').trim();
-if (auditorEmail) fd.append('auditorEmail', auditorEmail);
-if (clientEmail)  fd.append('clientEmail', clientEmail);
-
-
-  // Map JSON (manual or synthesized from frameworkSelections)
-  const mapEl = document.getElementById('map');
-  let mapVal = mapEl ? mapEl.value.trim() : '';
-
-  if (!mapVal) {
-    const autoMap = {};
-    Object.keys(frameworkSelections).forEach(fwKey => {
-      const cfg = FRAMEWORK_CONFIG[fwKey];
-      const sel = frameworkSelections[fwKey] || {};
-      if (!cfg) return;
-
-      (cfg.items || []).forEach(item => {
-        const filename = sel[item.id];
-        if (!filename) return;
-
-        if (fwKey === 'SOC2' && item.mapKey) {
-          autoMap[item.mapKey] = filename; // flat keys for worker compatibility
-        } else {
-          if (!autoMap[fwKey]) autoMap[fwKey] = {};
-          autoMap[fwKey][item.id] = filename;
-        }
-      });
-    });
-
-    if (Object.keys(autoMap).length) {
-      mapVal = JSON.stringify(autoMap);
-    }
-  }
-
-  if (mapVal) fd.append('map', mapVal);
-
-  // Files
-  Array.from(fileInput?.files || []).forEach(f => fd.append('files', f, f.name));
-
+  const ae = ($('#auditorEmail')?.value || '').trim();
+  if (ae) fd.append('auditorEmail', ae);
+  Array.from($('#files')?.files || []).forEach(f => fd.append('files', f, f.name));
   return fd;
 }
 
-document.getElementById('intakeForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  clearStatus();
-
-  const err = validate();
-  if (err) {
-    showStatus(esc(err).replace(/\n/g, '<br>'), false);
-    return;
-  }
-
-  submitBtn.disabled = true;
-  submitBtn.textContent = 'Uploading…';
-
-  // Worker returns needs like: [{ framework:"SOC2", missing:[...] }, ...]
-  function renderNeedsHtml(needs) {
-    if (!needs) return '';
-
-    if (Array.isArray(needs)) {
-      const lines = [];
-      for (const n of needs) {
-        const fw = n?.framework || 'Framework';
-        const missing = Array.isArray(n?.missing) ? n.missing : [];
-        if (!missing.length) continue;
-        lines.push(`<strong>${esc(fw)}:</strong> ${missing.map(x => esc(String(x))).join(', ')}`);
+document.addEventListener('DOMContentLoaded', () => {
+  $('#y').textContent = new Date().getFullYear();
+  $('#role')?.addEventListener('change', updateRoleUI);
+  $('#files')?.addEventListener('change', updateFileMeta);
+  
+  $('#startBtn')?.addEventListener('click', () => {
+    clearStatus();
+    if (!$('#role')?.value) { showStatus('Choose a role.', false); return; }
+    $('#pricingGate').style.display = 'block';
+    $('#pricingGate').scrollIntoView({ behavior: 'smooth' });
+  });
+  
+  $('#applyCodeBtn')?.addEventListener('click', async () => {
+    clearStatus();
+    const code = ($('#unlockCode')?.value || '').trim().toUpperCase();
+    if (!code) { $('#unlockHint').textContent = 'Enter a code.'; return; }
+    try {
+      const res = await fetch(`${WORKER_BASE}/check-code?code=${encodeURIComponent(code)}`);
+      const j = await res.json();
+      if (!res.ok || !j?.ok) throw new Error(j?.error || 'Invalid');
+      appliedCode = j.code || code;
+      $('#unlockHint').textContent = `✓ Code accepted. ${j.remaining ?? '?'} credits.`;
+      setUnlocked();
+    } catch (e) {
+      $('#unlockHint').textContent = e.message || 'Invalid code.';
+    }
+  });
+  
+  $('#sendReqBtn')?.addEventListener('click', async () => {
+    clearStatus();
+    const btn = $('#sendReqBtn');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    try {
+      if (!appliedCode) throw new Error('Apply a code first.');
+      const j = await submitAuditorRequest();
+      const link = safeUrl(j.magicLink) || j.magicLink || '';
+      showStatus(`<strong>✓ Request sent!</strong><br><br>Your client will receive an email with upload instructions.<br><br><strong>Client link:</strong><br><a href="${esc(link)}" target="_blank" style="word-break:break-all">${esc(link)}</a>`, true);
+    } catch (e) {
+      showStatus(esc(e.message), false);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Send request to client';
+    }
+  });
+  
+  $('#intakeForm')?.addEventListener('submit', async e => {
+    e.preventDefault();
+    clearStatus();
+    const err = validate();
+    if (err) { showStatus(esc(err), false); return; }
+    const btn = $('#submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Uploading…';
+    try {
+      const res = await fetch(`${WORKER_BASE}/intake`, { method: 'POST', body: gather() });
+      const j = await res.json();
+      if (!res.ok || !j?.ok) throw new Error(j?.error || 'Failed');
+      const v = safeUrl(j.viewerUrl || j.packUrl);
+      showStatus(`<strong>✓ Upload complete!</strong> ${j.usage?.files || 0} file(s).${v ? `<br><br><a href="${esc(v)}" target="_blank" class="btn primary">Open ProofPack</a>` : ''}`, true);
+    } catch (e) {
+      showStatus(esc(e.message), false);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Upload & build ProofPack';
+    }
+  });
+  
+  const fb = $('#filesRow');
+  if (fb) {
+    ['dragenter', 'dragover'].forEach(ev => fb.addEventListener(ev, e => { e.preventDefault(); fb.classList.add('dragover'); }));
+    ['dragleave', 'dragend', 'drop'].forEach(ev => fb.addEventListener(ev, e => { e.preventDefault(); fb.classList.remove('dragover'); }));
+    fb.addEventListener('drop', e => {
+      if (e.dataTransfer?.files) {
+        try {
+          const dt = new DataTransfer();
+          Array.from(e.dataTransfer.files).forEach(f => dt.items.add(f));
+          $('#files').files = dt.files;
+        } catch {}
+        updateFileMeta();
       }
-      return lines.join('<br>');
-    }
-
-    // fallback if needs is an object shape
-    if (typeof needs === 'object') {
-      const parts = [];
-      for (const fw in needs) {
-        const arr = needs[fw];
-        if (!Array.isArray(arr) || !arr.length) continue;
-        parts.push(`<strong>${esc(fw)}:</strong> ${arr.map(x => esc(String(x))).join(', ')}`);
-      }
-      return parts.join('<br>');
-    }
-
-    return esc(String(needs));
+    });
   }
-
-  try {
-    const res = await fetch(`${WORKER_BASE}/intake`, { method: 'POST', body: gather() });
-    const text = await res.text();
-
-    let json = null;
-    try { json = JSON.parse(text); } catch (_) {}
-
-    if (!res.ok || !json || json.ok === false) {
-      const msg = (json && (json.error || json.message)) ? (json.error || json.message) : `Upload failed (${res.status})`;
-
-      // If worker returns an actionable "problem" response, show it as a link/button
-      const actionUrl = safeUrl(json?.action?.url);
-      const actionLabel = json?.action?.label ? String(json.action.label) : 'Fix this';
-
-      const actionHtml = actionUrl
-        ? `<br><br><a class="btn primary" href="${esc(actionUrl)}" target="_blank" rel="noopener noreferrer">${esc(actionLabel)}</a>`
-        : '';
-
-      const detailHtml = json?.detail ? `<br><br><div class="small muted">${esc(String(json.detail))}</div>` : '';
-
-      showStatus(`${esc(msg)}${actionHtml}${detailHtml}`, false);
-      return;
-    }
-
-
-    const filesCount =
-      json?.usage?.files ??
-      (Array.isArray(json?.saved) ? json.saved.length : 0);
-
-    const viewer = safeUrl(json.viewerUrl || json.packUrl);
-    const linkHtml = viewer
-      ? `<br><br><a href="${esc(viewer)}" target="_blank" rel="noopener noreferrer">Open ProofPack viewer</a>`
-      : '';
-
-    // IMPORTANT: never trust backend HTML; escape it
-    const needsHtml = json.missingSummary
-      ? esc(String(json.missingSummary)).replace(/\n/g, '<br>')
-      : renderNeedsHtml(json.needs);
-
-    const missingBlock = needsHtml
-      ? `<br><br><strong>Missing items (backend):</strong><br>${needsHtml}`
-      : '';
-
-    const packUrl = safeUrl(json.packUrl);
-    const packUrlHtml = packUrl
-      ? `<br><br><strong>Signed JSON:</strong> <a href="${esc(packUrl)}" target="_blank" rel="noopener noreferrer">Open</a>`
-      : '';
-
-    const manifestKey = json.manifestKey
-      ? `<br><strong>Manifest key:</strong> <code>${esc(json.manifestKey)}</code>`
-      : '';
-
-        const emailOk =
-      (json.emailOk === true) ? 'Yes' :
-      (json.emailOk === false) ? 'No (check email config)' :
-      'Unknown';
-
-    const emailBlock = `<br><strong>Email sent:</strong> ${esc(emailOk)}`;
-
-    // NEW: credit status, if present
-    let creditBlock = '';
-    const c = json.credit;
-    if (c && c.code) {
-      if (c.error) {
-        creditBlock =
-          `<br><strong>Code:</strong> ${esc(c.code)} — ` +
-          `<span style="color:#fca5a5">${esc(c.error)}</span>`;
-      } else {
-        const rem = (typeof c.remaining === 'number') ? c.remaining : '?';
-        const bundle = (typeof c.bundleSize === 'number') ? c.bundleSize : null;
-        const tail = bundle != null ? `${rem} of ${bundle}` : `${rem}`;
-        creditBlock =
-          `<br><strong>Code:</strong> ${esc(c.code)} — remaining credits: ${esc(String(tail))}`;
-      }
-    }
-
-    const fixEnds = json.fixWindowEndsAt
-      ? `<br><strong>Fix window ends:</strong> ${esc(json.fixWindowEndsAt)}`
-      : '';
-
-    const alreadyUsedMsg = (json.idempotent === true)
-      ? `⚠️ This link was already used. Showing the existing ProofPack (no new emails should be sent).`
-      : `✅ Received! <strong>${esc(filesCount)}</strong> file(s) saved.<br> A ProofPack email will arrive shortly.`;
-
-    showStatus(
-      `${alreadyUsedMsg}${missingBlock}${linkHtml}
-       <div class="small">${emailBlock}${creditBlock}${fixEnds}${manifestKey}${packUrlHtml}</div>`,
-      true
-    );
-
-
-  } catch (err) {
-    showStatus(esc(`Network error: ${err?.message || err}`), false);
-  } finally {
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'Send and build ProofPack';
-  }
+  
+  updateRoleUI();
+  prefillFromToken();
 });
-
-/* =======================
-   DROP-IN: wiring
-   ======================= */
-if (roleSelect) roleSelect.addEventListener('change', updateRoleUI);
-if (billingSelect) billingSelect.addEventListener('change', updateBillingUI);
-if (frameworksSelectEl) frameworksSelectEl.addEventListener('change', renderFrameworkGuides);
-
-// Initial render
-updateRoleUI();
-updateBillingUI();
-renderFrameworkGuides();
-updateFileMeta();
-prefillFromAuditorResendLink(); // auditor resend link prefill (role=auditor&flow=request...)
-prefillFromRequestToken();      // client magic link prefill (t=...)
-maybeUnlockFromStripeReturn();
-wireCommonEvidenceSearch();
-wireCustomEvidenceAdd();
-
-
-
-/* =======================
-   END DROP-IN: wiring
-   ======================= */
-
-
-  </script>
-
-  <!-- STICKY BOTTOM MARQUEE -->
-  <div class="marquee-fixed" role="region" aria-label="Key highlights">
-    <div class="marquee"><div>
-      &nbsp;Guided SOC 2 evidence collection • Built for boutique auditors and their clients • Lightweight alternative to messy shared folders • No need for a full 5-figure compliance platform • Beta pricing and Stripe billing coming soon • Ask for complimentary auditor codes at ops@proofrepo.com •
-      Guided SOC 2 evidence collection • Built for boutique auditors and their clients • Lightweight alternative to messy shared folders • No need for a full 5-figure compliance platform • Beta pricing and Stripe billing coming soon • Ask for complimentary auditor codes at ops@proofrepo.com •
-    </div></div>
-  </div>
-
+</script>
 </body>
 </html>
