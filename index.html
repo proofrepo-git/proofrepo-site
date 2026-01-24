@@ -284,6 +284,48 @@
         </div>
       </div>
 
+      <!-- REQUEST COMPOSER (Auditor) + Requested Items (Client view) -->
+<div id="requestedEvidenceBlock" class="guidance step-after-role" style="display:none">
+  <h4 style="margin:0 0 6px">Requested evidence (SOC 2 Security baseline)</h4>
+  <div class="small muted" style="margin:0 0 10px">
+    Auditors: customize what you want your client to upload. Clients: this is what your auditor requested.
+  </div>
+
+  <!-- Global instructions -->
+  <div style="margin-top:8px">
+    <label for="globalInstructions"><strong>Instructions for your client (optional)</strong></label>
+    <textarea id="globalInstructions" placeholder="Example: Provide evidence covering Jan–Dec 2025. Screenshots acceptable. Please redact secrets."></textarea>
+    <div class="hint">Shown in the email + on the upload page + in the final manifest.</div>
+  </div>
+
+  <!-- Container for grouped checklist -->
+  <div id="requestedEvidenceList" style="margin-top:12px"></div>
+
+  <!-- Add controls (auditor only) -->
+  <div id="requestedEvidenceAddControls" style="margin-top:12px;display:none">
+    <div class="form-row two">
+      <div>
+        <label for="commonEvidenceSearch">Add common request</label>
+        <input id="commonEvidenceSearch" placeholder="Search common items (e.g., MFA, risk assessment, incident response)…" />
+        <div class="hint">Click a result to add instantly.</div>
+        <div id="commonEvidenceResults" class="card" style="margin-top:8px;padding:12px;display:none"></div>
+      </div>
+
+      <div>
+        <label>Add custom request</label>
+        <div class="form-row" style="gap:8px">
+          <input id="customEvidenceTitle" placeholder="Request title (required)" />
+          <textarea id="customEvidenceInstructions" placeholder="Optional instructions (example: last 30 days; include reviewer sign-off + date)"></textarea>
+          <button type="button" class="btn" id="addCustomEvidenceBtn">Add custom item</button>
+          <div class="hint">Use for edge cases or nonstandard controls.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /REQUEST COMPOSER -->
+
+
       <!-- Files (drag & drop) -->
       <div class="filebox step-after-role" id="filesRow" style="display:none">
         <label for="files">
@@ -692,6 +734,318 @@
       }
     };
 
+    // ===== SOC2 SECURITY REQUEST COMPOSER (V1) =====
+const SOC2_SECURITY_BASELINE = [
+  {
+    group: "CC1–CC2 Governance & Policies",
+    items: [
+      { id: "sec_policy", title: "Information Security Policy / Program Overview", defaultOn: true, required: true },
+      { id: "roles_responsibilities", title: "Security roles & responsibilities (owner/admin roles)", defaultOn: true, required: true },
+      { id: "acceptable_use", title: "Acceptable Use / Code of Conduct (if exists)", defaultOn: true, required: false },
+    ]
+  },
+  {
+    group: "CC3 Risk Assessment",
+    items: [
+      { id: "risk_assessment", title: "Risk assessment or risk register excerpt (latest)", defaultOn: true, required: true },
+      { id: "risk_remediation", title: "Risk treatment / remediation tracking (open items list)", defaultOn: true, required: false },
+    ]
+  },
+  {
+    group: "CC4 Monitoring",
+    items: [
+      { id: "monitoring_overview", title: "Monitoring/alerting overview (tools + review cadence)", defaultOn: true, required: false },
+      { id: "periodic_reviews", title: "Periodic security/access reviews schedule or evidence", defaultOn: false, required: false },
+    ]
+  },
+  {
+    group: "CC5 Security Awareness & Incident Response",
+    items: [
+      { id: "security_training", title: "Security awareness training evidence", defaultOn: true, required: false },
+      { id: "incident_response", title: "Incident response process + how incidents are tracked", defaultOn: true, required: true },
+    ]
+  },
+  {
+    group: "CC6 Logical Access",
+    items: [
+      { id: "access_review", title: "User access review (export + reviewer sign-off)", defaultOn: true, required: true },
+      { id: "jml_process", title: "User provisioning/deprovisioning (JML) process + sample tickets (if available)", defaultOn: true, required: false },
+      { id: "mfa_enforcement", title: "MFA enforcement evidence (IdP settings screenshot or policy)", defaultOn: true, required: true },
+      { id: "privileged_access", title: "Privileged/admin access controls (admin list + how controlled)", defaultOn: true, required: false },
+    ]
+  },
+  {
+    group: "CC7 System Operations",
+    items: [
+      { id: "vuln_mgmt", title: "Vulnerability management (scan summary or ticket view)", defaultOn: true, required: false },
+      { id: "logging_retention", title: "Logging/audit trail evidence (what’s logged + retention)", defaultOn: true, required: true },
+      { id: "backups", title: "Backups & recovery basics (evidence they run)", defaultOn: false, required: false },
+    ]
+  },
+  {
+    group: "CC8 Change Management",
+    items: [
+      { id: "change_log", title: "Change management log / deployments evidence", defaultOn: true, required: true },
+      { id: "code_review_controls", title: "SDLC / code review controls (branch protections screenshot or policy)", defaultOn: false, required: false },
+    ]
+  },
+  {
+    group: "CC9 Vendor Risk",
+    items: [
+      { id: "vendor_list", title: "Vendor list + vendor risk approach", defaultOn: true, required: true },
+      { id: "subservice_orgs", title: "Critical vendors / subservice orgs list (cloud providers, key processors)", defaultOn: false, required: false },
+    ]
+  }
+];
+
+// Common-add library (searchable)
+const SOC2_COMMON_LIBRARY = [
+  "Access Control Policy",
+  "Change Management Policy",
+  "Vendor Management Policy",
+  "Data Classification / Handling Policy",
+  "BCP/DR Policy",
+  "DR test evidence (if performed)",
+  "Pen test report (if available)",
+  "Security exception log",
+  "Endpoint/EDR coverage screenshot",
+  "Encryption at rest evidence",
+  "Encryption in transit evidence",
+  "Key management approach (KMS)",
+  "Background check policy/evidence (if applicable)",
+  "Onboarding/offboarding samples (2–3 examples)",
+  "SIEM/alert review evidence (weekly/monthly)",
+];
+
+let requestedEvidenceState = []; // normalized list sent to worker
+// Each item: { id, group, title, instructions, required, defaultOn, included }
+
+function buildDefaultRequestedEvidence() {
+  const out = [];
+  for (const g of SOC2_SECURITY_BASELINE) {
+    for (const it of g.items) {
+      out.push({
+        id: it.id,
+        group: g.group,
+        title: it.title,
+        instructions: "",
+        required: !!it.required,
+        defaultOn: !!it.defaultOn,
+        included: !!it.defaultOn
+      });
+    }
+  }
+  return out;
+}
+
+function ensureRequestedEvidenceInitialized() {
+  // Only initialize once per page-load unless we explicitly set from /resolve
+  if (!requestedEvidenceState || !requestedEvidenceState.length) {
+    requestedEvidenceState = buildDefaultRequestedEvidence();
+  }
+}
+
+function renderRequestedEvidenceUI({ mode }) {
+  // mode: "auditor" | "client"
+  const block = document.getElementById("requestedEvidenceBlock");
+  const list = document.getElementById("requestedEvidenceList");
+  const addControls = document.getElementById("requestedEvidenceAddControls");
+
+  if (!block || !list) return;
+
+  const role = (document.getElementById("role")?.value || "").trim();
+  const selectedFrameworks = Array.from(document.getElementById("frameworks")?.selectedOptions || []).map(o => o.value);
+
+  const isSOC2Selected = selectedFrameworks.includes("SOC2");
+  if (!isSOC2Selected) {
+    block.style.display = "none";
+    return;
+  }
+
+  // Show block when SOC2 selected; hide add controls for client mode
+  block.style.display = "";
+  if (addControls) addControls.style.display = (mode === "auditor" && role === "auditor") ? "" : "none";
+
+  // Group items
+  const byGroup = new Map();
+  for (const item of requestedEvidenceState) {
+    const g = item.group || "Other";
+    if (!byGroup.has(g)) byGroup.set(g, []);
+    byGroup.get(g).push(item);
+  }
+
+  // Render
+  list.innerHTML = "";
+  for (const [groupName, items] of byGroup.entries()) {
+    const groupDiv = document.createElement("div");
+    groupDiv.style.marginTop = "10px";
+
+    const h = document.createElement("div");
+    h.innerHTML = `<strong>${esc(groupName)}</strong>`;
+    groupDiv.appendChild(h);
+
+    const ul = document.createElement("ul");
+    ul.style.margin = "8px 0 0";
+    ul.style.paddingLeft = "18px";
+
+    for (const item of items) {
+      const li = document.createElement("li");
+      li.style.margin = "8px 0";
+
+      const isAuditor = (mode === "auditor" && role === "auditor");
+      const chkId = `req-${item.id}-included`;
+      const txtId = `req-${item.id}-instr`;
+
+      // Checkbox (auditor only). Client sees a read-only list of included items.
+      const included = !!item.included;
+      if (isAuditor) {
+        li.innerHTML = `
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <input type="checkbox" id="${esc(chkId)}" ${included ? "checked" : ""} />
+            <div style="flex:1">
+              <label for="${esc(chkId)}"><strong>${esc(item.title)}</strong>${item.required ? ' <span class="pill" style="margin-left:6px">required</span>' : ""}</label>
+              <details class="advanced" style="margin-top:6px">
+                <summary>Instructions (optional)</summary>
+                <textarea id="${esc(txtId)}" placeholder="Example: last 30 days; include reviewer sign-off + date" style="margin-top:8px">${esc(item.instructions || "")}</textarea>
+              </details>
+            </div>
+          </div>
+        `;
+      } else {
+        if (!included) continue; // clients only see what auditor included
+        li.innerHTML = `
+          <div>
+            <strong>${esc(item.title)}</strong>${item.required ? ' <span class="pill" style="margin-left:6px">required</span>' : ""}
+            ${item.instructions ? `<div class="hint" style="margin-top:6px">${esc(item.instructions)}</div>` : ""}
+          </div>
+        `;
+      }
+
+      ul.appendChild(li);
+
+      // Wire events (auditor mode)
+      if (isAuditor) {
+        const chk = li.querySelector(`#${CSS.escape(chkId)}`);
+        const txt = li.querySelector(`#${CSS.escape(txtId)}`);
+        if (chk) {
+          chk.addEventListener("change", () => {
+            item.included = !!chk.checked;
+          });
+        }
+        if (txt) {
+          txt.addEventListener("input", () => {
+            item.instructions = txt.value || "";
+          });
+        }
+      }
+    }
+
+    if (ul.childNodes.length) {
+      groupDiv.appendChild(ul);
+      list.appendChild(groupDiv);
+    }
+  }
+}
+
+function getRequestedEvidencePayload() {
+  // Only send included items
+  return requestedEvidenceState
+    .filter(x => x && x.included)
+    .map(x => ({
+      id: x.id,
+      group: x.group,
+      title: x.title,
+      instructions: x.instructions || "",
+      required: !!x.required
+    }));
+}
+
+// Searchable common-add UI
+function wireCommonEvidenceSearch() {
+  const search = document.getElementById("commonEvidenceSearch");
+  const results = document.getElementById("commonEvidenceResults");
+  if (!search || !results) return;
+
+  function renderResults(q) {
+    const query = (q || "").trim().toLowerCase();
+    if (!query) {
+      results.style.display = "none";
+      results.innerHTML = "";
+      return;
+    }
+    const matches = SOC2_COMMON_LIBRARY
+      .filter(t => t.toLowerCase().includes(query))
+      .slice(0, 12);
+
+    if (!matches.length) {
+      results.style.display = "";
+      results.innerHTML = `<div class="small muted">No matches.</div>`;
+      return;
+    }
+
+    results.style.display = "";
+    results.innerHTML = matches
+      .map(t => `<div class="btn" data-add-common="${esc(t)}" style="justify-content:flex-start;width:100%;margin:6px 0">${esc(t)}</div>`)
+      .join("");
+  }
+
+  search.addEventListener("input", () => renderResults(search.value));
+
+  results.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-add-common]");
+    if (!btn) return;
+    const title = btn.getAttribute("data-add-common") || "";
+    if (!title) return;
+
+    // Avoid duplicates by title
+    const exists = requestedEvidenceState.some(x => (x.title || "").toLowerCase() === title.toLowerCase());
+    if (!exists) {
+      requestedEvidenceState.push({
+        id: "common_" + Math.random().toString(36).slice(2, 10),
+        group: "Common adds",
+        title,
+        instructions: "",
+        required: false,
+        defaultOn: false,
+        included: true
+      });
+    }
+    renderRequestedEvidenceUI({ mode: "auditor" });
+  });
+}
+
+function wireCustomEvidenceAdd() {
+  const btn = document.getElementById("addCustomEvidenceBtn");
+  const titleEl = document.getElementById("customEvidenceTitle");
+  const instrEl = document.getElementById("customEvidenceInstructions");
+  if (!btn || !titleEl) return;
+
+  btn.addEventListener("click", () => {
+    const title = (titleEl.value || "").trim();
+    const instructions = (instrEl?.value || "").trim();
+    if (!title) {
+      showStatus("Enter a custom request title.", false);
+      return;
+    }
+
+    requestedEvidenceState.push({
+      id: "custom_" + Math.random().toString(36).slice(2, 10),
+      group: "Custom requests",
+      title,
+      instructions,
+      required: false,
+      defaultOn: false,
+      included: true
+    });
+
+    titleEl.value = "";
+    if (instrEl) instrEl.value = "";
+    renderRequestedEvidenceUI({ mode: "auditor" });
+  });
+}
+// ===== /SOC2 SECURITY REQUEST COMPOSER =====
+
+
 const $ = s => document.querySelector(s);
     
 // ===== PATCH UTILS (escape + safeUrl) =====
@@ -845,6 +1199,14 @@ async function submitAuditorRequest() {
   if (appliedCode) {
     payload.auditorCode = appliedCode;
   }
+
+  // NEW: requested evidence payload (SOC2)
+  ensureRequestedEvidenceInitialized();
+  const globalInstructions = (document.getElementById("globalInstructions")?.value || "").trim();
+
+  payload.globalInstructions = globalInstructions;
+  payload.requestedEvidence = getRequestedEvidencePayload();
+
 
   const res = await fetch(`${WORKER_BASE}/request`, {
     method: 'POST',
@@ -1633,6 +1995,22 @@ if (auditorCodeCol) auditorCodeCol.style.display = 'none';
 
   if (auditorCodeCol) auditorCodeCol.style.display = 'none';
   if (auditorCodeInput) auditorCodeInput.value = '';
+
+  // Show request composer for auditors (SOC2 only), hide for others unless token link sets it later
+  const reqBlock = document.getElementById("requestedEvidenceBlock");
+  const addControls = document.getElementById("requestedEvidenceAddControls");
+  if (reqBlock) {
+    if (role === "auditor") {
+      ensureRequestedEvidenceInitialized();
+      reqBlock.style.display = "";
+      if (addControls) addControls.style.display = "";
+      renderRequestedEvidenceUI({ mode: "auditor" });
+    } else {
+      // non-auditors: normally hide; token flow may show it as read-only
+      reqBlock.style.display = "none";
+      if (addControls) addControls.style.display = "none";
+    }
+  }
 }
 
   // Keep billing + guide UI coherent with role
@@ -1812,6 +2190,31 @@ async function prefillFromRequestToken() {
 
   // Guard changes (optional)
   attachPrefillGuards({ companyVal, auditorEmailVal, frameworkVals });
+
+    // If resolve contains requestedEvidence/globalInstructions, show it to client as read-only.
+  // This allows you to evolve beyond the old SOC2 3-item tagging without breaking old flows.
+  if (Array.isArray(j.requestedEvidence) && j.requestedEvidence.length) {
+    requestedEvidenceState = j.requestedEvidence.map(x => ({
+      id: x.id || ("req_" + Math.random().toString(36).slice(2, 10)),
+      group: x.group || "Requested",
+      title: x.title || "Request item",
+      instructions: x.instructions || "",
+      required: !!x.required,
+      defaultOn: true,
+      included: true
+    }));
+
+    const gi = document.getElementById("globalInstructions");
+    if (gi && j.globalInstructions) gi.value = String(j.globalInstructions);
+
+    // Show requested items block for client view
+    const reqBlock = document.getElementById("requestedEvidenceBlock");
+    const addControls = document.getElementById("requestedEvidenceAddControls");
+    if (reqBlock) reqBlock.style.display = "";
+    if (addControls) addControls.style.display = "none";
+    renderRequestedEvidenceUI({ mode: "client" });
+  }
+
 
   // Token link means "already unlocked" (no pricing gate)
   clearStatus();
@@ -2055,17 +2458,27 @@ function validate() {
     if (files.length > 50) return 'For large batches, split into multiple submissions.';
   }
 
-  // Enforce required SOC2 tagging ONLY
-  const missing = [];
+  // Enforce required SOC2 tagging ONLY IF this is the legacy SOC2 flow
+  // (i.e., no request-driven requestedEvidence present from /resolve)
   const soc2Selected = fws.includes('SOC2');
 
-  if (soc2Selected) {
+  const hasRequestDrivenEvidence =
+    Array.isArray(requestedEvidenceState) &&
+    requestedEvidenceState.some(x => x && x.included);
+
+  // Only force the old 3-item tagging when we are NOT request-driven
+  if (soc2Selected && !hasRequestDrivenEvidence) {
+    const missing = [];
     const cfg = FRAMEWORK_CONFIG.SOC2;
     const sel = frameworkSelections.SOC2 || {};
     (cfg.items || []).forEach(item => {
       if (!sel[item.id]) missing.push(`${cfg.label}: ${item.label}`);
     });
+    if (missing.length) {
+      return 'For SOC 2, please tag files for these required items:\n• ' + missing.join('\n• ');
+    }
   }
+
 
   if (missing.length) {
     return 'For SOC 2, please tag files for these required items:\n• ' + missing.join('\n• ');
@@ -2332,6 +2745,9 @@ updateFileMeta();
 prefillFromAuditorResendLink(); // auditor resend link prefill (role=auditor&flow=request...)
 prefillFromRequestToken();      // client magic link prefill (t=...)
 maybeUnlockFromStripeReturn();
+wireCommonEvidenceSearch();
+wireCustomEvidenceAdd();
+
 
 
 /* =======================
