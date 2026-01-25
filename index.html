@@ -22,6 +22,7 @@
     .btn.sm{padding:8px 14px;font-size:.9rem}
     .btn.ghost{background:transparent;border:1px dashed #3a4a86}
     .btn.danger{background:#7f1d1d;border-color:#991b1b;color:#fecaca}
+    .btn.success{background:linear-gradient(135deg,#059669,#10b981);border-color:transparent;color:#fff}
     .hero{padding:56px 28px}
     .heroGrid{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center}
     .kicker{color:var(--accent);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.8rem}
@@ -127,7 +128,28 @@
     .modal h3{margin:0 0 16px}
     .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
 
-    @media(max-width:980px){.heroGrid{grid-template-columns:1fr}.cols3,.cols2{grid-template-columns:1fr}}
+    /* PRICING GATE STYLES */
+    .pricing-gate{margin-top:12px}
+    .pricing-gate h3{margin:0 0 4px}
+    .pricing-tabs{display:flex;gap:0;margin:16px 0 12px;border-radius:10px;overflow:hidden;border:1px solid #2a3766}
+    .pricing-tab{flex:1;padding:12px;text-align:center;cursor:pointer;background:#0a1020;border:none;color:var(--muted);font-weight:600;font-size:.95rem;transition:all .15s}
+    .pricing-tab:hover{background:#101830}
+    .pricing-tab.active{background:var(--primary);color:#fff}
+    .pricing-tab-content{display:none}
+    .pricing-tab-content.active{display:block}
+    
+    .pricing-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}
+    .pricing-card{padding:16px;border:1px solid #2a3766;border-radius:12px;background:#0a1225;text-align:center;cursor:pointer;transition:all .15s}
+    .pricing-card:hover{border-color:var(--primary);background:#0c1a3a;transform:translateY(-2px)}
+    .pricing-card.selected{border-color:var(--accent);background:#0f2a1a;box-shadow:0 0 0 2px var(--accent)}
+    .pricing-card.popular{border-color:var(--accent);position:relative}
+    .pricing-card.popular::before{content:'BEST VALUE';position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--accent);color:#062312;font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:4px}
+    .pricing-card-name{font-weight:700;font-size:1.1rem;margin-bottom:4px}
+    .pricing-card-price{font-size:1.5rem;font-weight:800;color:var(--accent)}
+    .pricing-card-price span{font-size:.85rem;font-weight:400;color:var(--muted)}
+    .pricing-card-desc{font-size:.85rem;color:var(--muted);margin-top:4px}
+    
+    @media(max-width:980px){.heroGrid{grid-template-columns:1fr}.cols3,.cols2{grid-template-columns:1fr}.pricing-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -236,14 +258,63 @@
 
       <input type="hidden" id="requestToken" value="">
 
-      <div id="pricingGate" class="card" style="display:none;margin-top:12px">
-        <h3 style="margin:0 0 8px">Enter your code to continue</h3>
-        <p class="small muted">Auditor codes unlock the request flow. Contact ops@proofrepo.com for codes.</p>
-        <div class="form-row two" style="margin-top:10px">
-          <input id="unlockCode" placeholder="Enter code"/>
-          <button type="button" class="btn primary" id="applyCodeBtn">Apply</button>
+      <!-- UPDATED PRICING GATE -->
+      <div id="pricingGate" class="card pricing-gate" style="display:none">
+        <h3>Enter your code to continue</h3>
+        <p class="small muted">Already have a code? Enter it below. Otherwise, get started with a free trial or purchase credits.</p>
+        
+        <!-- Tabs -->
+        <div class="pricing-tabs">
+          <button type="button" class="pricing-tab active" data-tab="code">I have a code</button>
+          <button type="button" class="pricing-tab" data-tab="buy">Buy credits</button>
         </div>
-        <div class="hint" id="unlockHint"></div>
+        
+        <!-- Tab: I have a code -->
+        <div class="pricing-tab-content active" data-tab-content="code">
+          <div class="form-row two" style="margin-top:10px">
+            <input id="unlockCode" placeholder="Enter code"/>
+            <button type="button" class="btn primary" id="applyCodeBtn">Apply</button>
+          </div>
+          <div class="hint" id="unlockHint"></div>
+        </div>
+        
+        <!-- Tab: Buy credits -->
+        <div class="pricing-tab-content" data-tab-content="buy">
+          <p class="small muted" style="margin-bottom:12px">Each credit = 1 ProofPack request. Buy more, save more.</p>
+          <div class="pricing-grid">
+            <div class="pricing-card" data-tier="single">
+              <div class="pricing-card-name">Single Pack</div>
+              <div class="pricing-card-price">$59</div>
+              <div class="pricing-card-desc">1 credit</div>
+            </div>
+            <div class="pricing-card" data-tier="pack5">
+              <div class="pricing-card-name">5-Pack</div>
+              <div class="pricing-card-price">$249</div>
+              <div class="pricing-card-desc">5 credits</div>
+            </div>
+            <div class="pricing-card popular" data-tier="pack15">
+              <div class="pricing-card-name">15-Pack</div>
+              <div class="pricing-card-price">$499</div>
+              <div class="pricing-card-desc">15 credits</div>
+            </div>
+            <div class="pricing-card" data-tier="pack50">
+              <div class="pricing-card-name">50-Pack</div>
+              <div class="pricing-card-price">$1,249</div>
+              <div class="pricing-card-desc">50 credits</div>
+            </div>
+          </div>
+          <div style="margin-top:16px;text-align:center">
+            <div class="pricing-card" data-tier="unlimited" style="max-width:300px;margin:0 auto">
+              <div class="pricing-card-name">Unlimited Annual</div>
+              <div class="pricing-card-price">$2,999<span>/year</span></div>
+              <div class="pricing-card-desc">Unlimited requests for 12 months</div>
+            </div>
+          </div>
+          <div id="buyHint" class="hint" style="text-align:center;margin-top:12px"></div>
+          <div style="margin-top:16px;text-align:center">
+            <button type="button" class="btn primary" id="continueBtn" disabled>Select a plan above</button>
+          </div>
+        </div>
       </div>
 
       <div id="status" class="status" style="display:none"></div>
@@ -304,11 +375,11 @@
     </div>
   </section>
 
-  <footer class="wrap"><div class="row"><div>© <span id="y"></span> ProofRepo • <a style="color:#9db0ff" href="mailto:ops@proofrepo.com">ops@proofrepo.com</a></div></div></footer>
+  <footer class="wrap"><div class="row"><div>© <span id="y"></span> ProofRepo • <a style="color:#9db0ff" href="/cdn-cgi/l/email-protection#640b14172414160b0b021601140b4a070b09"><span class="__cf_email__" data-cfemail="355a45467545475a5a534750455a1b565a58">[email&#160;protected]</span></a></div></div></footer>
 
-  <div class="marquee-fixed"><div class="marquee"><div>&nbsp;Guided compliance evidence collection • Built for auditors • SOC 2, ISO 27001, HIPAA, GDPR & more • Contact ops@proofrepo.com for codes •</div></div></div>
+  <div class="marquee-fixed"><div class="marquee"><div>&nbsp;Guided compliance evidence collection • Built for auditors • SOC 2, ISO 27001, HIPAA, GDPR & more • Get started with a free trial •</div></div></div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const WORKER_BASE = 'https://proofrepo-intake.atucker5.workers.dev';
 
 // COMPREHENSIVE EVIDENCE LIBRARY
@@ -475,6 +546,7 @@ let isFromRequestLink = false;
 let appliedCode = null;
 
 const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
 const esc = (s='') => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const safeUrl = u => { try { const url = new URL(String(u), location.href); return ['https:','http:'].includes(url.protocol) ? url.toString() : ''; } catch { return ''; } };
 
@@ -637,8 +709,6 @@ function renderItem(fwKey, gid, item, gs) {
     <div class="ei-content">
       <div class="ei-title">
         ${esc(item.title)}
-        
-        
       </div>
       ${item.hint ? `<div class="ei-hint">${esc(item.hint)}</div>` : ''}
       <div class="ei-instr">
@@ -651,7 +721,7 @@ function renderItem(fwKey, gid, item, gs) {
 
 function wireComposer() {
   // Framework toggle
-  document.querySelectorAll('[data-fw-toggle]').forEach(cb => {
+  $$('[data-fw-toggle]').forEach(cb => {
     cb.addEventListener('change', e => {
       const k = e.target.dataset.fwToggle;
       if (!composerState[k]) {
@@ -663,9 +733,8 @@ function wireComposer() {
   });
   
   // Control group header click (expand/collapse)
-  document.querySelectorAll('.cg-header').forEach(h => {
+  $$('.cg-header').forEach(h => {
     h.addEventListener('click', e => {
-      // Don't toggle if clicking exclude/include button
       if (e.target.closest('.cg-exclude') || e.target.closest('.cg-include')) return;
       const g = h.closest('.control-group');
       const fk = g.dataset.fw, gid = g.dataset.group;
@@ -675,7 +744,7 @@ function wireComposer() {
   });
   
   // Exclude group
-  document.querySelectorAll('[data-exclude-group]').forEach(btn => {
+  $$('[data-exclude-group]').forEach(btn => {
     btn.addEventListener('click', e => {
       e.stopPropagation();
       const [fk, gid] = btn.dataset.excludeGroup.split('-');
@@ -685,7 +754,7 @@ function wireComposer() {
   });
   
   // Include group
-  document.querySelectorAll('[data-include-group]').forEach(btn => {
+  $$('[data-include-group]').forEach(btn => {
     btn.addEventListener('click', e => {
       e.stopPropagation();
       const [fk, gid] = btn.dataset.includeGroup.split('-');
@@ -695,7 +764,7 @@ function wireComposer() {
   });
   
   // Show more/fewer toggle
-  document.querySelectorAll('.more-toggle').forEach(t => {
+  $$('.more-toggle').forEach(t => {
     t.addEventListener('click', e => {
       e.stopPropagation();
       const fk = t.dataset.fw, gid = t.dataset.group;
@@ -705,7 +774,7 @@ function wireComposer() {
   });
   
   // Evidence item checkbox
-  document.querySelectorAll('.evidence-item input[type="checkbox"]').forEach(cb => {
+  $$('.evidence-item input[type="checkbox"]').forEach(cb => {
     cb.addEventListener('change', e => {
       const el = e.target.closest('.evidence-item');
       const { fw, group, item } = el.dataset;
@@ -715,7 +784,7 @@ function wireComposer() {
   });
   
   // Evidence item instructions
-  document.querySelectorAll('[data-item-instr]').forEach(ta => {
+  $$('[data-item-instr]').forEach(ta => {
     ta.addEventListener('input', e => {
       const [fw, group, item] = ta.dataset.itemInstr.split('-');
       if (composerState[fw]?.groups?.[group]?.items?.[item]) {
@@ -725,7 +794,7 @@ function wireComposer() {
   });
   
   // Add custom item
-  document.querySelectorAll('[data-add-item]').forEach(btn => {
+  $$('[data-add-item]').forEach(btn => {
     btn.addEventListener('click', () => {
       const fk = btn.dataset.addItem;
       const gid = btn.dataset.group;
@@ -761,7 +830,7 @@ function wireComposer() {
   $('#addFwChip')?.addEventListener('click', () => $('#addFwModal').classList.remove('hidden'));
   
   // Add control group button
-  document.querySelectorAll('[data-add-group-btn]').forEach(btn => {
+  $$('[data-add-group-btn]').forEach(btn => {
     btn.addEventListener('click', () => {
       $('#customGroupFwKey').value = btn.dataset.addGroupBtn;
       $('#addGroupModal').classList.remove('hidden');
@@ -862,7 +931,6 @@ function getPayload() {
           group: g.title,
           title: item.title,
           instructions: is.instructions || '',
-          
         });
       }
     }
@@ -919,7 +987,7 @@ function renderClientChecklist(items, globalInstr) {
 
 function updateRoleUI() {
   const role = ($('#role')?.value || '').trim();
-  const later = document.querySelectorAll('.step-after-role');
+  const later = $$('.step-after-role');
   
   if (!role) {
     later.forEach(r => r.style.display = 'none');
@@ -1129,15 +1197,131 @@ function gather() {
   return fd;
 }
 
+// ==================== PRICING GATE LOGIC ====================
+
+let selectedTier = null;
+
+function initPricingTabs() {
+  // Tab switching
+  $$('.pricing-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      $$('.pricing-tab').forEach(t => t.classList.remove('active'));
+      $$('.pricing-tab-content').forEach(c => c.classList.remove('active'));
+      tab.classList.add('active');
+      const tabName = tab.dataset.tab;
+      document.querySelector(`[data-tab-content="${tabName}"]`)?.classList.add('active');
+      
+      // Update continue button text based on tab
+      const continueBtn = $('#continueBtn');
+      if (continueBtn) {
+        if (tabName === 'buy') {
+          continueBtn.textContent = selectedTier ? 'Continue to Checkout' : 'Select a plan above';
+          continueBtn.disabled = !selectedTier;
+        } else {
+          continueBtn.style.display = 'none';
+        }
+      }
+    });
+  });
+  
+  // Pricing card selection (not immediate checkout)
+  $$('.pricing-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const tier = card.dataset.tier;
+      if (!tier) return;
+      
+      // Deselect all, select this one
+      $$('.pricing-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      selectedTier = tier;
+      
+      // Enable continue button
+      const continueBtn = $('#continueBtn');
+      if (continueBtn) {
+        continueBtn.textContent = 'Continue to Checkout';
+        continueBtn.disabled = false;
+      }
+      
+      $('#buyHint').textContent = '';
+    });
+  });
+  
+  // Continue button - triggers checkout for selected tier
+  $('#continueBtn')?.addEventListener('click', async () => {
+    const activeTab = document.querySelector('.pricing-tab.active')?.dataset.tab;
+    
+    if (activeTab === 'buy') {
+      if (!selectedTier) {
+        $('#buyHint').textContent = 'Please select a plan first.';
+        return;
+      }
+      
+      const email = ($('#email')?.value || '').trim();
+      const btn = $('#continueBtn');
+      btn.disabled = true;
+      btn.textContent = 'Redirecting...';
+      $('#buyHint').textContent = '';
+      
+      try {
+        const res = await fetch(`${WORKER_BASE}/checkout`, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ 
+            tier: selectedTier, 
+            email: email || undefined,
+            successUrl: window.location.origin + window.location.pathname,
+            cancelUrl: window.location.origin + window.location.pathname
+          })
+        });
+        
+        const j = await res.json();
+        console.log('Checkout response:', j);
+        
+        if (!res.ok || !j?.ok) {
+          throw new Error(j?.error || `Checkout failed (HTTP ${res.status})`);
+        }
+        
+        if (j.url) {
+          window.location.href = j.url;
+        } else if (j.checkoutUrl) {
+          window.location.href = j.checkoutUrl;
+        } else {
+          console.error('No URL in response:', j);
+          throw new Error('No checkout URL returned. Make sure worker v4 is deployed.');
+        }
+      } catch (e) {
+        console.error('Checkout error:', e);
+        const errorMsg = e.message || 'Could not start checkout';
+        // Check if it's a network/CORS error
+        if (e.name === 'TypeError' && e.message.includes('fetch')) {
+          $('#buyHint').textContent = 'Network error. Make sure the worker is deployed and accessible.';
+        } else {
+          $('#buyHint').textContent = 'Error: ' + errorMsg;
+        }
+        btn.disabled = false;
+        btn.textContent = 'Continue to Checkout';
+      }
+    }
+  });
+  
+  // Free trial request - removed (trials given manually to targeted prospects)
+}
+
+// ==================== INIT ====================
+
 document.addEventListener('DOMContentLoaded', () => {
   $('#y').textContent = new Date().getFullYear();
   $('#role')?.addEventListener('change', updateRoleUI);
   $('#files')?.addEventListener('change', updateFileMeta);
   
+  // Initialize pricing tabs
+  initPricingTabs();
+  
   $('#startBtn')?.addEventListener('click', () => {
     clearStatus();
     if (!$('#role')?.value) { showStatus('Choose a role.', false); return; }
     $('#pricingGate').style.display = 'block';
+    $('#startBtn').style.display = 'none'; // Hide the Continue button after showing pricing gate
     $('#pricingGate').scrollIntoView({ behavior: 'smooth' });
   });
   
@@ -1150,7 +1334,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const j = await res.json();
       if (!res.ok || !j?.ok) throw new Error(j?.error || 'Invalid');
       appliedCode = j.code || code;
-      $('#unlockHint').textContent = `✓ Code accepted. ${j.remaining ?? '?'} credits.`;
+      $('#unlockHint').innerHTML = `<span style="color:var(--accent)">✓ Code accepted.</span> ${j.remaining ?? '?'} credit${j.remaining !== 1 ? 's' : ''} available.`;
       setUnlocked();
     } catch (e) {
       $('#unlockHint').textContent = e.message || 'Invalid code.';
