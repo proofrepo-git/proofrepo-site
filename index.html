@@ -1,3 +1,6 @@
+
+Copy
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -349,11 +352,11 @@
     </div>
   </section>
 
-  <footer class="wrap"><div class="row"><div>© <span id="y"></span> ProofRepo • <a style="color:#9db0ff" href="mailto:support@proofrepo.com">support@proofrepo.com</a></div></div></footer>
+  <footer class="wrap"><div class="row"><div>© <span id="y"></span> ProofRepo • <a style="color:#9db0ff" href="/cdn-cgi/l/email-protection#0d7e787d7d627f794d7d7f62626b7f687d62236e6260"><span class="__cf_email__" data-cfemail="b0c3c5c0c0dfc2c4f0c0c2dfdfd6c2d5c0df9ed3dfdd">[email&#160;protected]</span></a></div></div></footer>
 
   <div class="marquee-fixed"><div class="marquee"><div>&nbsp;Guided compliance evidence collection • Built for auditors • SOC 2, ISO 27001, HIPAA, GDPR & more • Get started with a free trial •</div></div></div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const WORKER_BASE = 'https://proofrepo-intake.atucker5.workers.dev';
 const STORAGE_KEY = 'proofrepo_form_state';
 
@@ -648,8 +651,15 @@ async function handleCheckoutReturn() {
       return true;
     } else if (res.status === 202) {
       showStatus(`<strong style="color:var(--accent)">✓ Payment confirmed!</strong><br><br>
-        <p>Your code is being generated and will be emailed shortly. Enter it above to continue.</p>`, true);
+        <p>Your code is being generated. It should arrive in your email within 1-2 minutes.</p>
+        <p>Once you receive it, enter it in the code field above and click Apply.</p>`, true);
       if (savedState) updateRoleUI();
+      // Show the pricing gate with code tab active so they can enter it
+      $('#pricingGate').style.display = 'block';
+      $$('.pricing-tab').forEach(t => t.classList.remove('active'));
+      $$('.pricing-tab-content').forEach(c => c.classList.remove('active'));
+      document.querySelector('[data-tab="code"]')?.classList.add('active');
+      document.querySelector('[data-tab-content="code"]')?.classList.add('active');
       return true;
     } else {
       throw new Error(j.error || 'Could not verify payment');
@@ -1330,17 +1340,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     fb.addEventListener('drop', e => {
       if (e.dataTransfer?.files) {
         try {
-          const dt = new DataTransfer();
-          Array.from(e.dataTransfer.files).forEach(f => dt.items.add(f));
-          $('#files').files = dt.files;
-        } catch {}
-        updateFileMeta();
-      }
-    });
-  }
-
-  updateRoleUI();
-});
-</script>
-</body>
-</html>
+          const dt = n
