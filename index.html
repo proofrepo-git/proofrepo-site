@@ -172,7 +172,7 @@
         <select id="role" required>
           <option value="" selected disabled>Choose one…</option>
           <option value="auditor">I'm an auditor requesting evidence from a client</option>
-          <option value="client">My auditor sent me here to upload evidence</option>
+          <option value="client" style="display:none">My auditor sent me here to upload evidence</option>
           <option value="company">I'm building a ProofPack proactively</option>
         </select>
         <div class="hint" id="roleHint">This determines your workflow.</div>
@@ -1250,27 +1250,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   const hasToken = url.searchParams.get('t') || url.searchParams.get('token');
   if (hasToken) { await prefillFromToken(); return; }
 
-  // Try to restore saved auditor state
-  const savedState = loadFormState();
-  if (savedState && savedState.role === 'auditor') {
-    restoreFormState(savedState);
-    updateRoleUI();
-    if (savedState.globalInstructions) {
-      setTimeout(() => { const gi = $('#globalInstructions'); if (gi) gi.value = savedState.globalInstructions; }, 100);
-    }
-    if (savedState.appliedCode) {
-      $('#unlockCode').value = savedState.appliedCode;
-      try {
-        const res = await fetch(`${WORKER_BASE}/check-code?code=${encodeURIComponent(savedState.appliedCode)}`);
-        const j = await res.json();
-        if (res.ok && j?.ok) {
-          appliedCode = j.code || savedState.appliedCode;
-          setUnlocked();
-          showStatus(`<span style="color:var(--accent)">✓ Welcome back!</span> Code <strong>${esc(appliedCode)}</strong> — ${j.remaining ?? '?'} credit${j.remaining !== 1 ? 's' : ''} remaining.`, true);
-        }
-      } catch (e) { console.warn('Could not verify saved code:', e); }
-    }
-  }
+  // Clear any stale form state on fresh visits (no session_id, no token)
+  // State is only meant to persist during checkout redirect
+  clearFormState();
+
+  updateRoleUI();
 
   $('#startBtn')?.addEventListener('click', () => {
     clearStatus();
