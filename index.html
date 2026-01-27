@@ -240,25 +240,6 @@
       border-color: var(--primary);
     }
 
-    .deadline-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .deadline-row.hide-time {
-      grid-template-columns: 1fr;
-    }
-
-    .deadline-row .form-group {
-      margin-bottom: 0;
-    }
-
-    #timeGroup.hidden {
-      display: none;
-    }
-
     .framework-selector {
       display: flex;
       flex-wrap: wrap;
@@ -585,7 +566,7 @@
       font-size: 0.9rem;
     }
 
-    /* Payment section - appears ABOVE the main action button */
+    /* Payment section */
     .payment-section {
       display: none;
       background: var(--surface-elevated);
@@ -618,7 +599,6 @@
       background: var(--bg);
       border-radius: 12px;
       padding: 16px;
-      margin-bottom: 16px;
     }
 
     .code-input {
@@ -662,21 +642,21 @@
     .code-status.invalid { color: var(--error); }
     .code-status.checking { color: var(--text-muted); }
 
-    .divider {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin: 20px 0;
-      color: var(--text-muted);
-      font-size: 0.9rem;
+    .purchase-section {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
     }
 
-    .divider::before,
-    .divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
+    .purchase-section.hidden {
+      display: none;
+    }
+
+    .divider-text {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 16px;
     }
 
     .pricing-grid {
@@ -885,8 +865,6 @@
     @media (max-width: 768px) {
       .how-grid { grid-template-columns: 1fr; }
       .pricing-grid { grid-template-columns: 1fr 1fr; }
-      .deadline-row { grid-template-columns: 1fr; }
-      .deadline-row #timeGroup { display: block !important; }
     }
 
     @media (max-width: 600px) {
@@ -935,7 +913,7 @@
   </section>
 
   <main class="main-container">
-    <!-- Success Banner (shows after checkout with code) -->
+    <!-- Success Banner -->
     <div id="successBanner" class="success-banner">
       <h3>✓ Payment Successful!</h3>
       <p>Your code is ready to use:</p>
@@ -979,29 +957,24 @@
           </div>
         </div>
 
-        <div class="deadline-row" id="deadlineRow">
-          <div class="form-group">
-            <label class="form-label">Deadline</label>
-            <select class="form-select" id="deadlineDays">
-              <option value="8h">8 hours from now</option>
-              <option value="12h">12 hours from now</option>
-              <option value="24h">24 hours from now</option>
-              <option value="2">2 days</option>
-              <option value="3">3 days</option>
-              <option value="5" selected>5 days</option>
-              <option value="7">1 week</option>
-              <option value="10">10 days</option>
-              <option value="14">2 weeks</option>
-              <option value="21">3 weeks</option>
-              <option value="30">1 month</option>
-              <option value="45">45 days</option>
-              <option value="60">2 months</option>
-            </select>
-          </div>
-          <div class="form-group" id="timeGroup">
-            <label class="form-label">Due by time</label>
-            <input type="time" class="form-input" id="deadlineTime" value="17:00">
-          </div>
+        <!-- Simplified Deadline - NO TIME PICKER -->
+        <div class="form-group">
+          <label class="form-label">Deadline</label>
+          <select class="form-select" id="deadlineSelect">
+            <option value="8">8 hours</option>
+            <option value="12">12 hours</option>
+            <option value="24">24 hours</option>
+            <option value="48">2 days</option>
+            <option value="72">3 days</option>
+            <option value="120" selected>5 days</option>
+            <option value="168">1 week</option>
+            <option value="240">10 days</option>
+            <option value="336">2 weeks</option>
+            <option value="504">3 weeks</option>
+            <option value="720">1 month</option>
+            <option value="1080">45 days</option>
+            <option value="1440">2 months</option>
+          </select>
         </div>
 
         <div class="form-group">
@@ -1012,7 +985,7 @@
           <div id="composer"></div>
         </div>
 
-        <!-- Payment Section - ABOVE the main button -->
+        <!-- Payment Section -->
         <div id="paymentSection" class="payment-section">
           <div class="payment-header">
             <h3>Enter your credit code</h3>
@@ -1025,36 +998,38 @@
             <div id="codeStatus" class="code-status"></div>
           </div>
 
-          <div class="divider">or purchase credits</div>
-
-          <div class="pricing-grid">
-            <div class="pricing-card" data-tier="single">
-              <div class="pricing-card-name">Single</div>
-              <div class="pricing-card-price">$59</div>
-              <div class="pricing-card-desc">1 credit</div>
+          <!-- Purchase section - hidden after checkout return -->
+          <div id="purchaseSection" class="purchase-section">
+            <p class="divider-text">— or purchase credits —</p>
+            <div class="pricing-grid">
+              <div class="pricing-card" data-tier="single">
+                <div class="pricing-card-name">Single</div>
+                <div class="pricing-card-price">$59</div>
+                <div class="pricing-card-desc">1 credit</div>
+              </div>
+              <div class="pricing-card" data-tier="pack5">
+                <div class="pricing-card-name">5-Pack</div>
+                <div class="pricing-card-price">$249</div>
+                <div class="pricing-card-desc">$50 each</div>
+              </div>
+              <div class="pricing-card" data-tier="pack15">
+                <div class="pricing-card-name">15-Pack</div>
+                <div class="pricing-card-price">$499</div>
+                <div class="pricing-card-desc">$33 each</div>
+              </div>
+              <div class="pricing-card" data-tier="pack50">
+                <div class="pricing-card-name">50-Pack</div>
+                <div class="pricing-card-price">$1,249</div>
+                <div class="pricing-card-desc">$25 each</div>
+              </div>
             </div>
-            <div class="pricing-card" data-tier="pack5">
-              <div class="pricing-card-name">5-Pack</div>
-              <div class="pricing-card-price">$249</div>
-              <div class="pricing-card-desc">$50 each</div>
-            </div>
-            <div class="pricing-card" data-tier="pack15">
-              <div class="pricing-card-name">15-Pack</div>
-              <div class="pricing-card-price">$499</div>
-              <div class="pricing-card-desc">$33 each</div>
-            </div>
-            <div class="pricing-card" data-tier="pack50">
-              <div class="pricing-card-name">50-Pack</div>
-              <div class="pricing-card-price">$1,249</div>
-              <div class="pricing-card-desc">$25 each</div>
-            </div>
+            <button class="btn btn-outline btn-full" id="buyCreditsBtn" disabled>
+              Select a plan to purchase
+            </button>
           </div>
-          <button class="btn btn-outline btn-full" id="buyCreditsBtn" disabled>
-            Select a plan to purchase
-          </button>
         </div>
 
-        <!-- Main Action Button - BELOW payment section -->
+        <!-- Main Action Button -->
         <button class="btn btn-primary btn-full" id="mainActionBtn" style="margin-top: 24px;">
           Continue
         </button>
@@ -1307,8 +1282,7 @@ function saveFormState() {
       auditorEmail: $('#auditorEmail')?.value || '',
       clientCompany: $('#clientCompany')?.value || '',
       clientEmail: $('#clientEmail')?.value || '',
-      deadlineDays: $('#deadlineDays')?.value || '5',
-      deadlineTime: $('#deadlineTime')?.value || '17:00',
+      deadlineHours: $('#deadlineSelect')?.value || '120',
       globalInstructions: $('#globalInstructions')?.value || '',
       appliedCode: state.code || '',
       composerState: composerState,
@@ -1338,8 +1312,7 @@ function restoreFormState(data) {
   if (data.auditorEmail) $('#auditorEmail').value = data.auditorEmail;
   if (data.clientCompany) $('#clientCompany').value = data.clientCompany;
   if (data.clientEmail) $('#clientEmail').value = data.clientEmail;
-  if (data.deadlineDays) $('#deadlineDays').value = data.deadlineDays;
-  if (data.deadlineTime) $('#deadlineTime').value = data.deadlineTime;
+  if (data.deadlineHours) $('#deadlineSelect').value = data.deadlineHours;
   if (data.appliedCode) { 
     state.code = data.appliedCode; 
     if ($('#auditorCode')) $('#auditorCode').value = data.appliedCode; 
@@ -1354,7 +1327,7 @@ function clearFormState() {
 }
 
 function setupAutoSave() {
-  ['roleSelect', 'auditorEmail', 'clientCompany', 'clientEmail', 'deadlineDays', 'deadlineTime'].forEach(id => {
+  ['roleSelect', 'auditorEmail', 'clientCompany', 'clientEmail', 'deadlineSelect'].forEach(id => {
     const el = $(`#${id}`);
     if (el) { 
       el.addEventListener('change', saveFormState); 
@@ -1363,40 +1336,12 @@ function setupAutoSave() {
   });
 }
 
-// ==================== DEADLINE/TIME LOGIC ====================
-
-function updateTimeVisibility() {
-  const val = $('#deadlineDays')?.value || '';
-  const timeGroup = $('#timeGroup');
-  const deadlineRow = $('#deadlineRow');
-  
-  // Hide time picker for hour-based options (ends with 'h')
-  if (val.endsWith('h')) {
-    timeGroup.classList.add('hidden');
-    deadlineRow.classList.add('hide-time');
-  } else {
-    timeGroup.classList.remove('hidden');
-    deadlineRow.classList.remove('hide-time');
-  }
-}
+// ==================== DEADLINE LOGIC (SIMPLIFIED) ====================
 
 function calculateDeadline() {
-  const val = $('#deadlineDays')?.value || '5';
+  const hours = parseInt($('#deadlineSelect')?.value || '120', 10);
   const deadline = new Date();
-  
-  if (val.endsWith('h')) {
-    // Hour-based: just add hours from now
-    const hours = parseInt(val);
-    deadline.setTime(deadline.getTime() + hours * 60 * 60 * 1000);
-  } else {
-    // Day-based: add days and set to specified time
-    const days = parseFloat(val);
-    const timeStr = ($('#deadlineTime')?.value || '17:00').trim();
-    const [hh, mm] = timeStr.split(':').map(x => parseInt(x, 10));
-    deadline.setTime(deadline.getTime() + days * 24 * 60 * 60 * 1000);
-    deadline.setHours(hh || 17, mm || 0, 0, 0);
-  }
-  
+  deadline.setTime(deadline.getTime() + hours * 60 * 60 * 1000);
   return deadline;
 }
 
@@ -1619,11 +1564,9 @@ function updateCodeUI(result) {
     codeStatus.textContent = '';
     state.codeValid = false;
   }
-  
-  updateMainButton();
 }
 
-// ==================== CHECKOUT RETURN HANDLING ====================
+// ==================== CHECKOUT RETURN ====================
 
 async function checkCheckoutReturn() {
   const url = new URL(location.href);
@@ -1648,8 +1591,9 @@ async function checkCheckoutReturn() {
     handleRoleChange('auditor');
   }
   
-  // Show payment section
+  // Show payment section (but hide purchase options)
   showPaymentSection();
+  $('#purchaseSection').classList.add('hidden');
   
   // Show success banner
   const successBanner = $('#successBanner');
@@ -1664,17 +1608,19 @@ async function checkCheckoutReturn() {
   codeStatus.className = 'code-status checking';
   codeStatus.innerHTML = '<span class="spinner"></span> Retrieving your code...';
   
-  // Fast polling (1 second intervals, up to 60 seconds)
+  // Aggressive polling - keep trying every second for 90 seconds
   let code = null;
   let creditsText = '';
   
-  for (let attempt = 0; attempt < 60; attempt++) {
+  for (let attempt = 0; attempt < 90; attempt++) {
     try {
       const res = await fetch(`${API}/checkout/session?session_id=${sessionId}`);
       const data = await res.json();
       
+      console.log(`Attempt ${attempt + 1}:`, data);
+      
       if (data.ok && data.code) {
-        // Success! Code found
+        // SUCCESS! Got the code
         code = data.code;
         state.code = code;
         state.codeValid = true;
@@ -1683,30 +1629,14 @@ async function checkCheckoutReturn() {
         break;
       }
       
-      if (data.pending) {
-        // Still waiting for webhook - keep polling
-        codeStatus.innerHTML = `<span class="spinner"></span> Retrieving your code... (${attempt + 1}s)`;
-        await new Promise(r => setTimeout(r, 1000));
-        continue;
-      }
-      
-      // Some other error - keep trying a few more times
-      if (attempt < 10) {
-        await new Promise(r => setTimeout(r, 1000));
-        continue;
-      }
-      
-      // Give up after 10 attempts if not pending
-      break;
+      // Keep trying regardless of response - webhook might not have fired yet
+      codeStatus.innerHTML = `<span class="spinner"></span> Retrieving your code... (${attempt + 1}s)`;
       
     } catch (e) {
       console.error('Checkout check error:', e);
-      if (attempt < 5) {
-        await new Promise(r => setTimeout(r, 1000));
-        continue;
-      }
-      break;
     }
+    
+    await new Promise(r => setTimeout(r, 1000));
   }
   
   if (code) {
@@ -1732,7 +1662,7 @@ async function checkCheckoutReturn() {
   return true;
 }
 
-// ==================== UI STATE MANAGEMENT ====================
+// ==================== UI STATE ====================
 
 function handleRoleChange(role) {
   state.role = role;
@@ -1741,7 +1671,6 @@ function handleRoleChange(role) {
   if (role === 'auditor') { 
     if (Object.keys(composerState).length === 0) initComposerState(); 
     renderComposer();
-    updateTimeVisibility();
   }
 }
 
@@ -1756,20 +1685,15 @@ function updateMainButton() {
   if (!btn) return;
   
   if (!state.paymentVisible) {
-    // Stage 1: Continue button
+    // Stage 1: Continue button (blue)
     btn.textContent = 'Continue';
     btn.className = 'btn btn-primary btn-full';
     btn.disabled = false;
-  } else if (state.codeValid) {
-    // Stage 2: Has valid code - Send button
+  } else {
+    // Stage 2: Always show Send button (green, always enabled)
     btn.textContent = 'Send Evidence Request';
     btn.className = 'btn btn-accent btn-full';
-    btn.disabled = false;
-  } else {
-    // Payment visible but no valid code
-    btn.textContent = 'Enter code or buy credits';
-    btn.className = 'btn btn-primary btn-full';
-    btn.disabled = true;
+    btn.disabled = false; // ALWAYS ENABLED - we validate on click
   }
 }
 
@@ -1823,8 +1747,36 @@ async function handleMainAction() {
     showPaymentSection();
     $('#paymentSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
     
-  } else if (state.codeValid) {
-    // STAGE 2: Send the request
+  } else {
+    // STAGE 2: Validate code on click, then send if valid
+    const code = ($('#auditorCode')?.value || '').trim().toUpperCase();
+    
+    if (!code) {
+      alert('Please enter your credit code.');
+      $('#auditorCode').focus();
+      return;
+    }
+    
+    // If not already validated, validate now
+    if (!state.codeValid || state.code !== code) {
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Checking code...';
+      
+      const result = await validateCode(code);
+      updateCodeUI(result);
+      
+      if (!result.valid) {
+        btn.disabled = false;
+        btn.textContent = 'Send Evidence Request';
+        alert(result.error || 'Invalid code. Please try again.');
+        return;
+      }
+      
+      state.code = code;
+      saveFormState();
+    }
+    
+    // Code is valid - send the request
     await sendRequest();
   }
 }
@@ -1867,8 +1819,6 @@ async function handleCheckout() {
 }
 
 async function sendRequest() {
-  if (!state.codeValid) return;
-  
   const btn = $('#mainActionBtn');
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> Sending...';
@@ -1916,7 +1866,7 @@ async function sendRequest() {
   }
 }
 
-// ==================== MODAL HANDLERS ====================
+// ==================== MODALS ====================
 
 function setupModals() {
   $('#cancelFwBtn')?.addEventListener('click', () => { 
@@ -1967,19 +1917,17 @@ function setupModals() {
   });
 }
 
-// ==================== INITIALIZATION ====================
+// ==================== INIT ====================
 
 async function init() {
-  // Set year in footer
   $('#year').textContent = new Date().getFullYear();
   
-  // Initialize composer state
   initComposerState();
   
-  // Check for checkout return FIRST (before setting up other listeners)
+  // Check for checkout return FIRST
   const isCheckoutReturn = await checkCheckoutReturn();
   
-  // ALWAYS set up all event listeners (this was the bug in the old code!)
+  // ALWAYS set up all event listeners
   setupAutoSave();
   setupModals();
   
@@ -1994,72 +1942,29 @@ async function init() {
     }
   }
   
-  // Role selector
+  // Event listeners
   $('#roleSelect').addEventListener('change', e => {
     handleRoleChange(e.target.value);
     saveFormState();
   });
   
-  // Deadline selector - update time visibility
-  $('#deadlineDays').addEventListener('change', () => {
-    updateTimeVisibility();
-    saveFormState();
-  });
-  
-  // Main action button
   $('#mainActionBtn').addEventListener('click', handleMainAction);
   
-  // Code input - validate on blur
-  $('#auditorCode').addEventListener('blur', async () => {
-    const code = $('#auditorCode').value.trim().toUpperCase();
-    if (code && code.length >= 6) {
-      const result = await validateCode(code);
-      updateCodeUI(result);
-      if (result.valid) {
-        state.code = code;
-        saveFormState();
-      }
-    }
-  });
-  
-  // Code input - validate on Enter
-  $('#auditorCode').addEventListener('keyup', async (e) => {
-    if (e.key === 'Enter') {
-      const code = $('#auditorCode').value.trim().toUpperCase();
-      if (code) {
-        const result = await validateCode(code);
-        updateCodeUI(result);
-        if (result.valid) {
-          state.code = code;
-          saveFormState();
-        }
-      }
-    }
-  });
-  
-  // Pricing cards
   $$('.pricing-card').forEach(card => {
     card.addEventListener('click', () => selectTier(card.dataset.tier));
   });
   
-  // Buy credits button
   $('#buyCreditsBtn').addEventListener('click', handleCheckout);
   
-  // Get started link in header
   $('#getStartedLink').addEventListener('click', e => {
     e.preventDefault();
     $('#roleSelect').scrollIntoView({ behavior: 'smooth' });
     $('#roleSelect').focus();
   });
   
-  // Initialize time visibility
-  updateTimeVisibility();
-  
-  // Update main button state
   updateMainButton();
 }
 
-// Run initialization when DOM is ready
 document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
