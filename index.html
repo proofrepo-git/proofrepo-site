@@ -247,8 +247,16 @@
       margin-bottom: 20px;
     }
 
+    .deadline-row.hide-time {
+      grid-template-columns: 1fr;
+    }
+
     .deadline-row .form-group {
       margin-bottom: 0;
+    }
+
+    #timeGroup.hidden {
+      display: none;
     }
 
     .framework-selector {
@@ -577,7 +585,8 @@
       font-size: 0.9rem;
     }
 
-    .pricing-gate {
+    /* Payment section - appears ABOVE the main action button */
+    .payment-section {
       display: none;
       background: var(--surface-elevated);
       border: 1px solid var(--border);
@@ -586,79 +595,44 @@
       margin-top: 24px;
     }
 
-    .pricing-gate.visible {
+    .payment-section.visible {
       display: block;
     }
 
-    .pricing-gate-header {
+    .payment-header {
       text-align: center;
       margin-bottom: 20px;
     }
 
-    .pricing-gate-header h3 {
+    .payment-header h3 {
       font-size: 1.1rem;
       margin-bottom: 4px;
     }
 
-    .pricing-gate-header p {
+    .payment-header p {
       color: var(--text-muted);
       font-size: 0.9rem;
     }
 
-    .gate-tabs {
-      display: flex;
-      gap: 0;
-      margin-bottom: 20px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    .gate-tab {
-      flex: 1;
-      padding: 12px;
-      text-align: center;
-      cursor: pointer;
-      font-weight: 500;
+    .code-entry {
       background: var(--bg);
-      border: none;
-      color: var(--text-muted);
-      transition: all 0.2s;
-    }
-
-    .gate-tab:hover {
-      background: var(--surface);
-    }
-
-    .gate-tab.active {
-      background: var(--primary);
-      color: white;
-    }
-
-    .gate-content {
-      display: none;
-    }
-
-    .gate-content.active {
-      display: block;
-    }
-
-    .code-input-wrapper {
-      display: flex;
-      gap: 12px;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
     }
 
     .code-input {
-      flex: 1;
+      width: 100%;
       padding: 14px 16px;
       font-size: 1.1rem;
       font-weight: 600;
       letter-spacing: 2px;
       text-transform: uppercase;
-      background: var(--bg);
+      background: var(--surface);
       border: 2px solid var(--border);
       border-radius: 10px;
       color: var(--text);
+      text-align: center;
     }
 
     .code-input:focus {
@@ -666,17 +640,44 @@
       border-color: var(--primary);
     }
 
+    .code-input.valid {
+      border-color: var(--accent);
+    }
+
+    .code-input.invalid {
+      border-color: var(--error);
+    }
+
     .code-status {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
       margin-top: 12px;
       font-size: 0.9rem;
+      min-height: 24px;
     }
 
     .code-status.valid { color: var(--accent); }
     .code-status.invalid { color: var(--error); }
     .code-status.checking { color: var(--text-muted); }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 20px 0;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
 
     .pricing-grid {
       display: grid;
@@ -745,6 +746,15 @@
     .success-banner p {
       color: var(--text-muted);
       font-size: 0.9rem;
+    }
+
+    .success-banner .code-display {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 3px;
+      font-family: monospace;
+      margin: 12px 0;
     }
 
     .how-section {
@@ -876,6 +886,7 @@
       .how-grid { grid-template-columns: 1fr; }
       .pricing-grid { grid-template-columns: 1fr 1fr; }
       .deadline-row { grid-template-columns: 1fr; }
+      .deadline-row #timeGroup { display: block !important; }
     }
 
     @media (max-width: 600px) {
@@ -924,14 +935,17 @@
   </section>
 
   <main class="main-container">
+    <!-- Success Banner (shows after checkout with code) -->
     <div id="successBanner" class="success-banner">
       <h3>✓ Payment Successful!</h3>
-      <p>Your code is ready. Complete your request below.</p>
+      <p>Your code is ready to use:</p>
+      <div class="code-display" id="successCodeDisplay">—</div>
+      <p style="font-size: 0.85rem;">This code has been auto-filled below. Click "Send Request" when ready.</p>
     </div>
 
     <div id="mainFormCard" class="card">
       <div class="card-header">
-        <h2>Upload evidence and get a ProofPack</h2>
+        <h2>Request compliance evidence</h2>
         <p>Choose your role to get started.</p>
       </div>
 
@@ -960,18 +974,18 @@
             <input type="text" class="form-input" id="clientCompany" placeholder="Acme Corp">
           </div>
           <div class="form-group">
-            <label class="form-label">Client's email (where to send the upload link)</label>
+            <label class="form-label">Client's email</label>
             <input type="email" class="form-input" id="clientEmail" placeholder="client@company.com">
           </div>
         </div>
 
-        <div class="deadline-row">
+        <div class="deadline-row" id="deadlineRow">
           <div class="form-group">
             <label class="form-label">Deadline</label>
             <select class="form-select" id="deadlineDays">
-              <option value="0.33">8 hours</option>
-              <option value="0.5">12 hours</option>
-              <option value="1">24 hours</option>
+              <option value="8h">8 hours from now</option>
+              <option value="12h">12 hours from now</option>
+              <option value="24h">24 hours from now</option>
               <option value="2">2 days</option>
               <option value="3">3 days</option>
               <option value="5" selected>5 days</option>
@@ -984,8 +998,8 @@
               <option value="60">2 months</option>
             </select>
           </div>
-          <div class="form-group">
-            <label class="form-label">Time</label>
+          <div class="form-group" id="timeGroup">
+            <label class="form-label">Due by time</label>
             <input type="time" class="form-input" id="deadlineTime" value="17:00">
           </div>
         </div>
@@ -998,66 +1012,51 @@
           <div id="composer"></div>
         </div>
 
-        <button class="btn btn-primary btn-full" id="continueBtn" style="margin-top: 24px;">
-          Continue
-        </button>
-
-        <div id="pricingGate" class="pricing-gate">
-          <div class="pricing-gate-header">
-            <h3>Almost there!</h3>
-            <p>Enter your credit code or purchase credits to send this request.</p>
+        <!-- Payment Section - ABOVE the main button -->
+        <div id="paymentSection" class="payment-section">
+          <div class="payment-header">
+            <h3>Enter your credit code</h3>
+            <p>Each code gives you credits to send evidence requests.</p>
           </div>
 
-          <div class="gate-tabs">
-            <button type="button" class="gate-tab active" data-tab="code">I have a code</button>
-            <button type="button" class="gate-tab" data-tab="buy">Buy credits</button>
+          <div class="code-entry">
+            <label class="form-label">Credit Code</label>
+            <input type="text" class="code-input" id="auditorCode" placeholder="ENTER CODE">
+            <div id="codeStatus" class="code-status"></div>
           </div>
 
-          <div id="gateCodeContent" class="gate-content active">
-            <div style="background: var(--bg); border-radius: 12px; padding: 16px;">
-              <label class="form-label">Credit Code</label>
-              <div class="code-input-wrapper">
-                <input type="text" class="code-input" id="auditorCode" placeholder="ENTER CODE">
-                <button class="btn btn-outline" id="verifyCodeBtn">Verify</button>
-              </div>
-              <div id="codeStatus" class="code-status"></div>
+          <div class="divider">or purchase credits</div>
+
+          <div class="pricing-grid">
+            <div class="pricing-card" data-tier="single">
+              <div class="pricing-card-name">Single</div>
+              <div class="pricing-card-price">$59</div>
+              <div class="pricing-card-desc">1 credit</div>
+            </div>
+            <div class="pricing-card" data-tier="pack5">
+              <div class="pricing-card-name">5-Pack</div>
+              <div class="pricing-card-price">$249</div>
+              <div class="pricing-card-desc">$50 each</div>
+            </div>
+            <div class="pricing-card" data-tier="pack15">
+              <div class="pricing-card-name">15-Pack</div>
+              <div class="pricing-card-price">$499</div>
+              <div class="pricing-card-desc">$33 each</div>
+            </div>
+            <div class="pricing-card" data-tier="pack50">
+              <div class="pricing-card-name">50-Pack</div>
+              <div class="pricing-card-price">$1,249</div>
+              <div class="pricing-card-desc">$25 each</div>
             </div>
           </div>
-
-          <div id="gateBuyContent" class="gate-content">
-            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 12px;">
-              Each credit = 1 ProofPack request. Buy more, save more.
-            </p>
-            <div class="pricing-grid">
-              <div class="pricing-card" data-tier="single">
-                <div class="pricing-card-name">Single Pack</div>
-                <div class="pricing-card-price">$59</div>
-                <div class="pricing-card-desc">1 credit</div>
-              </div>
-              <div class="pricing-card" data-tier="pack5">
-                <div class="pricing-card-name">5-Pack</div>
-                <div class="pricing-card-price">$249</div>
-                <div class="pricing-card-desc">5 credits ($50 each)</div>
-              </div>
-              <div class="pricing-card" data-tier="pack15">
-                <div class="pricing-card-name">15-Pack</div>
-                <div class="pricing-card-price">$499</div>
-                <div class="pricing-card-desc">15 credits ($33 each)</div>
-              </div>
-              <div class="pricing-card" data-tier="pack50">
-                <div class="pricing-card-name">50-Pack</div>
-                <div class="pricing-card-price">$1,249</div>
-                <div class="pricing-card-desc">50 credits ($25 each)</div>
-              </div>
-            </div>
-            <button class="btn btn-accent btn-full" id="buyCreditsBtn" disabled style="margin-top: 12px;">
-              Select a plan above
-            </button>
-          </div>
+          <button class="btn btn-outline btn-full" id="buyCreditsBtn" disabled>
+            Select a plan to purchase
+          </button>
         </div>
 
-        <button class="btn btn-accent btn-full" id="sendRequestBtn" style="margin-top: 16px; display: none;">
-          Send Evidence Request to Client
+        <!-- Main Action Button - BELOW payment section -->
+        <button class="btn btn-primary btn-full" id="mainActionBtn" style="margin-top: 24px;">
+          Continue
         </button>
       </div>
 
@@ -1285,11 +1284,21 @@ const FRAMEWORK_LIBRARY = {
 
 let composerState = {};
 let customFrameworks = [];
-let state = { role: '', code: '', codeValid: false, codeCredits: 0, selectedTier: null, pricingGateVisible: false };
+let state = { 
+  role: '', 
+  code: '', 
+  codeValid: false, 
+  codeCredits: 0, 
+  selectedTier: null, 
+  paymentVisible: false,
+  isCheckoutReturn: false
+};
 
 const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
 const esc = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+// ==================== LOCAL STORAGE ====================
 
 function saveFormState() {
   try {
@@ -1331,20 +1340,67 @@ function restoreFormState(data) {
   if (data.clientEmail) $('#clientEmail').value = data.clientEmail;
   if (data.deadlineDays) $('#deadlineDays').value = data.deadlineDays;
   if (data.deadlineTime) $('#deadlineTime').value = data.deadlineTime;
-  if (data.appliedCode) { state.code = data.appliedCode; $('#auditorCode').value = data.appliedCode; }
+  if (data.appliedCode) { 
+    state.code = data.appliedCode; 
+    if ($('#auditorCode')) $('#auditorCode').value = data.appliedCode; 
+  }
   if (data.composerState && Object.keys(data.composerState).length) composerState = data.composerState;
   if (data.customFrameworks && data.customFrameworks.length) customFrameworks = data.customFrameworks;
   return true;
 }
 
-function clearFormState() { try { localStorage.removeItem(STORAGE_KEY); } catch (e) {} }
+function clearFormState() { 
+  try { localStorage.removeItem(STORAGE_KEY); } catch (e) {} 
+}
 
 function setupAutoSave() {
   ['roleSelect', 'auditorEmail', 'clientCompany', 'clientEmail', 'deadlineDays', 'deadlineTime'].forEach(id => {
     const el = $(`#${id}`);
-    if (el) { el.addEventListener('change', saveFormState); el.addEventListener('input', saveFormState); }
+    if (el) { 
+      el.addEventListener('change', saveFormState); 
+      el.addEventListener('input', saveFormState); 
+    }
   });
 }
+
+// ==================== DEADLINE/TIME LOGIC ====================
+
+function updateTimeVisibility() {
+  const val = $('#deadlineDays')?.value || '';
+  const timeGroup = $('#timeGroup');
+  const deadlineRow = $('#deadlineRow');
+  
+  // Hide time picker for hour-based options (ends with 'h')
+  if (val.endsWith('h')) {
+    timeGroup.classList.add('hidden');
+    deadlineRow.classList.add('hide-time');
+  } else {
+    timeGroup.classList.remove('hidden');
+    deadlineRow.classList.remove('hide-time');
+  }
+}
+
+function calculateDeadline() {
+  const val = $('#deadlineDays')?.value || '5';
+  const deadline = new Date();
+  
+  if (val.endsWith('h')) {
+    // Hour-based: just add hours from now
+    const hours = parseInt(val);
+    deadline.setTime(deadline.getTime() + hours * 60 * 60 * 1000);
+  } else {
+    // Day-based: add days and set to specified time
+    const days = parseFloat(val);
+    const timeStr = ($('#deadlineTime')?.value || '17:00').trim();
+    const [hh, mm] = timeStr.split(':').map(x => parseInt(x, 10));
+    deadline.setTime(deadline.getTime() + days * 24 * 60 * 60 * 1000);
+    deadline.setHours(hh || 17, mm || 0, 0, 0);
+  }
+  
+  return deadline;
+}
+
+// ==================== FRAMEWORK HELPERS ====================
 
 function getAllFrameworks() {
   const all = { ...FRAMEWORK_LIBRARY };
@@ -1365,6 +1421,8 @@ function initComposerState() {
     }
   }
 }
+
+// ==================== COMPOSER RENDERING ====================
 
 function renderComposer() {
   const c = $('#composer');
@@ -1511,161 +1569,498 @@ function getPayload() {
   return result;
 }
 
+// ==================== CODE VALIDATION ====================
+
+async function validateCode(code) {
+  if (!code) return { valid: false, error: 'No code entered' };
+  
+  try {
+    const res = await fetch(`${API}/check-code?code=${encodeURIComponent(code)}`);
+    const data = await res.json();
+    
+    if (data.ok && data.remaining > 0) {
+      return { 
+        valid: true, 
+        credits: data.remaining,
+        message: data.remaining >= 9999 ? 'Unlimited credits' : `${data.remaining} credit${data.remaining !== 1 ? 's' : ''} remaining`
+      };
+    } else if (data.remaining === 0) {
+      return { valid: false, error: 'No credits remaining on this code' };
+    } else {
+      return { valid: false, error: 'Invalid code' };
+    }
+  } catch (e) {
+    return { valid: false, error: 'Error checking code' };
+  }
+}
+
+function updateCodeUI(result) {
+  const codeInput = $('#auditorCode');
+  const codeStatus = $('#codeStatus');
+  
+  if (!codeInput || !codeStatus) return;
+  
+  if (result.valid) {
+    codeInput.classList.remove('invalid');
+    codeInput.classList.add('valid');
+    codeStatus.className = 'code-status valid';
+    codeStatus.textContent = `✓ Valid — ${result.message}`;
+    state.codeValid = true;
+    state.codeCredits = result.credits;
+  } else if (result.error) {
+    codeInput.classList.remove('valid');
+    codeInput.classList.add('invalid');
+    codeStatus.className = 'code-status invalid';
+    codeStatus.textContent = `✗ ${result.error}`;
+    state.codeValid = false;
+  } else {
+    codeInput.classList.remove('valid', 'invalid');
+    codeStatus.className = 'code-status';
+    codeStatus.textContent = '';
+    state.codeValid = false;
+  }
+  
+  updateMainButton();
+}
+
+// ==================== CHECKOUT RETURN HANDLING ====================
+
 async function checkCheckoutReturn() {
   const url = new URL(location.href);
   const sessionId = url.searchParams.get('session_id');
   if (!sessionId) return false;
+  
+  state.isCheckoutReturn = true;
+  
+  // Clear URL
   url.searchParams.delete('session_id');
   window.history.replaceState({}, '', url.toString());
-  $('#successBanner').classList.add('visible');
+  
+  // Restore saved form state
   const savedState = loadFormState();
-  if (savedState) { restoreFormState(savedState); if (savedState.role === 'auditor') handleRoleChange('auditor'); } else { $('#roleSelect').value = 'auditor'; handleRoleChange('auditor'); }
-  $('#pricingGate').classList.add('visible');
-  $('#sendRequestBtn').style.display = 'none';
-  state.pricingGateVisible = true;
-  switchTab('code');
-  const codeInput = $('#auditorCode'), codeStatus = $('#codeStatus');
-  codeInput.value = 'LOADING...'; codeInput.disabled = true;
+  if (savedState) {
+    restoreFormState(savedState);
+    if (savedState.role === 'auditor') {
+      handleRoleChange('auditor');
+    }
+  } else {
+    $('#roleSelect').value = 'auditor';
+    handleRoleChange('auditor');
+  }
+  
+  // Show payment section
+  showPaymentSection();
+  
+  // Show success banner
+  const successBanner = $('#successBanner');
+  const successCodeDisplay = $('#successCodeDisplay');
+  successBanner.classList.add('visible');
+  successCodeDisplay.textContent = 'Loading...';
+  
+  const codeInput = $('#auditorCode');
+  const codeStatus = $('#codeStatus');
+  codeInput.value = '';
+  codeInput.placeholder = 'Loading...';
   codeStatus.className = 'code-status checking';
   codeStatus.innerHTML = '<span class="spinner"></span> Retrieving your code...';
-  let code = null, creditsText = '';
-  for (let attempt = 0; attempt < 30; attempt++) {
+  
+  // Fast polling (1 second intervals, up to 60 seconds)
+  let code = null;
+  let creditsText = '';
+  
+  for (let attempt = 0; attempt < 60; attempt++) {
     try {
       const res = await fetch(`${API}/checkout/session?session_id=${sessionId}`);
       const data = await res.json();
-      if (data.ok && data.code) { code = data.code; state.code = code; state.codeValid = true; state.codeCredits = data.credits; creditsText = data.creditsDisplay || `${data.credits} credit${data.credits !== 1 ? 's' : ''} remaining`; break; }
-      codeStatus.innerHTML = `<span class="spinner"></span> Retrieving your code... (${attempt + 1}/30)`;
-      await new Promise(r => setTimeout(r, 2000));
-    } catch (e) { console.error('Checkout check error:', e); }
+      
+      if (data.ok && data.code) {
+        // Success! Code found
+        code = data.code;
+        state.code = code;
+        state.codeValid = true;
+        state.codeCredits = data.credits;
+        creditsText = data.creditsDisplay || `${data.credits} credit${data.credits !== 1 ? 's' : ''} remaining`;
+        break;
+      }
+      
+      if (data.pending) {
+        // Still waiting for webhook - keep polling
+        codeStatus.innerHTML = `<span class="spinner"></span> Retrieving your code... (${attempt + 1}s)`;
+        await new Promise(r => setTimeout(r, 1000));
+        continue;
+      }
+      
+      // Some other error - keep trying a few more times
+      if (attempt < 10) {
+        await new Promise(r => setTimeout(r, 1000));
+        continue;
+      }
+      
+      // Give up after 10 attempts if not pending
+      break;
+      
+    } catch (e) {
+      console.error('Checkout check error:', e);
+      if (attempt < 5) {
+        await new Promise(r => setTimeout(r, 1000));
+        continue;
+      }
+      break;
+    }
   }
-  codeInput.disabled = false;
-  if (code) { codeInput.value = code; codeStatus.className = 'code-status valid'; codeStatus.innerHTML = `✓ Valid code — ${creditsText}`; $('#sendRequestBtn').style.display = 'block'; saveFormState(); }
-  else { codeInput.value = ''; codeInput.placeholder = 'CHECK YOUR EMAIL'; codeStatus.className = 'code-status'; codeStatus.innerHTML = 'Your code is being emailed. Enter it above when you receive it.'; }
+  
+  if (code) {
+    // Success - show the code
+    successCodeDisplay.textContent = code;
+    codeInput.value = code;
+    codeInput.placeholder = 'ENTER CODE';
+    codeInput.classList.add('valid');
+    codeStatus.className = 'code-status valid';
+    codeStatus.textContent = `✓ Valid — ${creditsText}`;
+    saveFormState();
+  } else {
+    // Fallback - tell them to check email
+    successCodeDisplay.textContent = 'Check your email';
+    successBanner.querySelector('p:last-of-type').textContent = 'Your code should arrive shortly. Enter it below when you receive it.';
+    codeInput.value = '';
+    codeInput.placeholder = 'ENTER CODE';
+    codeStatus.className = 'code-status';
+    codeStatus.textContent = 'Enter the code from your email';
+  }
+  
+  updateMainButton();
   return true;
 }
+
+// ==================== UI STATE MANAGEMENT ====================
 
 function handleRoleChange(role) {
   state.role = role;
   $('#auditorFlow').style.display = role === 'auditor' ? 'block' : 'none';
   $('#clientFlow').style.display = role === 'client' ? 'block' : 'none';
-  if (role === 'auditor') { if (Object.keys(composerState).length === 0) initComposerState(); renderComposer(); }
+  if (role === 'auditor') { 
+    if (Object.keys(composerState).length === 0) initComposerState(); 
+    renderComposer();
+    updateTimeVisibility();
+  }
 }
 
-async function verifyCode() {
-  const code = $('#auditorCode').value.trim().toUpperCase();
-  const statusEl = $('#codeStatus');
-  if (!code) { statusEl.innerHTML = ''; state.codeValid = false; updateUI(); return; }
-  statusEl.className = 'code-status checking';
-  statusEl.innerHTML = '<span class="spinner"></span> Checking...';
-  try {
-    const res = await fetch(`${API}/check-code?code=${encodeURIComponent(code)}`);
-    const data = await res.json();
-    if (data.ok && data.remaining > 0) { state.code = code; state.codeValid = true; state.codeCredits = data.remaining; const creditsText = data.remaining >= 9999 ? 'Unlimited credits' : `${data.remaining} credit${data.remaining !== 1 ? 's' : ''} remaining`; statusEl.className = 'code-status valid'; statusEl.innerHTML = `✓ Valid code — ${creditsText}`; saveFormState(); }
-    else if (data.remaining === 0) { state.codeValid = false; statusEl.className = 'code-status invalid'; statusEl.innerHTML = '✗ No credits remaining on this code'; }
-    else { state.codeValid = false; statusEl.className = 'code-status invalid'; statusEl.innerHTML = '✗ Invalid code'; }
-  } catch (e) { state.codeValid = false; statusEl.className = 'code-status invalid'; statusEl.innerHTML = '✗ Error checking code'; }
-  updateUI();
+function showPaymentSection() {
+  state.paymentVisible = true;
+  $('#paymentSection').classList.add('visible');
+  updateMainButton();
 }
 
-function updateUI() {
-  const sendBtn = $('#sendRequestBtn');
-  if (state.codeValid && state.pricingGateVisible) { sendBtn.style.display = 'block'; sendBtn.disabled = false; }
-  else { sendBtn.style.display = state.pricingGateVisible ? 'block' : 'none'; sendBtn.disabled = !state.codeValid; }
-}
-
-function switchTab(tabName) {
-  $$('.gate-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tabName));
-  $('#gateCodeContent').classList.toggle('active', tabName === 'code');
-  $('#gateBuyContent').classList.toggle('active', tabName === 'buy');
+function updateMainButton() {
+  const btn = $('#mainActionBtn');
+  if (!btn) return;
+  
+  if (!state.paymentVisible) {
+    // Stage 1: Continue button
+    btn.textContent = 'Continue';
+    btn.className = 'btn btn-primary btn-full';
+    btn.disabled = false;
+  } else if (state.codeValid) {
+    // Stage 2: Has valid code - Send button
+    btn.textContent = 'Send Evidence Request';
+    btn.className = 'btn btn-accent btn-full';
+    btn.disabled = false;
+  } else {
+    // Payment visible but no valid code
+    btn.textContent = 'Enter code or buy credits';
+    btn.className = 'btn btn-primary btn-full';
+    btn.disabled = true;
+  }
 }
 
 function selectTier(tier) {
-  $$('.pricing-card').forEach(card => { card.classList.toggle('selected', card.dataset.tier === tier); });
+  $$('.pricing-card').forEach(card => { 
+    card.classList.toggle('selected', card.dataset.tier === tier); 
+  });
   state.selectedTier = tier;
   const buyBtn = $('#buyCreditsBtn');
-  if (tier) { const prices = { single: '$59', pack5: '$249', pack15: '$499', pack50: '$1,249' }; buyBtn.disabled = false; buyBtn.textContent = `Buy Now — ${prices[tier]}`; }
-  else { buyBtn.disabled = true; buyBtn.textContent = 'Select a plan above'; }
+  if (tier) { 
+    const prices = { single: '$59', pack5: '$249', pack15: '$499', pack50: '$1,249' }; 
+    buyBtn.disabled = false; 
+    buyBtn.textContent = `Buy Credits — ${prices[tier]}`; 
+  } else { 
+    buyBtn.disabled = true; 
+    buyBtn.textContent = 'Select a plan to purchase'; 
+  }
+}
+
+// ==================== MAIN ACTIONS ====================
+
+async function handleMainAction() {
+  const btn = $('#mainActionBtn');
+  
+  if (!state.paymentVisible) {
+    // STAGE 1: Validate form and show payment section
+    const email = ($('#auditorEmail')?.value || '').trim();
+    const clientEmail = ($('#clientEmail')?.value || '').trim();
+    const company = ($('#clientCompany')?.value || '').trim();
+    
+    if (!email || !email.includes('@')) {
+      alert('Please enter your email address.');
+      return;
+    }
+    if (!company) {
+      alert('Please enter the client company name.');
+      return;
+    }
+    if (!clientEmail || !clientEmail.includes('@')) {
+      alert('Please enter the client email address.');
+      return;
+    }
+    
+    const evidence = getPayload();
+    if (evidence.length === 0) {
+      alert('Please select at least one evidence item to request.');
+      return;
+    }
+    
+    saveFormState();
+    showPaymentSection();
+    $('#paymentSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    
+  } else if (state.codeValid) {
+    // STAGE 2: Send the request
+    await sendRequest();
+  }
 }
 
 async function handleCheckout() {
   if (!state.selectedTier) return;
+  
   const buyBtn = $('#buyCreditsBtn');
-  buyBtn.disabled = true; buyBtn.innerHTML = '<span class="spinner"></span> Processing...';
+  buyBtn.disabled = true;
+  buyBtn.innerHTML = '<span class="spinner"></span> Processing...';
+  
   saveFormState();
+  
   try {
-    const res = await fetch(`${API}/checkout`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ tier: state.selectedTier, email: $('#auditorEmail').value, successUrl: window.location.origin + window.location.pathname + '?session_id={CHECKOUT_SESSION_ID}', cancelUrl: window.location.href }) });
+    const res = await fetch(`${API}/checkout`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tier: state.selectedTier,
+        email: $('#auditorEmail').value,
+        successUrl: window.location.origin + window.location.pathname + '?session_id={CHECKOUT_SESSION_ID}',
+        cancelUrl: window.location.href
+      })
+    });
+    
     const data = await res.json();
-    if (data.ok && data.url) { window.location.href = data.url; }
-    else { alert('Error starting checkout: ' + (data.error || 'Unknown error')); buyBtn.disabled = false; buyBtn.textContent = 'Buy Now'; }
-  } catch (e) { alert('Error: ' + e.message); buyBtn.disabled = false; buyBtn.textContent = 'Buy Now'; }
+    
+    if (data.ok && data.url) {
+      window.location.href = data.url;
+    } else {
+      alert('Error starting checkout: ' + (data.error || 'Unknown error'));
+      buyBtn.disabled = false;
+      buyBtn.textContent = 'Buy Credits';
+    }
+  } catch (e) {
+    alert('Error: ' + e.message);
+    buyBtn.disabled = false;
+    buyBtn.textContent = 'Buy Credits';
+  }
 }
 
 async function sendRequest() {
   if (!state.codeValid) return;
-  const sendBtn = $('#sendRequestBtn');
-  sendBtn.disabled = true; sendBtn.innerHTML = '<span class="spinner"></span> Sending...';
-  const daysVal = parseFloat($('#deadlineDays')?.value || '5');
-  const timeStr = ($('#deadlineTime')?.value || '17:00').trim();
-  const [hh, mm] = timeStr.split(':').map(x => parseInt(x, 10));
-  const deadline = new Date();
-  deadline.setTime(deadline.getTime() + daysVal * 24 * 60 * 60 * 1000);
-  deadline.setHours(hh || 17, mm || 0, 0, 0);
-  const frameworks = Object.entries(composerState).filter(([_, s]) => s.enabled).map(([k]) => { const allFw = getAllFrameworks(); return allFw[k]?.label || k; });
+  
+  const btn = $('#mainActionBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Sending...';
+  
+  const deadline = calculateDeadline();
+  const frameworks = Object.entries(composerState)
+    .filter(([_, s]) => s.enabled)
+    .map(([k]) => { 
+      const allFw = getAllFrameworks(); 
+      return allFw[k]?.label || k; 
+    });
   const requestedEvidence = getPayload();
+  
   try {
-    const res = await fetch(`${API}/request`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ auditorEmail: $('#auditorEmail').value, clientEmail: $('#clientEmail').value, company: $('#clientCompany').value, frameworks: frameworks, deadlineISO: deadline.toISOString(), auditorCode: state.code, globalInstructions: $('#globalInstructions')?.value || '', requestedEvidence: requestedEvidence }) });
+    const res = await fetch(`${API}/request`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        auditorEmail: $('#auditorEmail').value,
+        clientEmail: $('#clientEmail').value,
+        company: $('#clientCompany').value,
+        frameworks: frameworks,
+        deadlineISO: deadline.toISOString(),
+        auditorCode: state.code,
+        globalInstructions: $('#globalInstructions')?.value || '',
+        requestedEvidence: requestedEvidence
+      })
+    });
+    
     const data = await res.json();
-    if (data.ok) { clearFormState(); alert('Success! Evidence request sent to ' + $('#clientEmail').value + '\n\nClient link: ' + (data.magicLink || '')); window.location.reload(); }
-    else { alert('Error: ' + (data.error || 'Unknown error')); sendBtn.disabled = false; sendBtn.textContent = 'Send Evidence Request to Client'; }
-  } catch (e) { alert('Error: ' + e.message); sendBtn.disabled = false; sendBtn.textContent = 'Send Evidence Request to Client'; }
+    
+    if (data.ok) {
+      clearFormState();
+      alert('Success! Evidence request sent to ' + $('#clientEmail').value + '\n\nClient link: ' + (data.magicLink || ''));
+      window.location.reload();
+    } else {
+      alert('Error: ' + (data.error || 'Unknown error'));
+      btn.disabled = false;
+      btn.textContent = 'Send Evidence Request';
+    }
+  } catch (e) {
+    alert('Error: ' + e.message);
+    btn.disabled = false;
+    btn.textContent = 'Send Evidence Request';
+  }
 }
 
-$('#cancelFwBtn')?.addEventListener('click', () => { $('#addFwModal').classList.add('hidden'); $('#customFwName').value = ''; $('#customFwDesc').value = ''; });
-$('#saveFwBtn')?.addEventListener('click', () => {
-  const name = ($('#customFwName')?.value || '').trim(), desc = ($('#customFwDesc')?.value || '').trim();
-  if (!name) return;
-  const id = 'cf_' + Math.random().toString(36).slice(2, 8);
-  customFrameworks.push({ id, label: name, description: desc || 'Custom framework', defaultOn: false, controlGroups: [] });
-  composerState[id] = { enabled: true, groups: {} };
-  $('#addFwModal').classList.add('hidden'); $('#customFwName').value = ''; $('#customFwDesc').value = '';
-  renderComposer(); saveFormState();
-});
-$('#cancelGroupBtn')?.addEventListener('click', () => { $('#addGroupModal').classList.add('hidden'); $('#customGroupName').value = ''; $('#customGroupDesc').value = ''; $('#customGroupFwKey').value = ''; });
-$('#saveGroupBtn')?.addEventListener('click', () => {
-  const name = ($('#customGroupName')?.value || '').trim(), desc = ($('#customGroupDesc')?.value || '').trim(), fwKey = $('#customGroupFwKey')?.value;
-  if (!name || !fwKey) return;
-  const gid = 'g_' + Math.random().toString(36).slice(2, 8);
-  const allFw = getAllFrameworks(), fw = allFw[fwKey];
-  if (fw) { fw.controlGroups.push({ id: gid, title: name, description: desc, items: [] }); composerState[fwKey].groups[gid] = { expanded: true, showMore: false, excluded: false, items: {} }; }
-  $('#addGroupModal').classList.add('hidden'); $('#customGroupName').value = ''; $('#customGroupDesc').value = ''; $('#customGroupFwKey').value = '';
-  renderComposer(); saveFormState();
-});
+// ==================== MODAL HANDLERS ====================
 
-document.addEventListener('DOMContentLoaded', async () => {
-  $('#year').textContent = new Date().getFullYear();
-  const isCheckoutReturn = await checkCheckoutReturn();
-  if (isCheckoutReturn) { setupAutoSave(); return; }
-  initComposerState(); setupAutoSave();
-  $('#roleSelect').addEventListener('change', e => { handleRoleChange(e.target.value); saveFormState(); });
-  $('#continueBtn').addEventListener('click', () => {
-    const email = ($('#auditorEmail')?.value || '').trim(), clientEmail = ($('#clientEmail')?.value || '').trim(), company = ($('#clientCompany')?.value || '').trim();
-    if (!email || !email.includes('@')) { alert('Please enter your email address.'); return; }
-    if (!company) { alert('Please enter the client company name.'); return; }
-    if (!clientEmail || !clientEmail.includes('@')) { alert('Please enter the client email address.'); return; }
-    saveFormState(); state.pricingGateVisible = true; $('#pricingGate').classList.add('visible'); $('#pricingGate').scrollIntoView({ behavior: 'smooth' }); updateUI();
+function setupModals() {
+  $('#cancelFwBtn')?.addEventListener('click', () => { 
+    $('#addFwModal').classList.add('hidden'); 
+    $('#customFwName').value = ''; 
+    $('#customFwDesc').value = ''; 
   });
-  $$('.gate-tab').forEach(tab => { tab.addEventListener('click', () => switchTab(tab.dataset.tab)); });
-  $('#verifyCodeBtn').addEventListener('click', verifyCode);
-  $('#auditorCode').addEventListener('keyup', e => { if (e.key === 'Enter') verifyCode(); });
-  $$('.pricing-card').forEach(card => { card.addEventListener('click', () => selectTier(card.dataset.tier)); });
+  
+  $('#saveFwBtn')?.addEventListener('click', () => {
+    const name = ($('#customFwName')?.value || '').trim();
+    const desc = ($('#customFwDesc')?.value || '').trim();
+    if (!name) return;
+    const id = 'cf_' + Math.random().toString(36).slice(2, 8);
+    customFrameworks.push({ id, label: name, description: desc || 'Custom framework', defaultOn: false, controlGroups: [] });
+    composerState[id] = { enabled: true, groups: {} };
+    $('#addFwModal').classList.add('hidden');
+    $('#customFwName').value = '';
+    $('#customFwDesc').value = '';
+    renderComposer();
+    saveFormState();
+  });
+  
+  $('#cancelGroupBtn')?.addEventListener('click', () => { 
+    $('#addGroupModal').classList.add('hidden'); 
+    $('#customGroupName').value = ''; 
+    $('#customGroupDesc').value = ''; 
+    $('#customGroupFwKey').value = ''; 
+  });
+  
+  $('#saveGroupBtn')?.addEventListener('click', () => {
+    const name = ($('#customGroupName')?.value || '').trim();
+    const desc = ($('#customGroupDesc')?.value || '').trim();
+    const fwKey = $('#customGroupFwKey')?.value;
+    if (!name || !fwKey) return;
+    const gid = 'g_' + Math.random().toString(36).slice(2, 8);
+    const allFw = getAllFrameworks();
+    const fw = allFw[fwKey];
+    if (fw) {
+      fw.controlGroups.push({ id: gid, title: name, description: desc, items: [] });
+      composerState[fwKey].groups[gid] = { expanded: true, showMore: false, excluded: false, items: {} };
+    }
+    $('#addGroupModal').classList.add('hidden');
+    $('#customGroupName').value = '';
+    $('#customGroupDesc').value = '';
+    $('#customGroupFwKey').value = '';
+    renderComposer();
+    saveFormState();
+  });
+}
+
+// ==================== INITIALIZATION ====================
+
+async function init() {
+  // Set year in footer
+  $('#year').textContent = new Date().getFullYear();
+  
+  // Initialize composer state
+  initComposerState();
+  
+  // Check for checkout return FIRST (before setting up other listeners)
+  const isCheckoutReturn = await checkCheckoutReturn();
+  
+  // ALWAYS set up all event listeners (this was the bug in the old code!)
+  setupAutoSave();
+  setupModals();
+  
+  // Restore form state if not returning from checkout
+  if (!isCheckoutReturn) {
+    const savedState = loadFormState();
+    if (savedState) {
+      restoreFormState(savedState);
+      if (savedState.role) {
+        handleRoleChange(savedState.role);
+      }
+    }
+  }
+  
+  // Role selector
+  $('#roleSelect').addEventListener('change', e => {
+    handleRoleChange(e.target.value);
+    saveFormState();
+  });
+  
+  // Deadline selector - update time visibility
+  $('#deadlineDays').addEventListener('change', () => {
+    updateTimeVisibility();
+    saveFormState();
+  });
+  
+  // Main action button
+  $('#mainActionBtn').addEventListener('click', handleMainAction);
+  
+  // Code input - validate on blur
+  $('#auditorCode').addEventListener('blur', async () => {
+    const code = $('#auditorCode').value.trim().toUpperCase();
+    if (code && code.length >= 6) {
+      const result = await validateCode(code);
+      updateCodeUI(result);
+      if (result.valid) {
+        state.code = code;
+        saveFormState();
+      }
+    }
+  });
+  
+  // Code input - validate on Enter
+  $('#auditorCode').addEventListener('keyup', async (e) => {
+    if (e.key === 'Enter') {
+      const code = $('#auditorCode').value.trim().toUpperCase();
+      if (code) {
+        const result = await validateCode(code);
+        updateCodeUI(result);
+        if (result.valid) {
+          state.code = code;
+          saveFormState();
+        }
+      }
+    }
+  });
+  
+  // Pricing cards
+  $$('.pricing-card').forEach(card => {
+    card.addEventListener('click', () => selectTier(card.dataset.tier));
+  });
+  
+  // Buy credits button
   $('#buyCreditsBtn').addEventListener('click', handleCheckout);
-  $('#sendRequestBtn').addEventListener('click', sendRequest);
-  $('#getStartedLink').addEventListener('click', e => { e.preventDefault(); $('#roleSelect').scrollIntoView({ behavior: 'smooth' }); $('#roleSelect').focus(); });
-});
+  
+  // Get started link in header
+  $('#getStartedLink').addEventListener('click', e => {
+    e.preventDefault();
+    $('#roleSelect').scrollIntoView({ behavior: 'smooth' });
+    $('#roleSelect').focus();
+  });
+  
+  // Initialize time visibility
+  updateTimeVisibility();
+  
+  // Update main button state
+  updateMainButton();
+}
+
+// Run initialization when DOM is ready
+document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
-
-Recognized user needed exportable code format instead.
-
-The complete code is displaye
