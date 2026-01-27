@@ -22,6 +22,7 @@
       --accent-hover: #059669;
       --warning: #f59e0b;
       --error: #ef4444;
+      --marquee-height: 48px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -32,9 +33,9 @@
       color: var(--text);
       line-height: 1.6;
       min-height: 100vh;
+      padding-bottom: var(--marquee-height);
     }
 
-    /* Header */
     .header {
       display: flex;
       justify-content: space-between;
@@ -80,11 +81,11 @@
       font-size: 0.9rem;
       font-weight: 500;
       transition: color 0.2s;
+      cursor: pointer;
     }
 
     .header-links a:hover { color: var(--text); }
 
-    /* Hero */
     .hero {
       padding: 48px 24px;
       text-align: center;
@@ -120,7 +121,7 @@
       font-size: 1.1rem;
       color: var(--text-muted);
       max-width: 600px;
-      margin: 0 auto 24px;
+      margin: 0 auto 12px;
     }
 
     .hero-features {
@@ -145,14 +146,12 @@
       flex-shrink: 0;
     }
 
-    /* Main Container */
     .main-container {
       max-width: 900px;
       margin: 0 auto;
       padding: 24px;
     }
 
-    /* Cards */
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -176,7 +175,6 @@
       color: var(--text-muted);
     }
 
-    /* Form Elements */
     .form-group {
       margin-bottom: 20px;
     }
@@ -207,7 +205,7 @@
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
     }
 
-    .form-input::placeholder { color: var(--text-muted); }
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--text-muted); }
 
     .form-row {
       display: grid;
@@ -215,7 +213,11 @@
       gap: 16px;
     }
 
-    /* Role Selector */
+    .form-textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
     .role-selector {
       margin-bottom: 24px;
     }
@@ -238,56 +240,22 @@
       border-color: var(--primary);
     }
 
-    /* Code Input Section - STEP 2 ONLY */
-    .code-section {
-      background: var(--surface-elevated);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 24px;
-    }
-
-    .code-input-wrapper {
-      display: flex;
+    .deadline-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 12px;
+      margin-bottom: 20px;
     }
 
-    .code-input {
-      flex: 1;
-      padding: 14px 16px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      background: var(--bg);
-      border: 2px solid var(--border);
-      border-radius: 10px;
-      color: var(--text);
+    .deadline-row .form-group {
+      margin-bottom: 0;
     }
 
-    .code-input:focus {
-      outline: none;
-      border-color: var(--primary);
-    }
-
-    .code-status {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 12px;
-      font-size: 0.9rem;
-    }
-
-    .code-status.valid { color: var(--accent); }
-    .code-status.invalid { color: var(--error); }
-    .code-status.checking { color: var(--text-muted); }
-
-    /* Framework Tags */
     .framework-selector {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 12px;
     }
 
     .framework-tag {
@@ -315,19 +283,30 @@
       color: #60a5fa;
     }
 
-    .framework-tag input {
-      display: none;
+    .framework-tag input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--primary);
     }
 
-    /* Evidence Categories */
-    .evidence-category {
+    .framework-tag.add-btn {
+      border-style: dashed;
+      color: var(--text-muted);
+    }
+
+    .control-group {
       border: 1px solid var(--border);
       border-radius: 12px;
       margin-bottom: 12px;
       overflow: hidden;
     }
 
-    .evidence-category-header {
+    .control-group.excluded {
+      opacity: 0.5;
+      border-style: dashed;
+    }
+
+    .cg-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -337,16 +316,23 @@
       transition: background 0.2s;
     }
 
-    .evidence-category-header:hover {
+    .cg-header:hover {
       background: rgba(30, 58, 95, 0.5);
     }
 
-    .evidence-category-title {
+    .cg-title {
       font-weight: 600;
       font-size: 0.95rem;
+      flex: 1;
     }
 
-    .evidence-category-count {
+    .cg-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cg-count {
       font-size: 0.8rem;
       color: var(--text-muted);
       background: var(--bg);
@@ -354,42 +340,178 @@
       border-radius: 12px;
     }
 
-    .evidence-category-items {
+    .cg-toggle {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      width: 20px;
+      text-align: center;
+    }
+
+    .cg-exclude, .cg-include {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-muted);
+    }
+
+    .cg-exclude:hover {
+      background: #7f1d1d;
+      border-color: #991b1b;
+      color: #fecaca;
+    }
+
+    .cg-include:hover {
+      background: #166534;
+      border-color: #166534;
+      color: #86efac;
+    }
+
+    .cg-body {
       display: none;
-      padding: 12px;
+      padding: 12px 16px;
       background: var(--bg);
     }
 
-    .evidence-category.expanded .evidence-category-items {
+    .cg-body.open {
       display: block;
+    }
+
+    .cg-description {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
     }
 
     .evidence-item {
       display: flex;
-      align-items: center;
       gap: 10px;
-      padding: 10px 12px;
+      align-items: flex-start;
+      padding: 12px;
+      margin-bottom: 8px;
+      border: 1px solid var(--border);
       border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.2s;
+      background: var(--surface);
     }
 
-    .evidence-item:hover {
-      background: var(--surface);
+    .evidence-item.included {
+      border-color: var(--primary);
+      background: rgba(37, 99, 235, 0.1);
     }
 
     .evidence-item input[type="checkbox"] {
       width: 18px;
       height: 18px;
+      margin-top: 2px;
       accent-color: var(--primary);
+      flex-shrink: 0;
     }
 
-    .evidence-item-text {
+    .ei-content {
       flex: 1;
-      font-size: 0.9rem;
+      min-width: 0;
     }
 
-    /* Buttons */
+    .ei-title {
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .ei-hint {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .ei-instr {
+      margin-top: 8px;
+    }
+
+    .ei-instr label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .ei-instr textarea {
+      width: 100%;
+      min-height: 50px;
+      padding: 8px 10px;
+      font-size: 0.9rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      resize: vertical;
+    }
+
+    .ei-instr textarea::placeholder {
+      color: #6b7a9a;
+    }
+
+    .ei-instr textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .more-toggle {
+      margin: 12px 0;
+      padding: 10px 14px;
+      font-size: 0.9rem;
+      color: #7a9bff;
+      cursor: pointer;
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .more-toggle:hover {
+      background: var(--surface-elevated);
+      border-color: var(--primary);
+    }
+
+    .add-custom-section {
+      margin-top: 16px;
+      padding: 16px;
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      background: rgba(0,0,0,0.2);
+    }
+
+    .add-custom-section h4 {
+      margin: 0 0 12px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .custom-form {
+      display: grid;
+      gap: 10px;
+    }
+
+    .custom-form input,
+    .custom-form textarea {
+      background: var(--bg);
+    }
+
+    .global-instructions {
+      padding: 16px;
+      border-top: 1px solid var(--border);
+      margin-top: 12px;
+    }
+
+    .global-instructions textarea {
+      min-height: 70px;
+    }
+
     .btn {
       display: inline-flex;
       align-items: center;
@@ -430,6 +552,11 @@
       transform: translateY(-1px);
     }
 
+    .btn-accent:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
     .btn-outline {
       background: transparent;
       border: 2px solid var(--border);
@@ -445,150 +572,39 @@
       width: 100%;
     }
 
-    /* Success Display */
-    .success-display {
-      display: none;
-      text-align: center;
-      padding: 32px;
-    }
-
-    .success-display.visible {
-      display: block;
-    }
-
-    .success-icon {
-      width: 64px;
-      height: 64px;
-      background: rgba(16, 185, 129, 0.2);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 20px;
-    }
-
-    .success-icon svg {
-      color: var(--accent);
-      width: 32px;
-      height: 32px;
-    }
-
-    .success-display h3 {
-      font-size: 1.5rem;
-      margin-bottom: 8px;
-    }
-
-    .success-display p {
-      color: var(--text-muted);
-      margin-bottom: 24px;
-    }
-
-    .code-display-box {
-      background: rgba(16, 185, 129, 0.1);
-      border: 2px solid var(--accent);
-      border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 24px;
-    }
-
-    .code-display-label {
+    .btn-sm {
+      padding: 8px 14px;
       font-size: 0.9rem;
-      color: var(--text-muted);
-      margin-bottom: 8px;
     }
 
-    .code-display-value {
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--accent);
-      letter-spacing: 3px;
-      font-family: 'Courier New', monospace;
-    }
-
-    .code-display-credits {
-      margin-top: 8px;
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
-
-    .success-buttons {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    /* Payment Banner */
-    .payment-banner {
-      display: none;
-      background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(16, 185, 129, 0.2));
-      border: 1px solid rgba(37, 99, 235, 0.3);
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 24px;
-      text-align: center;
-    }
-
-    .payment-banner.visible {
-      display: block !important;
-    }
-
-    .payment-banner h3 {
-      font-size: 1.1rem;
-      margin-bottom: 8px;
-    }
-
-    .payment-banner p {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      margin-bottom: 16px;
-    }
-
-    /* Loading Spinner */
-    .spinner {
-      width: 20px;
-      height: 20px;
-      border: 2px solid rgba(255,255,255,0.3);
-      border-top-color: white;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      display: inline-block;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    /* Payment Gate Section - STEP 2 */
-    .payment-gate {
+    .pricing-gate {
       display: none;
       background: var(--surface-elevated);
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 24px;
-      margin-bottom: 24px;
+      margin-top: 24px;
     }
 
-    .payment-gate.visible {
+    .pricing-gate.visible {
       display: block;
     }
 
-    .payment-gate-header {
+    .pricing-gate-header {
       text-align: center;
       margin-bottom: 20px;
     }
 
-    .payment-gate-header h3 {
+    .pricing-gate-header h3 {
       font-size: 1.1rem;
       margin-bottom: 4px;
     }
 
-    .payment-gate-header p {
+    .pricing-gate-header p {
       color: var(--text-muted);
       font-size: 0.9rem;
     }
 
-    /* Tab switcher for code vs buy */
     .gate-tabs {
       display: flex;
       gap: 0;
@@ -605,6 +621,8 @@
       cursor: pointer;
       font-weight: 500;
       background: var(--bg);
+      border: none;
+      color: var(--text-muted);
       transition: all 0.2s;
     }
 
@@ -625,10 +643,44 @@
       display: block;
     }
 
-    /* Pricing Section */
+    .code-input-wrapper {
+      display: flex;
+      gap: 12px;
+    }
+
+    .code-input {
+      flex: 1;
+      padding: 14px 16px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+    }
+
+    .code-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .code-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      font-size: 0.9rem;
+    }
+
+    .code-status.valid { color: var(--accent); }
+    .code-status.invalid { color: var(--error); }
+    .code-status.checking { color: var(--text-muted); }
+
     .pricing-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 12px;
       margin-bottom: 16px;
     }
@@ -655,59 +707,182 @@
 
     .pricing-card-name {
       font-weight: 600;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       margin-bottom: 4px;
     }
 
     .pricing-card-price {
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       font-weight: 700;
       color: var(--accent);
       margin-bottom: 4px;
     }
 
     .pricing-card-desc {
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       color: var(--text-muted);
     }
 
-    /* Instructions Textarea */
-    .form-textarea {
-      min-height: 80px;
-      resize: vertical;
+    .success-banner {
+      display: none;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.1));
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      text-align: center;
     }
 
-    /* Deadline Row */
-    .deadline-row {
-      display: flex;
-      gap: 12px;
-      align-items: end;
+    .success-banner.visible {
+      display: block;
     }
 
-    .deadline-row .form-group {
-      flex: 1;
-      margin-bottom: 0;
+    .success-banner h3 {
+      color: var(--accent);
+      margin-bottom: 8px;
     }
 
-    /* Footer */
+    .success-banner p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .how-section {
+      padding: 48px 24px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .how-section h2 {
+      text-align: center;
+      margin-bottom: 32px;
+      font-size: 1.5rem;
+    }
+
+    .how-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .how-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .how-card h3 {
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+
+    .how-card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
     .footer {
       text-align: center;
       padding: 32px 24px;
       color: var(--text-muted);
       font-size: 0.85rem;
       border-top: 1px solid var(--border);
-      margin-top: 48px;
     }
 
-    /* Responsive */
+    .marquee-fixed {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: var(--marquee-height);
+      display: flex;
+      align-items: center;
+      border-top: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0));
+      backdrop-filter: blur(6px);
+      z-index: 9999;
+      overflow: hidden;
+    }
+
+    .marquee {
+      white-space: nowrap;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .marquee > div {
+      display: inline-block;
+      padding-left: 100%;
+      animation: scroll 28s linear infinite;
+      color: #b9c6ff;
+      opacity: 0.9;
+    }
+
+    @keyframes scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+    }
+
+    .modal-overlay.hidden {
+      display: none;
+    }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      max-width: 500px;
+      width: 90%;
+    }
+
+    .modal h3 {
+      margin: 0 0 16px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 16px;
+    }
+
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+      .how-grid { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr 1fr; }
+      .deadline-row { grid-template-columns: 1fr; }
+    }
+
     @media (max-width: 600px) {
       .hero { padding: 32px 16px; }
       .main-container { padding: 16px; }
       .card { padding: 20px; }
       .form-row { grid-template-columns: 1fr; }
-      .pricing-grid { grid-template-columns: 1fr 1fr; }
-      .success-buttons { flex-direction: column; }
-      .success-buttons .btn { width: 100%; }
     }
   </style>
 </head>
@@ -723,12 +898,15 @@
     </a>
     <nav class="header-links">
       <a href="#how-it-works">How it works</a>
-      <a href="#" id="getStartedLink">Get started</a>
+      <a id="getStartedLink">Get started</a>
     </nav>
   </header>
 
   <section class="hero">
-    <button class="btn btn-primary" id="heroGetStarted">Get started</button>
+    <div class="hero-badge">Compliance ProofPacks in Seconds</div>
+    <h1>Streamlined evidence collection — without the chaos</h1>
+    <p><strong>Auditors:</strong> Define exactly what evidence you need. Send your client a guided upload link.</p>
+    <p><strong>Companies:</strong> Upload evidence with clear guidance. No more "wrong file" corrections.</p>
     <div class="hero-features">
       <div class="hero-feature">
         <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -746,20 +924,17 @@
   </section>
 
   <main class="main-container">
-    <!-- Success Banner (inline, not blocking) -->
-    <div id="successBanner" class="payment-banner" style="display:none; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.1)); border-color: var(--accent);">
-      <h3 style="color: var(--accent);">✓ Payment Successful!</h3>
+    <div id="successBanner" class="success-banner">
+      <h3>✓ Payment Successful!</h3>
       <p>Your code is ready. Complete your request below.</p>
     </div>
 
-    <!-- Main Form Card -->
     <div id="mainFormCard" class="card">
       <div class="card-header">
         <h2>Upload evidence and get a ProofPack</h2>
         <p>Choose your role to get started.</p>
       </div>
 
-      <!-- Role Selector -->
       <div class="role-selector">
         <label class="form-label">What brings you here?</label>
         <select id="roleSelect">
@@ -769,107 +944,77 @@
         </select>
       </div>
 
-      <!-- Auditor Flow -->
       <div id="auditorFlow" style="display: none;">
         <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">
           Define what evidence you need, then we'll email your client a guided upload link.
         </p>
 
-        <!-- STEP 1: Basic Info (always visible when auditor selected) -->
-        <div id="auditorStep1">
-          <!-- Email -->
-          <div class="form-group">
-            <label class="form-label">Your email (auditor)</label>
-            <input type="email" class="form-input" id="auditorEmail" placeholder="auditor@firm.com">
-          </div>
-
-          <!-- Client Info -->
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label">Client company</label>
-              <input type="text" class="form-input" id="clientCompany" placeholder="Acme Corp">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Client's email (where to send the upload link)</label>
-              <input type="email" class="form-input" id="clientEmail" placeholder="client@company.com">
-            </div>
-          </div>
-
-          <!-- Deadline -->
-          <div class="deadline-row" style="margin-bottom: 20px;">
-            <div class="form-group">
-              <label class="form-label">Deadline</label>
-              <select class="form-select" id="deadlineDays">
-                <option value="5">5 days</option>
-                <option value="7">7 days</option>
-                <option value="14">14 days</option>
-                <option value="30">30 days</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Time</label>
-              <input type="time" class="form-input" id="deadlineTime" value="17:00">
-              <span style="font-size: 0.8rem; color: var(--text-muted);">local time</span>
-            </div>
-          </div>
-
-          <!-- Framework Selector -->
-          <div class="form-group">
-            <label class="form-label">Evidence Request</label>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">Check frameworks, then customize what evidence you need. Items marked ✓ are included by default.</p>
-            <div class="framework-selector">
-              <label class="framework-tag selected">
-                <input type="checkbox" value="SOC2" checked> ✓ SOC 2
-              </label>
-              <label class="framework-tag">
-                <input type="checkbox" value="ISO27001"> ISO 27001
-              </label>
-              <label class="framework-tag">
-                <input type="checkbox" value="HIPAA"> HIPAA
-              </label>
-              <label class="framework-tag">
-                <input type="checkbox" value="GDPR"> GDPR
-              </label>
-            </div>
-          </div>
-
-          <!-- Evidence Categories (populated by JS) -->
-          <div id="evidenceCategories">
-            <!-- Will be populated by JS when SOC2 is selected -->
-          </div>
-
-          <!-- Global Instructions -->
-          <div class="form-group" style="margin-top: 20px;">
-            <label class="form-label">Overall Instructions for client</label>
-            <textarea class="form-textarea" id="globalInstructions" placeholder="Example: Please provide evidence covering Jan-Dec 2025. Screenshots acceptable. Redact any secrets or credentials."></textarea>
-            <label style="display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 0.85rem; color: var(--text-muted); cursor: pointer;">
-              <input type="checkbox" id="showInstructionsAbove" checked>
-              Show prominently to your client above the checklist
-            </label>
-          </div>
-
-          <!-- Continue Button (moves to Step 2) -->
-          <button class="btn btn-primary btn-full" id="continueToPaymentBtn" style="margin-top: 24px;">
-            Continue
-          </button>
+        <div class="form-group">
+          <label class="form-label">Your email (auditor)</label>
+          <input type="email" class="form-input" id="auditorEmail" placeholder="auditor@firm.com">
         </div>
 
-        <!-- STEP 2: Payment Gate (hidden until Continue is clicked) -->
-        <div id="auditorStep2" class="payment-gate">
-          <div class="payment-gate-header">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Client company</label>
+            <input type="text" class="form-input" id="clientCompany" placeholder="Acme Corp">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Client's email (where to send the upload link)</label>
+            <input type="email" class="form-input" id="clientEmail" placeholder="client@company.com">
+          </div>
+        </div>
+
+        <div class="deadline-row">
+          <div class="form-group">
+            <label class="form-label">Deadline</label>
+            <select class="form-select" id="deadlineDays">
+              <option value="0.33">8 hours</option>
+              <option value="0.5">12 hours</option>
+              <option value="1">24 hours</option>
+              <option value="2">2 days</option>
+              <option value="3">3 days</option>
+              <option value="5" selected>5 days</option>
+              <option value="7">1 week</option>
+              <option value="10">10 days</option>
+              <option value="14">2 weeks</option>
+              <option value="21">3 weeks</option>
+              <option value="30">1 month</option>
+              <option value="45">45 days</option>
+              <option value="60">2 months</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Time</label>
+            <input type="time" class="form-input" id="deadlineTime" value="17:00">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Evidence Request</label>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
+            Check frameworks, then customize what evidence you need. Items with ✓ are included by default.
+          </p>
+          <div id="composer"></div>
+        </div>
+
+        <button class="btn btn-primary btn-full" id="continueBtn" style="margin-top: 24px;">
+          Continue
+        </button>
+
+        <div id="pricingGate" class="pricing-gate">
+          <div class="pricing-gate-header">
             <h3>Almost there!</h3>
             <p>Enter your credit code or purchase credits to send this request.</p>
           </div>
 
-          <!-- Tabs -->
           <div class="gate-tabs">
-            <div class="gate-tab active" data-tab="code">I have a code</div>
-            <div class="gate-tab" data-tab="buy">Buy credits</div>
+            <button type="button" class="gate-tab active" data-tab="code">I have a code</button>
+            <button type="button" class="gate-tab" data-tab="buy">Buy credits</button>
           </div>
 
-          <!-- Code Entry Tab -->
           <div id="gateCodeContent" class="gate-content active">
-            <div class="code-section" style="margin: 0; background: var(--bg);">
+            <div style="background: var(--bg); border-radius: 12px; padding: 16px;">
               <label class="form-label">Credit Code</label>
               <div class="code-input-wrapper">
                 <input type="text" class="code-input" id="auditorCode" placeholder="ENTER CODE">
@@ -879,48 +1024,43 @@
             </div>
           </div>
 
-          <!-- Buy Credits Tab -->
           <div id="gateBuyContent" class="gate-content">
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 12px;">
+              Each credit = 1 ProofPack request. Buy more, save more.
+            </p>
             <div class="pricing-grid">
               <div class="pricing-card" data-tier="single">
                 <div class="pricing-card-name">Single Pack</div>
                 <div class="pricing-card-price">$59</div>
-                <div class="pricing-card-desc">1 evidence pack</div>
+                <div class="pricing-card-desc">1 credit</div>
               </div>
               <div class="pricing-card" data-tier="pack5">
                 <div class="pricing-card-name">5-Pack</div>
                 <div class="pricing-card-price">$249</div>
-                <div class="pricing-card-desc">5 packs ($50 each)</div>
+                <div class="pricing-card-desc">5 credits ($50 each)</div>
               </div>
               <div class="pricing-card" data-tier="pack15">
                 <div class="pricing-card-name">15-Pack</div>
                 <div class="pricing-card-price">$499</div>
-                <div class="pricing-card-desc">15 packs ($33 each)</div>
+                <div class="pricing-card-desc">15 credits ($33 each)</div>
               </div>
               <div class="pricing-card" data-tier="pack50">
                 <div class="pricing-card-name">50-Pack</div>
                 <div class="pricing-card-price">$1,249</div>
-                <div class="pricing-card-desc">50 packs ($25 each)</div>
+                <div class="pricing-card-desc">50 credits ($25 each)</div>
               </div>
             </div>
-            <button class="btn btn-accent btn-full" id="buyCreditsBtn" disabled>
+            <button class="btn btn-accent btn-full" id="buyCreditsBtn" disabled style="margin-top: 12px;">
               Select a plan above
             </button>
           </div>
-
-          <!-- Back button -->
-          <button class="btn btn-outline btn-full" id="backToStep1Btn" style="margin-top: 12px;">
-            ← Back to edit request
-          </button>
         </div>
 
-        <!-- STEP 3: Send Request Button (only visible when code is valid) -->
-        <button class="btn btn-accent btn-full" id="sendRequestBtn" style="margin-top: 24px; display: none;">
+        <button class="btn btn-accent btn-full" id="sendRequestBtn" style="margin-top: 16px; display: none;">
           Send Evidence Request to Client
         </button>
       </div>
 
-      <!-- Client Flow (placeholder) -->
       <div id="clientFlow" style="display: none;">
         <p style="color: var(--text-muted);">
           Please use the link provided by your auditor to upload evidence. 
@@ -930,550 +1070,602 @@
     </div>
   </main>
 
+  <section id="how-it-works" class="how-section">
+    <h2>How it works</h2>
+    <div class="how-grid">
+      <div class="how-card">
+        <h3>1. Auditor creates request</h3>
+        <p>Select frameworks, customize evidence items, add instructions for your client.</p>
+      </div>
+      <div class="how-card">
+        <h3>2. Client uploads</h3>
+        <p>Client receives a link with a clear checklist of exactly what to provide.</p>
+      </div>
+      <div class="how-card">
+        <h3>3. ProofPack ready</h3>
+        <p>Files organized by control area with a manifest ready for workpapers.</p>
+      </div>
+    </div>
+  </section>
+
   <footer class="footer">
-    <p>ProofRepo — Compliance evidence collection for auditors • SOC 2, ISO 27001, HIPAA, GDPR & more • Get started with a free trial</p>
+    <p>© <span id="year"></span> ProofRepo • <a href="mailto:support@proofrepo.com" style="color: #9db0ff;">support@proofrepo.com</a></p>
   </footer>
 
-  <script>
-    const API = 'https://proofrepo-intake.atucker5.workers.dev';
-    
-    // State
-    let state = {
-      role: '',
-      code: '',
-      codeValid: false,
-      codeCredits: 0,
-      selectedTier: null,
-      frameworks: ['SOC2'],
-      formData: null,
-      step: 'form' // 'form' | 'payment' | 'ready'
+  <div class="marquee-fixed">
+    <div class="marquee">
+      <div>&nbsp;Guided compliance evidence collection • Built for auditors • SOC 2, ISO 27001, HIPAA, GDPR & more • Get started with a free trial •&nbsp;&nbsp;&nbsp;&nbsp;Guided compliance evidence collection • Built for auditors • SOC 2, ISO 27001, HIPAA, GDPR & more • Get started with a free trial •</div>
+    </div>
+  </div>
+
+  <div id="addFwModal" class="modal-overlay hidden">
+    <div class="modal">
+      <h3>Add Custom Framework</h3>
+      <div class="form-group">
+        <label class="form-label">Framework name</label>
+        <input type="text" class="form-input" id="customFwName" placeholder="e.g., PCI DSS, FedRAMP, Internal Audit">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description (optional)</label>
+        <input type="text" class="form-input" id="customFwDesc" placeholder="Brief description">
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline" id="cancelFwBtn">Cancel</button>
+        <button type="button" class="btn btn-primary" id="saveFwBtn">Add Framework</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="addGroupModal" class="modal-overlay hidden">
+    <div class="modal">
+      <h3>Add Control Group</h3>
+      <div class="form-group">
+        <label class="form-label">Control group name</label>
+        <input type="text" class="form-input" id="customGroupName" placeholder="e.g., Network Security, Physical Security">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description (optional)</label>
+        <input type="text" class="form-input" id="customGroupDesc" placeholder="What this control group covers">
+      </div>
+      <input type="hidden" id="customGroupFwKey" value="">
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline" id="cancelGroupBtn">Cancel</button>
+        <button type="button" class="btn btn-primary" id="saveGroupBtn">Add Control Group</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+const API = 'https://proofrepo-intake.atucker5.workers.dev';
+const STORAGE_KEY = 'proofrepo_form_state';
+
+const FRAMEWORK_LIBRARY = {
+  SOC2: {
+    label: 'SOC 2', description: 'Service Organization Control 2', defaultOn: true,
+    controlGroups: [
+      { id: 'governance', title: 'Governance & Policies', description: 'Security policies and organizational governance',
+        items: [
+          { id: 'info_sec_policy', title: 'Information Security Policy', common: true, hint: 'Current policy document with approval date' },
+          { id: 'security_roles', title: 'Security Roles & Responsibilities', common: true, hint: 'Org chart or RACI showing security ownership' },
+          { id: 'acceptable_use', title: 'Acceptable Use Policy', common: true, hint: 'Employee IT usage guidelines' },
+          { id: 'code_of_conduct', title: 'Code of Conduct', common: false, hint: 'Ethics and conduct expectations' },
+          { id: 'data_classification', title: 'Data Classification Policy', common: false, hint: 'How data is categorized by sensitivity' },
+          { id: 'remote_work', title: 'Remote Work Policy', common: false, hint: 'Security requirements for remote workers' },
+        ]},
+      { id: 'risk', title: 'Risk Assessment', description: 'How risks are identified and managed',
+        items: [
+          { id: 'risk_assessment', title: 'Risk Assessment', common: true, hint: 'Most recent risk assessment with ratings' },
+          { id: 'risk_register', title: 'Risk Register', common: true, hint: 'List of risks with owners and status' },
+          { id: 'risk_treatment', title: 'Risk Treatment Plan', common: true, hint: 'How identified risks are being addressed' },
+          { id: 'risk_acceptance', title: 'Risk Acceptance Documentation', common: false, hint: 'Formal acceptance of residual risks' },
+        ]},
+      { id: 'awareness', title: 'Security Awareness & Training', description: 'Employee security education',
+        items: [
+          { id: 'security_training', title: 'Security Awareness Training', common: true, hint: 'Training completion report or LMS screenshot' },
+          { id: 'training_materials', title: 'Training Materials', common: false, hint: 'Topics covered in training' },
+          { id: 'phishing_testing', title: 'Phishing Test Results', common: false, hint: 'Simulated phishing campaign results' },
+        ]},
+      { id: 'incident', title: 'Incident Response', description: 'How security incidents are handled',
+        items: [
+          { id: 'ir_plan', title: 'Incident Response Plan', common: true, hint: 'IR procedures and escalation paths' },
+          { id: 'ir_team', title: 'IR Team Contacts', common: true, hint: 'Who is on the IR team' },
+          { id: 'incident_log', title: 'Security Incident Log', common: true, hint: 'Record of incidents (or attestation of none)' },
+          { id: 'ir_testing', title: 'IR Plan Testing', common: false, hint: 'Tabletop exercises or IR tests' },
+          { id: 'postmortem', title: 'Incident Postmortems', common: false, hint: 'Post-incident review samples' },
+        ]},
+      { id: 'access', title: 'Access Control', description: 'How user access is managed',
+        items: [
+          { id: 'access_review', title: 'User Access Review', common: true, hint: 'Periodic access review with approvals' },
+          { id: 'mfa_evidence', title: 'MFA Enforcement', common: true, hint: 'Screenshot showing MFA is required' },
+          { id: 'access_policy', title: 'Access Control Policy', common: true, hint: 'Policy defining access principles' },
+          { id: 'jml_process', title: 'Joiner/Mover/Leaver Process', common: true, hint: 'How access is granted and revoked' },
+          { id: 'jml_samples', title: 'JML Process Samples', common: false, hint: '2-3 onboarding/offboarding examples' },
+          { id: 'privileged_list', title: 'Privileged Access List', common: true, hint: 'Admin users and justification' },
+          { id: 'privileged_controls', title: 'Privileged Access Controls', common: false, hint: 'PAM, just-in-time access, etc.' },
+          { id: 'sso_config', title: 'SSO Configuration', common: false, hint: 'Single sign-on setup' },
+          { id: 'password_policy', title: 'Password Policy', common: false, hint: 'Password requirements' },
+        ]},
+      { id: 'operations', title: 'System Operations & Monitoring', description: 'How systems are monitored and maintained',
+        items: [
+          { id: 'logging', title: 'Logging & Audit Trails', common: true, hint: 'What is logged, where, retention period' },
+          { id: 'monitoring', title: 'Monitoring & Alerting', common: true, hint: 'Tools used and how alerts are handled' },
+          { id: 'siem', title: 'SIEM / Log Aggregation', common: false, hint: 'Centralized logging solution' },
+          { id: 'vuln_scanning', title: 'Vulnerability Scanning', common: true, hint: 'Scan results or summary' },
+          { id: 'patch_mgmt', title: 'Patch Management', common: false, hint: 'How patches are applied' },
+          { id: 'endpoint', title: 'Endpoint Protection', common: false, hint: 'Antivirus/EDR coverage' },
+          { id: 'backups', title: 'Backup & Recovery', common: false, hint: 'Backup config and testing' },
+        ]},
+      { id: 'change', title: 'Change Management', description: 'How changes are controlled',
+        items: [
+          { id: 'change_log', title: 'Change Log / Deployments', common: true, hint: 'Record of recent changes' },
+          { id: 'change_policy', title: 'Change Management Policy', common: true, hint: 'Change control requirements' },
+          { id: 'code_review', title: 'Code Review Evidence', common: true, hint: 'PR approvals, branch protection' },
+          { id: 'change_approval', title: 'Change Approval Process', common: false, hint: 'How changes are approved' },
+          { id: 'emergency_change', title: 'Emergency Change Process', common: false, hint: 'How urgent changes work' },
+        ]},
+      { id: 'vendor', title: 'Vendor Management', description: 'How third-party risks are managed',
+        items: [
+          { id: 'vendor_list', title: 'Vendor Inventory', common: true, hint: 'List with risk tiers' },
+          { id: 'vendor_policy', title: 'Vendor Management Policy', common: true, hint: 'Policy for vendor evaluation' },
+          { id: 'vendor_assessments', title: 'Vendor Assessments', common: false, hint: 'Sample security questionnaires' },
+          { id: 'critical_vendors', title: 'Critical Vendors List', common: false, hint: 'Cloud providers, key dependencies' },
+        ]},
+    ]
+  },
+  ISO27001: {
+    label: 'ISO 27001', description: 'Information Security Management System', defaultOn: false,
+    controlGroups: [
+      { id: 'isms', title: 'ISMS Documentation', description: 'Core ISMS documents',
+        items: [
+          { id: 'scope', title: 'ISMS Scope', common: true, hint: 'Boundaries of ISMS' },
+          { id: 'policy', title: 'ISMS Policy', common: true, hint: 'Top-level security policy' },
+          { id: 'soa', title: 'Statement of Applicability', common: true, hint: 'Which controls apply' },
+          { id: 'risk_iso', title: 'Risk Assessment', common: true, hint: 'ISO 27001 risk assessment' },
+          { id: 'risk_treatment_iso', title: 'Risk Treatment Plan', common: true, hint: 'How risks are treated' },
+          { id: 'internal_audit', title: 'Internal Audit Results', common: true, hint: 'Recent ISMS audit' },
+          { id: 'mgmt_review', title: 'Management Review', common: true, hint: 'Management review minutes' },
+        ]},
+      { id: 'annex', title: 'Annex A Controls', description: 'Evidence for applicable controls',
+        items: [
+          { id: 'asset_inventory', title: 'Asset Inventory', common: true, hint: 'Information assets list' },
+          { id: 'access_iso', title: 'Access Control', common: true, hint: 'Access control implementation' },
+          { id: 'crypto', title: 'Cryptography', common: false, hint: 'Encryption controls' },
+          { id: 'physical', title: 'Physical Security', common: false, hint: 'Physical access controls' },
+          { id: 'supplier', title: 'Supplier Security', common: false, hint: 'Third-party management' },
+        ]},
+    ]
+  },
+  HIPAA: {
+    label: 'HIPAA', description: 'Health Insurance Portability and Accountability Act', defaultOn: false,
+    controlGroups: [
+      { id: 'admin', title: 'Administrative Safeguards', description: 'Administrative controls for PHI',
+        items: [
+          { id: 'risk_hipaa', title: 'Security Risk Analysis', common: true, hint: 'HIPAA risk analysis' },
+          { id: 'policies_hipaa', title: 'HIPAA Policies', common: true, hint: 'Security policies' },
+          { id: 'training_hipaa', title: 'Workforce Training', common: true, hint: 'HIPAA training records' },
+          { id: 'sanctions', title: 'Sanction Policy', common: false, hint: 'Violation consequences' },
+        ]},
+      { id: 'technical', title: 'Technical Safeguards', description: 'Technical controls for PHI',
+        items: [
+          { id: 'access_hipaa', title: 'Access Controls', common: true, hint: 'PHI access controls' },
+          { id: 'audit_hipaa', title: 'Audit Controls', common: true, hint: 'PHI access logging' },
+          { id: 'integrity', title: 'Integrity Controls', common: false, hint: 'PHI integrity mechanisms' },
+          { id: 'transmission', title: 'Transmission Security', common: false, hint: 'PHI encryption in transit' },
+        ]},
+      { id: 'ba', title: 'Business Associates', description: 'BA agreements',
+        items: [
+          { id: 'baa_list', title: 'BAA Inventory', common: true, hint: 'List of BAAs' },
+          { id: 'baa_samples', title: 'Sample BAAs', common: false, hint: 'Executed BAA examples' },
+        ]},
+    ]
+  },
+  GDPR: {
+    label: 'GDPR', description: 'General Data Protection Regulation', defaultOn: false,
+    controlGroups: [
+      { id: 'core', title: 'Core Requirements', description: 'Fundamental GDPR compliance',
+        items: [
+          { id: 'ropa', title: 'Record of Processing Activities', common: true, hint: 'Article 30 records' },
+          { id: 'privacy_notice', title: 'Privacy Notice', common: true, hint: 'Public privacy policy' },
+          { id: 'lawful_basis', title: 'Lawful Basis Documentation', common: true, hint: 'Legal basis per activity' },
+          { id: 'dpia', title: 'Data Protection Impact Assessments', common: false, hint: 'DPIAs for high-risk processing' },
+        ]},
+      { id: 'rights', title: 'Data Subject Rights', description: 'Handling data subject requests',
+        items: [
+          { id: 'dsar', title: 'DSAR Process', common: true, hint: 'How requests are handled' },
+          { id: 'consent', title: 'Consent Records', common: false, hint: 'Consent mechanisms' },
+        ]},
+      { id: 'processors', title: 'Processors & Transfers', description: 'Third parties and transfers',
+        items: [
+          { id: 'dpa', title: 'Data Processing Agreements', common: true, hint: 'DPAs with processors' },
+          { id: 'transfers', title: 'Transfer Mechanisms', common: false, hint: 'SCCs, adequacy, etc.' },
+        ]},
+    ]
+  }
+};
+
+let composerState = {};
+let customFrameworks = [];
+let state = { role: '', code: '', codeValid: false, codeCredits: 0, selectedTier: null, pricingGateVisible: false };
+
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+const esc = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+function saveFormState() {
+  try {
+    const data = {
+      role: $('#roleSelect')?.value || '',
+      auditorEmail: $('#auditorEmail')?.value || '',
+      clientCompany: $('#clientCompany')?.value || '',
+      clientEmail: $('#clientEmail')?.value || '',
+      deadlineDays: $('#deadlineDays')?.value || '5',
+      deadlineTime: $('#deadlineTime')?.value || '17:00',
+      globalInstructions: $('#globalInstructions')?.value || '',
+      appliedCode: state.code || '',
+      composerState: composerState,
+      customFrameworks: customFrameworks,
+      savedAt: Date.now()
     };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch (e) { console.warn('Could not save form state:', e); }
+}
 
-    // Evidence categories data for SOC 2
-    const EVIDENCE_CATEGORIES = {
-      SOC2: [
-        {
-          name: 'Governance & Policies',
-          items: [
-            { id: 'info_security_policy', label: 'Information Security Policy', default: true },
-            { id: 'acceptable_use', label: 'Acceptable Use Policy', default: true },
-            { id: 'access_control_policy', label: 'Access Control Policy', default: true },
-            { id: 'data_classification', label: 'Data Classification Policy', default: false },
-            { id: 'vendor_management', label: 'Vendor Management Policy', default: false }
-          ]
-        },
-        {
-          name: 'Risk Assessment',
-          items: [
-            { id: 'risk_assessment', label: 'Risk Assessment Report', default: true },
-            { id: 'risk_treatment', label: 'Risk Treatment Plan', default: false },
-            { id: 'risk_register', label: 'Risk Register', default: false }
-          ]
-        },
-        {
-          name: 'Access Control',
-          items: [
-            { id: 'access_review', label: 'User Access Review', default: true },
-            { id: 'user_provisioning', label: 'User Provisioning Evidence', default: true },
-            { id: 'terminated_access', label: 'Terminated User Access Removal', default: true },
-            { id: 'mfa_evidence', label: 'MFA Configuration Evidence', default: true },
-            { id: 'privileged_access', label: 'Privileged Access List', default: false }
-          ]
-        },
-        {
-          name: 'Change Management',
-          items: [
-            { id: 'change_log', label: 'Change Log / Release Notes', default: true },
-            { id: 'change_approval', label: 'Change Approval Records', default: true },
-            { id: 'code_review', label: 'Code Review Evidence', default: false },
-            { id: 'deployment_records', label: 'Deployment Records', default: false }
-          ]
-        },
-        {
-          name: 'System Operations',
-          items: [
-            { id: 'backup_evidence', label: 'Backup Configuration & Logs', default: true },
-            { id: 'monitoring_alerts', label: 'Monitoring & Alerting Config', default: false },
-            { id: 'incident_response', label: 'Incident Response Plan', default: true },
-            { id: 'incident_log', label: 'Incident Log / Tickets', default: false }
-          ]
-        },
-        {
-          name: 'Vendor Management',
-          items: [
-            { id: 'vendor_list', label: 'Vendor / Subprocessor List', default: true },
-            { id: 'vendor_assessments', label: 'Vendor Security Assessments', default: false },
-            { id: 'vendor_contracts', label: 'Vendor Contracts / DPAs', default: false }
-          ]
-        },
-        {
-          name: 'Security Testing',
-          items: [
-            { id: 'pentest_report', label: 'Penetration Test Report', default: false },
-            { id: 'vuln_scan', label: 'Vulnerability Scan Results', default: false },
-            { id: 'security_training', label: 'Security Training Records', default: true }
-          ]
-        }
-      ]
-    };
+function loadFormState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const data = JSON.parse(raw);
+    if (data.savedAt && (Date.now() - data.savedAt) > 24 * 60 * 60 * 1000) {
+      localStorage.removeItem(STORAGE_KEY);
+      return null;
+    }
+    return data;
+  } catch (e) { return null; }
+}
 
-    // Render evidence categories
-    function renderEvidenceCategories() {
-      const container = document.getElementById('evidenceCategories');
-      if (!container) return;
-      
-      // Only show for SOC2 currently
-      if (!state.frameworks.includes('SOC2')) {
-        container.innerHTML = '';
-        return;
+function restoreFormState(data) {
+  if (!data) return false;
+  if (data.role) $('#roleSelect').value = data.role;
+  if (data.auditorEmail) $('#auditorEmail').value = data.auditorEmail;
+  if (data.clientCompany) $('#clientCompany').value = data.clientCompany;
+  if (data.clientEmail) $('#clientEmail').value = data.clientEmail;
+  if (data.deadlineDays) $('#deadlineDays').value = data.deadlineDays;
+  if (data.deadlineTime) $('#deadlineTime').value = data.deadlineTime;
+  if (data.appliedCode) { state.code = data.appliedCode; $('#auditorCode').value = data.appliedCode; }
+  if (data.composerState && Object.keys(data.composerState).length) composerState = data.composerState;
+  if (data.customFrameworks && data.customFrameworks.length) customFrameworks = data.customFrameworks;
+  return true;
+}
+
+function clearFormState() { try { localStorage.removeItem(STORAGE_KEY); } catch (e) {} }
+
+function setupAutoSave() {
+  ['roleSelect', 'auditorEmail', 'clientCompany', 'clientEmail', 'deadlineDays', 'deadlineTime'].forEach(id => {
+    const el = $(`#${id}`);
+    if (el) { el.addEventListener('change', saveFormState); el.addEventListener('input', saveFormState); }
+  });
+}
+
+function getAllFrameworks() {
+  const all = { ...FRAMEWORK_LIBRARY };
+  customFrameworks.forEach(f => { all[f.id] = f; });
+  return all;
+}
+
+function initComposerState() {
+  composerState = {};
+  const allFw = getAllFrameworks();
+  for (const [fwKey, fw] of Object.entries(allFw)) {
+    composerState[fwKey] = { enabled: fw.defaultOn || false, groups: {} };
+    for (const g of (fw.controlGroups || [])) {
+      composerState[fwKey].groups[g.id] = { expanded: false, showMore: false, excluded: false, items: {} };
+      for (const item of (g.items || [])) {
+        composerState[fwKey].groups[g.id].items[item.id] = { included: item.common, instructions: '' };
       }
-
-      const categories = EVIDENCE_CATEGORIES.SOC2 || [];
-      let html = '';
-
-      categories.forEach((cat, catIndex) => {
-        const isExpanded = catIndex === 0; // First category expanded by default
-        const checkedCount = cat.items.filter(item => item.default).length;
-        
-        html += `
-          <div class="evidence-category ${isExpanded ? 'expanded' : ''}" data-category="${catIndex}">
-            <div class="evidence-category-header" onclick="toggleCategory(${catIndex})">
-              <span class="evidence-category-title">${cat.name}</span>
-              <span class="evidence-category-count">${checkedCount}/${cat.items.length} selected</span>
-            </div>
-            <div class="evidence-category-items">
-        `;
-        
-        cat.items.forEach(item => {
-          html += `
-            <label class="evidence-item">
-              <input type="checkbox" value="${item.id}" ${item.default ? 'checked' : ''} onchange="updateCategoryCount(${catIndex})">
-              <span class="evidence-item-text">${item.label}</span>
-            </label>
-          `;
-        });
-        
-        html += `
-            </div>
-          </div>
-        `;
-      });
-
-      container.innerHTML = html;
     }
+  }
+}
 
-    // Toggle category expansion
-    function toggleCategory(index) {
-      const cat = document.querySelector(`.evidence-category[data-category="${index}"]`);
-      if (cat) cat.classList.toggle('expanded');
+function renderComposer() {
+  const c = $('#composer');
+  if (!c) return;
+  const allFw = getAllFrameworks();
+  let html = '<div class="framework-selector">';
+  for (const [fwKey, fw] of Object.entries(allFw)) {
+    const on = composerState[fwKey]?.enabled;
+    html += `<label class="framework-tag ${on ? 'selected' : ''}"><input type="checkbox" ${on ? 'checked' : ''} data-fw-toggle="${esc(fwKey)}">${on ? '✓' : ''} ${esc(fw.label)}</label>`;
+  }
+  html += '<button type="button" class="framework-tag add-btn" id="addFwChip">+ Add framework</button></div>';
+  for (const [fwKey, fw] of Object.entries(allFw)) {
+    if (!composerState[fwKey]?.enabled) continue;
+    html += renderFwBody(fwKey, fw);
+  }
+  const savedGlobalInstr = $('#globalInstructions')?.value || '';
+  html += `<div class="global-instructions"><label class="form-label">Overall instructions for client</label><textarea class="form-textarea" id="globalInstructions" placeholder="Example: Please provide evidence covering Jan–Dec 2025. Screenshots acceptable. Redact any secrets or credentials.">${esc(savedGlobalInstr)}</textarea><p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">Shown prominently to your client above the checklist.</p></div>`;
+  c.innerHTML = html;
+  wireComposer();
+  const gi = $('#globalInstructions');
+  if (gi) gi.addEventListener('input', saveFormState);
+}
+
+function renderFwBody(fwKey, fw) {
+  let html = `<div style="margin-top: 16px; margin-bottom: 8px;"><strong>${esc(fw.label)}</strong>${fw.description ? ` <span style="color: var(--text-muted);">— ${esc(fw.description)}</span>` : ''}</div>`;
+  for (const g of (fw.controlGroups || [])) html += renderGroup(fwKey, g);
+  html += `<button type="button" class="btn btn-sm btn-outline" style="width: 100%; margin-top: 8px; border-style: dashed;" data-add-group-btn="${esc(fwKey)}">+ Add control group</button>`;
+  return html;
+}
+
+function renderGroup(fwKey, g) {
+  const gs = composerState[fwKey]?.groups?.[g.id];
+  const exp = gs?.expanded, more = gs?.showMore, excluded = gs?.excluded;
+  const common = (g.items || []).filter(i => i.common), extra = (g.items || []).filter(i => !i.common);
+  const includedCount = (g.items || []).filter(i => gs?.items?.[i.id]?.included && !excluded).length;
+  const totalCount = (g.items || []).length;
+  let html = `<div class="control-group ${excluded ? 'excluded' : ''}" data-fw="${esc(fwKey)}" data-group="${esc(g.id)}"><div class="cg-header"><span class="cg-title">${esc(g.title)}</span><div class="cg-status">${excluded ? `<span style="color: var(--text-muted); font-size: 0.8rem;">Excluded</span><button type="button" class="cg-include" data-include-group="${esc(fwKey)}-${esc(g.id)}" title="Include">+</button>` : `<span class="cg-count">${includedCount}/${totalCount}</span><button type="button" class="cg-exclude" data-exclude-group="${esc(fwKey)}-${esc(g.id)}" title="Exclude">×</button>`}<span class="cg-toggle">${exp ? '▼' : '▶'}</span></div></div><div class="cg-body ${exp ? 'open' : ''}">`;
+  if (excluded) {
+    html += `<p style="color: var(--text-muted); text-align: center; padding: 12px;">This control group is excluded from the request.</p>`;
+  } else {
+    if (g.description) html += `<p class="cg-description">${esc(g.description)}</p>`;
+    for (const item of common) html += renderItem(fwKey, g.id, item, gs);
+    if (extra.length) {
+      html += `<div class="extra-items" style="display: ${more ? 'block' : 'none'};">`;
+      for (const item of extra) html += renderItem(fwKey, g.id, item, gs);
+      html += '</div>';
+      html += `<div class="more-toggle" data-fw="${esc(fwKey)}" data-group="${esc(g.id)}">${more ? '− Show fewer options' : `+ Show ${extra.length} more options`}</div>`;
     }
+    html += `<div class="add-custom-section"><h4>Add custom request to "${esc(g.title)}"</h4><div class="custom-form"><input class="form-input" placeholder="e.g., Network Diagram, Encryption Key Rotation Log" data-custom-name="${esc(fwKey)}-${esc(g.id)}"><textarea class="form-textarea" placeholder="Instructions for client (describe what you need, date ranges, format...)" data-custom-instr="${esc(fwKey)}-${esc(g.id)}" style="min-height: 50px;"></textarea><button type="button" class="btn btn-sm btn-outline" data-add-item="${esc(fwKey)}" data-group="${esc(g.id)}">+ Add request</button></div></div>`;
+  }
+  html += '</div></div>';
+  return html;
+}
 
-    // Update category count display
-    function updateCategoryCount(index) {
-      const cat = document.querySelector(`.evidence-category[data-category="${index}"]`);
-      if (!cat) return;
-      const checkboxes = cat.querySelectorAll('input[type="checkbox"]');
-      const checked = Array.from(checkboxes).filter(cb => cb.checked).length;
-      const countEl = cat.querySelector('.evidence-category-count');
-      if (countEl) countEl.textContent = `${checked}/${checkboxes.length} selected`;
-    }
+function renderItem(fwKey, gid, item, gs) {
+  const st = gs?.items?.[item.id];
+  const inc = st?.included ?? item.common;
+  const instr = st?.instructions || '';
+  return `<div class="evidence-item ${inc ? 'included' : ''}" data-fw="${esc(fwKey)}" data-group="${esc(gid)}" data-item="${esc(item.id)}"><input type="checkbox" ${inc ? 'checked' : ''}><div class="ei-content"><div class="ei-title">${esc(item.title)}</div>${item.hint ? `<div class="ei-hint">${esc(item.hint)}</div>` : ''}<div class="ei-instr"><label>Instructions for client (optional)</label><textarea placeholder="e.g., Please include date range, reviewer sign-off, specific format..." data-item-instr="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">${esc(instr)}</textarea></div></div></div>`;
+}
 
-    // Restore state from localStorage
-    function restoreState() {
-      try {
-        const saved = localStorage.getItem('proofrepo_form_state');
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          if (parsed.auditorEmail) document.getElementById('auditorEmail').value = parsed.auditorEmail;
-          if (parsed.clientCompany) document.getElementById('clientCompany').value = parsed.clientCompany;
-          if (parsed.clientEmail) document.getElementById('clientEmail').value = parsed.clientEmail;
-          if (parsed.globalInstructions) document.getElementById('globalInstructions').value = parsed.globalInstructions;
-          state.formData = parsed;
-        }
-      } catch (e) {}
-    }
-
-    // Save state to localStorage
-    function saveState() {
-      try {
-        const data = {
-          auditorEmail: document.getElementById('auditorEmail').value,
-          clientCompany: document.getElementById('clientCompany').value,
-          clientEmail: document.getElementById('clientEmail').value,
-          globalInstructions: document.getElementById('globalInstructions').value,
-          timestamp: Date.now()
-        };
-        localStorage.setItem('proofrepo_form_state', JSON.stringify(data));
-      } catch (e) {}
-    }
-
-    // Check for checkout return (payment completed)
-    async function checkCheckoutReturn() {
-      const params = new URLSearchParams(window.location.search);
-      const sessionId = params.get('session_id');
-      
-      if (!sessionId) return false;
-
-      // Show auditor flow and go to payment step
-      document.getElementById('roleSelect').value = 'auditor';
-      handleRoleChange('auditor');
-      
-      // Restore saved form state
-      restoreState();
-      
-      // Go directly to payment step with code tab active
-      goToStep('payment');
-      
-      // Show success banner
-      const banner = document.getElementById('successBanner');
-      if (banner) banner.classList.add('visible');
-
-      // Show loading state in code field
-      const codeInput = document.getElementById('auditorCode');
-      const codeStatus = document.getElementById('codeStatus');
-      codeInput.value = 'LOADING...';
-      codeInput.disabled = true;
-      codeStatus.className = 'code-status checking';
-      codeStatus.innerHTML = '<span class="spinner"></span> Retrieving your code...';
-
-      // Poll for code
-      let code = null;
-      let creditsText = '';
-      
-      for (let attempt = 0; attempt < 30; attempt++) {
-        try {
-          const res = await fetch(`${API}/checkout/session?session_id=${sessionId}`);
-          const data = await res.json();
-          
-          if (data.ok && data.code) {
-            code = data.code;
-            state.code = code;
-            state.codeValid = true;
-            state.codeCredits = data.credits;
-            creditsText = data.creditsDisplay || `${data.credits} credit${data.credits !== 1 ? 's' : ''} remaining`;
-            break;
+function wireComposer() {
+  $$('[data-fw-toggle]').forEach(cb => {
+    cb.addEventListener('change', e => {
+      const k = e.target.dataset.fwToggle;
+      if (!composerState[k]) composerState[k] = { enabled: false, groups: {} };
+      composerState[k].enabled = e.target.checked;
+      const allFw = getAllFrameworks();
+      const fw = allFw[k];
+      if (fw && composerState[k].enabled) {
+        for (const g of (fw.controlGroups || [])) {
+          if (!composerState[k].groups[g.id]) {
+            composerState[k].groups[g.id] = { expanded: false, showMore: false, excluded: false, items: {} };
+            for (const item of (g.items || [])) composerState[k].groups[g.id].items[item.id] = { included: item.common, instructions: '' };
           }
-          
-          codeStatus.innerHTML = `<span class="spinner"></span> Retrieving your code... (${attempt + 1}/30)`;
-          await new Promise(r => setTimeout(r, 2000));
-        } catch (e) {
-          console.error('Checkout check error:', e);
         }
       }
-
-      // Fill in the code field
-      codeInput.disabled = false;
-      if (code) {
-        codeInput.value = code;
-        codeStatus.className = 'code-status valid';
-        codeStatus.innerHTML = `✓ Valid code — ${creditsText}`;
-        updateUI();
-      } else {
-        codeInput.value = '';
-        codeInput.placeholder = 'CHECK YOUR EMAIL';
-        codeStatus.className = 'code-status';
-        codeStatus.innerHTML = 'Your code is being emailed. Enter it above when you receive it.';
-      }
-
-      // Clear the URL params
-      window.history.replaceState({}, '', window.location.pathname);
-      
-      return true;
-    }
-
-    // Step navigation
-    function goToStep(step) {
-      state.step = step;
-      
-      const step1 = document.getElementById('auditorStep1');
-      const step2 = document.getElementById('auditorStep2');
-      const sendBtn = document.getElementById('sendRequestBtn');
-      
-      if (step === 'form') {
-        step1.style.display = 'block';
-        step2.classList.remove('visible');
-        sendBtn.style.display = 'none';
-      } else if (step === 'payment') {
-        step1.style.display = 'none';
-        step2.classList.add('visible');
-        sendBtn.style.display = 'none';
-        // If code already valid, show send button
-        if (state.codeValid) {
-          sendBtn.style.display = 'block';
-        }
-      } else if (step === 'ready') {
-        step1.style.display = 'none';
-        step2.classList.add('visible');
-        sendBtn.style.display = 'block';
-      }
-    }
-
-    // Role change handler
-    function handleRoleChange(role) {
-      state.role = role;
-      document.getElementById('auditorFlow').style.display = role === 'auditor' ? 'block' : 'none';
-      document.getElementById('clientFlow').style.display = role === 'client' ? 'block' : 'none';
-      
-      if (role === 'auditor') {
-        goToStep('form');
-        renderEvidenceCategories();
-      }
-    }
-
-    // Verify code
-    async function verifyCode() {
-      const code = document.getElementById('auditorCode').value.trim().toUpperCase();
-      const statusEl = document.getElementById('codeStatus');
-      
-      if (!code) {
-        statusEl.innerHTML = '';
-        state.codeValid = false;
-        updateUI();
-        return;
-      }
-
-      statusEl.className = 'code-status checking';
-      statusEl.innerHTML = '<span class="spinner"></span> Checking...';
-
-      try {
-        const res = await fetch(`${API}/check-code?code=${encodeURIComponent(code)}`);
-        const data = await res.json();
-
-        if (data.ok && data.remaining > 0) {
-          state.code = code;
-          state.codeValid = true;
-          state.codeCredits = data.remaining;
-          const creditsText = data.remaining >= 9999 ? 'Unlimited credits' : `${data.remaining} credit${data.remaining !== 1 ? 's' : ''} remaining`;
-          statusEl.className = 'code-status valid';
-          statusEl.innerHTML = `✓ Valid code — ${creditsText}`;
-        } else if (data.remaining === 0) {
-          state.codeValid = false;
-          statusEl.className = 'code-status invalid';
-          statusEl.innerHTML = '✗ No credits remaining on this code';
-        } else {
-          state.codeValid = false;
-          statusEl.className = 'code-status invalid';
-          statusEl.innerHTML = '✗ Invalid code';
-        }
-      } catch (e) {
-        state.codeValid = false;
-        statusEl.className = 'code-status invalid';
-        statusEl.innerHTML = '✗ Error checking code';
-      }
-
-      updateUI();
-    }
-
-    // Update UI based on state
-    function updateUI() {
-      const sendBtn = document.getElementById('sendRequestBtn');
-
-      if (state.codeValid && state.step === 'payment') {
-        sendBtn.style.display = 'block';
-        sendBtn.disabled = false;
-        sendBtn.textContent = 'Send Evidence Request to Client';
-      } else {
-        sendBtn.style.display = 'none';
-      }
-    }
-
-    // Handle tier selection
-    function selectTier(tier) {
-      document.querySelectorAll('.pricing-card').forEach(card => {
-        card.classList.toggle('selected', card.dataset.tier === tier);
-      });
-      state.selectedTier = tier;
-      
-      const buyBtn = document.getElementById('buyCreditsBtn');
-      if (tier) {
-        const prices = { single: '$59', pack5: '$249', pack15: '$499', pack50: '$1,249' };
-        buyBtn.disabled = false;
-        buyBtn.textContent = `Buy Now — ${prices[tier]}`;
-      } else {
-        buyBtn.disabled = true;
-        buyBtn.textContent = 'Select a plan above';
-      }
-    }
-
-    // Handle checkout
-    async function handleCheckout() {
-      if (!state.selectedTier) return;
-
-      const buyBtn = document.getElementById('buyCreditsBtn');
-      buyBtn.disabled = true;
-      buyBtn.innerHTML = '<span class="spinner"></span> Processing...';
-
-      saveState();
-
-      try {
-        const res = await fetch(`${API}/checkout`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            tier: state.selectedTier,
-            email: document.getElementById('auditorEmail').value,
-            successUrl: window.location.origin + window.location.pathname + '?session_id={CHECKOUT_SESSION_ID}',
-            cancelUrl: window.location.href
-          })
-        });
-
-        const data = await res.json();
-
-        if (data.ok && data.url) {
-          window.location.href = data.url;
-        } else {
-          alert('Error starting checkout: ' + (data.error || 'Unknown error'));
-          buyBtn.disabled = false;
-          buyBtn.textContent = 'Buy Now';
-        }
-      } catch (e) {
-        alert('Error: ' + e.message);
-        buyBtn.disabled = false;
-        buyBtn.textContent = 'Buy Now';
-      }
-    }
-
-    // Tab switching
-    function switchTab(tabName) {
-      document.querySelectorAll('.gate-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tabName));
-      document.getElementById('gateCodeContent').classList.toggle('active', tabName === 'code');
-      document.getElementById('gateBuyContent').classList.toggle('active', tabName === 'buy');
-    }
-
-    // Send request
-    async function sendRequest() {
-      if (!state.codeValid) return;
-
-      const sendBtn = document.getElementById('sendRequestBtn');
-      sendBtn.disabled = true;
-      sendBtn.innerHTML = '<span class="spinner"></span> Sending...';
-
-      const deadlineDays = parseInt(document.getElementById('deadlineDays').value);
-      const deadline = new Date(Date.now() + deadlineDays * 24 * 60 * 60 * 1000).toISOString();
-
-      try {
-        const res = await fetch(`${API}/request`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            auditorEmail: document.getElementById('auditorEmail').value,
-            clientEmail: document.getElementById('clientEmail').value,
-            company: document.getElementById('clientCompany').value,
-            frameworks: state.frameworks,
-            deadlineISO: deadline,
-            auditorCode: state.code,
-            globalInstructions: document.getElementById('globalInstructions').value
-          })
-        });
-
-        const data = await res.json();
-
-        if (data.ok) {
-          localStorage.removeItem('proofrepo_form_state');
-          alert('Success! Evidence request sent to ' + document.getElementById('clientEmail').value);
-          window.location.reload();
-        } else {
-          alert('Error: ' + (data.error || 'Unknown error'));
-          sendBtn.disabled = false;
-          sendBtn.textContent = 'Send Evidence Request to Client';
-        }
-      } catch (e) {
-        alert('Error: ' + e.message);
-        sendBtn.disabled = false;
-        sendBtn.textContent = 'Send Evidence Request to Client';
-      }
-    }
-
-    // Initialize
-    document.addEventListener('DOMContentLoaded', async () => {
-      // Check for checkout return first
-      const isCheckoutReturn = await checkCheckoutReturn();
-
-      // Event listeners
-      document.getElementById('roleSelect').addEventListener('change', (e) => {
-        handleRoleChange(e.target.value);
-      });
-
-      document.getElementById('verifyCodeBtn').addEventListener('click', verifyCode);
-      document.getElementById('auditorCode').addEventListener('keyup', (e) => {
-        if (e.key === 'Enter') verifyCode();
-      });
-
-      // Continue button (Step 1 -> Step 2)
-      document.getElementById('continueToPaymentBtn').addEventListener('click', () => {
-        // Basic validation
-        const email = document.getElementById('auditorEmail').value.trim();
-        const clientEmail = document.getElementById('clientEmail').value.trim();
-        const company = document.getElementById('clientCompany').value.trim();
-        
-        if (!email || !email.includes('@')) {
-          alert('Please enter your email address.');
-          return;
-        }
-        if (!company) {
-          alert('Please enter the client company name.');
-          return;
-        }
-        if (!clientEmail || !clientEmail.includes('@')) {
-          alert('Please enter the client email address.');
-          return;
-        }
-        
-        saveState();
-        goToStep('payment');
-      });
-
-      // Back button (Step 2 -> Step 1)
-      document.getElementById('backToStep1Btn').addEventListener('click', () => {
-        goToStep('form');
-      });
-
-      // Tab switching
-      document.querySelectorAll('.gate-tab').forEach(tab => {
-        tab.addEventListener('click', () => switchTab(tab.dataset.tab));
-      });
-
-      // Pricing cards
-      document.querySelectorAll('.pricing-card').forEach(card => {
-        card.addEventListener('click', () => selectTier(card.dataset.tier));
-      });
-
-      document.getElementById('buyCreditsBtn').addEventListener('click', handleCheckout);
-      document.getElementById('sendRequestBtn').addEventListener('click', sendRequest);
-
-      // Framework toggles
-      document.querySelectorAll('.framework-tag input').forEach(input => {
-        input.addEventListener('change', (e) => {
-          const tag = e.target.closest('.framework-tag');
-          tag.classList.toggle('selected', e.target.checked);
-          if (e.target.checked) {
-            state.frameworks.push(e.target.value);
-          } else {
-            state.frameworks = state.frameworks.filter(f => f !== e.target.value);
-          }
-          // Re-render evidence categories when frameworks change
-          renderEvidenceCategories();
-        });
-      });
-
-      // Scroll to main on hero button click
-      document.getElementById('heroGetStarted').addEventListener('click', () => {
-        document.getElementById('roleSelect').scrollIntoView({ behavior: 'smooth' });
-        document.getElementById('roleSelect').focus();
-      });
-
-      document.getElementById('getStartedLink').addEventListener('click', (e) => {
-        e.preventDefault();
-        document.getElementById('roleSelect').scrollIntoView({ behavior: 'smooth' });
-      });
-
-      // Initial render if role is already set
-      if (document.getElementById('roleSelect').value === 'auditor') {
-        renderEvidenceCategories();
-      }
-
-      updateUI();
+      renderComposer();
+      saveFormState();
     });
-  </script>
+  });
+  $$('.cg-header').forEach(h => {
+    h.addEventListener('click', e => {
+      if (e.target.closest('.cg-exclude') || e.target.closest('.cg-include')) return;
+      const g = h.closest('.control-group');
+      const fk = g.dataset.fw, gid = g.dataset.group;
+      composerState[fk].groups[gid].expanded = !composerState[fk].groups[gid].expanded;
+      renderComposer();
+    });
+  });
+  $$('[data-exclude-group]').forEach(btn => {
+    btn.addEventListener('click', e => { e.stopPropagation(); const [fk, gid] = btn.dataset.excludeGroup.split('-'); composerState[fk].groups[gid].excluded = true; renderComposer(); saveFormState(); });
+  });
+  $$('[data-include-group]').forEach(btn => {
+    btn.addEventListener('click', e => { e.stopPropagation(); const [fk, gid] = btn.dataset.includeGroup.split('-'); composerState[fk].groups[gid].excluded = false; renderComposer(); saveFormState(); });
+  });
+  $$('.more-toggle').forEach(t => {
+    t.addEventListener('click', e => { e.stopPropagation(); const fk = t.dataset.fw, gid = t.dataset.group; composerState[fk].groups[gid].showMore = !composerState[fk].groups[gid].showMore; renderComposer(); });
+  });
+  $$('.evidence-item input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', e => { const el = e.target.closest('.evidence-item'); const { fw, group, item } = el.dataset; composerState[fw].groups[group].items[item].included = e.target.checked; renderComposer(); saveFormState(); });
+  });
+  $$('[data-item-instr]').forEach(ta => {
+    ta.addEventListener('input', e => { const parts = ta.dataset.itemInstr.split('-'); const [fw, group] = [parts[0], parts[1]]; const item = parts.slice(2).join('-'); if (composerState[fw]?.groups?.[group]?.items?.[item]) composerState[fw].groups[group].items[item].instructions = e.target.value; saveFormState(); });
+  });
+  $$('[data-add-item]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const fk = btn.dataset.addItem, gid = btn.dataset.group;
+      const nameInput = document.querySelector(`[data-custom-name="${fk}-${gid}"]`);
+      const instrInput = document.querySelector(`[data-custom-instr="${fk}-${gid}"]`);
+      const title = (nameInput?.value || '').trim(), instructions = (instrInput?.value || '').trim();
+      if (!title) { alert('Please enter a request name.'); return; }
+      const cid = 'c_' + Math.random().toString(36).slice(2, 8);
+      const allFw = getAllFrameworks();
+      const fw = allFw[fk], grp = fw?.controlGroups?.find(g => g.id === gid);
+      if (grp) { grp.items.push({ id: cid, title, common: true, hint: '' }); composerState[fk].groups[gid].items[cid] = { included: true, instructions }; }
+      nameInput.value = ''; instrInput.value = '';
+      renderComposer(); saveFormState();
+    });
+  });
+  $('#addFwChip')?.addEventListener('click', () => { $('#addFwModal').classList.remove('hidden'); });
+  $$('[data-add-group-btn]').forEach(btn => {
+    btn.addEventListener('click', () => { $('#customGroupFwKey').value = btn.dataset.addGroupBtn; $('#addGroupModal').classList.remove('hidden'); });
+  });
+}
+
+function getPayload() {
+  const result = [];
+  const allFw = getAllFrameworks();
+  for (const [fk, fs] of Object.entries(composerState)) {
+    if (!fs.enabled) continue;
+    const fw = allFw[fk];
+    if (!fw) continue;
+    for (const g of (fw.controlGroups || [])) {
+      const gs = fs.groups?.[g.id];
+      if (!gs || gs.excluded) continue;
+      for (const item of (g.items || [])) {
+        const is = gs.items?.[item.id];
+        if (!is?.included) continue;
+        result.push({ id: item.id, framework: fw.label || fk, group: g.title, title: item.title, instructions: is.instructions || '' });
+      }
+    }
+  }
+  return result;
+}
+
+async function checkCheckoutReturn() {
+  const url = new URL(location.href);
+  const sessionId = url.searchParams.get('session_id');
+  if (!sessionId) return false;
+  url.searchParams.delete('session_id');
+  window.history.replaceState({}, '', url.toString());
+  $('#successBanner').classList.add('visible');
+  const savedState = loadFormState();
+  if (savedState) { restoreFormState(savedState); if (savedState.role === 'auditor') handleRoleChange('auditor'); } else { $('#roleSelect').value = 'auditor'; handleRoleChange('auditor'); }
+  $('#pricingGate').classList.add('visible');
+  $('#sendRequestBtn').style.display = 'none';
+  state.pricingGateVisible = true;
+  switchTab('code');
+  const codeInput = $('#auditorCode'), codeStatus = $('#codeStatus');
+  codeInput.value = 'LOADING...'; codeInput.disabled = true;
+  codeStatus.className = 'code-status checking';
+  codeStatus.innerHTML = '<span class="spinner"></span> Retrieving your code...';
+  let code = null, creditsText = '';
+  for (let attempt = 0; attempt < 30; attempt++) {
+    try {
+      const res = await fetch(`${API}/checkout/session?session_id=${sessionId}`);
+      const data = await res.json();
+      if (data.ok && data.code) { code = data.code; state.code = code; state.codeValid = true; state.codeCredits = data.credits; creditsText = data.creditsDisplay || `${data.credits} credit${data.credits !== 1 ? 's' : ''} remaining`; break; }
+      codeStatus.innerHTML = `<span class="spinner"></span> Retrieving your code... (${attempt + 1}/30)`;
+      await new Promise(r => setTimeout(r, 2000));
+    } catch (e) { console.error('Checkout check error:', e); }
+  }
+  codeInput.disabled = false;
+  if (code) { codeInput.value = code; codeStatus.className = 'code-status valid'; codeStatus.innerHTML = `✓ Valid code — ${creditsText}`; $('#sendRequestBtn').style.display = 'block'; saveFormState(); }
+  else { codeInput.value = ''; codeInput.placeholder = 'CHECK YOUR EMAIL'; codeStatus.className = 'code-status'; codeStatus.innerHTML = 'Your code is being emailed. Enter it above when you receive it.'; }
+  return true;
+}
+
+function handleRoleChange(role) {
+  state.role = role;
+  $('#auditorFlow').style.display = role === 'auditor' ? 'block' : 'none';
+  $('#clientFlow').style.display = role === 'client' ? 'block' : 'none';
+  if (role === 'auditor') { if (Object.keys(composerState).length === 0) initComposerState(); renderComposer(); }
+}
+
+async function verifyCode() {
+  const code = $('#auditorCode').value.trim().toUpperCase();
+  const statusEl = $('#codeStatus');
+  if (!code) { statusEl.innerHTML = ''; state.codeValid = false; updateUI(); return; }
+  statusEl.className = 'code-status checking';
+  statusEl.innerHTML = '<span class="spinner"></span> Checking...';
+  try {
+    const res = await fetch(`${API}/check-code?code=${encodeURIComponent(code)}`);
+    const data = await res.json();
+    if (data.ok && data.remaining > 0) { state.code = code; state.codeValid = true; state.codeCredits = data.remaining; const creditsText = data.remaining >= 9999 ? 'Unlimited credits' : `${data.remaining} credit${data.remaining !== 1 ? 's' : ''} remaining`; statusEl.className = 'code-status valid'; statusEl.innerHTML = `✓ Valid code — ${creditsText}`; saveFormState(); }
+    else if (data.remaining === 0) { state.codeValid = false; statusEl.className = 'code-status invalid'; statusEl.innerHTML = '✗ No credits remaining on this code'; }
+    else { state.codeValid = false; statusEl.className = 'code-status invalid'; statusEl.innerHTML = '✗ Invalid code'; }
+  } catch (e) { state.codeValid = false; statusEl.className = 'code-status invalid'; statusEl.innerHTML = '✗ Error checking code'; }
+  updateUI();
+}
+
+function updateUI() {
+  const sendBtn = $('#sendRequestBtn');
+  if (state.codeValid && state.pricingGateVisible) { sendBtn.style.display = 'block'; sendBtn.disabled = false; }
+  else { sendBtn.style.display = state.pricingGateVisible ? 'block' : 'none'; sendBtn.disabled = !state.codeValid; }
+}
+
+function switchTab(tabName) {
+  $$('.gate-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tabName));
+  $('#gateCodeContent').classList.toggle('active', tabName === 'code');
+  $('#gateBuyContent').classList.toggle('active', tabName === 'buy');
+}
+
+function selectTier(tier) {
+  $$('.pricing-card').forEach(card => { card.classList.toggle('selected', card.dataset.tier === tier); });
+  state.selectedTier = tier;
+  const buyBtn = $('#buyCreditsBtn');
+  if (tier) { const prices = { single: '$59', pack5: '$249', pack15: '$499', pack50: '$1,249' }; buyBtn.disabled = false; buyBtn.textContent = `Buy Now — ${prices[tier]}`; }
+  else { buyBtn.disabled = true; buyBtn.textContent = 'Select a plan above'; }
+}
+
+async function handleCheckout() {
+  if (!state.selectedTier) return;
+  const buyBtn = $('#buyCreditsBtn');
+  buyBtn.disabled = true; buyBtn.innerHTML = '<span class="spinner"></span> Processing...';
+  saveFormState();
+  try {
+    const res = await fetch(`${API}/checkout`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ tier: state.selectedTier, email: $('#auditorEmail').value, successUrl: window.location.origin + window.location.pathname + '?session_id={CHECKOUT_SESSION_ID}', cancelUrl: window.location.href }) });
+    const data = await res.json();
+    if (data.ok && data.url) { window.location.href = data.url; }
+    else { alert('Error starting checkout: ' + (data.error || 'Unknown error')); buyBtn.disabled = false; buyBtn.textContent = 'Buy Now'; }
+  } catch (e) { alert('Error: ' + e.message); buyBtn.disabled = false; buyBtn.textContent = 'Buy Now'; }
+}
+
+async function sendRequest() {
+  if (!state.codeValid) return;
+  const sendBtn = $('#sendRequestBtn');
+  sendBtn.disabled = true; sendBtn.innerHTML = '<span class="spinner"></span> Sending...';
+  const daysVal = parseFloat($('#deadlineDays')?.value || '5');
+  const timeStr = ($('#deadlineTime')?.value || '17:00').trim();
+  const [hh, mm] = timeStr.split(':').map(x => parseInt(x, 10));
+  const deadline = new Date();
+  deadline.setTime(deadline.getTime() + daysVal * 24 * 60 * 60 * 1000);
+  deadline.setHours(hh || 17, mm || 0, 0, 0);
+  const frameworks = Object.entries(composerState).filter(([_, s]) => s.enabled).map(([k]) => { const allFw = getAllFrameworks(); return allFw[k]?.label || k; });
+  const requestedEvidence = getPayload();
+  try {
+    const res = await fetch(`${API}/request`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ auditorEmail: $('#auditorEmail').value, clientEmail: $('#clientEmail').value, company: $('#clientCompany').value, frameworks: frameworks, deadlineISO: deadline.toISOString(), auditorCode: state.code, globalInstructions: $('#globalInstructions')?.value || '', requestedEvidence: requestedEvidence }) });
+    const data = await res.json();
+    if (data.ok) { clearFormState(); alert('Success! Evidence request sent to ' + $('#clientEmail').value + '\n\nClient link: ' + (data.magicLink || '')); window.location.reload(); }
+    else { alert('Error: ' + (data.error || 'Unknown error')); sendBtn.disabled = false; sendBtn.textContent = 'Send Evidence Request to Client'; }
+  } catch (e) { alert('Error: ' + e.message); sendBtn.disabled = false; sendBtn.textContent = 'Send Evidence Request to Client'; }
+}
+
+$('#cancelFwBtn')?.addEventListener('click', () => { $('#addFwModal').classList.add('hidden'); $('#customFwName').value = ''; $('#customFwDesc').value = ''; });
+$('#saveFwBtn')?.addEventListener('click', () => {
+  const name = ($('#customFwName')?.value || '').trim(), desc = ($('#customFwDesc')?.value || '').trim();
+  if (!name) return;
+  const id = 'cf_' + Math.random().toString(36).slice(2, 8);
+  customFrameworks.push({ id, label: name, description: desc || 'Custom framework', defaultOn: false, controlGroups: [] });
+  composerState[id] = { enabled: true, groups: {} };
+  $('#addFwModal').classList.add('hidden'); $('#customFwName').value = ''; $('#customFwDesc').value = '';
+  renderComposer(); saveFormState();
+});
+$('#cancelGroupBtn')?.addEventListener('click', () => { $('#addGroupModal').classList.add('hidden'); $('#customGroupName').value = ''; $('#customGroupDesc').value = ''; $('#customGroupFwKey').value = ''; });
+$('#saveGroupBtn')?.addEventListener('click', () => {
+  const name = ($('#customGroupName')?.value || '').trim(), desc = ($('#customGroupDesc')?.value || '').trim(), fwKey = $('#customGroupFwKey')?.value;
+  if (!name || !fwKey) return;
+  const gid = 'g_' + Math.random().toString(36).slice(2, 8);
+  const allFw = getAllFrameworks(), fw = allFw[fwKey];
+  if (fw) { fw.controlGroups.push({ id: gid, title: name, description: desc, items: [] }); composerState[fwKey].groups[gid] = { expanded: true, showMore: false, excluded: false, items: {} }; }
+  $('#addGroupModal').classList.add('hidden'); $('#customGroupName').value = ''; $('#customGroupDesc').value = ''; $('#customGroupFwKey').value = '';
+  renderComposer(); saveFormState();
+});
+
+document.addEventListener('DOMContentLoaded', async () => {
+  $('#year').textContent = new Date().getFullYear();
+  const isCheckoutReturn = await checkCheckoutReturn();
+  if (isCheckoutReturn) { setupAutoSave(); return; }
+  initComposerState(); setupAutoSave();
+  $('#roleSelect').addEventListener('change', e => { handleRoleChange(e.target.value); saveFormState(); });
+  $('#continueBtn').addEventListener('click', () => {
+    const email = ($('#auditorEmail')?.value || '').trim(), clientEmail = ($('#clientEmail')?.value || '').trim(), company = ($('#clientCompany')?.value || '').trim();
+    if (!email || !email.includes('@')) { alert('Please enter your email address.'); return; }
+    if (!company) { alert('Please enter the client company name.'); return; }
+    if (!clientEmail || !clientEmail.includes('@')) { alert('Please enter the client email address.'); return; }
+    saveFormState(); state.pricingGateVisible = true; $('#pricingGate').classList.add('visible'); $('#pricingGate').scrollIntoView({ behavior: 'smooth' }); updateUI();
+  });
+  $$('.gate-tab').forEach(tab => { tab.addEventListener('click', () => switchTab(tab.dataset.tab)); });
+  $('#verifyCodeBtn').addEventListener('click', verifyCode);
+  $('#auditorCode').addEventListener('keyup', e => { if (e.key === 'Enter') verifyCode(); });
+  $$('.pricing-card').forEach(card => { card.addEventListener('click', () => selectTier(card.dataset.tier)); });
+  $('#buyCreditsBtn').addEventListener('click', handleCheckout);
+  $('#sendRequestBtn').addEventListener('click', sendRequest);
+  $('#getStartedLink').addEventListener('click', e => { e.preventDefault(); $('#roleSelect').scrollIntoView({ behavior: 'smooth' }); $('#roleSelect').focus(); });
+});
+</script>
 </body>
 </html>
+
+Recognized user needed exportable code format instead.
+
+The complete code is displaye
