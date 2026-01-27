@@ -1337,4 +1337,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     fb.addEventListener('drop', e => {
       if (e.dataTransfer?.files) {
         try {
-          const dt = n
+          const dt = new DataTransfer();
+          Array.from(e.dataTransfer.files).forEach(f => dt.items.add(f));
+          $('#files').files = dt.files;
+        } catch {}
+        updateFileMeta();
+      }
+    });
+  }
+
+  updateRoleUI();
+});
+</script>
+</body>
+</html>
