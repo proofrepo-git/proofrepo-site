@@ -530,7 +530,7 @@
     }
 
     .payment-banner.visible {
-      display: block;
+      display: block !important;
     }
 
     .payment-banner h3 {
@@ -552,6 +552,7 @@
       border-top-color: white;
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
+      display: inline-block;
     }
 
     @keyframes spin {
@@ -691,7 +692,13 @@
   </section>
 
   <main class="main-container">
-    <!-- Success Display (for checkout returns) -->
+    <!-- Success Banner (inline, not blocking) - FIX 2 ADDED -->
+    <div id="successBanner" class="payment-banner" style="display:none; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.1)); border-color: var(--accent);">
+      <h3 style="color: var(--accent);">✓ Payment Successful!</h3>
+      <p>Your code is being loaded into the form below.</p>
+    </div>
+
+    <!-- Success Display (for checkout returns) - KEPT FOR BACKWARDS COMPAT -->
     <div id="successDisplay" class="card success-display">
       <div class="success-icon">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -912,69 +919,74 @@
       } catch (e) {}
     }
 
-    // Check for checkout return
+    // FIX 1: REPLACED checkCheckoutReturn - go straight to form with code filled in
     async function checkCheckoutReturn() {
       const params = new URLSearchParams(window.location.search);
       const sessionId = params.get('session_id');
       
       if (!sessionId) return false;
 
-      document.getElementById('mainFormCard').style.display = 'none';
-      const successDisplay = document.getElementById('successDisplay');
-      successDisplay.classList.add('visible');
-      document.getElementById('displayedCode').textContent = 'Loading...';
-      document.getElementById('displayedCredits').textContent = 'Please wait...';
-
-      // Poll for code with retries on frontend too
-      let code = null;
-      let credits = null;
+      // Don't show intermediate screen - go straight to form
+      document.getElementById('roleSelect').value = 'auditor';
+      handleRoleChange('auditor');
       
-      for (let attempt = 0; attempt < 20; attempt++) {
+      // Restore saved form state immediately
+      restoreState();
+      
+      // Show loading state in code field
+      const codeInput = document.getElementById('auditorCode');
+      const codeStatus = document.getElementById('codeStatus');
+      codeInput.value = 'LOADING...';
+      codeInput.disabled = true;
+      codeStatus.className = 'code-status checking';
+      codeStatus.innerHTML = '<span class="spinner"></span> Retrieving your code...';
+
+      // Show success banner
+      const banner = document.getElementById('successBanner');
+      if (banner) banner.classList.add('visible');
+
+      // Poll for code
+      let code = null;
+      let creditsText = '';
+      
+      for (let attempt = 0; attempt < 30; attempt++) {
         try {
           const res = await fetch(`${API}/checkout/session?session_id=${sessionId}`);
           const data = await res.json();
           
           if (data.ok && data.code) {
             code = data.code;
-            credits = data.creditsDisplay || `${data.credits} credits`;
+            state.code = code;
+            state.codeValid = true;
+            state.codeCredits = data.credits;
+            creditsText = data.creditsDisplay || `${data.credits} credit${data.credits !== 1 ? 's' : ''} remaining`;
             break;
           }
           
-          // Update status message
-          document.getElementById('displayedCredits').textContent = `Waiting for confirmation... (${attempt + 1}/20)`;
-          
-          // Wait 3 seconds before next attempt
-          await new Promise(r => setTimeout(r, 3000));
+          codeStatus.innerHTML = `<span class="spinner"></span> Retrieving your code... (${attempt + 1}/30)`;
+          await new Promise(r => setTimeout(r, 2000));
         } catch (e) {
           console.error('Checkout check error:', e);
         }
       }
 
+      // Fill in the code field
+      codeInput.disabled = false;
       if (code) {
-        document.getElementById('displayedCode').textContent = code;
-        document.getElementById('displayedCredits').textContent = credits;
-        state.code = code;
-        state.codeValid = true;
+        codeInput.value = code;
+        codeStatus.className = 'code-status valid';
+        codeStatus.innerHTML = `✓ Valid code — ${creditsText}`;
+        updateUI();
       } else {
-        document.getElementById('displayedCode').textContent = 'Check your email';
-        document.getElementById('displayedCredits').textContent = 'Your code will be emailed to you shortly.';
+        codeInput.value = '';
+        codeInput.placeholder = 'CHECK YOUR EMAIL';
+        codeStatus.className = 'code-status';
+        codeStatus.innerHTML = 'Your code is being emailed. Enter it above when you receive it.';
       }
 
-      // Handle "Continue where you left off" button
-      document.getElementById('continueWithCodeBtn').addEventListener('click', () => {
-        successDisplay.classList.remove('visible');
-        document.getElementById('mainFormCard').style.display = 'block';
-        document.getElementById('roleSelect').value = 'auditor';
-        handleRoleChange('auditor');
-        if (code) {
-          document.getElementById('auditorCode').value = code;
-          verifyCode();
-        }
-        restoreState();
-        // Clear the URL
-        window.history.replaceState({}, '', window.location.pathname);
-      });
-
+      // Clear the URL params
+      window.history.replaceState({}, '', window.location.pathname);
+      
       return true;
     }
 
@@ -1147,13 +1159,12 @@
       }
     }
 
-    // Initialize
+    // FIX 3: Initialize - removed early return so event listeners still get attached
     document.addEventListener('DOMContentLoaded', async () => {
-      // Check for checkout return first
+      // Check for checkout return first (no longer returns early - form is shown)
       const isCheckoutReturn = await checkCheckoutReturn();
-      if (isCheckoutReturn) return;
 
-      // Event listeners
+      // Event listeners - these need to be attached regardless of checkout return
       document.getElementById('roleSelect').addEventListener('change', (e) => {
         handleRoleChange(e.target.value);
       });
