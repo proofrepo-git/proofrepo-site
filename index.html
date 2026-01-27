@@ -60,8 +60,6 @@
     .filebox{border:1px dashed #3a4a86;border-radius:12px;padding:14px}
     .filebox.dragover{border-style:solid;border-color:#4b65ff;background:#0f1a3d}
     .filemeta{font-size:.9rem;color:#a9b8ef}
-
-    /* COMPOSER */
     .composer{margin-top:12px;border-radius:12px;border:1px solid #27356b;background:#0d1736;overflow:hidden}
     .fw-list{display:flex;flex-wrap:wrap;gap:8px;padding:14px;border-bottom:1px solid #1d2857;background:#0a1020}
     .fw-chip{display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:8px;border:1px solid #2a3766;background:#0e1634;cursor:pointer;user-select:none;transition:all .15s}
@@ -71,8 +69,6 @@
     .fw-chip-label{font-weight:600;font-size:.95rem}
     .add-fw-btn{border-style:dashed;color:var(--muted)}
     .fw-body{padding:14px}
-
-    /* CONTROL GROUP */
     .control-group{margin-bottom:16px;border:1px solid #1d2857;border-radius:10px;overflow:hidden}
     .control-group.excluded{opacity:.5;border-style:dashed}
     .cg-header{display:flex;align-items:center;gap:10px;padding:12px 14px;background:#0c1428;cursor:pointer;user-select:none}
@@ -87,8 +83,6 @@
     .cg-include:hover{background:#166534}
     .cg-body{display:none;padding:12px 14px;background:#080e20}
     .cg-body.open{display:block}
-
-    /* EVIDENCE ITEM */
     .evidence-item{display:flex;gap:10px;align-items:flex-start;padding:12px;margin-bottom:8px;border:1px solid #1a2545;border-radius:8px;background:#0a1225}
     .evidence-item.included{border-color:#1d4ed8;background:#0c1a3a}
     .evidence-item input[type="checkbox"]{width:18px;height:18px;margin-top:2px;accent-color:var(--primary);flex-shrink:0}
@@ -97,38 +91,26 @@
     .ei-hint{font-size:.85rem;color:#6b7a9a;margin-bottom:6px}
     .ei-instr{margin-top:8px}
     .ei-instr textarea{min-height:50px;font-size:.9rem;background:#060d1a}
-
-    /* MORE TOGGLE */
     .more-toggle{margin:12px 0;padding:10px 14px;font-size:.9rem;color:#7a9bff;cursor:pointer;background:#0a1225;border:1px dashed #2a3a60;border-radius:8px;text-align:center}
     .more-toggle:hover{background:#0c1530;border-color:#4060a0}
-
-    /* ADD CUSTOM */
     .add-custom-section{margin-top:16px;padding:16px;border:1px dashed #2a3a60;border-radius:10px;background:#080e1a}
     .add-custom-section h4{margin:0 0 12px;font-size:.95rem;color:var(--muted)}
     .custom-form{display:grid;gap:10px}
     .custom-form input,.custom-form textarea{background:#060d1a}
     .custom-form .form-row{margin-bottom:0}
-
-    /* GLOBAL INSTRUCTIONS */
     .global-instructions{padding:14px;border-top:1px solid #1d2857}
     .global-instructions textarea{min-height:60px}
-
-    /* CLIENT VIEW */
     .client-checklist{padding:14px}
     .cli-group{margin-bottom:16px}
     .cli-group-title{font-weight:700;margin-bottom:8px;padding:8px 10px;background:#0c1428;border-radius:6px}
     .cli-item{padding:10px;margin-bottom:6px;border:1px solid #1a2545;border-radius:8px;background:#0a1225}
     .cli-item-title{font-weight:500}
     .cli-item-instr{font-size:.9rem;color:var(--muted);margin-top:6px;padding:8px;background:#060d1a;border-radius:6px;border-left:3px solid #2a3766}
-
-    /* MODAL */
     .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:10000}
     .modal-overlay.hidden{display:none}
     .modal{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px;max-width:500px;width:90%}
     .modal h3{margin:0 0 16px}
     .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
-
-    /* PRICING GATE STYLES */
     .pricing-gate{margin-top:12px}
     .pricing-gate h3{margin:0 0 4px}
     .pricing-tabs{display:flex;gap:0;margin:16px 0 12px;border-radius:10px;overflow:hidden;border:1px solid #2a3766}
@@ -137,7 +119,6 @@
     .pricing-tab.active{background:var(--primary);color:#fff}
     .pricing-tab-content{display:none}
     .pricing-tab-content.active{display:block}
-    
     .pricing-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}
     .pricing-card{padding:16px;border:1px solid #2a3766;border-radius:12px;background:#0a1225;text-align:center;cursor:pointer;transition:all .15s}
     .pricing-card:hover{border-color:var(--primary);background:#0c1a3a;transform:translateY(-2px)}
@@ -148,7 +129,6 @@
     .pricing-card-price{font-size:1.5rem;font-weight:800;color:var(--accent)}
     .pricing-card-price span{font-size:.85rem;font-weight:400;color:var(--muted)}
     .pricing-card-desc{font-size:.85rem;color:var(--muted);margin-top:4px}
-    
     @media(max-width:980px){.heroGrid{grid-template-columns:1fr}.cols3,.cols2{grid-template-columns:1fr}.pricing-grid{grid-template-columns:1fr}}
   </style>
 </head>
@@ -258,18 +238,15 @@
 
       <input type="hidden" id="requestToken" value="">
 
-      <!-- UPDATED PRICING GATE -->
       <div id="pricingGate" class="card pricing-gate" style="display:none">
         <h3>Enter your code to continue</h3>
         <p class="small muted">Already have a code? Enter it below. Otherwise, get started with a free trial or purchase credits.</p>
         
-        <!-- Tabs -->
         <div class="pricing-tabs">
           <button type="button" class="pricing-tab active" data-tab="code">I have a code</button>
           <button type="button" class="pricing-tab" data-tab="buy">Buy credits</button>
         </div>
         
-        <!-- Tab: I have a code -->
         <div class="pricing-tab-content active" data-tab-content="code">
           <div class="form-row two" style="margin-top:10px">
             <input id="unlockCode" placeholder="Enter code"/>
@@ -278,7 +255,6 @@
           <div class="hint" id="unlockHint"></div>
         </div>
         
-        <!-- Tab: Buy credits -->
         <div class="pricing-tab-content" data-tab-content="buy">
           <p class="small muted" style="margin-bottom:12px">Each credit = 1 ProofPack request. Buy more, save more.</p>
           <div class="pricing-grid">
@@ -327,7 +303,6 @@
     </form>
   </section>
 
-  <!-- ADD FRAMEWORK MODAL -->
   <div id="addFwModal" class="modal-overlay hidden">
     <div class="modal">
       <h3>Add Custom Framework</h3>
@@ -346,7 +321,6 @@
     </div>
   </div>
 
-  <!-- ADD CONTROL GROUP MODAL -->
   <div id="addGroupModal" class="modal-overlay hidden">
     <div class="modal">
       <h3>Add Control Group</h3>
@@ -375,14 +349,14 @@
     </div>
   </section>
 
-  <footer class="wrap"><div class="row"><div>© <span id="y"></span> ProofRepo • <a style="color:#9db0ff" href="/cdn-cgi/l/email-protection#640b14172414160b0b021601140b4a070b09"><span class="__cf_email__" data-cfemail="355a45467545475a5a534750455a1b565a58">[email&#160;protected]</span></a></div></div></footer>
+  <footer class="wrap"><div class="row"><div>© <span id="y"></span> ProofRepo • <a style="color:#9db0ff" href="mailto:support@proofrepo.com">support@proofrepo.com</a></div></div></footer>
 
   <div class="marquee-fixed"><div class="marquee"><div>&nbsp;Guided compliance evidence collection • Built for auditors • SOC 2, ISO 27001, HIPAA, GDPR & more • Get started with a free trial •</div></div></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 const WORKER_BASE = 'https://proofrepo-intake.atucker5.workers.dev';
+const STORAGE_KEY = 'proofrepo_form_state';
 
-// COMPREHENSIVE EVIDENCE LIBRARY
 const FRAMEWORK_LIBRARY = {
   SOC2: {
     label: 'SOC 2', description: 'Service Organization Control 2', defaultOn: true,
@@ -544,6 +518,7 @@ let customFrameworks = [];
 let isUnlocked = false;
 let isFromRequestLink = false;
 let appliedCode = null;
+let selectedTier = null;
 
 const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
@@ -553,22 +528,151 @@ const safeUrl = u => { try { const url = new URL(String(u), location.href); retu
 function showStatus(msg, ok=false) { const el=$('#status'); el.style.display='block'; el.className='status '+(ok?'ok':'err'); el.innerHTML=msg; }
 function clearStatus() { $('#status').style.display='none'; }
 
+// ==================== LOCAL STORAGE FOR FORM STATE ====================
+
+function saveFormState() {
+  try {
+    const state = {
+      role: $('#role')?.value || '',
+      email: $('#email')?.value || '',
+      company: $('#company')?.value || '',
+      clientContactEmail: $('#clientContactEmail')?.value || '',
+      deadlineDays: $('#deadlineDays')?.value || '5',
+      deadlineTime: $('#deadlineTime')?.value || '17:00',
+      auditorEmail: $('#auditorEmail')?.value || '',
+      globalInstructions: $('#globalInstructions')?.value || '',
+      appliedCode: appliedCode,
+      composerState: composerState,
+      customFrameworks: customFrameworks,
+      savedAt: Date.now()
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (e) {
+    console.warn('Could not save form state:', e);
+  }
+}
+
+function loadFormState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const state = JSON.parse(raw);
+    if (state.savedAt && (Date.now() - state.savedAt) > 24 * 60 * 60 * 1000) {
+      localStorage.removeItem(STORAGE_KEY);
+      return null;
+    }
+    return state;
+  } catch (e) {
+    console.warn('Could not load form state:', e);
+    return null;
+  }
+}
+
+function restoreFormState(state) {
+  if (!state) return false;
+  if (state.role) $('#role').value = state.role;
+  if (state.email) $('#email').value = state.email;
+  if (state.company) $('#company').value = state.company;
+  if (state.clientContactEmail) $('#clientContactEmail').value = state.clientContactEmail;
+  if (state.deadlineDays) $('#deadlineDays').value = state.deadlineDays;
+  if (state.deadlineTime) $('#deadlineTime').value = state.deadlineTime;
+  if (state.auditorEmail) $('#auditorEmail').value = state.auditorEmail;
+  if (state.appliedCode) appliedCode = state.appliedCode;
+  if (state.composerState) composerState = state.composerState;
+  if (state.customFrameworks) customFrameworks = state.customFrameworks;
+  return true;
+}
+
+function clearFormState() {
+  try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+}
+
+function setupAutoSave() {
+  const inputs = ['role', 'email', 'company', 'clientContactEmail', 'deadlineDays', 'deadlineTime', 'auditorEmail'];
+  inputs.forEach(id => {
+    const el = $(`#${id}`);
+    if (el) {
+      el.addEventListener('change', saveFormState);
+      el.addEventListener('input', saveFormState);
+    }
+  });
+}
+
+// ==================== CHECKOUT RETURN HANDLER ====================
+
+async function handleCheckoutReturn() {
+  const url = new URL(location.href);
+  const sessionId = url.searchParams.get('session_id');
+  if (!sessionId) return false;
+
+  url.searchParams.delete('session_id');
+  window.history.replaceState({}, '', url.toString());
+
+  showStatus('Confirming your purchase...', true);
+
+  const savedState = loadFormState();
+  if (savedState) {
+    restoreFormState(savedState);
+    updateRoleUI();
+  }
+
+  try {
+    const res = await fetch(`${WORKER_BASE}/checkout/session?session_id=${encodeURIComponent(sessionId)}`);
+    const j = await res.json();
+    console.log('Checkout session response:', j);
+
+    if (j.ok && j.code) {
+      appliedCode = j.code;
+      $('#unlockCode').value = j.code;
+      const creditsDisplay = j.isUnlimited ? 'Unlimited' : j.credits;
+      showStatus(`
+        <strong style="color:var(--accent);font-size:1.2rem">✓ Payment confirmed!</strong><br><br>
+        <div style="background:#0f2a1a;border:2px solid #86efac;border-radius:12px;padding:20px;text-align:center;margin:12px 0;">
+          <div style="color:#6b7280;font-size:14px;margin-bottom:4px;">Your Credit Code</div>
+          <div style="font-size:28px;font-weight:700;color:#059669;letter-spacing:2px;">${esc(j.code)}</div>
+          <div style="color:#6b7280;font-size:14px;margin-top:8px;">${creditsDisplay} credit${!j.isUnlimited && j.credits !== 1 ? 's' : ''} available</div>
+        </div>
+        <p style="color:var(--muted);font-size:14px;">Save this code! It's also been emailed to <strong>${esc(j.email || 'you')}</strong>.</p>
+      `, true);
+      if (j.email && !$('#email').value) $('#email').value = j.email;
+      if (!$('#role').value) $('#role').value = 'auditor';
+      updateRoleUI();
+      if (savedState && savedState.globalInstructions) {
+        setTimeout(() => {
+          const gi = $('#globalInstructions');
+          if (gi) gi.value = savedState.globalInstructions;
+        }, 100);
+      }
+      setUnlocked();
+      saveFormState();
+      return true;
+    } else if (res.status === 202) {
+      showStatus(`<strong style="color:var(--accent)">✓ Payment confirmed!</strong><br><br>
+        <p>Your code is being generated and will be emailed shortly. Enter it above to continue.</p>`, true);
+      if (savedState) updateRoleUI();
+      return true;
+    } else {
+      throw new Error(j.error || 'Could not verify payment');
+    }
+  } catch (e) {
+    console.error('Checkout return error:', e);
+    showStatus(`<strong>Payment processed</strong><br><br>
+      <p>Your code should be emailed shortly. Enter it above to continue.</p>`, false);
+    if (savedState) updateRoleUI();
+    return true;
+  }
+}
+
+// ==================== COMPOSER STATE ====================
+
 function initComposerState() {
   composerState = {};
   for (const [fwKey, fw] of Object.entries(FRAMEWORK_LIBRARY)) {
     composerState[fwKey] = { enabled: fw.defaultOn, groups: {} };
     for (const g of fw.controlGroups) {
-      composerState[fwKey].groups[g.id] = { 
-        expanded: false, 
-        showMore: false, 
-        excluded: false,
-        items: {} 
-      };
+      composerState[fwKey].groups[g.id] = { expanded: false, showMore: false, excluded: false, items: {} };
       for (const item of g.items) {
-        composerState[fwKey].groups[g.id].items[item.id] = { 
-          included: item.common, 
-          instructions: '' 
-        };
+        composerState[fwKey].groups[g.id].items[item.id] = { included: item.common, instructions: '' };
       }
     }
   }
@@ -588,8 +692,6 @@ function renderComposer() {
 
   const allFw = getAllFrameworks();
   let html = '<div class="fw-list">';
-  
-  // Framework chips
   for (const [fwKey, fw] of Object.entries(allFw)) {
     const on = composerState[fwKey]?.enabled;
     html += `<label class="fw-chip ${on ? 'active' : ''}" data-fw="${esc(fwKey)}">
@@ -599,37 +701,33 @@ function renderComposer() {
   }
   html += '<button type="button" class="fw-chip add-fw-btn" id="addFwChip">+ Add framework</button></div>';
 
-  // Framework bodies
   for (const [fwKey, fw] of Object.entries(allFw)) {
     if (!composerState[fwKey]?.enabled) continue;
     html += renderFwBody(fwKey, fw);
   }
 
-  // Global instructions
+  const savedGlobalInstr = $('#globalInstructions')?.value || '';
   html += `<div class="global-instructions">
     <label for="globalInstructions"><strong>Overall instructions for client</strong></label>
-    <textarea id="globalInstructions" placeholder="Example: Please provide evidence covering Jan–Dec 2025. Screenshots acceptable. Redact any secrets or credentials."></textarea>
+    <textarea id="globalInstructions" placeholder="Example: Please provide evidence covering Jan–Dec 2025. Screenshots acceptable. Redact any secrets or credentials.">${esc(savedGlobalInstr)}</textarea>
     <div class="hint">Shown prominently to your client above the checklist.</div>
   </div>`;
 
   c.innerHTML = html;
   wireComposer();
+  const gi = $('#globalInstructions');
+  if (gi) gi.addEventListener('input', saveFormState);
 }
 
 function renderFwBody(fwKey, fw) {
-  const isCustom = !!customFrameworks.find(f => f.id === fwKey);
   let html = `<div class="fw-body" data-fw-body="${esc(fwKey)}">
     <div style="margin-bottom:12px;display:flex;justify-content:space-between;align-items:center">
       <div><strong>${esc(fw.label)}</strong>${fw.description ? ` <span class="muted">— ${esc(fw.description)}</span>` : ''}</div>
     </div>`;
-  
   for (const g of (fw.controlGroups || [])) {
     html += renderGroup(fwKey, g);
   }
-  
-  // Add control group button
   html += `<button type="button" class="btn sm ghost" style="width:100%;margin-top:8px" data-add-group-btn="${esc(fwKey)}">+ Add control group</button>`;
-  
   return html + '</div>';
 }
 
@@ -638,7 +736,6 @@ function renderGroup(fwKey, g) {
   const exp = gs?.expanded;
   const more = gs?.showMore;
   const excluded = gs?.excluded;
-  
   const common = (g.items || []).filter(i => i.common);
   const extra = (g.items || []).filter(i => !i.common);
   const includedCount = (g.items || []).filter(i => gs?.items?.[i.id]?.included && !excluded).length;
@@ -656,46 +753,27 @@ function renderGroup(fwKey, g) {
       </div>
     </div>
     <div class="cg-body ${exp ? 'open' : ''}">`;
-  
+
   if (excluded) {
     html += `<div class="muted" style="padding:12px;text-align:center">This control group is excluded from the request.</div>`;
   } else {
-    if (g.description) {
-      html += `<div class="muted small" style="margin-bottom:12px">${esc(g.description)}</div>`;
-    }
-    
-    // Common items
-    for (const item of common) {
-      html += renderItem(fwKey, g.id, item, gs);
-    }
-    
-    // Extra items (hidden by default)
+    if (g.description) html += `<div class="muted small" style="margin-bottom:12px">${esc(g.description)}</div>`;
+    for (const item of common) html += renderItem(fwKey, g.id, item, gs);
     if (extra.length) {
       html += `<div class="extra-items" style="display:${more ? 'block' : 'none'}">`;
-      for (const item of extra) {
-        html += renderItem(fwKey, g.id, item, gs);
-      }
+      for (const item of extra) html += renderItem(fwKey, g.id, item, gs);
       html += '</div>';
       html += `<div class="more-toggle" data-fw="${esc(fwKey)}" data-group="${esc(g.id)}">${more ? '− Show fewer options' : `+ Show ${extra.length} more options`}</div>`;
     }
-    
-    // Add custom item section
     html += `<div class="add-custom-section">
       <h4>Add custom request to "${esc(g.title)}"</h4>
       <div class="custom-form">
-        <div class="form-row">
-          <label class="small">Request name</label>
-          <input placeholder="e.g., Network Diagram, Encryption Key Rotation Log" data-custom-name="${esc(fwKey)}-${esc(g.id)}"/>
-        </div>
-        <div class="form-row">
-          <label class="small">Instructions for client (optional)</label>
-          <textarea placeholder="Describe what you need, date ranges, format preferences, etc." data-custom-instr="${esc(fwKey)}-${esc(g.id)}"></textarea>
-        </div>
+        <div class="form-row"><label class="small">Request name</label><input placeholder="e.g., Network Diagram, Encryption Key Rotation Log" data-custom-name="${esc(fwKey)}-${esc(g.id)}"/></div>
+        <div class="form-row"><label class="small">Instructions for client (optional)</label><textarea placeholder="Describe what you need, date ranges, format preferences, etc." data-custom-instr="${esc(fwKey)}-${esc(g.id)}"></textarea></div>
         <button type="button" class="btn sm" data-add-item="${esc(fwKey)}" data-group="${esc(g.id)}">+ Add request</button>
       </div>
     </div>`;
   }
-  
   return html + '</div></div>';
 }
 
@@ -703,13 +781,10 @@ function renderItem(fwKey, gid, item, gs) {
   const st = gs?.items?.[item.id];
   const inc = st?.included ?? item.common;
   const instr = st?.instructions || '';
-  
   return `<div class="evidence-item ${inc ? 'included' : ''}" data-fw="${esc(fwKey)}" data-group="${esc(gid)}" data-item="${esc(item.id)}">
     <input type="checkbox" ${inc ? 'checked' : ''}/>
     <div class="ei-content">
-      <div class="ei-title">
-        ${esc(item.title)}
-      </div>
+      <div class="ei-title">${esc(item.title)}</div>
       ${item.hint ? `<div class="ei-hint">${esc(item.hint)}</div>` : ''}
       <div class="ei-instr">
         <label class="small muted">Instructions for client (optional)</label>
@@ -720,19 +795,16 @@ function renderItem(fwKey, gid, item, gs) {
 }
 
 function wireComposer() {
-  // Framework toggle
   $$('[data-fw-toggle]').forEach(cb => {
     cb.addEventListener('change', e => {
       const k = e.target.dataset.fwToggle;
-      if (!composerState[k]) {
-        composerState[k] = { enabled: false, groups: {} };
-      }
+      if (!composerState[k]) composerState[k] = { enabled: false, groups: {} };
       composerState[k].enabled = e.target.checked;
       renderComposer();
+      saveFormState();
     });
   });
-  
-  // Control group header click (expand/collapse)
+
   $$('.cg-header').forEach(h => {
     h.addEventListener('click', e => {
       if (e.target.closest('.cg-exclude') || e.target.closest('.cg-include')) return;
@@ -742,28 +814,27 @@ function wireComposer() {
       renderComposer();
     });
   });
-  
-  // Exclude group
+
   $$('[data-exclude-group]').forEach(btn => {
     btn.addEventListener('click', e => {
       e.stopPropagation();
       const [fk, gid] = btn.dataset.excludeGroup.split('-');
       composerState[fk].groups[gid].excluded = true;
       renderComposer();
+      saveFormState();
     });
   });
-  
-  // Include group
+
   $$('[data-include-group]').forEach(btn => {
     btn.addEventListener('click', e => {
       e.stopPropagation();
       const [fk, gid] = btn.dataset.includeGroup.split('-');
       composerState[fk].groups[gid].excluded = false;
       renderComposer();
+      saveFormState();
     });
   });
-  
-  // Show more/fewer toggle
+
   $$('.more-toggle').forEach(t => {
     t.addEventListener('click', e => {
       e.stopPropagation();
@@ -772,28 +843,27 @@ function wireComposer() {
       renderComposer();
     });
   });
-  
-  // Evidence item checkbox
+
   $$('.evidence-item input[type="checkbox"]').forEach(cb => {
     cb.addEventListener('change', e => {
       const el = e.target.closest('.evidence-item');
       const { fw, group, item } = el.dataset;
       composerState[fw].groups[group].items[item].included = e.target.checked;
       renderComposer();
+      saveFormState();
     });
   });
-  
-  // Evidence item instructions
+
   $$('[data-item-instr]').forEach(ta => {
     ta.addEventListener('input', e => {
       const [fw, group, item] = ta.dataset.itemInstr.split('-');
       if (composerState[fw]?.groups?.[group]?.items?.[item]) {
         composerState[fw].groups[group].items[item].instructions = e.target.value;
       }
+      saveFormState();
     });
   });
-  
-  // Add custom item
+
   $$('[data-add-item]').forEach(btn => {
     btn.addEventListener('click', () => {
       const fk = btn.dataset.addItem;
@@ -802,34 +872,23 @@ function wireComposer() {
       const instrInput = document.querySelector(`[data-custom-instr="${fk}-${gid}"]`);
       const title = (nameInput?.value || '').trim();
       const instructions = (instrInput?.value || '').trim();
-      
-      if (!title) {
-        showStatus('Please enter a request name.', false);
-        return;
-      }
-      
+      if (!title) { showStatus('Please enter a request name.', false); return; }
       const cid = 'c_' + Math.random().toString(36).slice(2, 8);
       const allFw = getAllFrameworks();
       const fw = allFw[fk];
       const grp = fw?.controlGroups?.find(g => g.id === gid);
-      
-      if (grp) {
-        grp.items.push({ id: cid, title, common: true, hint: '' });
-      }
-      
+      if (grp) grp.items.push({ id: cid, title, common: true, hint: '' });
       composerState[fk].groups[gid].items[cid] = { included: true, instructions };
-      
       nameInput.value = '';
       instrInput.value = '';
       clearStatus();
       renderComposer();
+      saveFormState();
     });
   });
-  
-  // Add framework
+
   $('#addFwChip')?.addEventListener('click', () => $('#addFwModal').classList.remove('hidden'));
-  
-  // Add control group button
+
   $$('[data-add-group-btn]').forEach(btn => {
     btn.addEventListener('click', () => {
       $('#customGroupFwKey').value = btn.dataset.addGroupBtn;
@@ -838,7 +897,6 @@ function wireComposer() {
   });
 }
 
-// Add Framework Modal
 $('#cancelFwBtn')?.addEventListener('click', () => {
   $('#addFwModal').classList.add('hidden');
   $('#customFwName').value = '';
@@ -849,24 +907,16 @@ $('#saveFwBtn')?.addEventListener('click', () => {
   const name = ($('#customFwName')?.value || '').trim();
   const desc = ($('#customFwDesc')?.value || '').trim();
   if (!name) return;
-  
   const id = 'cf_' + Math.random().toString(36).slice(2, 8);
-  customFrameworks.push({
-    id,
-    label: name,
-    description: desc || 'Custom framework',
-    controlGroups: []
-  });
-  
+  customFrameworks.push({ id, label: name, description: desc || 'Custom framework', controlGroups: [] });
   composerState[id] = { enabled: true, groups: {} };
-  
   $('#addFwModal').classList.add('hidden');
   $('#customFwName').value = '';
   $('#customFwDesc').value = '';
   renderComposer();
+  saveFormState();
 });
 
-// Add Control Group Modal
 $('#cancelGroupBtn')?.addEventListener('click', () => {
   $('#addGroupModal').classList.add('hidden');
   $('#customGroupName').value = '';
@@ -878,76 +928,49 @@ $('#saveGroupBtn')?.addEventListener('click', () => {
   const name = ($('#customGroupName')?.value || '').trim();
   const desc = ($('#customGroupDesc')?.value || '').trim();
   const fwKey = $('#customGroupFwKey')?.value;
-  
   if (!name || !fwKey) return;
-  
   const gid = 'g_' + Math.random().toString(36).slice(2, 8);
   const allFw = getAllFrameworks();
   const fw = allFw[fwKey];
-  
   if (fw) {
-    fw.controlGroups.push({
-      id: gid,
-      title: name,
-      description: desc,
-      items: []
-    });
-    
-    composerState[fwKey].groups[gid] = {
-      expanded: true,
-      showMore: false,
-      excluded: false,
-      items: {}
-    };
+    fw.controlGroups.push({ id: gid, title: name, description: desc, items: [] });
+    composerState[fwKey].groups[gid] = { expanded: true, showMore: false, excluded: false, items: {} };
   }
-  
   $('#addGroupModal').classList.add('hidden');
   $('#customGroupName').value = '';
   $('#customGroupDesc').value = '';
   $('#customGroupFwKey').value = '';
   renderComposer();
+  saveFormState();
 });
 
 function getPayload() {
   const result = [];
   const allFw = getAllFrameworks();
-  
   for (const [fk, fs] of Object.entries(composerState)) {
     if (!fs.enabled) continue;
     const fw = allFw[fk];
     if (!fw) continue;
-    
     for (const g of (fw.controlGroups || [])) {
       const gs = fs.groups?.[g.id];
       if (!gs || gs.excluded) continue;
-      
       for (const item of (g.items || [])) {
         const is = gs.items?.[item.id];
         if (!is?.included) continue;
-        
-        result.push({
-          id: item.id,
-          framework: fw.label || fk,
-          group: g.title,
-          title: item.title,
-          instructions: is.instructions || '',
-        });
+        result.push({ id: item.id, framework: fw.label || fk, group: g.title, title: item.title, instructions: is.instructions || '' });
       }
     }
   }
-  
   return result;
 }
 
 function renderClientChecklist(items, globalInstr) {
   const c = $('#composer');
   if (!c) return;
-  
   if (!items?.length) {
     c.innerHTML = '<div class="client-checklist"><div class="muted">No specific evidence requested.</div></div>';
     return;
   }
-  
   const byFw = new Map();
   for (const i of items) {
     const fw = i.framework || 'Requested';
@@ -957,52 +980,37 @@ function renderClientChecklist(items, globalInstr) {
     if (!bg.has(g)) bg.set(g, []);
     bg.get(g).push(i);
   }
-  
   let html = '<div class="client-checklist">';
-  
   if (globalInstr) {
     html += `<div style="margin-bottom:16px;padding:14px;background:#0a1020;border-radius:10px;border-left:4px solid var(--accent)">
       <strong style="color:var(--accent)">📋 Instructions from your auditor:</strong>
       <div class="muted" style="margin-top:8px;white-space:pre-wrap">${esc(globalInstr)}</div>
     </div>`;
   }
-  
   for (const [fw, groups] of byFw.entries()) {
     html += `<div style="margin-bottom:20px"><strong style="font-size:1.1rem">${esc(fw)}</strong></div>`;
-    
     for (const [gn, its] of groups.entries()) {
       html += `<div class="cli-group"><div class="cli-group-title">${esc(gn)}</div>`;
       for (const i of its) {
-        html += `<div class="cli-item">
-          <div class="cli-item-title">${esc(i.title)}</div>
-          ${i.instructions ? `<div class="cli-item-instr">${esc(i.instructions)}</div>` : ''}
-        </div>`;
+        html += `<div class="cli-item"><div class="cli-item-title">${esc(i.title)}</div>${i.instructions ? `<div class="cli-item-instr">${esc(i.instructions)}</div>` : ''}</div>`;
       }
       html += '</div>';
     }
   }
-  
   c.innerHTML = html + '</div>';
 }
 
 function updateRoleUI() {
   const role = ($('#role')?.value || '').trim();
   const later = $$('.step-after-role');
-  
-  if (!role) {
-    later.forEach(r => r.style.display = 'none');
-    return;
-  }
-  
+  if (!role) { later.forEach(r => r.style.display = 'none'); return; }
   later.forEach(r => {
     if (['filesRow'].includes(r.id)) r.style.display = 'none';
     else if (r.id === 'actionsRow') r.style.display = 'flex';
     else r.style.display = 'block';
   });
-  
   const cc = $('#clientContactCol'), dl = $('#deadlineRow'), cb = $('#composerBlock'), rr = $('#routingRow');
   const el = $('#emailLabel'), cl = $('#companyLabel'), rh = $('#roleHint'), sb = $('#startBtn');
-  
   if (role === 'auditor') {
     el.textContent = 'Your email (auditor)';
     cl.textContent = 'Client company';
@@ -1012,7 +1020,7 @@ function updateRoleUI() {
     rr.style.display = 'none';
     sb.textContent = 'Continue';
     $('#composerHint').textContent = 'Check frameworks, then customize what evidence you need. Items marked ✓ are included by default.';
-    initComposerState();
+    if (Object.keys(composerState).length === 0) initComposerState();
     renderComposer();
   } else if (role === 'client') {
     el.textContent = 'Your email';
@@ -1031,12 +1039,7 @@ function updateRoleUI() {
     rr.style.display = 'none';
     sb.textContent = 'Continue';
   }
-  
-  rh.textContent = {
-    auditor: "Define what evidence you need, then we'll email your client a guided upload link.",
-    client: 'Your auditor sent you here. Upload the requested evidence.',
-    company: 'Build a ProofPack proactively for future audits.'
-  }[role] || '';
+  rh.textContent = { auditor: "Define what evidence you need, then we'll email your client a guided upload link.", client: 'Your auditor sent you here. Upload the requested evidence.', company: 'Build a ProofPack proactively for future audits.' }[role] || '';
 }
 
 function setUnlocked() {
@@ -1044,7 +1047,6 @@ function setUnlocked() {
   const role = ($('#role')?.value || '').trim();
   $('#pricingGate').style.display = 'none';
   $('#startBtn').style.display = 'none';
-  
   if (role === 'auditor') {
     $('#sendReqBtn').style.display = 'inline-flex';
     $('#submitBtn').style.display = 'none';
@@ -1060,48 +1062,21 @@ async function submitAuditorRequest() {
   const ae = ($('#email')?.value || '').trim();
   const ce = ($('#clientContactEmail')?.value || '').trim();
   const co = ($('#company')?.value || '').trim();
-  
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(ae)) throw new Error('Enter a valid auditor email.');
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(ce)) throw new Error('Enter a valid client email.');
   if (!co) throw new Error('Enter the client company name.');
-  
   const daysVal = parseFloat($('#deadlineDays')?.value || '5');
   const ts = ($('#deadlineTime')?.value || '17:00').trim();
   const [hh, mm] = ts.split(':').map(x => parseInt(x, 10));
-  
   const d = new Date();
   d.setTime(d.getTime() + daysVal * 24 * 60 * 60 * 1000);
   d.setHours(hh || 17, mm || 0, 0, 0);
-  
-  const fws = Object.entries(composerState)
-    .filter(([_, s]) => s.enabled)
-    .map(([k]) => {
-      const allFw = getAllFrameworks();
-      return allFw[k]?.label || k;
-    });
-  
+  const fws = Object.entries(composerState).filter(([_, s]) => s.enabled).map(([k]) => { const allFw = getAllFrameworks(); return allFw[k]?.label || k; });
   if (!fws.length) throw new Error('Select at least one framework.');
-  
   const re = getPayload();
   if (!re.length) throw new Error('Select at least one evidence item to request.');
-  
-  const payload = {
-    auditorEmail: ae,
-    clientEmail: ce,
-    company: co,
-    frameworks: fws,
-    deadlineISO: d.toISOString(),
-    auditorCode: appliedCode,
-    globalInstructions: ($('#globalInstructions')?.value || '').trim(),
-    requestedEvidence: re
-  };
-  
-  const res = await fetch(`${WORKER_BASE}/request`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify(payload)
-  });
-  
+  const payload = { auditorEmail: ae, clientEmail: ce, company: co, frameworks: fws, deadlineISO: d.toISOString(), auditorCode: appliedCode, globalInstructions: ($('#globalInstructions')?.value || '').trim(), requestedEvidence: re };
+  const res = await fetch(`${WORKER_BASE}/request`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) });
   const j = await res.json().catch(() => null);
   if (!res.ok || !j?.ok) throw new Error(j?.error || 'Request failed');
   return j;
@@ -1111,48 +1086,34 @@ async function prefillFromToken() {
   const url = new URL(location.href);
   const token = url.searchParams.get('t') || url.searchParams.get('token');
   if (!token) return;
-  
   isFromRequestLink = true;
   $('#pricingGate').style.display = 'none';
   $('#startBtn').style.display = 'none';
   showStatus('Verifying link…', true);
   $('#requestToken').value = token;
-  
   let res, j;
   try {
     res = await fetch(`${WORKER_BASE}/resolve?t=${encodeURIComponent(token)}`);
     j = await res.json();
-  } catch {
-    showStatus('Could not verify link.', false);
-    return;
-  }
-  
-  if (!res.ok || !j?.ok) {
-    showStatus('Invalid or expired link.', false);
-    return;
-  }
-  
+  } catch { showStatus('Could not verify link.', false); return; }
+  if (!res.ok || !j?.ok) { showStatus('Invalid or expired link.', false); return; }
   if (j.status === 'submitted') {
     const v = safeUrl(j.viewerUrl || j.packUrl);
     showStatus(`Already used.${v ? ` <a href="${esc(v)}" target="_blank">Open ProofPack</a>` : ''}`, false);
     $('#intakeForm').style.display = 'none';
     return;
   }
-  
   $('#role').value = 'client';
   $('#role').disabled = true;
   updateRoleUI();
-  
   if (j.clientEmail) $('#email').value = j.clientEmail;
   if (j.company) $('#company').value = j.company;
   if (j.auditorEmail) $('#auditorEmail').value = j.auditorEmail;
-  
   if (j.requestedEvidence?.length) {
     $('#composerBlock').style.display = 'block';
     $('#composerHint').textContent = 'Your auditor has requested the following evidence:';
     renderClientChecklist(j.requestedEvidence, j.globalInstructions);
   }
-  
   clearStatus();
   setUnlocked();
   $('#filesRow').style.display = 'block';
@@ -1187,10 +1148,7 @@ function gather() {
   fd.append('frameworks', 'SOC2');
   const t = $('#requestToken')?.value;
   if (t) fd.append('t', t);
-  if (appliedCode) {
-    fd.append('auditorCode', appliedCode);
-    fd.append('billingMode', 'code');
-  }
+  if (appliedCode) { fd.append('auditorCode', appliedCode); fd.append('billingMode', 'code'); }
   const ae = ($('#auditorEmail')?.value || '').trim();
   if (ae) fd.append('auditorEmail', ae);
   Array.from($('#files')?.files || []).forEach(f => fd.append('files', f, f.name));
@@ -1199,10 +1157,7 @@ function gather() {
 
 // ==================== PRICING GATE LOGIC ====================
 
-let selectedTier = null;
-
 function initPricingTabs() {
-  // Tab switching
   $$('.pricing-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       $$('.pricing-tab').forEach(t => t.classList.remove('active'));
@@ -1210,8 +1165,6 @@ function initPricingTabs() {
       tab.classList.add('active');
       const tabName = tab.dataset.tab;
       document.querySelector(`[data-tab-content="${tabName}"]`)?.classList.add('active');
-      
-      // Update continue button text based on tab
       const continueBtn = $('#continueBtn');
       if (continueBtn) {
         if (tabName === 'buy') {
@@ -1223,108 +1176,104 @@ function initPricingTabs() {
       }
     });
   });
-  
-  // Pricing card selection (not immediate checkout)
+
   $$('.pricing-card').forEach(card => {
     card.addEventListener('click', () => {
       const tier = card.dataset.tier;
       if (!tier) return;
-      
-      // Deselect all, select this one
       $$('.pricing-card').forEach(c => c.classList.remove('selected'));
       card.classList.add('selected');
       selectedTier = tier;
-      
-      // Enable continue button
       const continueBtn = $('#continueBtn');
-      if (continueBtn) {
-        continueBtn.textContent = 'Continue to Checkout';
-        continueBtn.disabled = false;
-      }
-      
+      if (continueBtn) { continueBtn.textContent = 'Continue to Checkout'; continueBtn.disabled = false; }
       $('#buyHint').textContent = '';
     });
   });
-  
-  // Continue button - triggers checkout for selected tier
+
   $('#continueBtn')?.addEventListener('click', async () => {
     const activeTab = document.querySelector('.pricing-tab.active')?.dataset.tab;
-    
     if (activeTab === 'buy') {
-      if (!selectedTier) {
-        $('#buyHint').textContent = 'Please select a plan first.';
-        return;
-      }
-      
+      if (!selectedTier) { $('#buyHint').textContent = 'Please select a plan first.'; return; }
+      saveFormState();
       const email = ($('#email')?.value || '').trim();
       const btn = $('#continueBtn');
       btn.disabled = true;
       btn.textContent = 'Redirecting...';
       $('#buyHint').textContent = '';
-      
       try {
         const res = await fetch(`${WORKER_BASE}/checkout`, {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ 
-            tier: selectedTier, 
-            email: email || undefined,
-            successUrl: window.location.origin + window.location.pathname,
-            cancelUrl: window.location.origin + window.location.pathname
-          })
+          body: JSON.stringify({ tier: selectedTier, email: email || undefined, successUrl: window.location.origin + window.location.pathname + '?session_id={CHECKOUT_SESSION_ID}', cancelUrl: window.location.origin + window.location.pathname })
         });
-        
         const j = await res.json();
         console.log('Checkout response:', j);
-        
-        if (!res.ok || !j?.ok) {
-          throw new Error(j?.error || `Checkout failed (HTTP ${res.status})`);
-        }
-        
-        if (j.url) {
-          window.location.href = j.url;
-        } else if (j.checkoutUrl) {
-          window.location.href = j.checkoutUrl;
-        } else {
-          console.error('No URL in response:', j);
-          throw new Error('No checkout URL returned. Make sure worker v4 is deployed.');
-        }
+        if (!res.ok || !j?.ok) throw new Error(j?.error || `Checkout failed (HTTP ${res.status})`);
+        if (j.url) { window.location.href = j.url; }
+        else if (j.checkoutUrl) { window.location.href = j.checkoutUrl; }
+        else { console.error('No URL in response:', j); throw new Error('No checkout URL returned.'); }
       } catch (e) {
         console.error('Checkout error:', e);
         const errorMsg = e.message || 'Could not start checkout';
-        // Check if it's a network/CORS error
-        if (e.name === 'TypeError' && e.message.includes('fetch')) {
-          $('#buyHint').textContent = 'Network error. Make sure the worker is deployed and accessible.';
-        } else {
-          $('#buyHint').textContent = 'Error: ' + errorMsg;
-        }
+        if (e.name === 'TypeError' && e.message.includes('fetch')) { $('#buyHint').textContent = 'Network error. Make sure the worker is deployed and accessible.'; }
+        else { $('#buyHint').textContent = 'Error: ' + errorMsg; }
         btn.disabled = false;
         btn.textContent = 'Continue to Checkout';
       }
     }
   });
-  
-  // Free trial request - removed (trials given manually to targeted prospects)
 }
 
 // ==================== INIT ====================
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   $('#y').textContent = new Date().getFullYear();
-  $('#role')?.addEventListener('change', updateRoleUI);
+  $('#role')?.addEventListener('change', () => { updateRoleUI(); saveFormState(); });
   $('#files')?.addEventListener('change', updateFileMeta);
-  
-  // Initialize pricing tabs
+
   initPricingTabs();
-  
+  setupAutoSave();
+
+  // Handle return from Stripe checkout FIRST
+  const handledCheckout = await handleCheckoutReturn();
+  if (handledCheckout) return;
+
+  // Check for request token (client flow)
+  const url = new URL(location.href);
+  const hasToken = url.searchParams.get('t') || url.searchParams.get('token');
+  if (hasToken) { await prefillFromToken(); return; }
+
+  // Try to restore saved auditor state
+  const savedState = loadFormState();
+  if (savedState && savedState.role === 'auditor') {
+    restoreFormState(savedState);
+    updateRoleUI();
+    if (savedState.globalInstructions) {
+      setTimeout(() => { const gi = $('#globalInstructions'); if (gi) gi.value = savedState.globalInstructions; }, 100);
+    }
+    if (savedState.appliedCode) {
+      $('#unlockCode').value = savedState.appliedCode;
+      try {
+        const res = await fetch(`${WORKER_BASE}/check-code?code=${encodeURIComponent(savedState.appliedCode)}`);
+        const j = await res.json();
+        if (res.ok && j?.ok) {
+          appliedCode = j.code || savedState.appliedCode;
+          setUnlocked();
+          showStatus(`<span style="color:var(--accent)">✓ Welcome back!</span> Code <strong>${esc(appliedCode)}</strong> — ${j.remaining ?? '?'} credit${j.remaining !== 1 ? 's' : ''} remaining.`, true);
+        }
+      } catch (e) { console.warn('Could not verify saved code:', e); }
+    }
+  }
+
   $('#startBtn')?.addEventListener('click', () => {
     clearStatus();
     if (!$('#role')?.value) { showStatus('Choose a role.', false); return; }
+    saveFormState();
     $('#pricingGate').style.display = 'block';
-    $('#startBtn').style.display = 'none'; // Hide the Continue button after showing pricing gate
+    $('#startBtn').style.display = 'none';
     $('#pricingGate').scrollIntoView({ behavior: 'smooth' });
   });
-  
+
   $('#applyCodeBtn')?.addEventListener('click', async () => {
     clearStatus();
     const code = ($('#unlockCode')?.value || '').trim().toUpperCase();
@@ -1336,11 +1285,10 @@ document.addEventListener('DOMContentLoaded', () => {
       appliedCode = j.code || code;
       $('#unlockHint').innerHTML = `<span style="color:var(--accent)">✓ Code accepted.</span> ${j.remaining ?? '?'} credit${j.remaining !== 1 ? 's' : ''} available.`;
       setUnlocked();
-    } catch (e) {
-      $('#unlockHint').textContent = e.message || 'Invalid code.';
-    }
+      saveFormState();
+    } catch (e) { $('#unlockHint').textContent = e.message || 'Invalid code.'; }
   });
-  
+
   $('#sendReqBtn')?.addEventListener('click', async () => {
     clearStatus();
     const btn = $('#sendReqBtn');
@@ -1350,15 +1298,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!appliedCode) throw new Error('Apply a code first.');
       const j = await submitAuditorRequest();
       const link = safeUrl(j.magicLink) || j.magicLink || '';
+      clearFormState();
       showStatus(`<strong>✓ Request sent!</strong><br><br>Your client will receive an email with upload instructions.<br><br><strong>Client link:</strong><br><a href="${esc(link)}" target="_blank" style="word-break:break-all">${esc(link)}</a>`, true);
-    } catch (e) {
-      showStatus(esc(e.message), false);
-    } finally {
-      btn.disabled = false;
-      btn.textContent = 'Send request to client';
-    }
+    } catch (e) { showStatus(esc(e.message), false); }
+    finally { btn.disabled = false; btn.textContent = 'Send request to client'; }
   });
-  
+
   $('#intakeForm')?.addEventListener('submit', async e => {
     e.preventDefault();
     clearStatus();
@@ -1372,15 +1317,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const j = await res.json();
       if (!res.ok || !j?.ok) throw new Error(j?.error || 'Failed');
       const v = safeUrl(j.viewerUrl || j.packUrl);
+      clearFormState();
       showStatus(`<strong>✓ Upload complete!</strong> ${j.usage?.files || 0} file(s).${v ? `<br><br><a href="${esc(v)}" target="_blank" class="btn primary">Open ProofPack</a>` : ''}`, true);
-    } catch (e) {
-      showStatus(esc(e.message), false);
-    } finally {
-      btn.disabled = false;
-      btn.textContent = 'Upload & build ProofPack';
-    }
+    } catch (e) { showStatus(esc(e.message), false); }
+    finally { btn.disabled = false; btn.textContent = 'Upload & build ProofPack'; }
   });
-  
+
   const fb = $('#filesRow');
   if (fb) {
     ['dragenter', 'dragover'].forEach(ev => fb.addEventListener(ev, e => { e.preventDefault(); fb.classList.add('dragover'); }));
@@ -1396,9 +1338,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-  
+
   updateRoleUI();
-  prefillFromToken();
 });
 </script>
 </body>
