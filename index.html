@@ -268,7 +268,7 @@
               <div class="pricing-card-price">$249</div>
               <div class="pricing-card-desc">5 credits</div>
             </div>
-            <div class="pricing-card popular" data-tier="pack15">
+            <div class="pricing-card" data-tier="pack15">
               <div class="pricing-card-name">15-Pack</div>
               <div class="pricing-card-price">$499</div>
               <div class="pricing-card-desc">15 credits</div>
@@ -1175,6 +1175,7 @@ function initPricingTabs() {
       const continueBtn = $('#continueBtn');
       if (continueBtn) {
         if (tabName === 'buy') {
+          continueBtn.style.display = 'inline-flex';
           continueBtn.textContent = selectedTier ? 'Continue to Checkout' : 'Select a plan above';
           continueBtn.disabled = !selectedTier;
         } else {
