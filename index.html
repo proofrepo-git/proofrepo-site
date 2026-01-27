@@ -2,1320 +2,1200 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ProofRepo — Compliance ProofPacks in seconds</title>
-  <meta name="description" content="Compliance ProofPacks in seconds. Guided evidence collection for auditors and their clients." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ProofRepo — Compliance ProofPacks in Seconds</title>
+  <meta name="description" content="Streamlined evidence collection for SOC 2, ISO 27001, HIPAA, GDPR audits. Send your client a guided upload link, get a structured ProofPack." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
-    :root{--bg:#0b1020;--gradA:#0b1020;--gradB:#0d1b3d;--panel:#10183a;--panel2:#0e1532;--text:#e8edff;--muted:#a7b6e7;--line:#1d2857;--primary:#2563eb;--primary2:#3b82f6;--accent:#22c55e;--danger:#ef4444;--r:16px;--shadow:0 14px 40px rgba(3,7,18,.35);--max:1200px;--marqueeH:54px}
-    *{box-sizing:border-box}
-    html,body{margin:0;background:linear-gradient(180deg,var(--gradA),var(--gradB));color:var(--text);font:16px/1.55 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
-    body{padding-bottom:calc(var(--marqueeH) + env(safe-area-inset-bottom,0px))}
-    a{color:inherit;text-decoration:none}
-    .wrap{max-width:var(--max);margin:0 auto;padding:28px}
-    .row{display:flex;align-items:center;justify-content:space-between;gap:16px}
-    .logo{display:flex;align-items:center;gap:10px;font-weight:800}
-    .glyph{width:34px;height:34px;border-radius:10px;background:conic-gradient(from 210deg,var(--primary),var(--primary2));box-shadow:var(--shadow)}
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:999px;border:1px solid #2a3766;cursor:pointer;transition:all .12s;background:transparent;color:var(--text);font-size:1rem}
-    .btn:hover{background:#111b3e;transform:translateY(-1px)}
-    .btn.primary{background:linear-gradient(135deg,var(--primary),var(--primary2));border-color:transparent;color:#fff;box-shadow:var(--shadow)}
-    .btn.primary[disabled]{opacity:.6;cursor:not-allowed;transform:none}
-    .btn.sm{padding:8px 14px;font-size:.9rem}
-    .btn.ghost{background:transparent;border:1px dashed #3a4a86}
-    .btn.danger{background:#7f1d1d;border-color:#991b1b;color:#fecaca}
-    .btn.success{background:linear-gradient(135deg,#059669,#10b981);border-color:transparent;color:#fff}
-    .hero{padding:56px 28px}
-    .heroGrid{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center}
-    .kicker{color:var(--accent);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.8rem}
-    h1{font-size:clamp(28px,4vw,46px);line-height:1.15;margin:10px 0 12px}
-    .sub{color:var(--muted);font-size:1.05rem;max-width:60ch}
-    .card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--r);padding:22px}
-    .ticks{display:grid;gap:10px;margin-top:12px}
-    .li{display:flex;gap:10px}
-    .tick{width:20px;height:20px;border-radius:999px;display:inline-grid;place-items:center;background:linear-gradient(135deg,#34d399,#86efac);color:#062312;font-weight:900;font-size:.8rem}
-    .pill{display:inline-block;padding:4px 8px;border:1px solid #2a3766;border-radius:999px;background:#0c1636;color:#a7b9ff;font-size:.75rem;margin-left:6px}
-    .pill.req{border-color:#f87171;color:#fca5a5;background:#2b1520}
-    .pill.on{border-color:#22c55e;color:#86efac;background:#0f2a1a}
-    .pill.off{border-color:#6b7280;color:#9ca3af;background:#1f2937}
-    .marquee-fixed{position:fixed;left:0;right:0;bottom:0;height:var(--marqueeH);display:flex;align-items:center;border-top:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0));backdrop-filter:blur(6px);z-index:9999}
-    .marquee{white-space:nowrap;overflow:hidden;width:100%}
-    .marquee > div{display:inline-block;padding-left:100%;animation:scroll 24s linear infinite;color:#b9c6ff;opacity:.95}
-    @keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
-    .section{padding:40px 28px}
-    .grid{display:grid;gap:18px}
-    .cols2{grid-template-columns:repeat(2,minmax(0,1fr))}
-    .cols3{grid-template-columns:repeat(3,minmax(0,1fr))}
-    .muted{color:var(--muted)}
-    .small{font-size:.9rem;color:var(--muted)}
-    .hint{font-size:.85rem;color:#9fb2ff;margin-top:6px}
-    form{display:grid;gap:14px}
-    label{font-weight:600}
-    input,select,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid #2a3766;background:#0e1634;color:var(--text);font-size:1rem}
-    input::placeholder,textarea::placeholder{color:#6b7a9a}
-    textarea{min-height:60px;resize:vertical}
-    .form-row{display:grid;gap:12px}
-    .two{grid-template-columns:1fr 1fr}
-    .status{margin-top:8px;padding:10px;border-radius:10px;background:#0d193c;border:1px solid #27356b}
-    .status.ok{border-color:#195d3a;background:#0f2a22}
-    .status.err{border-color:#7a1a2a;background:#2b0e16}
-    .filebox{border:1px dashed #3a4a86;border-radius:12px;padding:14px}
-    .filebox.dragover{border-style:solid;border-color:#4b65ff;background:#0f1a3d}
-    .filemeta{font-size:.9rem;color:#a9b8ef}
-    .composer{margin-top:12px;border-radius:12px;border:1px solid #27356b;background:#0d1736;overflow:hidden}
-    .fw-list{display:flex;flex-wrap:wrap;gap:8px;padding:14px;border-bottom:1px solid #1d2857;background:#0a1020}
-    .fw-chip{display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:8px;border:1px solid #2a3766;background:#0e1634;cursor:pointer;user-select:none;transition:all .15s}
-    .fw-chip:hover{border-color:#4060a0}
-    .fw-chip.active{border-color:var(--primary);background:#1a2a5a}
-    .fw-chip input{width:16px;height:16px;accent-color:var(--primary)}
-    .fw-chip-label{font-weight:600;font-size:.95rem}
-    .add-fw-btn{border-style:dashed;color:var(--muted)}
-    .fw-body{padding:14px}
-    .control-group{margin-bottom:16px;border:1px solid #1d2857;border-radius:10px;overflow:hidden}
-    .control-group.excluded{opacity:.5;border-style:dashed}
-    .cg-header{display:flex;align-items:center;gap:10px;padding:12px 14px;background:#0c1428;cursor:pointer;user-select:none}
-    .cg-header:hover{background:#101a35}
-    .cg-title{font-weight:600;flex:1}
-    .cg-status{display:flex;align-items:center;gap:8px}
-    .cg-count{font-size:.85rem;color:var(--muted)}
-    .cg-toggle{color:var(--muted);font-size:.9rem;width:20px;text-align:center}
-    .cg-exclude{width:24px;height:24px;border-radius:6px;border:1px solid #374151;background:#1f2937;color:#9ca3af;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer}
-    .cg-exclude:hover{background:#7f1d1d;border-color:#991b1b;color:#fecaca}
-    .cg-include{width:24px;height:24px;border-radius:6px;border:1px solid #166534;background:#14532d;color:#86efac;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer}
-    .cg-include:hover{background:#166534}
-    .cg-body{display:none;padding:12px 14px;background:#080e20}
-    .cg-body.open{display:block}
-    .evidence-item{display:flex;gap:10px;align-items:flex-start;padding:12px;margin-bottom:8px;border:1px solid #1a2545;border-radius:8px;background:#0a1225}
-    .evidence-item.included{border-color:#1d4ed8;background:#0c1a3a}
-    .evidence-item input[type="checkbox"]{width:18px;height:18px;margin-top:2px;accent-color:var(--primary);flex-shrink:0}
-    .ei-content{flex:1;min-width:0}
-    .ei-title{font-weight:500;margin-bottom:4px}
-    .ei-hint{font-size:.85rem;color:#6b7a9a;margin-bottom:6px}
-    .ei-instr{margin-top:8px}
-    .ei-instr textarea{min-height:50px;font-size:.9rem;background:#060d1a}
-    .more-toggle{margin:12px 0;padding:10px 14px;font-size:.9rem;color:#7a9bff;cursor:pointer;background:#0a1225;border:1px dashed #2a3a60;border-radius:8px;text-align:center}
-    .more-toggle:hover{background:#0c1530;border-color:#4060a0}
-    .add-custom-section{margin-top:16px;padding:16px;border:1px dashed #2a3a60;border-radius:10px;background:#080e1a}
-    .add-custom-section h4{margin:0 0 12px;font-size:.95rem;color:var(--muted)}
-    .custom-form{display:grid;gap:10px}
-    .custom-form input,.custom-form textarea{background:#060d1a}
-    .custom-form .form-row{margin-bottom:0}
-    .global-instructions{padding:14px;border-top:1px solid #1d2857}
-    .global-instructions textarea{min-height:60px}
-    .client-checklist{padding:14px}
-    .cli-group{margin-bottom:16px}
-    .cli-group-title{font-weight:700;margin-bottom:8px;padding:8px 10px;background:#0c1428;border-radius:6px}
-    .cli-item{padding:10px;margin-bottom:6px;border:1px solid #1a2545;border-radius:8px;background:#0a1225}
-    .cli-item-title{font-weight:500}
-    .cli-item-instr{font-size:.9rem;color:var(--muted);margin-top:6px;padding:8px;background:#060d1a;border-radius:6px;border-left:3px solid #2a3766}
-    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:10000}
-    .modal-overlay.hidden{display:none}
-    .modal{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px;max-width:500px;width:90%}
-    .modal h3{margin:0 0 16px}
-    .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
-    .pricing-gate{margin-top:12px}
-    .pricing-gate h3{margin:0 0 4px}
-    .pricing-tabs{display:flex;gap:0;margin:16px 0 12px;border-radius:10px;overflow:hidden;border:1px solid #2a3766}
-    .pricing-tab{flex:1;padding:12px;text-align:center;cursor:pointer;background:#0a1020;border:none;color:var(--muted);font-weight:600;font-size:.95rem;transition:all .15s}
-    .pricing-tab:hover{background:#101830}
-    .pricing-tab.active{background:var(--primary);color:#fff}
-    .pricing-tab-content{display:none}
-    .pricing-tab-content.active{display:block}
-    .pricing-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}
-    .pricing-card{padding:16px;border:1px solid #2a3766;border-radius:12px;background:#0a1225;text-align:center;cursor:pointer;transition:all .15s}
-    .pricing-card:hover{border-color:var(--primary);background:#0c1a3a;transform:translateY(-2px)}
-    .pricing-card.selected{border-color:var(--accent);background:#0f2a1a;box-shadow:0 0 0 2px var(--accent)}
-    .pricing-card-name{font-weight:700;font-size:1.1rem;margin-bottom:4px}
-    .pricing-card-price{font-size:1.5rem;font-weight:800;color:var(--accent)}
-    .pricing-card-price span{font-size:.85rem;font-weight:400;color:var(--muted)}
-    .pricing-card-desc{font-size:.85rem;color:var(--muted);margin-top:4px}
-    @media(max-width:980px){.heroGrid{grid-template-columns:1fr}.cols3,.cols2{grid-template-columns:1fr}.pricing-grid{grid-template-columns:1fr}}
+    :root {
+      --bg: #050a14;
+      --surface: #0a1628;
+      --surface-elevated: #0f1d32;
+      --border: #1e3a5f;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --accent: #10b981;
+      --accent-hover: #059669;
+      --warning: #f59e0b;
+      --error: #ef4444;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(5, 10, 20, 0.9);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .header-links {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .header-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .header-links a:hover { color: var(--text); }
+
+    /* Hero */
+    .hero {
+      padding: 48px 24px;
+      text-align: center;
+      background: linear-gradient(180deg, rgba(37, 99, 235, 0.1) 0%, transparent 100%);
+    }
+
+    .hero-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      background: rgba(37, 99, 235, 0.2);
+      border: 1px solid rgba(37, 99, 235, 0.3);
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #60a5fa;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--text) 0%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 24px;
+    }
+
+    .hero-features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 32px;
+      padding: 0 24px;
+    }
+
+    .hero-feature {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .hero-feature svg {
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* Main Container */
+    .main-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .card-header {
+      margin-bottom: 20px;
+    }
+
+    .card-header h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .card-header p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* Form Elements */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 1rem;
+      font-family: inherit;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    }
+
+    .form-input::placeholder { color: var(--text-muted); }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    /* Role Selector */
+    .role-selector {
+      margin-bottom: 24px;
+    }
+
+    .role-selector select {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--surface-elevated);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .role-selector select:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    /* Code Input Section */
+    .code-section {
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .code-input-wrapper {
+      display: flex;
+      gap: 12px;
+    }
+
+    .code-input {
+      flex: 1;
+      padding: 14px 16px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+    }
+
+    .code-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .code-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      font-size: 0.9rem;
+    }
+
+    .code-status.valid { color: var(--accent); }
+    .code-status.invalid { color: var(--error); }
+    .code-status.checking { color: var(--text-muted); }
+
+    /* Framework Tags */
+    .framework-selector {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .framework-tag {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .framework-tag:hover {
+      border-color: var(--primary);
+    }
+
+    .framework-tag.selected {
+      background: rgba(37, 99, 235, 0.2);
+      border-color: var(--primary);
+      color: #60a5fa;
+    }
+
+    .framework-tag input {
+      display: none;
+    }
+
+    /* Evidence Categories */
+    .evidence-category {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+
+    .evidence-category-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 16px;
+      background: var(--surface-elevated);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .evidence-category-header:hover {
+      background: rgba(30, 58, 95, 0.5);
+    }
+
+    .evidence-category-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .evidence-category-count {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background: var(--bg);
+      padding: 4px 10px;
+      border-radius: 12px;
+    }
+
+    .evidence-category-items {
+      display: none;
+      padding: 12px;
+      background: var(--bg);
+    }
+
+    .evidence-category.expanded .evidence-category-items {
+      display: block;
+    }
+
+    .evidence-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .evidence-item:hover {
+      background: var(--surface);
+    }
+
+    .evidence-item input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+    }
+
+    .evidence-item-text {
+      flex: 1;
+      font-size: 0.9rem;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      color: white;
+    }
+
+    .btn-accent:hover:not(:disabled) {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--border);
+      color: var(--text);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-full {
+      width: 100%;
+    }
+
+    /* Success Display */
+    .success-display {
+      display: none;
+      text-align: center;
+      padding: 32px;
+    }
+
+    .success-display.visible {
+      display: block;
+    }
+
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      background: rgba(16, 185, 129, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+
+    .success-icon svg {
+      color: var(--accent);
+      width: 32px;
+      height: 32px;
+    }
+
+    .success-display h3 {
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+    }
+
+    .success-display p {
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .code-display-box {
+      background: rgba(16, 185, 129, 0.1);
+      border: 2px solid var(--accent);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .code-display-label {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .code-display-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 3px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .code-display-credits {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .success-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Payment Banner */
+    .payment-banner {
+      display: none;
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(16, 185, 129, 0.2));
+      border: 1px solid rgba(37, 99, 235, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .payment-banner.visible {
+      display: block;
+    }
+
+    .payment-banner h3 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+    .payment-banner p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+    }
+
+    /* Loading Spinner */
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Pricing Section */
+    .pricing-section {
+      display: none;
+      margin-bottom: 24px;
+    }
+
+    .pricing-section.visible {
+      display: block;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+    }
+
+    .pricing-card {
+      background: var(--surface-elevated);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .pricing-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .pricing-card.selected {
+      border-color: var(--accent);
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    .pricing-card-name {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .pricing-card-price {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .pricing-card-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Instructions Textarea */
+    .form-textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    /* Deadline Row */
+    .deadline-row {
+      display: flex;
+      gap: 12px;
+      align-items: end;
+    }
+
+    .deadline-row .form-group {
+      flex: 1;
+      margin-bottom: 0;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 32px 24px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      margin-top: 48px;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .hero { padding: 32px 16px; }
+      .main-container { padding: 16px; }
+      .card { padding: 20px; }
+      .form-row { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr 1fr; }
+      .success-buttons { flex-direction: column; }
+      .success-buttons .btn { width: 100%; }
+    }
   </style>
 </head>
 <body>
-  <header class="wrap row nav">
-    <div class="logo"><div class="glyph"></div><span>ProofRepo</span></div>
-    <nav class="row">
-      <a class="btn" href="#how">How it works</a>
-      <a class="btn" href="#request">Get started</a>
+  <header class="header">
+    <a href="/" class="logo">
+      <div class="logo-icon">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </div>
+      ProofRepo
+    </a>
+    <nav class="header-links">
+      <a href="#how-it-works">How it works</a>
+      <a href="#" id="getStartedLink">Get started</a>
     </nav>
   </header>
 
-  <section class="wrap hero">
-    <div class="heroGrid">
-      <div>
-        <div class="kicker">Compliance ProofPacks in seconds</div>
-        <h1>Streamlined evidence collection — without the chaos</h1>
-        <p class="sub">
-          <strong>Auditors:</strong> Define exactly what evidence you need. Send your client a guided upload link.<br><br>
-          <strong>Companies:</strong> Upload evidence with clear guidance. No more "wrong file" corrections.
-        </p>
-        <div style="margin-top:16px"><a class="btn primary" href="#request">Get started</a></div>
+  <section class="hero">
+    <div class="hero-badge">Compliance ProofPacks in Seconds</div>
+    <h1>Streamlined evidence collection — without the chaos</h1>
+    <p><strong>Auditors:</strong> Define exactly what evidence you need. Send your client a guided upload link.</p>
+    <p><strong>Companies:</strong> Upload evidence with clear guidance. No more "wrong file" corrections.</p>
+    <button class="btn btn-primary" id="heroGetStarted">Get started</button>
+    <div class="hero-features">
+      <div class="hero-feature">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <span><strong>Auditor-defined requests:</strong> Specify exactly what you need.</span>
       </div>
-      <aside class="card">
-        <div class="ticks">
-          <div class="li"><span class="tick">✓</span><div><strong>Auditor-defined requests:</strong> Specify exactly what you need.</div></div>
-          <div class="li"><span class="tick">✓</span><div><strong>Guided for clients:</strong> Clear checklist shows what to upload.</div></div>
-          <div class="li"><span class="tick">✓</span><div><strong>Structured output:</strong> Files mapped to controls, ready for workpapers.</div></div>
-        </div>
-      </aside>
+      <div class="hero-feature">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <span><strong>Guided for clients:</strong> Clear checklist shows what to upload.</span>
+      </div>
+      <div class="hero-feature">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <span><strong>Structured output:</strong> Files mapped to controls, ready for workpapers.</span>
+      </div>
     </div>
   </section>
 
-  <section id="request" class="wrap section">
-    <h2>Upload evidence and get a ProofPack</h2>
-    <p class="muted">Choose your role to get started.</p>
+  <main class="main-container">
+    <!-- Success Display (for checkout returns) -->
+    <div id="successDisplay" class="card success-display">
+      <div class="success-icon">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </div>
+      <h3>Payment Successful!</h3>
+      <p>Your ProofRepo credits are ready to use.</p>
+      <div class="code-display-box">
+        <div class="code-display-label">Your Credit Code</div>
+        <div class="code-display-value" id="displayedCode">-</div>
+        <div class="code-display-credits" id="displayedCredits">-</div>
+      </div>
+      <div class="success-buttons">
+        <a href="https://proofrepo.com" class="btn btn-primary">Start Fresh</a>
+        <button class="btn btn-accent" id="continueWithCodeBtn">Continue Where You Left Off</button>
+      </div>
+    </div>
 
-    <form id="intakeForm" class="card" novalidate>
-      <div class="form-row">
-        <label for="role">What brings you here?</label>
-        <select id="role" required>
-          <option value="" selected disabled>Choose one…</option>
+    <!-- Main Form Card -->
+    <div id="mainFormCard" class="card">
+      <div class="card-header">
+        <h2>Upload evidence and get a ProofPack</h2>
+        <p>Choose your role to get started.</p>
+      </div>
+
+      <!-- Role Selector -->
+      <div class="role-selector">
+        <label class="form-label">What brings you here?</label>
+        <select id="roleSelect">
+          <option value="">Select your role...</option>
           <option value="auditor">I'm an auditor requesting evidence from a client</option>
-          <option value="client" style="display:none">My auditor sent me here to upload evidence</option>
-          <option value="company">I'm building a ProofPack proactively</option>
+          <option value="client">I'm responding to an evidence request</option>
         </select>
-        <div class="hint" id="roleHint">This determines your workflow.</div>
       </div>
 
-      <div class="form-row two step-after-role" id="contactRow" style="display:none">
-        <div>
-          <label id="emailLabel" for="email">Your email</label>
-          <input id="email" type="email" required placeholder="you@company.com"/>
-        </div>
-        <div id="companyCol">
-          <label id="companyLabel" for="company">Company</label>
-          <input id="company" placeholder="Company Inc."/>
-        </div>
-      </div>
+      <!-- Auditor Flow -->
+      <div id="auditorFlow" style="display: none;">
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">
+          Define what evidence you need, then we'll email your client a guided upload link.
+        </p>
 
-      <div id="clientContactCol" class="form-row step-after-role" style="display:none">
-        <label for="clientContactEmail">Client's email (where to send the upload link)</label>
-        <input id="clientContactEmail" type="email" placeholder="client@company.com"/>
-      </div>
-
-      <div class="form-row two step-after-role" id="deadlineRow" style="display:none">
-        <div>
-          <label for="deadlineDays">Deadline</label>
-          <select id="deadlineDays">
-            <option value="0.33">8 hours</option>
-            <option value="0.5">12 hours</option>
-            <option value="1">1 day</option>
-            <option value="2">2 days</option>
-            <option value="3">3 days</option>
-            <option value="5" selected>5 days</option>
-            <option value="7">1 week</option>
-            <option value="10">10 days</option>
-            <option value="14">2 weeks</option>
-            <option value="21">3 weeks</option>
-            <option value="30">1 month</option>
-            <option value="45">45 days</option>
-            <option value="60">2 months</option>
-          </select>
-        </div>
-        <div>
-          <label for="deadlineTime">Time</label>
-          <input id="deadlineTime" type="time" value="17:00"/>
-        </div>
-      </div>
-
-      <div id="composerBlock" class="step-after-role" style="display:none">
-        <label><strong>Evidence Request</strong></label>
-        <div class="hint" id="composerHint">Check the frameworks that apply, then customize what evidence you need. Items with ✓ are included by default.</div>
-        <div id="composer" class="composer"></div>
-      </div>
-
-      <div class="filebox step-after-role" id="filesRow" style="display:none">
-        <label for="files"><strong>Upload files</strong> <span class="muted">(drag & drop or click)</span></label>
-        <input id="files" type="file" multiple/>
-        <div id="fileMeta" class="filemeta">No files selected.</div>
-      </div>
-
-      <div class="form-row step-after-role" id="routingRow" style="display:none">
-        <label for="auditorEmail">Auditor email (optional - to CC on the ProofPack)</label>
-        <input id="auditorEmail" type="email" placeholder="reviewer@firm.com"/>
-      </div>
-
-      <input type="hidden" id="requestToken" value="">
-
-      <div id="pricingGate" class="card pricing-gate" style="display:none">
-        <h3>Enter your code to continue</h3>
-        <p class="small muted">Already have a code? Enter it below. Otherwise, get started with a free trial or purchase credits.</p>
-        
-        <div class="pricing-tabs">
-          <button type="button" class="pricing-tab active" data-tab="code">I have a code</button>
-          <button type="button" class="pricing-tab" data-tab="buy">Buy credits</button>
-        </div>
-        
-        <div class="pricing-tab-content active" data-tab-content="code">
-          <div class="form-row two" style="margin-top:10px">
-            <input id="unlockCode" placeholder="Enter code"/>
-            <button type="button" class="btn primary" id="applyCodeBtn">Apply</button>
+        <!-- Code Input -->
+        <div class="code-section">
+          <label class="form-label">Your email (auditor)</label>
+          <input type="email" class="form-input" id="auditorEmail" placeholder="auditor@firm.com" style="margin-bottom: 16px;">
+          
+          <label class="form-label">Credit Code</label>
+          <div class="code-input-wrapper">
+            <input type="text" class="code-input" id="auditorCode" placeholder="ENTER CODE">
+            <button class="btn btn-outline" id="verifyCodeBtn">Verify</button>
           </div>
-          <div class="hint" id="unlockHint"></div>
+          <div id="codeStatus" class="code-status"></div>
         </div>
-        
-        <div class="pricing-tab-content" data-tab-content="buy">
-          <p class="small muted" style="margin-bottom:12px">Each credit = 1 ProofPack request. Buy more, save more.</p>
+
+        <!-- Client Info -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Client company</label>
+            <input type="text" class="form-input" id="clientCompany" placeholder="Acme Corp">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Client's email (where to send the upload link)</label>
+            <input type="email" class="form-input" id="clientEmail" placeholder="client@company.com">
+          </div>
+        </div>
+
+        <!-- Deadline -->
+        <div class="deadline-row">
+          <div class="form-group">
+            <label class="form-label">Deadline</label>
+            <select class="form-select" id="deadlineDays">
+              <option value="5">5 days</option>
+              <option value="7">7 days</option>
+              <option value="14">14 days</option>
+              <option value="30">30 days</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Time</label>
+            <input type="time" class="form-input" id="deadlineTime" value="05:00">
+            <span style="font-size: 0.8rem; color: var(--text-muted);">PM</span>
+          </div>
+        </div>
+
+        <!-- Framework Selector -->
+        <div class="form-group" style="margin-top: 20px;">
+          <label class="form-label">Evidence Request</label>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">Check frameworks, then customize what evidence you need. Items marked ✓ are included by default.</p>
+          <div class="framework-selector">
+            <label class="framework-tag selected">
+              <input type="checkbox" value="SOC2" checked> ✓ SOC 2
+            </label>
+            <label class="framework-tag">
+              <input type="checkbox" value="ISO27001"> ISO 27001
+            </label>
+            <label class="framework-tag">
+              <input type="checkbox" value="HIPAA"> HIPAA
+            </label>
+            <label class="framework-tag">
+              <input type="checkbox" value="GDPR"> GDPR
+            </label>
+            <button class="framework-tag" id="addFrameworkBtn" style="border-style: dashed;">+ Add framework</button>
+          </div>
+        </div>
+
+        <!-- Evidence Categories -->
+        <div id="evidenceCategories">
+          <!-- Will be populated by JS -->
+        </div>
+
+        <!-- Global Instructions -->
+        <div class="form-group" style="margin-top: 20px;">
+          <label class="form-label">Overall Instructions for client</label>
+          <textarea class="form-textarea" id="globalInstructions" placeholder="Example: Please provide evidence covering Jan-Dec 2025. Screenshots acceptable. Redact any secrets or credentials."></textarea>
+          <label style="display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 0.85rem; color: var(--text-muted); cursor: pointer;">
+            <input type="checkbox" id="showInstructionsAbove" checked>
+            Show prominently to your client above the checklist
+          </label>
+        </div>
+
+        <!-- Payment Banner (shows when no valid code) -->
+        <div id="paymentBanner" class="payment-banner">
+          <h3>Payment processed</h3>
+          <p>Your code should be emailed shortly. Enter it above to continue.</p>
+        </div>
+
+        <!-- Pricing Section -->
+        <div id="pricingSection" class="pricing-section">
+          <label class="form-label">Select a plan to get started</label>
           <div class="pricing-grid">
             <div class="pricing-card" data-tier="single">
               <div class="pricing-card-name">Single Pack</div>
               <div class="pricing-card-price">$59</div>
-              <div class="pricing-card-desc">1 credit</div>
+              <div class="pricing-card-desc">1 evidence pack</div>
             </div>
             <div class="pricing-card" data-tier="pack5">
               <div class="pricing-card-name">5-Pack</div>
               <div class="pricing-card-price">$249</div>
-              <div class="pricing-card-desc">5 credits</div>
+              <div class="pricing-card-desc">5 packs ($50 each)</div>
             </div>
             <div class="pricing-card" data-tier="pack15">
               <div class="pricing-card-name">15-Pack</div>
               <div class="pricing-card-price">$499</div>
-              <div class="pricing-card-desc">15 credits</div>
+              <div class="pricing-card-desc">15 packs ($33 each)</div>
             </div>
             <div class="pricing-card" data-tier="pack50">
               <div class="pricing-card-name">50-Pack</div>
               <div class="pricing-card-price">$1,249</div>
-              <div class="pricing-card-desc">50 credits</div>
+              <div class="pricing-card-desc">50 packs ($25 each)</div>
             </div>
           </div>
-          <div style="margin-top:16px;text-align:center">
-            <div class="pricing-card" data-tier="unlimited" style="max-width:300px;margin:0 auto">
-              <div class="pricing-card-name">Unlimited Annual</div>
-              <div class="pricing-card-price">$2,999<span>/year</span></div>
-              <div class="pricing-card-desc">Unlimited requests for 12 months</div>
-            </div>
-          </div>
-          <div id="buyHint" class="hint" style="text-align:center;margin-top:12px"></div>
-          <div style="margin-top:16px;text-align:center">
-            <button type="button" class="btn primary" id="continueBtn" disabled>Select a plan above</button>
-          </div>
+          <button class="btn btn-accent btn-full" id="buyCreditsBtn" style="margin-top: 16px;" disabled>
+            Select a plan above
+          </button>
         </div>
+
+        <!-- Submit Button -->
+        <button class="btn btn-accent btn-full" id="sendRequestBtn" style="margin-top: 24px;" disabled>
+          Continue
+        </button>
       </div>
 
-      <div id="status" class="status" style="display:none"></div>
-
-      <div class="step-after-role" id="actionsRow" style="display:none;gap:10px;justify-content:flex-end">
-        <button id="startBtn" class="btn primary" type="button">Continue</button>
-        <button id="sendReqBtn" class="btn primary" type="button" style="display:none">Send request to client</button>
-        <button id="submitBtn" class="btn primary" type="submit" style="display:none">Upload & build ProofPack</button>
-      </div>
-    </form>
-  </section>
-
-  <div id="addFwModal" class="modal-overlay hidden">
-    <div class="modal">
-      <h3>Add Custom Framework</h3>
-      <div class="form-row" style="margin-bottom:12px">
-        <label for="customFwName">Framework name</label>
-        <input id="customFwName" placeholder="e.g., PCI DSS, FedRAMP, Internal Audit"/>
-      </div>
-      <div class="form-row">
-        <label for="customFwDesc">Description (optional)</label>
-        <input id="customFwDesc" placeholder="Brief description of this framework"/>
-      </div>
-      <div class="modal-actions">
-        <button type="button" class="btn" id="cancelFwBtn">Cancel</button>
-        <button type="button" class="btn primary" id="saveFwBtn">Add Framework</button>
+      <!-- Client Flow (placeholder) -->
+      <div id="clientFlow" style="display: none;">
+        <p style="color: var(--text-muted);">
+          Please use the link provided by your auditor to upload evidence. 
+          If you don't have a link, contact your auditor to request one.
+        </p>
       </div>
     </div>
-  </div>
+  </main>
 
-  <div id="addGroupModal" class="modal-overlay hidden">
-    <div class="modal">
-      <h3>Add Control Group</h3>
-      <div class="form-row" style="margin-bottom:12px">
-        <label for="customGroupName">Control group name</label>
-        <input id="customGroupName" placeholder="e.g., Network Security, Physical Security"/>
-      </div>
-      <div class="form-row">
-        <label for="customGroupDesc">Description (optional)</label>
-        <input id="customGroupDesc" placeholder="What this control group covers"/>
-      </div>
-      <input type="hidden" id="customGroupFwKey" value=""/>
-      <div class="modal-actions">
-        <button type="button" class="btn" id="cancelGroupBtn">Cancel</button>
-        <button type="button" class="btn primary" id="saveGroupBtn">Add Control Group</button>
-      </div>
-    </div>
-  </div>
+  <footer class="footer">
+    <p>ProofRepo — Compliance evidence collection for auditors • SOC 2, ISO 27001, HIPAA, GDPR & more • Get started with a free trial</p>
+  </footer>
 
-  <section id="how" class="wrap section">
-    <h2>How it works</h2>
-    <div class="grid cols3">
-      <div class="card"><h3>1. Auditor creates request</h3><p class="muted">Select frameworks, customize evidence items, add instructions.</p></div>
-      <div class="card"><h3>2. Client uploads</h3><p class="muted">Client receives a link with a clear checklist of what to provide.</p></div>
-      <div class="card"><h3>3. ProofPack ready</h3><p class="muted">Files organized by control area with a manifest for workpapers.</p></div>
-    </div>
-  </section>
-
-  <footer class="wrap"><div class="row"><div>© <span id="y"></span> ProofRepo • <a style="color:#9db0ff" href="mailto:support@proofrepo.com">support@proofrepo.com</a></div></div></footer>
-
-  <div class="marquee-fixed"><div class="marquee"><div>&nbsp;Guided compliance evidence collection • Built for auditors • SOC 2, ISO 27001, HIPAA, GDPR & more • Get started with a free trial •</div></div></div>
-
-<script>
-const WORKER_BASE = 'https://proofrepo-intake.atucker5.workers.dev';
-const STORAGE_KEY = 'proofrepo_form_state';
-
-const FRAMEWORK_LIBRARY = {
-  SOC2: {
-    label: 'SOC 2', description: 'Service Organization Control 2', defaultOn: true,
-    controlGroups: [
-      { id: 'governance', title: 'Governance & Policies', description: 'Security policies and organizational governance',
-        items: [
-          { id: 'info_sec_policy', title: 'Information Security Policy', common: true, hint: 'Current policy document with approval date' },
-          { id: 'security_roles', title: 'Security Roles & Responsibilities', common: true, hint: 'Org chart or RACI showing security ownership' },
-          { id: 'acceptable_use', title: 'Acceptable Use Policy', common: true, hint: 'Employee IT usage guidelines' },
-          { id: 'code_of_conduct', title: 'Code of Conduct', common: false, hint: 'Ethics and conduct expectations' },
-          { id: 'data_classification', title: 'Data Classification Policy', common: false, hint: 'How data is categorized by sensitivity' },
-          { id: 'remote_work', title: 'Remote Work Policy', common: false, hint: 'Security requirements for remote workers' },
-          { id: 'board_oversight', title: 'Board/Leadership Security Oversight', common: false, hint: 'Meeting minutes showing security discussions' },
-        ]},
-      { id: 'risk', title: 'Risk Assessment', description: 'How risks are identified and managed',
-        items: [
-          { id: 'risk_assessment', title: 'Risk Assessment', common: true, hint: 'Most recent risk assessment with ratings' },
-          { id: 'risk_register', title: 'Risk Register', common: true, hint: 'List of risks with owners and status' },
-          { id: 'risk_treatment', title: 'Risk Treatment Plan', common: true, hint: 'How identified risks are being addressed' },
-          { id: 'risk_acceptance', title: 'Risk Acceptance Documentation', common: false, hint: 'Formal acceptance of residual risks' },
-        ]},
-      { id: 'awareness', title: 'Security Awareness & Training', description: 'Employee security education',
-        items: [
-          { id: 'security_training', title: 'Security Awareness Training', common: true, hint: 'Training completion report or LMS screenshot' },
-          { id: 'training_materials', title: 'Training Materials', common: false, hint: 'Topics covered in training' },
-          { id: 'phishing_testing', title: 'Phishing Test Results', common: false, hint: 'Simulated phishing campaign results' },
-        ]},
-      { id: 'incident', title: 'Incident Response', description: 'How security incidents are handled',
-        items: [
-          { id: 'ir_plan', title: 'Incident Response Plan', common: true, hint: 'IR procedures and escalation paths' },
-          { id: 'ir_team', title: 'IR Team Contacts', common: true, hint: 'Who is on the IR team' },
-          { id: 'incident_log', title: 'Security Incident Log', common: true, hint: 'Record of incidents (or attestation of none)' },
-          { id: 'ir_testing', title: 'IR Plan Testing', common: false, hint: 'Tabletop exercises or IR tests' },
-          { id: 'postmortem', title: 'Incident Postmortems', common: false, hint: 'Post-incident review samples' },
-        ]},
-      { id: 'access', title: 'Access Control', description: 'How user access is managed',
-        items: [
-          { id: 'access_review', title: 'User Access Review', common: true, hint: 'Periodic access review with approvals' },
-          { id: 'mfa_evidence', title: 'MFA Enforcement', common: true, hint: 'Screenshot showing MFA is required' },
-          { id: 'access_policy', title: 'Access Control Policy', common: true, hint: 'Policy defining access principles' },
-          { id: 'jml_process', title: 'Joiner/Mover/Leaver Process', common: true, hint: 'How access is granted and revoked' },
-          { id: 'jml_samples', title: 'JML Process Samples', common: false, hint: '2-3 onboarding/offboarding examples' },
-          { id: 'privileged_list', title: 'Privileged Access List', common: true, hint: 'Admin users and justification' },
-          { id: 'privileged_controls', title: 'Privileged Access Controls', common: false, hint: 'PAM, just-in-time access, etc.' },
-          { id: 'sso_config', title: 'SSO Configuration', common: false, hint: 'Single sign-on setup' },
-          { id: 'password_policy', title: 'Password Policy', common: false, hint: 'Password requirements' },
-          { id: 'service_accounts', title: 'Service Account Inventory', common: false, hint: 'Non-human accounts list' },
-        ]},
-      { id: 'operations', title: 'System Operations & Monitoring', description: 'How systems are monitored and maintained',
-        items: [
-          { id: 'logging', title: 'Logging & Audit Trails', common: true, hint: 'What is logged, where, retention period' },
-          { id: 'monitoring', title: 'Monitoring & Alerting', common: true, hint: 'Tools used and how alerts are handled' },
-          { id: 'siem', title: 'SIEM / Log Aggregation', common: false, hint: 'Centralized logging solution' },
-          { id: 'vuln_scanning', title: 'Vulnerability Scanning', common: true, hint: 'Scan results or summary' },
-          { id: 'vuln_remediation', title: 'Vulnerability Remediation', common: false, hint: 'How vulns are tracked to fix' },
-          { id: 'patch_mgmt', title: 'Patch Management', common: false, hint: 'How patches are applied' },
-          { id: 'endpoint', title: 'Endpoint Protection', common: false, hint: 'Antivirus/EDR coverage' },
-          { id: 'encryption_rest', title: 'Encryption at Rest', common: false, hint: 'Evidence data is encrypted' },
-          { id: 'encryption_transit', title: 'Encryption in Transit', common: false, hint: 'TLS configuration' },
-          { id: 'backups', title: 'Backup & Recovery', common: false, hint: 'Backup config and testing' },
-        ]},
-      { id: 'change', title: 'Change Management', description: 'How changes are controlled',
-        items: [
-          { id: 'change_log', title: 'Change Log / Deployments', common: true, hint: 'Record of recent changes' },
-          { id: 'change_policy', title: 'Change Management Policy', common: true, hint: 'Change control requirements' },
-          { id: 'code_review', title: 'Code Review Evidence', common: true, hint: 'PR approvals, branch protection' },
-          { id: 'change_approval', title: 'Change Approval Process', common: false, hint: 'How changes are approved' },
-          { id: 'emergency_change', title: 'Emergency Change Process', common: false, hint: 'How urgent changes work' },
-          { id: 'sdlc', title: 'SDLC Documentation', common: false, hint: 'Development lifecycle docs' },
-        ]},
-      { id: 'vendor', title: 'Vendor Management', description: 'How third-party risks are managed',
-        items: [
-          { id: 'vendor_list', title: 'Vendor Inventory', common: true, hint: 'List with risk tiers' },
-          { id: 'vendor_policy', title: 'Vendor Management Policy', common: true, hint: 'Policy for vendor evaluation' },
-          { id: 'vendor_assessments', title: 'Vendor Assessments', common: false, hint: 'Sample security questionnaires' },
-          { id: 'critical_vendors', title: 'Critical Vendors List', common: false, hint: 'Cloud providers, key dependencies' },
-        ]},
-      { id: 'bcdr', title: 'Business Continuity', description: 'Continuity and disaster recovery',
-        items: [
-          { id: 'bcp', title: 'Business Continuity Plan', common: false, hint: 'Continuity procedures' },
-          { id: 'drp', title: 'Disaster Recovery Plan', common: false, hint: 'IT recovery procedures' },
-          { id: 'bcdr_testing', title: 'BCP/DR Testing', common: false, hint: 'Test results' },
-        ]},
-    ]
-  },
-  ISO27001: {
-    label: 'ISO 27001', description: 'Information Security Management System', defaultOn: false,
-    controlGroups: [
-      { id: 'isms', title: 'ISMS Documentation', description: 'Core ISMS documents',
-        items: [
-          { id: 'scope', title: 'ISMS Scope', common: true, hint: 'Boundaries of ISMS' },
-          { id: 'policy', title: 'ISMS Policy', common: true, hint: 'Top-level security policy' },
-          { id: 'soa', title: 'Statement of Applicability', common: true, hint: 'Which controls apply' },
-          { id: 'risk_iso', title: 'Risk Assessment', common: true, hint: 'ISO 27001 risk assessment' },
-          { id: 'risk_treatment_iso', title: 'Risk Treatment Plan', common: true, hint: 'How risks are treated' },
-          { id: 'internal_audit', title: 'Internal Audit Results', common: true, hint: 'Recent ISMS audit' },
-          { id: 'mgmt_review', title: 'Management Review', common: true, hint: 'Management review minutes' },
-        ]},
-      { id: 'annex', title: 'Annex A Controls', description: 'Evidence for applicable controls',
-        items: [
-          { id: 'asset_inventory', title: 'Asset Inventory', common: true, hint: 'Information assets list' },
-          { id: 'access_iso', title: 'Access Control', common: true, hint: 'Access control implementation' },
-          { id: 'crypto', title: 'Cryptography', common: false, hint: 'Encryption controls' },
-          { id: 'physical', title: 'Physical Security', common: false, hint: 'Physical access controls' },
-          { id: 'supplier', title: 'Supplier Security', common: false, hint: 'Third-party management' },
-        ]},
-    ]
-  },
-  HIPAA: {
-    label: 'HIPAA', description: 'Health Insurance Portability and Accountability Act', defaultOn: false,
-    controlGroups: [
-      { id: 'admin', title: 'Administrative Safeguards', description: 'Administrative controls for PHI',
-        items: [
-          { id: 'risk_hipaa', title: 'Security Risk Analysis', common: true, hint: 'HIPAA risk analysis' },
-          { id: 'policies_hipaa', title: 'HIPAA Policies', common: true, hint: 'Security policies' },
-          { id: 'training_hipaa', title: 'Workforce Training', common: true, hint: 'HIPAA training records' },
-          { id: 'sanctions', title: 'Sanction Policy', common: false, hint: 'Violation consequences' },
-        ]},
-      { id: 'technical', title: 'Technical Safeguards', description: 'Technical controls for PHI',
-        items: [
-          { id: 'access_hipaa', title: 'Access Controls', common: true, hint: 'PHI access controls' },
-          { id: 'audit_hipaa', title: 'Audit Controls', common: true, hint: 'PHI access logging' },
-          { id: 'integrity', title: 'Integrity Controls', common: false, hint: 'PHI integrity mechanisms' },
-          { id: 'transmission', title: 'Transmission Security', common: false, hint: 'PHI encryption in transit' },
-        ]},
-      { id: 'ba', title: 'Business Associates', description: 'BA agreements',
-        items: [
-          { id: 'baa_list', title: 'BAA Inventory', common: true, hint: 'List of BAAs' },
-          { id: 'baa_samples', title: 'Sample BAAs', common: false, hint: 'Executed BAA examples' },
-        ]},
-    ]
-  },
-  GDPR: {
-    label: 'GDPR', description: 'General Data Protection Regulation', defaultOn: false,
-    controlGroups: [
-      { id: 'core', title: 'Core Requirements', description: 'Fundamental GDPR compliance',
-        items: [
-          { id: 'ropa', title: 'Record of Processing Activities', common: true, hint: 'Article 30 records' },
-          { id: 'privacy_notice', title: 'Privacy Notice', common: true, hint: 'Public privacy policy' },
-          { id: 'lawful_basis', title: 'Lawful Basis Documentation', common: true, hint: 'Legal basis per activity' },
-          { id: 'dpia', title: 'Data Protection Impact Assessments', common: false, hint: 'DPIAs for high-risk processing' },
-        ]},
-      { id: 'rights', title: 'Data Subject Rights', description: 'Handling data subject requests',
-        items: [
-          { id: 'dsar', title: 'DSAR Process', common: true, hint: 'How requests are handled' },
-          { id: 'consent', title: 'Consent Records', common: false, hint: 'Consent mechanisms' },
-        ]},
-      { id: 'processors', title: 'Processors & Transfers', description: 'Third parties and transfers',
-        items: [
-          { id: 'dpa', title: 'Data Processing Agreements', common: true, hint: 'DPAs with processors' },
-          { id: 'transfers', title: 'Transfer Mechanisms', common: false, hint: 'SCCs, adequacy, etc.' },
-        ]},
-    ]
-  }
-};
-
-let composerState = {};
-let customFrameworks = [];
-let isUnlocked = false;
-let isFromRequestLink = false;
-let appliedCode = null;
-let selectedTier = null;
-
-const $ = s => document.querySelector(s);
-const $$ = s => document.querySelectorAll(s);
-const esc = (s='') => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-const safeUrl = u => { try { const url = new URL(String(u), location.href); return ['https:','http:'].includes(url.protocol) ? url.toString() : ''; } catch { return ''; } };
-
-function showStatus(msg, ok=false) { const el=$('#status'); el.style.display='block'; el.className='status '+(ok?'ok':'err'); el.innerHTML=msg; }
-function clearStatus() { $('#status').style.display='none'; }
-
-function saveFormState() {
-  try {
-    const state = {
-      role: $('#role')?.value || '',
-      email: $('#email')?.value || '',
-      company: $('#company')?.value || '',
-      clientContactEmail: $('#clientContactEmail')?.value || '',
-      deadlineDays: $('#deadlineDays')?.value || '5',
-      deadlineTime: $('#deadlineTime')?.value || '17:00',
-      auditorEmail: $('#auditorEmail')?.value || '',
-      globalInstructions: $('#globalInstructions')?.value || '',
-      appliedCode: appliedCode,
-      composerState: composerState,
-      customFrameworks: customFrameworks,
-      savedAt: Date.now()
+  <script>
+    const API = 'https://proofrepo-intake.atucker5.workers.dev';
+    
+    // State
+    let state = {
+      role: '',
+      code: '',
+      codeValid: false,
+      codeCredits: 0,
+      selectedTier: null,
+      frameworks: ['SOC2'],
+      formData: null
     };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  } catch (e) {
-    console.warn('Could not save form state:', e);
-  }
-}
 
-function loadFormState() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    const state = JSON.parse(raw);
-    if (state.savedAt && (Date.now() - state.savedAt) > 24 * 60 * 60 * 1000) {
-      localStorage.removeItem(STORAGE_KEY);
-      return null;
-    }
-    return state;
-  } catch (e) {
-    console.warn('Could not load form state:', e);
-    return null;
-  }
-}
-
-function restoreFormState(state) {
-  if (!state) return false;
-  if (state.role) $('#role').value = state.role;
-  if (state.email) $('#email').value = state.email;
-  if (state.company) $('#company').value = state.company;
-  if (state.clientContactEmail) $('#clientContactEmail').value = state.clientContactEmail;
-  if (state.deadlineDays) $('#deadlineDays').value = state.deadlineDays;
-  if (state.deadlineTime) $('#deadlineTime').value = state.deadlineTime;
-  if (state.auditorEmail) $('#auditorEmail').value = state.auditorEmail;
-  if (state.appliedCode) appliedCode = state.appliedCode;
-  if (state.composerState) composerState = state.composerState;
-  if (state.customFrameworks) customFrameworks = state.customFrameworks;
-  return true;
-}
-
-function clearFormState() {
-  try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
-}
-
-function setupAutoSave() {
-  const inputs = ['role', 'email', 'company', 'clientContactEmail', 'deadlineDays', 'deadlineTime', 'auditorEmail'];
-  inputs.forEach(id => {
-    const el = $(`#${id}`);
-    if (el) {
-      el.addEventListener('change', saveFormState);
-      el.addEventListener('input', saveFormState);
-    }
-  });
-}
-
-async function handleCheckoutReturn() {
-  const url = new URL(location.href);
-  const sessionId = url.searchParams.get('session_id');
-  if (!sessionId) return false;
-
-  url.searchParams.delete('session_id');
-  window.history.replaceState({}, '', url.toString());
-
-  showStatus('Confirming your purchase...', true);
-
-  const savedState = loadFormState();
-  if (savedState) {
-    restoreFormState(savedState);
-    updateRoleUI();
-  }
-
-  try {
-    const res = await fetch(`${WORKER_BASE}/checkout/session?session_id=${encodeURIComponent(sessionId)}`);
-    const j = await res.json();
-    console.log('Checkout session response:', j);
-
-    if (j.ok && j.code) {
-      appliedCode = j.code;
-      $('#unlockCode').value = j.code;
-      const creditsDisplay = j.isUnlimited ? 'Unlimited' : j.credits;
-      showStatus(`
-        <strong style="color:var(--accent);font-size:1.2rem">✓ Payment confirmed!</strong><br><br>
-        <div style="background:#0f2a1a;border:2px solid #86efac;border-radius:12px;padding:20px;text-align:center;margin:12px 0;">
-          <div style="color:#6b7280;font-size:14px;margin-bottom:4px;">Your Credit Code</div>
-          <div style="font-size:28px;font-weight:700;color:#059669;letter-spacing:2px;">${esc(j.code)}</div>
-          <div style="color:#6b7280;font-size:14px;margin-top:8px;">${creditsDisplay} credit${!j.isUnlimited && j.credits !== 1 ? 's' : ''} available</div>
-        </div>
-        <p style="color:var(--muted);font-size:14px;">Save this code! It's also been emailed to <strong>${esc(j.email || 'you')}</strong>.</p>
-      `, true);
-      if (j.email && !$('#email').value) $('#email').value = j.email;
-      if (!$('#role').value) $('#role').value = 'auditor';
-      updateRoleUI();
-      if (savedState && savedState.globalInstructions) {
-        setTimeout(() => {
-          const gi = $('#globalInstructions');
-          if (gi) gi.value = savedState.globalInstructions;
-        }, 100);
-      }
-      setUnlocked();
-      saveFormState();
-      return true;
-    } else if (res.status === 202) {
-      showStatus(`<strong style="color:var(--accent)">✓ Payment confirmed!</strong><br><br>
-        <p>Your code is being generated. It should arrive in your email within 1-2 minutes.</p>
-        <p>Once you receive it, enter it in the code field above and click Apply.</p>`, true);
-      if (savedState) updateRoleUI();
-      $('#pricingGate').style.display = 'block';
-      $$('.pricing-tab').forEach(t => t.classList.remove('active'));
-      $$('.pricing-tab-content').forEach(c => c.classList.remove('active'));
-      document.querySelector('[data-tab="code"]')?.classList.add('active');
-      document.querySelector('[data-tab-content="code"]')?.classList.add('active');
-      return true;
-    } else {
-      throw new Error(j.error || 'Could not verify payment');
-    }
-  } catch (e) {
-    console.error('Checkout return error:', e);
-    showStatus(`<strong>Payment processed</strong><br><br>
-      <p>Your code should be emailed shortly. Enter it above to continue.</p>`, false);
-    if (savedState) updateRoleUI();
-    return true;
-  }
-}
-
-function initComposerState() {
-  composerState = {};
-  for (const [fwKey, fw] of Object.entries(FRAMEWORK_LIBRARY)) {
-    composerState[fwKey] = { enabled: fw.defaultOn, groups: {} };
-    for (const g of fw.controlGroups) {
-      composerState[fwKey].groups[g.id] = { expanded: false, showMore: false, excluded: false, items: {} };
-      for (const item of g.items) {
-        composerState[fwKey].groups[g.id].items[item.id] = { included: item.common, instructions: '' };
-      }
-    }
-  }
-}
-
-function getAllFrameworks() {
-  const all = { ...FRAMEWORK_LIBRARY };
-  customFrameworks.forEach(f => all[f.id] = f);
-  return all;
-}
-
-function renderComposer() {
-  const c = $('#composer'); 
-  if (!c) return;
-  const role = ($('#role')?.value || '').trim();
-  if (role !== 'auditor') { c.innerHTML = ''; return; }
-
-  const allFw = getAllFrameworks();
-  let html = '<div class="fw-list">';
-  for (const [fwKey, fw] of Object.entries(allFw)) {
-    const on = composerState[fwKey]?.enabled;
-    html += `<label class="fw-chip ${on ? 'active' : ''}" data-fw="${esc(fwKey)}">
-      <input type="checkbox" ${on ? 'checked' : ''} data-fw-toggle="${esc(fwKey)}"/>
-      <span class="fw-chip-label">${esc(fw.label)}</span>
-    </label>`;
-  }
-  html += '<button type="button" class="fw-chip add-fw-btn" id="addFwChip">+ Add framework</button></div>';
-
-  for (const [fwKey, fw] of Object.entries(allFw)) {
-    if (!composerState[fwKey]?.enabled) continue;
-    html += renderFwBody(fwKey, fw);
-  }
-
-  const savedGlobalInstr = $('#globalInstructions')?.value || '';
-  html += `<div class="global-instructions">
-    <label for="globalInstructions"><strong>Overall instructions for client</strong></label>
-    <textarea id="globalInstructions" placeholder="Example: Please provide evidence covering Jan–Dec 2025. Screenshots acceptable. Redact any secrets or credentials.">${esc(savedGlobalInstr)}</textarea>
-    <div class="hint">Shown prominently to your client above the checklist.</div>
-  </div>`;
-
-  c.innerHTML = html;
-  wireComposer();
-  const gi = $('#globalInstructions');
-  if (gi) gi.addEventListener('input', saveFormState);
-}
-
-function renderFwBody(fwKey, fw) {
-  let html = `<div class="fw-body" data-fw-body="${esc(fwKey)}">
-    <div style="margin-bottom:12px;display:flex;justify-content:space-between;align-items:center">
-      <div><strong>${esc(fw.label)}</strong>${fw.description ? ` <span class="muted">— ${esc(fw.description)}</span>` : ''}</div>
-    </div>`;
-  for (const g of (fw.controlGroups || [])) {
-    html += renderGroup(fwKey, g);
-  }
-  html += `<button type="button" class="btn sm ghost" style="width:100%;margin-top:8px" data-add-group-btn="${esc(fwKey)}">+ Add control group</button>`;
-  return html + '</div>';
-}
-
-function renderGroup(fwKey, g) {
-  const gs = composerState[fwKey]?.groups?.[g.id];
-  const exp = gs?.expanded;
-  const more = gs?.showMore;
-  const excluded = gs?.excluded;
-  const common = (g.items || []).filter(i => i.common);
-  const extra = (g.items || []).filter(i => !i.common);
-  const includedCount = (g.items || []).filter(i => gs?.items?.[i.id]?.included && !excluded).length;
-  const totalCount = (g.items || []).length;
-
-  let html = `<div class="control-group ${excluded ? 'excluded' : ''}" data-fw="${esc(fwKey)}" data-group="${esc(g.id)}">
-    <div class="cg-header">
-      <span class="cg-title">${esc(g.title)}</span>
-      <div class="cg-status">
-        ${excluded 
-          ? `<span class="pill off">Excluded</span><button type="button" class="cg-include" data-include-group="${esc(fwKey)}-${esc(g.id)}" title="Include this group">+</button>`
-          : `<span class="cg-count">${includedCount} of ${totalCount} selected</span><button type="button" class="cg-exclude" data-exclude-group="${esc(fwKey)}-${esc(g.id)}" title="Exclude this group">×</button>`
-        }
-        <span class="cg-toggle">${exp ? '▼' : '▶'}</span>
-      </div>
-    </div>
-    <div class="cg-body ${exp ? 'open' : ''}">`;
-
-  if (excluded) {
-    html += `<div class="muted" style="padding:12px;text-align:center">This control group is excluded from the request.</div>`;
-  } else {
-    if (g.description) html += `<div class="muted small" style="margin-bottom:12px">${esc(g.description)}</div>`;
-    for (const item of common) html += renderItem(fwKey, g.id, item, gs);
-    if (extra.length) {
-      html += `<div class="extra-items" style="display:${more ? 'block' : 'none'}">`;
-      for (const item of extra) html += renderItem(fwKey, g.id, item, gs);
-      html += '</div>';
-      html += `<div class="more-toggle" data-fw="${esc(fwKey)}" data-group="${esc(g.id)}">${more ? '− Show fewer options' : `+ Show ${extra.length} more options`}</div>`;
-    }
-    html += `<div class="add-custom-section">
-      <h4>Add custom request to "${esc(g.title)}"</h4>
-      <div class="custom-form">
-        <div class="form-row"><label class="small">Request name</label><input placeholder="e.g., Network Diagram, Encryption Key Rotation Log" data-custom-name="${esc(fwKey)}-${esc(g.id)}"/></div>
-        <div class="form-row"><label class="small">Instructions for client (optional)</label><textarea placeholder="Describe what you need, date ranges, format preferences, etc." data-custom-instr="${esc(fwKey)}-${esc(g.id)}"></textarea></div>
-        <button type="button" class="btn sm" data-add-item="${esc(fwKey)}" data-group="${esc(g.id)}">+ Add request</button>
-      </div>
-    </div>`;
-  }
-  return html + '</div></div>';
-}
-
-function renderItem(fwKey, gid, item, gs) {
-  const st = gs?.items?.[item.id];
-  const inc = st?.included ?? item.common;
-  const instr = st?.instructions || '';
-  return `<div class="evidence-item ${inc ? 'included' : ''}" data-fw="${esc(fwKey)}" data-group="${esc(gid)}" data-item="${esc(item.id)}">
-    <input type="checkbox" ${inc ? 'checked' : ''}/>
-    <div class="ei-content">
-      <div class="ei-title">${esc(item.title)}</div>
-      ${item.hint ? `<div class="ei-hint">${esc(item.hint)}</div>` : ''}
-      <div class="ei-instr">
-        <label class="small muted">Instructions for client (optional)</label>
-        <textarea placeholder="e.g., Please include date range, reviewer sign-off, specific format..." data-item-instr="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">${esc(instr)}</textarea>
-      </div>
-    </div>
-  </div>`;
-}
-
-function wireComposer() {
-  $$('[data-fw-toggle]').forEach(cb => {
-    cb.addEventListener('change', e => {
-      const k = e.target.dataset.fwToggle;
-      if (!composerState[k]) composerState[k] = { enabled: false, groups: {} };
-      composerState[k].enabled = e.target.checked;
-      renderComposer();
-      saveFormState();
-    });
-  });
-
-  $$('.cg-header').forEach(h => {
-    h.addEventListener('click', e => {
-      if (e.target.closest('.cg-exclude') || e.target.closest('.cg-include')) return;
-      const g = h.closest('.control-group');
-      const fk = g.dataset.fw, gid = g.dataset.group;
-      composerState[fk].groups[gid].expanded = !composerState[fk].groups[gid].expanded;
-      renderComposer();
-    });
-  });
-
-  $$('[data-exclude-group]').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      const [fk, gid] = btn.dataset.excludeGroup.split('-');
-      composerState[fk].groups[gid].excluded = true;
-      renderComposer();
-      saveFormState();
-    });
-  });
-
-  $$('[data-include-group]').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      const [fk, gid] = btn.dataset.includeGroup.split('-');
-      composerState[fk].groups[gid].excluded = false;
-      renderComposer();
-      saveFormState();
-    });
-  });
-
-  $$('.more-toggle').forEach(t => {
-    t.addEventListener('click', e => {
-      e.stopPropagation();
-      const fk = t.dataset.fw, gid = t.dataset.group;
-      composerState[fk].groups[gid].showMore = !composerState[fk].groups[gid].showMore;
-      renderComposer();
-    });
-  });
-
-  $$('.evidence-item input[type="checkbox"]').forEach(cb => {
-    cb.addEventListener('change', e => {
-      const el = e.target.closest('.evidence-item');
-      const { fw, group, item } = el.dataset;
-      composerState[fw].groups[group].items[item].included = e.target.checked;
-      renderComposer();
-      saveFormState();
-    });
-  });
-
-  $$('[data-item-instr]').forEach(ta => {
-    ta.addEventListener('input', e => {
-      const [fw, group, item] = ta.dataset.itemInstr.split('-');
-      if (composerState[fw]?.groups?.[group]?.items?.[item]) {
-        composerState[fw].groups[group].items[item].instructions = e.target.value;
-      }
-      saveFormState();
-    });
-  });
-
-  $$('[data-add-item]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const fk = btn.dataset.addItem;
-      const gid = btn.dataset.group;
-      const nameInput = document.querySelector(`[data-custom-name="${fk}-${gid}"]`);
-      const instrInput = document.querySelector(`[data-custom-instr="${fk}-${gid}"]`);
-      const title = (nameInput?.value || '').trim();
-      const instructions = (instrInput?.value || '').trim();
-      if (!title) { showStatus('Please enter a request name.', false); return; }
-      const cid = 'c_' + Math.random().toString(36).slice(2, 8);
-      const allFw = getAllFrameworks();
-      const fw = allFw[fk];
-      const grp = fw?.controlGroups?.find(g => g.id === gid);
-      if (grp) grp.items.push({ id: cid, title, common: true, hint: '' });
-      composerState[fk].groups[gid].items[cid] = { included: true, instructions };
-      nameInput.value = '';
-      instrInput.value = '';
-      clearStatus();
-      renderComposer();
-      saveFormState();
-    });
-  });
-
-  $('#addFwChip')?.addEventListener('click', () => $('#addFwModal').classList.remove('hidden'));
-
-  $$('[data-add-group-btn]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      $('#customGroupFwKey').value = btn.dataset.addGroupBtn;
-      $('#addGroupModal').classList.remove('hidden');
-    });
-  });
-}
-
-$('#cancelFwBtn')?.addEventListener('click', () => {
-  $('#addFwModal').classList.add('hidden');
-  $('#customFwName').value = '';
-  $('#customFwDesc').value = '';
-});
-
-$('#saveFwBtn')?.addEventListener('click', () => {
-  const name = ($('#customFwName')?.value || '').trim();
-  const desc = ($('#customFwDesc')?.value || '').trim();
-  if (!name) return;
-  const id = 'cf_' + Math.random().toString(36).slice(2, 8);
-  customFrameworks.push({ id, label: name, description: desc || 'Custom framework', controlGroups: [] });
-  composerState[id] = { enabled: true, groups: {} };
-  $('#addFwModal').classList.add('hidden');
-  $('#customFwName').value = '';
-  $('#customFwDesc').value = '';
-  renderComposer();
-  saveFormState();
-});
-
-$('#cancelGroupBtn')?.addEventListener('click', () => {
-  $('#addGroupModal').classList.add('hidden');
-  $('#customGroupName').value = '';
-  $('#customGroupDesc').value = '';
-  $('#customGroupFwKey').value = '';
-});
-
-$('#saveGroupBtn')?.addEventListener('click', () => {
-  const name = ($('#customGroupName')?.value || '').trim();
-  const desc = ($('#customGroupDesc')?.value || '').trim();
-  const fwKey = $('#customGroupFwKey')?.value;
-  if (!name || !fwKey) return;
-  const gid = 'g_' + Math.random().toString(36).slice(2, 8);
-  const allFw = getAllFrameworks();
-  const fw = allFw[fwKey];
-  if (fw) {
-    fw.controlGroups.push({ id: gid, title: name, description: desc, items: [] });
-    composerState[fwKey].groups[gid] = { expanded: true, showMore: false, excluded: false, items: {} };
-  }
-  $('#addGroupModal').classList.add('hidden');
-  $('#customGroupName').value = '';
-  $('#customGroupDesc').value = '';
-  $('#customGroupFwKey').value = '';
-  renderComposer();
-  saveFormState();
-});
-
-function getPayload() {
-  const result = [];
-  const allFw = getAllFrameworks();
-  for (const [fk, fs] of Object.entries(composerState)) {
-    if (!fs.enabled) continue;
-    const fw = allFw[fk];
-    if (!fw) continue;
-    for (const g of (fw.controlGroups || [])) {
-      const gs = fs.groups?.[g.id];
-      if (!gs || gs.excluded) continue;
-      for (const item of (g.items || [])) {
-        const is = gs.items?.[item.id];
-        if (!is?.included) continue;
-        result.push({ id: item.id, framework: fw.label || fk, group: g.title, title: item.title, instructions: is.instructions || '' });
-      }
-    }
-  }
-  return result;
-}
-
-function renderClientChecklist(items, globalInstr) {
-  const c = $('#composer');
-  if (!c) return;
-  if (!items?.length) {
-    c.innerHTML = '<div class="client-checklist"><div class="muted">No specific evidence requested.</div></div>';
-    return;
-  }
-  const byFw = new Map();
-  for (const i of items) {
-    const fw = i.framework || 'Requested';
-    if (!byFw.has(fw)) byFw.set(fw, new Map());
-    const bg = byFw.get(fw);
-    const g = i.group || 'General';
-    if (!bg.has(g)) bg.set(g, []);
-    bg.get(g).push(i);
-  }
-  let html = '<div class="client-checklist">';
-  if (globalInstr) {
-    html += `<div style="margin-bottom:16px;padding:14px;background:#0a1020;border-radius:10px;border-left:4px solid var(--accent)">
-      <strong style="color:var(--accent)">📋 Instructions from your auditor:</strong>
-      <div class="muted" style="margin-top:8px;white-space:pre-wrap">${esc(globalInstr)}</div>
-    </div>`;
-  }
-  for (const [fw, groups] of byFw.entries()) {
-    html += `<div style="margin-bottom:20px"><strong style="font-size:1.1rem">${esc(fw)}</strong></div>`;
-    for (const [gn, its] of groups.entries()) {
-      html += `<div class="cli-group"><div class="cli-group-title">${esc(gn)}</div>`;
-      for (const i of its) {
-        html += `<div class="cli-item"><div class="cli-item-title">${esc(i.title)}</div>${i.instructions ? `<div class="cli-item-instr">${esc(i.instructions)}</div>` : ''}</div>`;
-      }
-      html += '</div>';
-    }
-  }
-  c.innerHTML = html + '</div>';
-}
-
-function updateRoleUI() {
-  const role = ($('#role')?.value || '').trim();
-  const later = $$('.step-after-role');
-  if (!role) { later.forEach(r => r.style.display = 'none'); return; }
-  later.forEach(r => {
-    if (['filesRow'].includes(r.id)) r.style.display = 'none';
-    else if (r.id === 'actionsRow') r.style.display = 'flex';
-    else r.style.display = 'block';
-  });
-  const cc = $('#clientContactCol'), dl = $('#deadlineRow'), cb = $('#composerBlock'), rr = $('#routingRow');
-  const el = $('#emailLabel'), cl = $('#companyLabel'), rh = $('#roleHint'), sb = $('#startBtn');
-  if (role === 'auditor') {
-    el.textContent = 'Your email (auditor)';
-    cl.textContent = 'Client company';
-    cc.style.display = 'block';
-    dl.style.display = 'grid';
-    cb.style.display = 'block';
-    rr.style.display = 'none';
-    sb.textContent = 'Continue';
-    $('#composerHint').textContent = 'Check frameworks, then customize what evidence you need. Items marked ✓ are included by default.';
-    if (Object.keys(composerState).length === 0) initComposerState();
-    renderComposer();
-  } else if (role === 'client') {
-    el.textContent = 'Your email';
-    cl.textContent = 'Your company';
-    cc.style.display = 'none';
-    dl.style.display = 'none';
-    cb.style.display = 'none';
-    rr.style.display = 'block';
-    sb.textContent = 'Continue';
-  } else {
-    el.textContent = 'Your email';
-    cl.textContent = 'Your company';
-    cc.style.display = 'none';
-    dl.style.display = 'none';
-    cb.style.display = 'none';
-    rr.style.display = 'none';
-    sb.textContent = 'Continue';
-  }
-  rh.textContent = { auditor: "Define what evidence you need, then we'll email your client a guided upload link.", client: 'Your auditor sent you here. Upload the requested evidence.', company: 'Build a ProofPack proactively for future audits.' }[role] || '';
-}
-
-function setUnlocked() {
-  isUnlocked = true;
-  const role = ($('#role')?.value || '').trim();
-  $('#pricingGate').style.display = 'none';
-  $('#startBtn').style.display = 'none';
-  if (role === 'auditor') {
-    $('#sendReqBtn').style.display = 'inline-flex';
-    $('#submitBtn').style.display = 'none';
-    $('#filesRow').style.display = 'none';
-  } else {
-    $('#sendReqBtn').style.display = 'none';
-    $('#submitBtn').style.display = 'inline-flex';
-    $('#filesRow').style.display = 'block';
-  }
-}
-
-async function submitAuditorRequest() {
-  const ae = ($('#email')?.value || '').trim();
-  const ce = ($('#clientContactEmail')?.value || '').trim();
-  const co = ($('#company')?.value || '').trim();
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(ae)) throw new Error('Enter a valid auditor email.');
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(ce)) throw new Error('Enter a valid client email.');
-  if (!co) throw new Error('Enter the client company name.');
-  const daysVal = parseFloat($('#deadlineDays')?.value || '5');
-  const ts = ($('#deadlineTime')?.value || '17:00').trim();
-  const [hh, mm] = ts.split(':').map(x => parseInt(x, 10));
-  const d = new Date();
-  d.setTime(d.getTime() + daysVal * 24 * 60 * 60 * 1000);
-  d.setHours(hh || 17, mm || 0, 0, 0);
-  const fws = Object.entries(composerState).filter(([_, s]) => s.enabled).map(([k]) => { const allFw = getAllFrameworks(); return allFw[k]?.label || k; });
-  if (!fws.length) throw new Error('Select at least one framework.');
-  const re = getPayload();
-  if (!re.length) throw new Error('Select at least one evidence item to request.');
-  const payload = { auditorEmail: ae, clientEmail: ce, company: co, frameworks: fws, deadlineISO: d.toISOString(), auditorCode: appliedCode, globalInstructions: ($('#globalInstructions')?.value || '').trim(), requestedEvidence: re };
-  const res = await fetch(`${WORKER_BASE}/request`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) });
-  const j = await res.json().catch(() => null);
-  if (!res.ok || !j?.ok) throw new Error(j?.error || 'Request failed');
-  return j;
-}
-
-async function prefillFromToken() {
-  const url = new URL(location.href);
-  const token = url.searchParams.get('t') || url.searchParams.get('token');
-  if (!token) return;
-  isFromRequestLink = true;
-  $('#pricingGate').style.display = 'none';
-  $('#startBtn').style.display = 'none';
-  showStatus('Verifying link…', true);
-  $('#requestToken').value = token;
-  let res, j;
-  try {
-    res = await fetch(`${WORKER_BASE}/resolve?t=${encodeURIComponent(token)}`);
-    j = await res.json();
-  } catch { showStatus('Could not verify link.', false); return; }
-  if (!res.ok || !j?.ok) { showStatus('Invalid or expired link.', false); return; }
-  if (j.status === 'submitted') {
-    const v = safeUrl(j.viewerUrl || j.packUrl);
-    showStatus(`Already used.${v ? ` <a href="${esc(v)}" target="_blank">Open ProofPack</a>` : ''}`, false);
-    $('#intakeForm').style.display = 'none';
-    return;
-  }
-  $('#role').value = 'client';
-  $('#role').disabled = true;
-  updateRoleUI();
-  if (j.clientEmail) $('#email').value = j.clientEmail;
-  if (j.company) $('#company').value = j.company;
-  if (j.auditorEmail) $('#auditorEmail').value = j.auditorEmail;
-  if (j.requestedEvidence?.length) {
-    $('#composerBlock').style.display = 'block';
-    $('#composerHint').textContent = 'Your auditor has requested the following evidence:';
-    renderClientChecklist(j.requestedEvidence, j.globalInstructions);
-  }
-  clearStatus();
-  setUnlocked();
-  $('#filesRow').style.display = 'block';
-}
-
-function updateFileMeta() {
-  const f = Array.from($('#files')?.files || []);
-  const m = $('#fileMeta');
-  if (!f.length) { m.textContent = 'No files selected.'; return; }
-  const t = f.reduce((n, x) => n + (x.size || 0), 0);
-  const mb = (t / 1024 / 1024).toFixed(2);
-  m.textContent = `${f.length} file(s), ${mb} MB`;
-}
-
-function validate() {
-  const role = ($('#role')?.value || '').trim();
-  if (!role) return 'Choose a role.';
-  if (!isUnlocked) return 'Click Continue.';
-  if (role === 'auditor') return 'Use Send request button.';
-  const e = ($('#email')?.value || '').trim();
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) return 'Enter valid email.';
-  const f = Array.from($('#files')?.files || []);
-  if (!f.length) return 'Upload at least one file.';
-  return null;
-}
-
-function gather() {
-  const fd = new FormData();
-  fd.append('email', ($('#email')?.value || '').trim());
-  fd.append('company', ($('#company')?.value || '').trim());
-  fd.append('role', $('#role')?.value || 'client');
-  fd.append('frameworks', 'SOC2');
-  const t = $('#requestToken')?.value;
-  if (t) fd.append('t', t);
-  if (appliedCode) { fd.append('auditorCode', appliedCode); fd.append('billingMode', 'code'); }
-  const ae = ($('#auditorEmail')?.value || '').trim();
-  if (ae) fd.append('auditorEmail', ae);
-  Array.from($('#files')?.files || []).forEach(f => fd.append('files', f, f.name));
-  return fd;
-}
-
-function initPricingTabs() {
-  $$('.pricing-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      $$('.pricing-tab').forEach(t => t.classList.remove('active'));
-      $$('.pricing-tab-content').forEach(c => c.classList.remove('active'));
-      tab.classList.add('active');
-      const tabName = tab.dataset.tab;
-      document.querySelector(`[data-tab-content="${tabName}"]`)?.classList.add('active');
-      const continueBtn = $('#continueBtn');
-      if (continueBtn) {
-        if (tabName === 'buy') {
-          continueBtn.style.display = 'inline-flex';
-          continueBtn.textContent = selectedTier ? 'Continue to Checkout' : 'Select a plan above';
-          continueBtn.disabled = !selectedTier;
-        } else {
-          continueBtn.style.display = 'none';
-        }
-      }
-    });
-  });
-
-  $$('.pricing-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const tier = card.dataset.tier;
-      if (!tier) return;
-      $$('.pricing-card').forEach(c => c.classList.remove('selected'));
-      card.classList.add('selected');
-      selectedTier = tier;
-      const continueBtn = $('#continueBtn');
-      if (continueBtn) { continueBtn.textContent = 'Continue to Checkout'; continueBtn.disabled = false; }
-      $('#buyHint').textContent = '';
-    });
-  });
-
-  $('#continueBtn')?.addEventListener('click', async () => {
-    const activeTab = document.querySelector('.pricing-tab.active')?.dataset.tab;
-    if (activeTab === 'buy') {
-      if (!selectedTier) { $('#buyHint').textContent = 'Please select a plan first.'; return; }
-      saveFormState();
-      const email = ($('#email')?.value || '').trim();
-      const btn = $('#continueBtn');
-      btn.disabled = true;
-      btn.textContent = 'Redirecting...';
-      $('#buyHint').textContent = '';
+    // Restore state from localStorage
+    function restoreState() {
       try {
-        const res = await fetch(`${WORKER_BASE}/checkout`, {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ tier: selectedTier, email: email || undefined, successUrl: window.location.origin + window.location.pathname + '?session_id={CHECKOUT_SESSION_ID}', cancelUrl: window.location.origin + window.location.pathname })
-        });
-        const j = await res.json();
-        console.log('Checkout response:', j);
-        if (!res.ok || !j?.ok) throw new Error(j?.error || `Checkout failed (HTTP ${res.status})`);
-        if (j.url) { window.location.href = j.url; }
-        else if (j.checkoutUrl) { window.location.href = j.checkoutUrl; }
-        else { console.error('No URL in response:', j); throw new Error('No checkout URL returned.'); }
+        const saved = localStorage.getItem('proofrepo_form_state');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed.auditorEmail) document.getElementById('auditorEmail').value = parsed.auditorEmail;
+          if (parsed.clientCompany) document.getElementById('clientCompany').value = parsed.clientCompany;
+          if (parsed.clientEmail) document.getElementById('clientEmail').value = parsed.clientEmail;
+          if (parsed.globalInstructions) document.getElementById('globalInstructions').value = parsed.globalInstructions;
+          state.formData = parsed;
+        }
+      } catch (e) {}
+    }
+
+    // Save state to localStorage
+    function saveState() {
+      try {
+        const data = {
+          auditorEmail: document.getElementById('auditorEmail').value,
+          clientCompany: document.getElementById('clientCompany').value,
+          clientEmail: document.getElementById('clientEmail').value,
+          globalInstructions: document.getElementById('globalInstructions').value,
+          timestamp: Date.now()
+        };
+        localStorage.setItem('proofrepo_form_state', JSON.stringify(data));
+      } catch (e) {}
+    }
+
+    // Check for checkout return
+    async function checkCheckoutReturn() {
+      const params = new URLSearchParams(window.location.search);
+      const sessionId = params.get('session_id');
+      
+      if (!sessionId) return false;
+
+      document.getElementById('mainFormCard').style.display = 'none';
+      const successDisplay = document.getElementById('successDisplay');
+      successDisplay.classList.add('visible');
+      document.getElementById('displayedCode').textContent = 'Loading...';
+      document.getElementById('displayedCredits').textContent = 'Please wait...';
+
+      // Poll for code with retries on frontend too
+      let code = null;
+      let credits = null;
+      
+      for (let attempt = 0; attempt < 20; attempt++) {
+        try {
+          const res = await fetch(`${API}/checkout/session?session_id=${sessionId}`);
+          const data = await res.json();
+          
+          if (data.ok && data.code) {
+            code = data.code;
+            credits = data.creditsDisplay || `${data.credits} credits`;
+            break;
+          }
+          
+          // Update status message
+          document.getElementById('displayedCredits').textContent = `Waiting for confirmation... (${attempt + 1}/20)`;
+          
+          // Wait 3 seconds before next attempt
+          await new Promise(r => setTimeout(r, 3000));
+        } catch (e) {
+          console.error('Checkout check error:', e);
+        }
+      }
+
+      if (code) {
+        document.getElementById('displayedCode').textContent = code;
+        document.getElementById('displayedCredits').textContent = credits;
+        state.code = code;
+        state.codeValid = true;
+      } else {
+        document.getElementById('displayedCode').textContent = 'Check your email';
+        document.getElementById('displayedCredits').textContent = 'Your code will be emailed to you shortly.';
+      }
+
+      // Handle "Continue where you left off" button
+      document.getElementById('continueWithCodeBtn').addEventListener('click', () => {
+        successDisplay.classList.remove('visible');
+        document.getElementById('mainFormCard').style.display = 'block';
+        document.getElementById('roleSelect').value = 'auditor';
+        handleRoleChange('auditor');
+        if (code) {
+          document.getElementById('auditorCode').value = code;
+          verifyCode();
+        }
+        restoreState();
+        // Clear the URL
+        window.history.replaceState({}, '', window.location.pathname);
+      });
+
+      return true;
+    }
+
+    // Role change handler
+    function handleRoleChange(role) {
+      state.role = role;
+      document.getElementById('auditorFlow').style.display = role === 'auditor' ? 'block' : 'none';
+      document.getElementById('clientFlow').style.display = role === 'client' ? 'block' : 'none';
+    }
+
+    // Verify code
+    async function verifyCode() {
+      const code = document.getElementById('auditorCode').value.trim().toUpperCase();
+      const statusEl = document.getElementById('codeStatus');
+      
+      if (!code) {
+        statusEl.innerHTML = '';
+        state.codeValid = false;
+        updateUI();
+        return;
+      }
+
+      statusEl.className = 'code-status checking';
+      statusEl.innerHTML = '<span class="spinner"></span> Checking...';
+
+      try {
+        const res = await fetch(`${API}/check-code?code=${encodeURIComponent(code)}`);
+        const data = await res.json();
+
+        if (data.ok && data.remaining > 0) {
+          state.code = code;
+          state.codeValid = true;
+          state.codeCredits = data.remaining;
+          const creditsText = data.remaining >= 9999 ? 'Unlimited credits' : `${data.remaining} credit${data.remaining !== 1 ? 's' : ''} remaining`;
+          statusEl.className = 'code-status valid';
+          statusEl.innerHTML = `✓ Valid code — ${creditsText}`;
+        } else if (data.remaining === 0) {
+          state.codeValid = false;
+          statusEl.className = 'code-status invalid';
+          statusEl.innerHTML = '✗ No credits remaining on this code';
+        } else {
+          state.codeValid = false;
+          statusEl.className = 'code-status invalid';
+          statusEl.innerHTML = '✗ Invalid code';
+        }
       } catch (e) {
-        console.error('Checkout error:', e);
-        const errorMsg = e.message || 'Could not start checkout';
-        if (e.name === 'TypeError' && e.message.includes('fetch')) { $('#buyHint').textContent = 'Network error. Make sure the worker is deployed and accessible.'; }
-        else { $('#buyHint').textContent = 'Error: ' + errorMsg; }
-        btn.disabled = false;
-        btn.textContent = 'Continue to Checkout';
+        state.codeValid = false;
+        statusEl.className = 'code-status invalid';
+        statusEl.innerHTML = '✗ Error checking code';
+      }
+
+      updateUI();
+    }
+
+    // Update UI based on state
+    function updateUI() {
+      const sendBtn = document.getElementById('sendRequestBtn');
+      const pricingSection = document.getElementById('pricingSection');
+      const paymentBanner = document.getElementById('paymentBanner');
+
+      if (state.codeValid) {
+        sendBtn.disabled = false;
+        sendBtn.textContent = 'Send Evidence Request to Client';
+        pricingSection.classList.remove('visible');
+        paymentBanner.classList.remove('visible');
+      } else {
+        sendBtn.disabled = true;
+        sendBtn.textContent = 'Enter a valid code to continue';
+        pricingSection.classList.add('visible');
       }
     }
-  });
-}
 
-document.addEventListener('DOMContentLoaded', async () => {
-  $('#y').textContent = new Date().getFullYear();
-  $('#role')?.addEventListener('change', () => { updateRoleUI(); saveFormState(); });
-  $('#files')?.addEventListener('change', updateFileMeta);
-
-  initPricingTabs();
-  setupAutoSave();
-
-  const handledCheckout = await handleCheckoutReturn();
-  if (handledCheckout) return;
-
-  const url = new URL(location.href);
-  const hasToken = url.searchParams.get('t') || url.searchParams.get('token');
-  if (hasToken) { await prefillFromToken(); return; }
-
-  clearFormState();
-
-  updateRoleUI();
-
-  $('#startBtn')?.addEventListener('click', () => {
-    clearStatus();
-    if (!$('#role')?.value) { showStatus('Choose a role.', false); return; }
-    saveFormState();
-    $('#pricingGate').style.display = 'block';
-    $('#startBtn').style.display = 'none';
-    $('#pricingGate').scrollIntoView({ behavior: 'smooth' });
-  });
-
-  $('#applyCodeBtn')?.addEventListener('click', async () => {
-    clearStatus();
-    const code = ($('#unlockCode')?.value || '').trim().toUpperCase();
-    if (!code) { $('#unlockHint').textContent = 'Enter a code.'; return; }
-    try {
-      const res = await fetch(`${WORKER_BASE}/check-code?code=${encodeURIComponent(code)}`);
-      const j = await res.json();
-      if (!res.ok || !j?.ok) throw new Error(j?.error || 'Invalid');
-      appliedCode = j.code || code;
-      $('#unlockHint').innerHTML = `<span style="color:var(--accent)">✓ Code accepted.</span> ${j.remaining ?? '?'} credit${j.remaining !== 1 ? 's' : ''} available.`;
-      setUnlocked();
-      saveFormState();
-    } catch (e) { $('#unlockHint').textContent = e.message || 'Invalid code.'; }
-  });
-
-  $('#sendReqBtn')?.addEventListener('click', async () => {
-    clearStatus();
-    const btn = $('#sendReqBtn');
-    btn.disabled = true;
-    btn.textContent = 'Sending…';
-    try {
-      if (!appliedCode) throw new Error('Apply a code first.');
-      const j = await submitAuditorRequest();
-      const link = safeUrl(j.magicLink) || j.magicLink || '';
-      clearFormState();
-      showStatus(`<strong>✓ Request sent!</strong><br><br>Your client will receive an email with upload instructions.<br><br><strong>Client link:</strong><br><a href="${esc(link)}" target="_blank" style="word-break:break-all">${esc(link)}</a>`, true);
-    } catch (e) { showStatus(esc(e.message), false); }
-    finally { btn.disabled = false; btn.textContent = 'Send request to client'; }
-  });
-
-  $('#intakeForm')?.addEventListener('submit', async e => {
-    e.preventDefault();
-    clearStatus();
-    const err = validate();
-    if (err) { showStatus(esc(err), false); return; }
-    const btn = $('#submitBtn');
-    btn.disabled = true;
-    btn.textContent = 'Uploading…';
-    try {
-      const res = await fetch(`${WORKER_BASE}/intake`, { method: 'POST', body: gather() });
-      const j = await res.json();
-      if (!res.ok || !j?.ok) throw new Error(j?.error || 'Failed');
-      const v = safeUrl(j.viewerUrl || j.packUrl);
-      clearFormState();
-      showStatus(`<strong>✓ Upload complete!</strong> ${j.usage?.files || 0} file(s).${v ? `<br><br><a href="${esc(v)}" target="_blank" class="btn primary">Open ProofPack</a>` : ''}`, true);
-    } catch (e) { showStatus(esc(e.message), false); }
-    finally { btn.disabled = false; btn.textContent = 'Upload & build ProofPack'; }
-  });
-
-  const fb = $('#filesRow');
-  if (fb) {
-    ['dragenter', 'dragover'].forEach(ev => fb.addEventListener(ev, e => { e.preventDefault(); fb.classList.add('dragover'); }));
-    ['dragleave', 'dragend', 'drop'].forEach(ev => fb.addEventListener(ev, e => { e.preventDefault(); fb.classList.remove('dragover'); }));
-    fb.addEventListener('drop', e => {
-      if (e.dataTransfer?.files) {
-        try {
-          const dt = new DataTransfer();
-          Array.from(e.dataTransfer.files).forEach(f => dt.items.add(f));
-          $('#files').files = dt.files;
-        } catch {}
-        updateFileMeta();
+    // Handle tier selection
+    function selectTier(tier) {
+      document.querySelectorAll('.pricing-card').forEach(card => {
+        card.classList.toggle('selected', card.dataset.tier === tier);
+      });
+      state.selectedTier = tier;
+      
+      const buyBtn = document.getElementById('buyCreditsBtn');
+      if (tier) {
+        const prices = { single: '$59', pack5: '$249', pack15: '$499', pack50: '$1,249' };
+        buyBtn.disabled = false;
+        buyBtn.textContent = `Buy Now — ${prices[tier]}`;
+      } else {
+        buyBtn.disabled = true;
+        buyBtn.textContent = 'Select a plan above';
       }
-    });
-  }
+    }
 
-  updateRoleUI();
-});
-</script>
+    // Handle checkout
+    async function handleCheckout() {
+      if (!state.selectedTier) return;
+
+      const buyBtn = document.getElementById('buyCreditsBtn');
+      buyBtn.disabled = true;
+      buyBtn.innerHTML = '<span class="spinner"></span> Processing...';
+
+      saveState();
+
+      try {
+        const res = await fetch(`${API}/checkout`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            tier: state.selectedTier,
+            email: document.getElementById('auditorEmail').value,
+            successUrl: window.location.origin + window.location.pathname + '?session_id={CHECKOUT_SESSION_ID}',
+            cancelUrl: window.location.href
+          })
+        });
+
+        const data = await res.json();
+
+        if (data.ok && data.url) {
+          window.location.href = data.url;
+        } else {
+          alert('Error starting checkout: ' + (data.error || 'Unknown error'));
+          buyBtn.disabled = false;
+          buyBtn.textContent = 'Buy Now';
+        }
+      } catch (e) {
+        alert('Error: ' + e.message);
+        buyBtn.disabled = false;
+        buyBtn.textContent = 'Buy Now';
+      }
+    }
+
+    // Send request
+    async function sendRequest() {
+      if (!state.codeValid) return;
+
+      const sendBtn = document.getElementById('sendRequestBtn');
+      sendBtn.disabled = true;
+      sendBtn.innerHTML = '<span class="spinner"></span> Sending...';
+
+      const deadlineDays = parseInt(document.getElementById('deadlineDays').value);
+      const deadline = new Date(Date.now() + deadlineDays * 24 * 60 * 60 * 1000).toISOString();
+
+      try {
+        const res = await fetch(`${API}/request`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            auditorEmail: document.getElementById('auditorEmail').value,
+            clientEmail: document.getElementById('clientEmail').value,
+            company: document.getElementById('clientCompany').value,
+            frameworks: state.frameworks,
+            deadlineISO: deadline,
+            auditorCode: state.code,
+            globalInstructions: document.getElementById('globalInstructions').value
+          })
+        });
+
+        const data = await res.json();
+
+        if (data.ok) {
+          localStorage.removeItem('proofrepo_form_state');
+          alert('Success! Evidence request sent to ' + document.getElementById('clientEmail').value);
+          window.location.reload();
+        } else {
+          alert('Error: ' + (data.error || 'Unknown error'));
+          sendBtn.disabled = false;
+          sendBtn.textContent = 'Send Evidence Request to Client';
+        }
+      } catch (e) {
+        alert('Error: ' + e.message);
+        sendBtn.disabled = false;
+        sendBtn.textContent = 'Send Evidence Request to Client';
+      }
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Check for checkout return first
+      const isCheckoutReturn = await checkCheckoutReturn();
+      if (isCheckoutReturn) return;
+
+      // Event listeners
+      document.getElementById('roleSelect').addEventListener('change', (e) => {
+        handleRoleChange(e.target.value);
+      });
+
+      document.getElementById('verifyCodeBtn').addEventListener('click', verifyCode);
+      document.getElementById('auditorCode').addEventListener('keyup', (e) => {
+        if (e.key === 'Enter') verifyCode();
+      });
+
+      document.querySelectorAll('.pricing-card').forEach(card => {
+        card.addEventListener('click', () => selectTier(card.dataset.tier));
+      });
+
+      document.getElementById('buyCreditsBtn').addEventListener('click', handleCheckout);
+      document.getElementById('sendRequestBtn').addEventListener('click', sendRequest);
+
+      // Framework toggles
+      document.querySelectorAll('.framework-tag input').forEach(input => {
+        input.addEventListener('change', (e) => {
+          const tag = e.target.closest('.framework-tag');
+          tag.classList.toggle('selected', e.target.checked);
+          if (e.target.checked) {
+            state.frameworks.push(e.target.value);
+          } else {
+            state.frameworks = state.frameworks.filter(f => f !== e.target.value);
+          }
+        });
+      });
+
+      // Scroll to main on hero button click
+      document.getElementById('heroGetStarted').addEventListener('click', () => {
+        document.getElementById('roleSelect').scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('roleSelect').focus();
+      });
+
+      document.getElementById('getStartedLink').addEventListener('click', (e) => {
+        e.preventDefault();
+        document.getElementById('roleSelect').scrollIntoView({ behavior: 'smooth' });
+      });
+
+      updateUI();
+    });
+  </script>
 </body>
 </html>
