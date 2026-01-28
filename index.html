@@ -1,12 +1,3 @@
-// Handle magic link redirect - MUST BE FIRST
-(function() {
-  const params = new URLSearchParams(window.location.search);
-  const token = params.get('t');
-  if (token && token.startsWith('req_')) {
-    window.location.href = 'https://proofrepo-intake.atucker5.workers.dev/upload?t=' + encodeURIComponent(token);
-    return;
-  }
-})();
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,6 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ProofRepo — Compliance ProofPacks in Seconds</title>
   <meta name="description" content="Streamlined evidence collection for SOC 2, ISO 27001, HIPAA, GDPR audits. Send your client a guided upload link, get a structured ProofPack." />
+  
+  <!-- MAGIC LINK REDIRECT - Must be in head, executes immediately -->
+  <script>
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+      var token = params.get('t');
+      if (token && token.indexOf('req_') === 0) {
+        window.location.replace('https://proofrepo-intake.atucker5.workers.dev/upload?t=' + encodeURIComponent(token));
+      }
+    })();
+  </script>
+  
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -1715,13 +1718,15 @@ function selectTier(tier) {
   if (tier) { 
     const prices = { single: '$59', pack5: '$249', pack15: '$499', pack50: '$1,249' }; 
     buyBtn.disabled = false; 
-    buyBtn.textContent = `Buy Credits — ${prices[tier]}`; 
+    buyBtn.textContent = `Buy Credits — ${prices[tier]}`;
+    // ADD THIS: Highlight the button
+    buyBtn.className = 'btn btn-accent btn-full';
   } else { 
     buyBtn.disabled = true; 
-    buyBtn.textContent = 'Select a plan to purchase'; 
+    buyBtn.textContent = 'Select a plan to purchase';
+    buyBtn.className = 'btn btn-outline btn-full';
   }
 }
-
 // ==================== MAIN ACTIONS ====================
 
 async function handleMainAction() {
