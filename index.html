@@ -1,3 +1,12 @@
+// Handle magic link redirect - MUST BE FIRST
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get('t');
+  if (token && token.startsWith('req_')) {
+    window.location.href = 'https://proofrepo-intake.atucker5.workers.dev/upload?t=' + encodeURIComponent(token);
+    return;
+  }
+})();
 <!DOCTYPE html>
 <html lang="en">
 <head>
