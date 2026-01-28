@@ -1945,15 +1945,10 @@ async function init() {
   setupAutoSave();
   setupModals();
   
-  // Restore form state if not returning from checkout
+  // Only restore form state when returning from Stripe checkout
+  // Fresh visits should start with a clean form
   if (!isCheckoutReturn) {
-    const savedState = loadFormState();
-    if (savedState) {
-      restoreFormState(savedState);
-      if (savedState.role) {
-        handleRoleChange(savedState.role);
-      }
-    }
+    clearFormState();
   }
   
   // Event listeners
