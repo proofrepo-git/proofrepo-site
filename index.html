@@ -1239,7 +1239,7 @@
       <div id="clientFlow" style="display: none;">
         <p style="color: var(--text-muted);">
           Please use the link provided by your compliance team to upload evidence. 
-          If you don't have a link, contact the person who requested evidence from you.
+          If you don't have a link, contact the person who requested evidence from you to get one.
         </p>
       </div>
     </div>
@@ -1352,7 +1352,7 @@
       <a href="/security.html">Security</a>
       <a href="/privacy.html">Privacy Policy</a>
       <a href="/terms.html">Terms of Service</a>
-      <a href="/cdn-cgi/l/email-protection#7b080e0b0b14090f3b0b0914141d091e0b1455181416">Contact</a>
+      <a href="mailto:support@proofrepo.com">Contact</a>
     </div>
     <p>© <span id="year"></span> ProofRepo. All rights reserved.</p>
   </footer>
@@ -1400,7 +1400,7 @@
     </div>
   </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 const API = 'https://proofrepo-intake.atucker5.workers.dev';
 const STORAGE_KEY = 'proofrepo_form_state';
 
@@ -2247,10 +2247,13 @@ async function init() {
   $('#getStartedLink').addEventListener('click', e => {
     e.preventDefault();
     $('#roleSelect').scrollIntoView({ behavior: 'smooth' });
+    $('#roleSelect').focus();
   });
+  
+  updateMainButton();
 }
 
-init();
+document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
