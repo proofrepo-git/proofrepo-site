@@ -784,12 +784,200 @@
       font-size: 0.9rem;
     }
 
+    /* ==================== TRUST SECTION ==================== */
+    .trust-section {
+      padding: 48px 24px;
+      background: linear-gradient(180deg, var(--bg) 0%, var(--surface) 50%, var(--bg) 100%);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .trust-section .section-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .trust-section .section-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .trust-section .section-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: var(--accent);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    .trust-section h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .trust-section .section-subtitle {
+      color: var(--text-muted);
+      font-size: 1rem;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .trust-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .trust-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 16px;
+      text-align: center;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .trust-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .trust-card-icon {
+      width: 44px;
+      height: 44px;
+      margin: 0 auto 12px;
+      background: linear-gradient(135deg, var(--primary), #8b5cf6);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .trust-card-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: white;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .trust-card h3 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .trust-card p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .trust-footer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .trust-footer-text {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .trust-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .trust-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .trust-link:hover {
+      color: var(--primary);
+    }
+
+    .trust-link svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    @media (max-width: 768px) {
+      .trust-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .trust-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .trust-card {
+        padding: 16px 12px;
+      }
+      .trust-links {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+
+    /* ==================== FOOTER ==================== */
     .footer {
       text-align: center;
       padding: 32px 24px;
       color: var(--text-muted);
       font-size: 0.85rem;
       border-top: 1px solid var(--border);
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--text);
+    }
+
+    .footer p {
+      margin: 0;
     }
 
     .marquee-fixed {
@@ -899,6 +1087,7 @@
     </a>
     <nav class="header-links">
       <a href="#how-it-works">How it works</a>
+      <a href="#trust">Security</a>
       <a id="getStartedLink">Get started</a>
     </nav>
   </header>
@@ -1074,8 +1263,98 @@
     </div>
   </section>
 
+  <!-- TRUST SECTION -->
+  <section class="trust-section" id="trust">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-badge">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+          </svg>
+          Security First
+        </div>
+        <h2>Your Data, Protected</h2>
+        <p class="section-subtitle">Enterprise-grade security without enterprise complexity. Built on trusted infrastructure.</p>
+      </div>
+
+      <div class="trust-grid">
+        <div class="trust-card">
+          <div class="trust-card-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+            </svg>
+          </div>
+          <h3>AES-256 Encryption</h3>
+          <p>Bank-grade encryption at rest</p>
+        </div>
+
+        <div class="trust-card">
+          <div class="trust-card-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <h3>TLS 1.2+ Transit</h3>
+          <p>Encrypted data transfer</p>
+        </div>
+
+        <div class="trust-card">
+          <div class="trust-card-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+            </svg>
+          </div>
+          <h3>90-Day Auto-Delete</h3>
+          <p>Automatic data removal</p>
+        </div>
+
+        <div class="trust-card">
+          <div class="trust-card-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+          </div>
+          <h3>SOC 2 Infrastructure</h3>
+          <p>Built on Cloudflare</p>
+        </div>
+      </div>
+
+      <div class="trust-footer">
+        <span class="trust-footer-text">Learn more:</span>
+        <div class="trust-links">
+          <a href="/security.html" class="trust-link">
+            <svg viewBox="0 0 24 24">
+              <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+            Security
+          </a>
+          <a href="/privacy.html" class="trust-link">
+            <svg viewBox="0 0 24 24">
+              <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+              <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+            </svg>
+            Privacy
+          </a>
+          <a href="/terms.html" class="trust-link">
+            <svg viewBox="0 0 24 24">
+              <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            Terms
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <footer class="footer">
-    <p>© <span id="year"></span> ProofRepo • <a href="mailto:support@proofrepo.com" style="color: #9db0ff;">support@proofrepo.com</a></p>
+    <div class="footer-links">
+      <a href="#how-it-works">How it Works</a>
+      <a href="/security.html">Security</a>
+      <a href="/privacy.html">Privacy Policy</a>
+      <a href="/terms.html">Terms of Service</a>
+      <a href="mailto:support@proofrepo.com">Contact</a>
+    </div>
+    <p>© <span id="year"></span> ProofRepo. All rights reserved.</p>
   </footer>
 
   <div class="marquee-fixed">
