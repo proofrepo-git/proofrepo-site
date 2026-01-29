@@ -1,781 +1,308 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Terms of Service — ProofRepo</title>
-  <meta name="description" content="ProofRepo Terms of Service - The legal agreement governing your use of our compliance evidence collection platform." />
+  <meta name="description" content="ProofRepo Terms of Service">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-primary: #0a0f1e;
-      --bg-secondary: #111827;
-      --bg-card: #1a2234;
-      --text-primary: #f1f5f9;
-      --text-secondary: #94a3b8;
-      --text-muted: #64748b;
-      --accent-blue: #3b82f6;
-      --accent-green: #22c55e;
-      --accent-purple: #8b5cf6;
-      --accent-yellow: #eab308;
-      --border-color: #1e293b;
-      --border-subtle: #334155;
+      --bg: #050a14;
+      --surface: #0a1628;
+      --surface-elevated: #0f1d32;
+      --border: #1e3a5f;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --primary: #2563eb;
+      --accent: #10b981;
     }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-primary);
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
       line-height: 1.7;
-      font-size: 16px;
+      font-size: 15px;
     }
-
-    /* Navigation */
-    .nav {
-      position: fixed;
+    .header {
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      background: rgba(5,10,20,0.9);
+      backdrop-filter: blur(10px);
+      position: sticky;
       top: 0;
-      left: 0;
-      right: 0;
       z-index: 100;
-      background: rgba(10, 15, 30, 0.9);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border-color);
     }
-
-    .nav-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      font-weight: 700;
-      font-size: 1.25rem;
-      color: var(--text-primary);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .logo-icon {
-      width: 32px;
-      height: 32px;
-      background: linear-gradient(135deg, var(--accent-blue), var(--accent-green));
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover {
-      color: var(--text-primary);
-    }
-
-    /* Hero Section */
-    .hero {
-      padding: 8rem 2rem 4rem;
-      text-align: center;
-      background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .hero h1 {
-      font-size: 3rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-      background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .hero p {
-      font-size: 1.25rem;
-      color: var(--text-secondary);
-      max-width: 700px;
-      margin: 0 auto;
-    }
-
-    .hero .effective-date {
-      margin-top: 1.5rem;
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
-
-    /* Main Content */
-    .main {
+    .header-inner {
       max-width: 800px;
       margin: 0 auto;
-      padding: 4rem 2rem;
-    }
-
-    /* Key Terms Summary */
-    .key-terms {
-      background: var(--bg-card);
-      border: 1px solid var(--accent-blue);
-      border-radius: 12px;
-      padding: 1.5rem 2rem;
-      margin-bottom: 3rem;
-    }
-
-    .key-terms h2 {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      color: var(--accent-blue);
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      justify-content: space-between;
     }
-
-    .key-terms ul {
-      list-style: none;
-      color: var(--text-secondary);
-      font-size: 0.95rem;
-    }
-
-    .key-terms li {
-      padding: 0.5rem 0;
-      padding-left: 1.5rem;
-      position: relative;
-    }
-
-    .key-terms li::before {
-      content: '→';
-      position: absolute;
-      left: 0;
-      color: var(--accent-blue);
-    }
-
-    /* Table of Contents */
-    .toc {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 1.5rem 2rem;
-      margin-bottom: 3rem;
-    }
-
-    .toc h2 {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .toc ol {
-      list-style: none;
-      counter-reset: toc;
-      columns: 2;
-      column-gap: 2rem;
-    }
-
-    .toc li {
-      counter-increment: toc;
-      margin: 0.4rem 0;
-    }
-
-    .toc a {
-      color: var(--text-secondary);
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--text);
       text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.9rem;
-      transition: color 0.2s;
     }
-
-    .toc a::before {
-      content: counter(toc) ".";
-      color: var(--accent-blue);
-      font-weight: 600;
-      min-width: 1.25rem;
-    }
-
-    .toc a:hover {
-      color: var(--text-primary);
-    }
-
-    /* Sections */
-    .section {
-      margin-bottom: 2.5rem;
-      scroll-margin-top: 100px;
-    }
-
-    .section h2 {
-      font-size: 1.35rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      padding-bottom: 0.75rem;
-      border-bottom: 1px solid var(--border-color);
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .section-number {
-      background: var(--accent-blue);
-      color: white;
-      font-size: 0.8rem;
-      font-weight: 600;
-      width: 26px;
-      height: 26px;
+    .logo-icon {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
       border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-
-    .section h3 {
-      font-size: 1.05rem;
-      font-weight: 600;
-      margin: 1.25rem 0 0.5rem;
-      color: var(--text-primary);
-    }
-
-    .section p {
-      color: var(--text-secondary);
-      margin-bottom: 0.75rem;
-    }
-
-    .section ul, .section ol {
-      margin: 0.75rem 0;
-      padding-left: 1.5rem;
-      color: var(--text-secondary);
-    }
-
-    .section li {
-      margin: 0.4rem 0;
-    }
-
-    .section strong {
-      color: var(--text-primary);
-    }
-
-    /* Important Notice */
-    .important-notice {
-      background: rgba(234, 179, 8, 0.1);
-      border: 1px solid rgba(234, 179, 8, 0.3);
-      border-radius: 8px;
-      padding: 1.25rem;
-      margin: 1.5rem 0;
-    }
-
-    .important-notice p {
-      margin: 0;
-      font-size: 0.95rem;
-      color: var(--text-secondary);
-    }
-
-    .important-notice strong {
-      color: var(--accent-yellow);
-    }
-
-    /* Legal Emphasis */
-    .legal-emphasis {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 1.25rem;
-      margin: 1.5rem 0;
-      text-transform: uppercase;
+    .back-link {
+      color: var(--text-muted);
+      text-decoration: none;
       font-size: 0.9rem;
-      letter-spacing: 0.02em;
-      line-height: 1.8;
     }
-
-    .legal-emphasis p {
-      margin: 0;
-      color: var(--text-secondary);
+    .back-link:hover { color: var(--text); }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
     }
-
-    /* Info Card */
-    .info-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
+    
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+    
+    /* Quick summary box */
+    .summary-box {
+      background: linear-gradient(135deg, rgba(37,99,235,0.1), rgba(16,185,129,0.1));
+      border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 1.5rem;
-      margin: 1.5rem 0;
+      padding: 24px;
+      margin-bottom: 40px;
     }
-
-    .info-card h4 {
+    .summary-box h2 {
       font-size: 1rem;
       font-weight: 600;
-      margin-bottom: 0.5rem;
-      color: var(--text-primary);
+      margin-bottom: 12px;
+      color: var(--accent);
     }
-
-    .info-card p {
-      margin: 0;
+    .summary-box ul {
+      list-style: none;
+      display: grid;
+      gap: 8px;
+    }
+    .summary-box li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
       font-size: 0.95rem;
     }
-
-    /* Contact Section */
-    .contact-section {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 2.5rem;
-      text-align: center;
-      margin-top: 4rem;
+    .summary-box li::before {
+      content: "✓";
+      color: var(--accent);
+      font-weight: 600;
+      flex-shrink: 0;
     }
-
-    .contact-section h2 {
-      font-size: 1.5rem;
-      margin-bottom: 0.75rem;
-      border: none;
-      padding: 0;
-      justify-content: center;
+    
+    /* Document content */
+    .document {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
     }
-
-    .contact-section p {
-      color: var(--text-secondary);
-      margin-bottom: 1.5rem;
+    
+    .section {
+      margin-bottom: 28px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--border);
     }
-
-    .contact-email {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--bg-primary);
-      border: 1px solid var(--border-subtle);
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
-      color: var(--accent-blue);
+    .section:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+    
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+    
+    p {
+      margin-bottom: 12px;
+      color: var(--text-muted);
+    }
+    p:last-child { margin-bottom: 0; }
+    
+    ul, ol {
+      margin: 12px 0;
+      padding-left: 24px;
+      color: var(--text-muted);
+    }
+    li { margin-bottom: 6px; }
+    
+    a {
+      color: var(--primary);
       text-decoration: none;
-      font-weight: 500;
-      transition: border-color 0.2s;
     }
-
-    .contact-email:hover {
-      border-color: var(--accent-blue);
+    a:hover { text-decoration: underline; }
+    
+    strong { color: var(--text); }
+    
+    .highlight-box {
+      background: var(--surface-elevated);
+      border-left: 3px solid var(--primary);
+      padding: 16px;
+      margin: 16px 0;
+      border-radius: 0 8px 8px 0;
     }
-
-    /* Footer */
+    
     .footer {
       text-align: center;
-      padding: 2rem;
-      border-top: 1px solid var(--border-color);
+      padding: 32px 24px;
       color: var(--text-muted);
       font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      margin-top: 48px;
     }
-
     .footer-links {
       display: flex;
       justify-content: center;
-      gap: 2rem;
-      margin-bottom: 1rem;
+      gap: 24px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
     }
-
     .footer-links a {
-      color: var(--text-secondary);
-      text-decoration: none;
-    }
-
-    .footer-links a:hover {
-      color: var(--text-primary);
-    }
-
-    @media (max-width: 768px) {
-      .hero h1 {
-        font-size: 2rem;
-      }
-
-      .hero p {
-        font-size: 1rem;
-      }
-
-      .nav-links {
-        display: none;
-      }
-
-      .toc ol {
-        columns: 1;
-      }
+      color: var(--text-muted);
     }
   </style>
 </head>
 <body>
-  <!-- Navigation -->
-  <nav class="nav">
-    <div class="nav-inner">
+  <header class="header">
+    <div class="header-inner">
       <a href="/" class="logo">
         <div class="logo-icon">
-          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
             <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
           </svg>
         </div>
         ProofRepo
       </a>
-      <ul class="nav-links">
-        <li><a href="/">Home</a></li>
-        <li><a href="/security.html">Security</a></li>
-        <li><a href="/privacy.html">Privacy</a></li>
-        <li><a href="/terms.html">Terms</a></li>
-      </ul>
+      <a href="/" class="back-link">← Back to home</a>
     </div>
-  </nav>
-
-  <!-- Hero -->
-  <header class="hero">
-    <h1>Terms of Service</h1>
-    <p>Please read these terms carefully before using ProofRepo. By using our Service, you agree to be bound by these terms.</p>
-    <p class="effective-date">Effective Date: January 28, 2026</p>
   </header>
 
-  <!-- Main Content -->
-  <main class="main">
-    <!-- Key Terms Summary -->
-    <div class="key-terms">
-      <h2>
-        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-        </svg>
-        Key Points (Plain English Summary)
-      </h2>
+  <div class="container">
+    <h1>Terms of Service</h1>
+    <p class="subtitle">Last updated: January 28, 2026</p>
+
+    <div class="summary-box">
+      <h2>The Short Version</h2>
       <ul>
-        <li>ProofRepo is a tool for auditors to collect compliance evidence from their clients</li>
-        <li>You purchase credits to send evidence requests; credits are non-refundable</li>
-        <li>All data is automatically deleted after 90 days</li>
-        <li>You're responsible for the files you upload — don't upload anything illegal</li>
-        <li>We provide the service "as is" without guarantees of uptime or error-free operation</li>
-        <li>Our liability is limited to the amount you've paid us in the past 12 months</li>
+        <li>ProofRepo helps auditors collect compliance evidence from clients</li>
+        <li>You pay per evidence request using credits (no subscription required)</li>
+        <li>Credits are valid for 12 months from purchase</li>
+        <li>Files are automatically deleted after 90 days</li>
+        <li>All sales are final — please use our trial before purchasing</li>
+        <li>We're a delivery service, not legal or compliance advisors</li>
       </ul>
     </div>
 
-    <!-- Table of Contents -->
-    <nav class="toc">
-      <h2>Contents</h2>
-      <ol>
-        <li><a href="#acceptance">Acceptance of Terms</a></li>
-        <li><a href="#service-description">Service Description</a></li>
-        <li><a href="#accounts-credits">Accounts & Credits</a></li>
-        <li><a href="#acceptable-use">Acceptable Use</a></li>
-        <li><a href="#user-content">User Content</a></li>
-        <li><a href="#intellectual-property">Intellectual Property</a></li>
-        <li><a href="#privacy">Privacy & Data</a></li>
-        <li><a href="#payment">Payment Terms</a></li>
-        <li><a href="#disclaimers">Disclaimers</a></li>
-        <li><a href="#limitation-liability">Limitation of Liability</a></li>
-        <li><a href="#indemnification">Indemnification</a></li>
-        <li><a href="#termination">Termination</a></li>
-        <li><a href="#modifications">Modifications to Terms</a></li>
-        <li><a href="#governing-law">Governing Law</a></li>
-        <li><a href="#miscellaneous">Miscellaneous</a></li>
-        <li><a href="#contact">Contact Information</a></li>
-      </ol>
-    </nav>
-
-    <!-- Section 1: Acceptance -->
-    <section id="acceptance" class="section">
-      <h2><span class="section-number">1</span> Acceptance of Terms</h2>
-      <p>These Terms of Service ("Terms") constitute a legally binding agreement between you ("you," "your," or "User") and ProofRepo ("we," "us," "our," or "Company") governing your access to and use of the ProofRepo website at proofrepo.com and all related services (collectively, the "Service").</p>
-      <p>By accessing or using the Service, you agree to be bound by these Terms. If you do not agree to all of these Terms, you may not access or use the Service.</p>
-      <p>If you are using the Service on behalf of a business or other legal entity, you represent that you have the authority to bind that entity to these Terms, and "you" refers to that entity.</p>
-    </section>
-
-    <!-- Section 2: Service Description -->
-    <section id="service-description" class="section">
-      <h2><span class="section-number">2</span> Service Description</h2>
-      <p>ProofRepo is a compliance evidence collection platform that enables auditors and compliance professionals ("Auditors") to request, collect, and organize evidence from their clients ("Clients"). The Service includes:</p>
-      <ul>
-        <li>Creating and sending evidence requests with customized checklists</li>
-        <li>Secure file upload and storage for compliance evidence</li>
-        <li>Generating organized "ProofPacks" containing submitted evidence</li>
-        <li>Email notifications and reminders</li>
-        <li>Time-limited, secure access to uploaded files</li>
-      </ul>
-      <p>We reserve the right to modify, suspend, or discontinue any aspect of the Service at any time without notice.</p>
-    </section>
-
-    <!-- Section 3: Accounts & Credits -->
-    <section id="accounts-credits" class="section">
-      <h2><span class="section-number">3</span> Accounts & Credits</h2>
+    <div class="document">
       
-      <h3>3.1 Credit-Based Access</h3>
-      <p>ProofRepo operates on a credit-based system. Auditors purchase credits, and each evidence request consumes one credit when a Client submits evidence. Credits are non-transferable between users.</p>
-      
-      <h3>3.2 Credit Codes</h3>
-      <p>Upon purchase, you receive a unique credit code. You are responsible for keeping your credit code confidential. Anyone with your credit code can use your credits.</p>
-      
-      <h3>3.3 Credit Expiration</h3>
-      <p>Credits do not expire. However, we reserve the right to implement expiration policies in the future with reasonable notice.</p>
-      
-      <h3>3.4 No User Accounts</h3>
-      <p>ProofRepo does not require user accounts or passwords. Access is managed through unique, cryptographically signed links. You are responsible for the security of these links.</p>
-    </section>
-
-    <!-- Section 4: Acceptable Use -->
-    <section id="acceptable-use" class="section">
-      <h2><span class="section-number">4</span> Acceptable Use</h2>
-      <p>You agree to use the Service only for lawful purposes and in accordance with these Terms. You agree NOT to:</p>
-      <ul>
-        <li>Upload, transmit, or store any content that is illegal, harmful, threatening, abusive, defamatory, or otherwise objectionable</li>
-        <li>Upload malware, viruses, or any code designed to disrupt or harm the Service or other users</li>
-        <li>Use the Service to violate any applicable law or regulation</li>
-        <li>Attempt to gain unauthorized access to any portion of the Service or any systems connected to the Service</li>
-        <li>Use automated scripts, bots, or other means to access the Service without our express permission</li>
-        <li>Interfere with or disrupt the Service or servers or networks connected to the Service</li>
-        <li>Impersonate any person or entity or falsely state or misrepresent your affiliation</li>
-        <li>Use the Service to collect personal information about others without their consent</li>
-        <li>Use the Service for any purpose other than its intended use as a compliance evidence collection platform</li>
-      </ul>
-      <p>We reserve the right to suspend or terminate access for any user who violates these acceptable use policies.</p>
-    </section>
-
-    <!-- Section 5: User Content -->
-    <section id="user-content" class="section">
-      <h2><span class="section-number">5</span> User Content</h2>
-      
-      <h3>5.1 Your Content</h3>
-      <p>"User Content" means any files, documents, text, or other materials that you upload, submit, or transmit through the Service. You retain all ownership rights in your User Content.</p>
-      
-      <h3>5.2 License to Us</h3>
-      <p>By uploading User Content, you grant us a limited, non-exclusive, royalty-free license to host, store, transfer, and display your User Content solely as necessary to provide the Service. This license terminates when your User Content is deleted from our systems.</p>
-      
-      <h3>5.3 Your Responsibilities</h3>
-      <p>You are solely responsible for your User Content. You represent and warrant that:</p>
-      <ul>
-        <li>You have all rights necessary to upload and share your User Content</li>
-        <li>Your User Content does not violate any law or infringe any third-party rights</li>
-        <li>Your User Content does not contain any malicious code</li>
-      </ul>
-      
-      <h3>5.4 No Obligation to Monitor</h3>
-      <p>We do not preview, approve, or monitor User Content. However, we reserve the right to remove any User Content that violates these Terms or that we find objectionable, without prior notice.</p>
-      
-      <h3>5.5 Automatic Deletion</h3>
-      <p>All User Content is automatically and permanently deleted 90 days after upload. Users may also delete their content at any time through the Pack Viewer interface.</p>
-    </section>
-
-    <!-- Section 6: Intellectual Property -->
-    <section id="intellectual-property" class="section">
-      <h2><span class="section-number">6</span> Intellectual Property</h2>
-      
-      <h3>6.1 Our Intellectual Property</h3>
-      <p>The Service, including its design, features, functionality, text, graphics, logos, and software, is owned by ProofRepo and protected by copyright, trademark, and other intellectual property laws. You may not copy, modify, distribute, sell, or lease any part of our Service without our express written consent.</p>
-      
-      <h3>6.2 Feedback</h3>
-      <p>If you provide us with feedback, suggestions, or ideas about the Service, you grant us a non-exclusive, perpetual, irrevocable, royalty-free license to use that feedback for any purpose without compensation or attribution to you.</p>
-    </section>
-
-    <!-- Section 7: Privacy -->
-    <section id="privacy" class="section">
-      <h2><span class="section-number">7</span> Privacy & Data</h2>
-      <p>Your use of the Service is subject to our <a href="/privacy.html" style="color: var(--accent-blue);">Privacy Policy</a>, which is incorporated into these Terms by reference. Please review our Privacy Policy to understand our practices regarding your personal information.</p>
-      <p>By using the Service, you consent to the collection, use, and disclosure of your information as described in the Privacy Policy.</p>
-    </section>
-
-    <!-- Section 8: Payment -->
-    <section id="payment" class="section">
-      <h2><span class="section-number">8</span> Payment Terms</h2>
-      
-      <h3>8.1 Pricing</h3>
-      <p>Current pricing is displayed on our website. We reserve the right to change pricing at any time. Price changes will not affect credits already purchased.</p>
-      
-      <h3>8.2 Payment Processing</h3>
-      <p>Payments are processed by Stripe, Inc. By making a purchase, you agree to Stripe's terms of service. We do not store your credit card information.</p>
-      
-      <h3>8.3 No Refunds</h3>
-      <div class="important-notice">
-        <p><strong>All credit purchases are final and non-refundable.</strong> Credits cannot be exchanged for cash or transferred to another user. Please ensure the Service meets your needs before purchasing.</p>
+      <div class="section">
+        <h3>1. What ProofRepo Does</h3>
+        <p>ProofRepo is an evidence collection and delivery service. Auditors create evidence requests, clients upload files, and both parties receive organized results. We facilitate the transfer — we don't provide legal, compliance, or audit advice.</p>
       </div>
-      
-      <h3>8.4 Taxes</h3>
-      <p>You are responsible for any applicable taxes associated with your purchase. Displayed prices may not include taxes, which will be calculated at checkout based on your location.</p>
-    </section>
 
-    <!-- Section 9: Disclaimers -->
-    <section id="disclaimers" class="section">
-      <h2><span class="section-number">9</span> Disclaimers</h2>
-      
-      <div class="legal-emphasis">
-        <p>THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT.</p>
+      <div class="section">
+        <h3>2. Using the Service</h3>
+        <p>By using ProofRepo, you agree to these terms. You must be at least 18 years old and have authority to agree on behalf of any organization you represent.</p>
+        <p>You agree to:</p>
+        <ul>
+          <li>Provide accurate information</li>
+          <li>Only upload content you have rights to share</li>
+          <li>Not use the service for illegal purposes</li>
+          <li>Keep your credit codes secure</li>
+        </ul>
       </div>
-      
-      <p>We do not warrant that:</p>
-      <ul>
-        <li>The Service will be uninterrupted, timely, secure, or error-free</li>
-        <li>The results obtained from using the Service will be accurate or reliable</li>
-        <li>Any errors in the Service will be corrected</li>
-        <li>The Service will meet your specific requirements</li>
-      </ul>
-      
-      <p>You use the Service at your own risk. We are not responsible for any damage to your computer system, loss of data, or other harm that results from your use of the Service.</p>
-      
-      <h3>9.1 Not Legal or Compliance Advice</h3>
-      <p>ProofRepo is a tool to facilitate evidence collection. We do not provide legal, compliance, or auditing advice. The Service does not guarantee that you will pass any audit or achieve compliance with any standard or regulation. You are responsible for ensuring your compliance program meets applicable requirements.</p>
-    </section>
 
-    <!-- Section 10: Limitation of Liability -->
-    <section id="limitation-liability" class="section">
-      <h2><span class="section-number">10</span> Limitation of Liability</h2>
-      
-      <div class="legal-emphasis">
-        <p>TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL PROOFREPO, ITS OFFICERS, DIRECTORS, EMPLOYEES, AGENTS, OR AFFILIATES BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING BUT NOT LIMITED TO LOSS OF PROFITS, DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES, RESULTING FROM:</p>
+      <div class="section">
+        <h3>3. Credits and Payment</h3>
+        <p><strong>How credits work:</strong> You purchase credits to send evidence requests. Each request uses one credit. Credits are tied to a unique code.</p>
+        <div class="highlight-box">
+          <p><strong>Credit validity:</strong> Credits expire 12 months from purchase date. Unused credits are not refundable.</p>
+        </div>
+        <p><strong>Pricing:</strong> Current prices are displayed at checkout. We may adjust pricing for future purchases.</p>
+        <p><strong>Refunds:</strong> All sales are final. We offer a free trial so you can test the service before purchasing. If you experience a technical issue that prevents service delivery, contact us and we'll make it right.</p>
       </div>
-      
-      <ul>
-        <li>Your access to or use of (or inability to access or use) the Service</li>
-        <li>Any conduct or content of any third party on the Service</li>
-        <li>Any User Content obtained from the Service</li>
-        <li>Unauthorized access, use, or alteration of your transmissions or content</li>
-        <li>Any bugs, viruses, or other harmful code that may be transmitted through the Service</li>
-        <li>Any errors or omissions in any content</li>
-      </ul>
-      
-      <div class="important-notice">
-        <p><strong>IN NO EVENT SHALL OUR TOTAL LIABILITY TO YOU FOR ALL CLAIMS ARISING FROM OR RELATING TO THE SERVICE EXCEED THE AMOUNT YOU HAVE PAID TO US IN THE TWELVE (12) MONTHS PRECEDING THE CLAIM, OR ONE HUNDRED DOLLARS ($100), WHICHEVER IS GREATER.</strong></p>
+
+      <div class="section">
+        <h3>4. Your Content</h3>
+        <p>You retain ownership of all content you upload. By using the service, you grant us permission to store and transmit your files as necessary to provide the service.</p>
+        <p><strong>Automatic deletion:</strong> All uploaded files are automatically deleted 90 days after submission. You can also delete submissions manually at any time through the Pack Viewer.</p>
+        <p><strong>Your responsibility:</strong> You're responsible for ensuring you have the right to share any content you upload and that it doesn't violate any laws.</p>
       </div>
-      
-      <p>Some jurisdictions do not allow the exclusion of certain warranties or limitation of liability for incidental or consequential damages, so some of the above limitations may not apply to you. In such jurisdictions, our liability will be limited to the greatest extent permitted by law.</p>
-    </section>
 
-    <!-- Section 11: Indemnification -->
-    <section id="indemnification" class="section">
-      <h2><span class="section-number">11</span> Indemnification</h2>
-      <p>You agree to indemnify, defend, and hold harmless ProofRepo and its officers, directors, employees, agents, and affiliates from and against any claims, liabilities, damages, losses, costs, and expenses (including reasonable attorneys' fees) arising out of or in any way connected with:</p>
-      <ul>
-        <li>Your access to or use of the Service</li>
-        <li>Your User Content</li>
-        <li>Your violation of these Terms</li>
-        <li>Your violation of any third-party rights, including intellectual property or privacy rights</li>
-        <li>Any claim that your User Content caused damage to a third party</li>
-      </ul>
-    </section>
-
-    <!-- Section 12: Termination -->
-    <section id="termination" class="section">
-      <h2><span class="section-number">12</span> Termination</h2>
-      
-      <h3>12.1 Termination by You</h3>
-      <p>You may stop using the Service at any time. Any unused credits will remain in your account but will not be refunded.</p>
-      
-      <h3>12.2 Termination by Us</h3>
-      <p>We may suspend or terminate your access to the Service at any time, with or without cause, and with or without notice. Reasons for termination may include, but are not limited to:</p>
-      <ul>
-        <li>Violation of these Terms</li>
-        <li>Conduct that we believe is harmful to other users or the Service</li>
-        <li>Fraudulent or illegal activity</li>
-        <li>Extended inactivity</li>
-      </ul>
-      
-      <h3>12.3 Effect of Termination</h3>
-      <p>Upon termination, your right to use the Service will immediately cease. Any User Content may be deleted. Sections that by their nature should survive termination will survive, including but not limited to: Intellectual Property, Disclaimers, Limitation of Liability, Indemnification, and Governing Law.</p>
-    </section>
-
-    <!-- Section 13: Modifications -->
-    <section id="modifications" class="section">
-      <h2><span class="section-number">13</span> Modifications to Terms</h2>
-      <p>We reserve the right to modify these Terms at any time. When we make material changes, we will:</p>
-      <ul>
-        <li>Update the "Effective Date" at the top of these Terms</li>
-        <li>Post the updated Terms on this page</li>
-        <li>For significant changes affecting your rights, provide notice via email (if we have your email address) or through the Service</li>
-      </ul>
-      <p>Your continued use of the Service after the effective date of any changes constitutes your acceptance of the updated Terms. If you do not agree to the updated Terms, you must stop using the Service.</p>
-    </section>
-
-    <!-- Section 14: Governing Law -->
-    <section id="governing-law" class="section">
-      <h2><span class="section-number">14</span> Governing Law & Dispute Resolution</h2>
-      
-      <h3>14.1 Governing Law</h3>
-      <p>These Terms shall be governed by and construed in accordance with the laws of the State of Delaware, United States, without regard to its conflict of law provisions.</p>
-      
-      <h3>14.2 Dispute Resolution</h3>
-      <p>Any dispute arising from or relating to these Terms or the Service shall be resolved through binding arbitration administered by the American Arbitration Association in accordance with its Commercial Arbitration Rules. The arbitration shall be conducted in English, and the arbitrator's decision shall be final and binding.</p>
-      
-      <h3>14.3 Class Action Waiver</h3>
-      <p>You agree that any dispute resolution proceedings will be conducted only on an individual basis and not in a class, consolidated, or representative action.</p>
-      
-      <h3>14.4 Exceptions</h3>
-      <p>Notwithstanding the above, either party may seek injunctive or other equitable relief in any court of competent jurisdiction to protect its intellectual property rights.</p>
-    </section>
-
-    <!-- Section 15: Miscellaneous -->
-    <section id="miscellaneous" class="section">
-      <h2><span class="section-number">15</span> Miscellaneous</h2>
-      
-      <h3>15.1 Entire Agreement</h3>
-      <p>These Terms, together with the Privacy Policy, constitute the entire agreement between you and ProofRepo regarding the Service and supersede all prior agreements and understandings.</p>
-      
-      <h3>15.2 Severability</h3>
-      <p>If any provision of these Terms is found to be unenforceable, the remaining provisions will continue in full force and effect.</p>
-      
-      <h3>15.3 Waiver</h3>
-      <p>Our failure to enforce any right or provision of these Terms will not be considered a waiver of that right or provision.</p>
-      
-      <h3>15.4 Assignment</h3>
-      <p>You may not assign or transfer these Terms or your rights under them without our prior written consent. We may assign our rights and obligations under these Terms without restriction.</p>
-      
-      <h3>15.5 Force Majeure</h3>
-      <p>We will not be liable for any failure or delay in performance due to circumstances beyond our reasonable control, including but not limited to acts of God, natural disasters, war, terrorism, labor disputes, power failures, or internet service provider failures.</p>
-      
-      <h3>15.6 No Third-Party Beneficiaries</h3>
-      <p>These Terms do not create any third-party beneficiary rights.</p>
-    </section>
-
-    <!-- Section 16: Contact -->
-    <section id="contact" class="section">
-      <h2><span class="section-number">16</span> Contact Information</h2>
-      <p>If you have any questions about these Terms, please contact us:</p>
-      
-      <div class="info-card">
-        <p><strong>General Inquiries:</strong> <a href="mailto:support@proofrepo.com" style="color: var(--accent-blue);">support@proofrepo.com</a></p>
-        <p><strong>Legal Inquiries:</strong> <a href="mailto:legal@proofrepo.com" style="color: var(--accent-blue);">legal@proofrepo.com</a></p>
-        <p><strong>Privacy Concerns:</strong> <a href="mailto:privacy@proofrepo.com" style="color: var(--accent-blue);">privacy@proofrepo.com</a></p>
+      <div class="section">
+        <h3>5. Privacy</h3>
+        <p>Our <a href="/privacy.html">Privacy Policy</a> explains how we collect, use, and protect your data. By using ProofRepo, you agree to our privacy practices.</p>
       </div>
-    </section>
 
-    <!-- Contact CTA -->
-    <section class="contact-section">
-      <h2>Questions About These Terms?</h2>
-      <p>We're happy to clarify any part of this agreement.</p>
-      <a href="mailto:support@proofrepo.com" class="contact-email">
-        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-        </svg>
-        support@proofrepo.com
-      </a>
-    </section>
-  </main>
+      <div class="section">
+        <h3>6. Service Availability</h3>
+        <p>We strive for high availability but don't guarantee uninterrupted service. We may modify or discontinue features with reasonable notice. For significant changes, we'll notify active users via email.</p>
+      </div>
 
-  <!-- Footer -->
+      <div class="section">
+        <h3>7. Limitations</h3>
+        <p>ProofRepo is provided "as is." We're a file transfer service — we don't guarantee that using ProofRepo will result in successful audits, compliance certification, or any particular outcome.</p>
+        <p>To the maximum extent permitted by law, our liability is limited to the amount you paid us in the 12 months before any claim, or $100, whichever is greater.</p>
+        <p>We're not liable for indirect, incidental, or consequential damages, including lost profits, data loss, or business interruption.</p>
+      </div>
+
+      <div class="section">
+        <h3>8. Termination</h3>
+        <p>You may stop using ProofRepo at any time. We may suspend or terminate access for violations of these terms. Upon termination, your right to use any remaining credits ends, but we'll fulfill any pending evidence requests.</p>
+      </div>
+
+      <div class="section">
+        <h3>9. Disputes</h3>
+        <p>These terms are governed by Delaware law. Any disputes will be resolved through binding arbitration rather than court, except for small claims. You agree to resolve disputes individually, not as part of a class action.</p>
+      </div>
+
+      <div class="section">
+        <h3>10. Changes to Terms</h3>
+        <p>We may update these terms occasionally. Material changes will be communicated via email or prominent notice on our website. Continued use after changes constitutes acceptance.</p>
+      </div>
+
+      <div class="section">
+        <h3>11. Contact</h3>
+        <p>Questions about these terms? Email us at <strong>support@proofrepo.com</strong></p>
+      </div>
+
+    </div>
+  </div>
+
   <footer class="footer">
     <div class="footer-links">
       <a href="/">Home</a>
       <a href="/security.html">Security</a>
-      <a href="/privacy.html">Privacy Policy</a>
-      <a href="/terms.html">Terms of Service</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
     </div>
     <p>© 2026 ProofRepo. All rights reserved.</p>
   </footer>
