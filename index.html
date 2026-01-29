@@ -1095,12 +1095,12 @@
   <section class="hero">
     <div class="hero-badge">Compliance ProofPacks in Seconds</div>
     <h1>Streamlined evidence collection — without the chaos</h1>
-    <p><strong>Auditors:</strong> Define exactly what evidence you need. Send your client a guided upload link.</p>
+    <p><strong>Compliance teams:</strong> Define exactly what evidence you need. Send your client a guided upload link.</p>
     <p><strong>Companies:</strong> Upload evidence with clear guidance. No more "wrong file" corrections.</p>
     <div class="hero-features">
       <div class="hero-feature">
         <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        <span><strong>Auditor-defined requests:</strong> Specify exactly what you need.</span>
+        <span><strong>Customized requests:</strong> Specify exactly what you need.</span>
       </div>
       <div class="hero-feature">
         <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -1132,7 +1132,7 @@
         <label class="form-label">What brings you here?</label>
         <select id="roleSelect">
           <option value="">Select your role...</option>
-          <option value="auditor">I'm an auditor requesting evidence from a client</option>
+          <option value="auditor">I'm requesting evidence from a client</option>
           <option value="client">I'm responding to an evidence request</option>
         </select>
       </div>
@@ -1143,8 +1143,8 @@
         </p>
 
         <div class="form-group">
-          <label class="form-label">Your email (auditor)</label>
-          <input type="email" class="form-input" id="auditorEmail" placeholder="auditor@firm.com">
+          <label class="form-label">Your email</label>
+          <input type="email" class="form-input" id="auditorEmail" placeholder="you@yourcompany.com">
         </div>
 
         <div class="form-row">
@@ -1238,8 +1238,8 @@
 
       <div id="clientFlow" style="display: none;">
         <p style="color: var(--text-muted);">
-          Please use the link provided by your auditor to upload evidence. 
-          If you don't have a link, contact your auditor to request one.
+          Please use the link provided by your compliance team to upload evidence. 
+          If you don't have a link, contact the person who requested evidence from you.
         </p>
       </div>
     </div>
@@ -1249,7 +1249,7 @@
     <h2>How it works</h2>
     <div class="how-grid">
       <div class="how-card">
-        <h3>1. Auditor creates request</h3>
+        <h3>1. Create your request</h3>
         <p>Select frameworks, customize evidence items, add instructions for your client.</p>
       </div>
       <div class="how-card">
@@ -1352,14 +1352,14 @@
       <a href="/security.html">Security</a>
       <a href="/privacy.html">Privacy Policy</a>
       <a href="/terms.html">Terms of Service</a>
-      <a href="mailto:support@proofrepo.com">Contact</a>
+      <a href="/cdn-cgi/l/email-protection#7b080e0b0b14090f3b0b0914141d091e0b1455181416">Contact</a>
     </div>
     <p>© <span id="year"></span> ProofRepo. All rights reserved.</p>
   </footer>
 
   <div class="marquee-fixed">
     <div class="marquee">
-      <div>&nbsp;Guided compliance evidence collection • Built for auditors • SOC 2, ISO 27001, HIPAA, GDPR & more • Get started with a free trial •&nbsp;&nbsp;&nbsp;&nbsp;Guided compliance evidence collection • Built for auditors • SOC 2, ISO 27001, HIPAA, GDPR & more • Get started with a free trial •</div>
+      <div>&nbsp;Guided compliance evidence collection • Built for compliance teams • SOC 2, ISO 27001, HIPAA, GDPR & more • Get started with a free trial •&nbsp;&nbsp;&nbsp;&nbsp;Guided compliance evidence collection • Built for compliance teams • SOC 2, ISO 27001, HIPAA, GDPR & more • Get started with a free trial •</div>
     </div>
   </div>
 
@@ -1400,7 +1400,7 @@
     </div>
   </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const API = 'https://proofrepo-intake.atucker5.workers.dev';
 const STORAGE_KEY = 'proofrepo_form_state';
 
@@ -2247,13 +2247,3 @@ async function init() {
   $('#getStartedLink').addEventListener('click', e => {
     e.preventDefault();
     $('#roleSelect').scrollIntoView({ behavior: 'smooth' });
-    $('#roleSelect').focus();
-  });
-  
-  updateMainButton();
-}
-
-document.addEventListener('DOMContentLoaded', init);
-</script>
-</body>
-</html>
