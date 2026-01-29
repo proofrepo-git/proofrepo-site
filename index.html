@@ -230,6 +230,78 @@
       resize: vertical;
     }
 
+    /* Chip Input Styles */
+    .chip-input-container {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      min-height: 48px;
+      cursor: text;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .chip-input-container:focus-within {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    }
+    .chip-input-container .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: var(--primary);
+      color: white;
+      border-radius: 16px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      animation: chipIn 0.15s ease-out;
+    }
+    @keyframes chipIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .chip-input-container .chip .chip-remove {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      background: rgba(255,255,255,0.2);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 12px;
+      line-height: 1;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .chip-input-container .chip .chip-remove:hover {
+      background: rgba(255,255,255,0.4);
+    }
+    .chip-input-container .chip-text-input {
+      flex: 1;
+      min-width: 150px;
+      border: none;
+      background: transparent;
+      color: var(--text);
+      font-size: 1rem;
+      font-family: inherit;
+      outline: none;
+      padding: 4px 0;
+    }
+    .chip-input-container .chip-text-input::placeholder {
+      color: var(--text-muted);
+    }
+    .chip-input-hint {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
     .role-selector {
       margin-bottom: 24px;
     }
@@ -1143,8 +1215,11 @@
         </p>
 
         <div class="form-group">
-          <label class="form-label">Your email</label>
-          <input type="email" class="form-input" id="auditorEmail" placeholder="you@yourcompany.com">
+          <label class="form-label">Your team's email(s)</label>
+          <div class="chip-input-container" id="auditorEmailsContainer" data-placeholder="you@yourcompany.com">
+            <input type="text" class="chip-text-input" placeholder="you@yourcompany.com">
+          </div>
+          <div class="chip-input-hint">Press Enter or comma to add multiple team members</div>
         </div>
 
         <div class="form-row">
@@ -1153,8 +1228,11 @@
             <input type="text" class="form-input" id="clientCompany" placeholder="Acme Corp">
           </div>
           <div class="form-group">
-            <label class="form-label">Client's email</label>
-            <input type="email" class="form-input" id="clientEmail" placeholder="client@company.com">
+            <label class="form-label">Client email(s)</label>
+            <div class="chip-input-container" id="clientEmailsContainer" data-placeholder="client@company.com">
+              <input type="text" class="chip-text-input" placeholder="client@company.com">
+            </div>
+            <div class="chip-input-hint">Add multiple contacts if needed</div>
           </div>
         </div>
 
@@ -1352,7 +1430,7 @@
       <a href="/security.html">Security</a>
       <a href="/privacy.html">Privacy Policy</a>
       <a href="/terms.html">Terms of Service</a>
-      <a href="mailto:support@proofrepo.com">Contact</a>
+      <a href="/cdn-cgi/l/email-protection#7605030606190402360604191910041306195815191b">Contact</a>
     </div>
     <p>© <span id="year"></span> ProofRepo. All rights reserved.</p>
   </footer>
@@ -1400,7 +1478,7 @@
     </div>
   </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const API = 'https://proofrepo-intake.atucker5.workers.dev';
 const STORAGE_KEY = 'proofrepo_form_state';
 
@@ -1564,15 +1642,112 @@ const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
 const esc = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
+// ==================== CHIP INPUT FUNCTIONS ====================
+
+function initChipInput(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  
+  const input = container.querySelector('.chip-text-input');
+  if (!input) return;
+  
+  container._emails = [];
+  
+  container.addEventListener('click', (e) => {
+    if (e.target === container) input.focus();
+  });
+  
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault();
+      addChipFromInput(container, input);
+    } else if (e.key === 'Backspace' && input.value === '' && container._emails.length > 0) {
+      removeChip(container, container._emails.length - 1);
+    }
+  });
+  
+  input.addEventListener('blur', () => {
+    if (input.value.trim()) addChipFromInput(container, input);
+  });
+  
+  input.addEventListener('paste', (e) => {
+    const pasted = (e.clipboardData || window.clipboardData).getData('text');
+    if (pasted.includes(',') || pasted.includes(';') || pasted.includes(' ')) {
+      e.preventDefault();
+      const emails = pasted.split(/[,;\s]+/).filter(em => em.includes('@'));
+      emails.forEach(email => addChip(container, email.trim()));
+      input.value = '';
+    }
+  });
+}
+
+function addChipFromInput(container, input) {
+  const email = input.value.trim().replace(/,+$/, '');
+  if (addChip(container, email)) input.value = '';
+}
+
+function addChip(container, email) {
+  if (!email || !email.includes('@') || !email.includes('.')) return false;
+  if (container._emails.includes(email.toLowerCase())) return false;
+  
+  container._emails.push(email.toLowerCase());
+  
+  const chip = document.createElement('span');
+  chip.className = 'chip';
+  chip.innerHTML = esc(email) + '<button type="button" class="chip-remove" aria-label="Remove">&times;</button>';
+  
+  const inp = container.querySelector('.chip-text-input');
+  container.insertBefore(chip, inp);
+  
+  chip.querySelector('.chip-remove').addEventListener('click', () => {
+    const idx = container._emails.indexOf(email.toLowerCase());
+    if (idx > -1) removeChip(container, idx);
+  });
+  
+  updateChipPlaceholder(container);
+  saveFormState();
+  return true;
+}
+
+function removeChip(container, index) {
+  if (index < 0 || index >= container._emails.length) return;
+  container._emails.splice(index, 1);
+  const chips = container.querySelectorAll('.chip');
+  if (chips[index]) chips[index].remove();
+  updateChipPlaceholder(container);
+  saveFormState();
+}
+
+function updateChipPlaceholder(container) {
+  const inp = container.querySelector('.chip-text-input');
+  if (!inp) return;
+  inp.placeholder = container._emails.length === 0 
+    ? (container.dataset.placeholder || 'Add email...') 
+    : 'Add another...';
+}
+
+function getChipEmails(containerId) {
+  const container = document.getElementById(containerId);
+  return container?._emails || [];
+}
+
+function setChipEmails(containerId, emails) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container._emails = [];
+  container.querySelectorAll('.chip').forEach(c => c.remove());
+  (emails || []).forEach(email => addChip(container, email));
+}
+
 // ==================== LOCAL STORAGE ====================
 
 function saveFormState() {
   try {
     const data = {
       role: $('#roleSelect')?.value || '',
-      auditorEmail: $('#auditorEmail')?.value || '',
+      auditorEmails: getChipEmails('auditorEmailsContainer'),
       clientCompany: $('#clientCompany')?.value || '',
-      clientEmail: $('#clientEmail')?.value || '',
+      clientEmails: getChipEmails('clientEmailsContainer'),
       deadlineHours: $('#deadlineSelect')?.value || '120',
       globalInstructions: $('#globalInstructions')?.value || '',
       appliedCode: state.code || '',
@@ -1600,9 +1775,17 @@ function loadFormState() {
 function restoreFormState(data) {
   if (!data) return false;
   if (data.role) $('#roleSelect').value = data.role;
-  if (data.auditorEmail) $('#auditorEmail').value = data.auditorEmail;
+  if (data.auditorEmails && data.auditorEmails.length) {
+    setChipEmails('auditorEmailsContainer', data.auditorEmails);
+  } else if (data.auditorEmail) {
+    setChipEmails('auditorEmailsContainer', [data.auditorEmail]);
+  }
   if (data.clientCompany) $('#clientCompany').value = data.clientCompany;
-  if (data.clientEmail) $('#clientEmail').value = data.clientEmail;
+  if (data.clientEmails && data.clientEmails.length) {
+    setChipEmails('clientEmailsContainer', data.clientEmails);
+  } else if (data.clientEmail) {
+    setChipEmails('clientEmailsContainer', [data.clientEmail]);
+  }
   if (data.deadlineHours) $('#deadlineSelect').value = data.deadlineHours;
   if (data.appliedCode) { 
     state.code = data.appliedCode; 
@@ -1618,7 +1801,7 @@ function clearFormState() {
 }
 
 function setupAutoSave() {
-  ['roleSelect', 'auditorEmail', 'clientCompany', 'clientEmail', 'deadlineSelect'].forEach(id => {
+  ['roleSelect', 'clientCompany', 'deadlineSelect'].forEach(id => {
     const el = $(`#${id}`);
     if (el) { 
       el.addEventListener('change', saveFormState); 
@@ -2013,20 +2196,20 @@ async function handleMainAction() {
   
   if (!state.paymentVisible) {
     // STAGE 1: Validate form and show payment section
-    const email = ($('#auditorEmail')?.value || '').trim();
-    const clientEmail = ($('#clientEmail')?.value || '').trim();
+    const auditorEmails = getChipEmails('auditorEmailsContainer');
+    const clientEmails = getChipEmails('clientEmailsContainer');
     const company = ($('#clientCompany')?.value || '').trim();
     
-    if (!email || !email.includes('@')) {
-      alert('Please enter your email address.');
+    if (auditorEmails.length === 0) {
+      alert('Please enter at least one team email address.');
       return;
     }
     if (!company) {
       alert('Please enter the client company name.');
       return;
     }
-    if (!clientEmail || !clientEmail.includes('@')) {
-      alert('Please enter the client email address.');
+    if (clientEmails.length === 0) {
+      alert('Please enter at least one client email address.');
       return;
     }
     
@@ -2084,12 +2267,13 @@ async function handleCheckout() {
   saveFormState();
   
   try {
+    const auditorEmails = getChipEmails('auditorEmailsContainer');
     const res = await fetch(`${API}/checkout`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         tier: state.selectedTier,
-        email: $('#auditorEmail').value,
+        email: auditorEmails[0] || '',
         successUrl: window.location.origin + window.location.pathname + '?session_id={CHECKOUT_SESSION_ID}',
         cancelUrl: window.location.href
       })
@@ -2124,14 +2308,18 @@ async function sendRequest() {
       return allFw[k]?.label || k; 
     });
   const requestedEvidence = getPayload();
+  const auditorEmails = getChipEmails('auditorEmailsContainer');
+  const clientEmails = getChipEmails('clientEmailsContainer');
   
   try {
     const res = await fetch(`${API}/request`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        auditorEmail: $('#auditorEmail').value,
-        clientEmail: $('#clientEmail').value,
+        auditorEmail: auditorEmails[0] || '',
+        auditorEmails: auditorEmails,
+        clientEmail: clientEmails[0] || '',
+        clientEmails: clientEmails,
         company: $('#clientCompany').value,
         frameworks: frameworks,
         deadlineISO: deadline.toISOString(),
@@ -2145,7 +2333,8 @@ async function sendRequest() {
     
     if (data.ok) {
       clearFormState();
-      alert('Success! Evidence request sent to ' + $('#clientEmail').value + '\n\nClient link: ' + (data.magicLink || ''));
+      const clientList = clientEmails.join(', ');
+      alert('Success! Evidence request sent to ' + clientList + '\n\nClient link: ' + (data.magicLink || ''));
       window.location.reload();
     } else {
       alert('Error: ' + (data.error || 'Unknown error'));
@@ -2214,6 +2403,10 @@ function setupModals() {
 
 async function init() {
   $('#year').textContent = new Date().getFullYear();
+  
+  // Initialize chip inputs FIRST (before any state restore)
+  initChipInput('auditorEmailsContainer');
+  initChipInput('clientEmailsContainer');
   
   initComposerState();
   
