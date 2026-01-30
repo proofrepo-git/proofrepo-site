@@ -2399,6 +2399,75 @@ function setupModals() {
   });
 }
 
+
+// ==================== URL PARAM PREFILL (for resend links) ====================
+
+function handleUrlPrefill() {
+  const params = new URLSearchParams(window.location.search);
+  
+  // Check if this is a resend link (mode=resend or has prev token)
+  const mode = params.get('mode');
+  const prev = params.get('prev');
+  
+  if (mode !== 'resend' && !prev) return false;
+  
+  // Get prefill values
+  const company = params.get('company') || '';
+  const frameworks = (params.get('frameworks') || '').split(',').filter(Boolean);
+  const auditorEmails = (params.get('auditorEmails') || '').split(',').filter(e => e && e.includes('@'));
+  const clientEmails = (params.get('clientEmails') || '').split(',').filter(e => e && e.includes('@'));
+  
+  // Set role to auditor
+  const roleSelect = $('#roleSelect');
+  if (roleSelect) {
+    roleSelect.value = 'auditor';
+    handleRoleChange('auditor');
+  }
+  
+  // Prefill company
+  const companyInput = $('#clientCompany');
+  if (companyInput && company) {
+    companyInput.value = company;
+  }
+  
+  // Prefill emails (chip inputs must be initialized first)
+  if (auditorEmails.length > 0) {
+    setChipEmails('auditorEmailsContainer', auditorEmails);
+  }
+  if (clientEmails.length > 0) {
+    setChipEmails('clientEmailsContainer', clientEmails);
+  }
+  
+  // Enable frameworks in composer
+  if (frameworks.length > 0) {
+    frameworks.forEach(fw => {
+      const fwUpper = fw.toUpperCase();
+      if (composerState[fwUpper]) {
+        composerState[fwUpper].enabled = true;
+      }
+    });
+    renderComposer();
+  }
+  
+  // Clean URL (remove params without reload)
+  const cleanUrl = window.location.pathname;
+  window.history.replaceState({}, '', cleanUrl);
+  
+  // Show a subtle toast or scroll to deadline (since that's all they need to change)
+  setTimeout(() => {
+    const deadlineSelect = $('#deadlineSelect');
+    if (deadlineSelect) {
+      deadlineSelect.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      deadlineSelect.focus();
+      // Flash the deadline field
+      deadlineSelect.style.outline = '2px solid var(--accent)';
+      setTimeout(() => { deadlineSelect.style.outline = ''; }, 2000);
+    }
+  }, 300);
+  
+  return true;
+}
+
 // ==================== INIT ====================
 
 async function init() {
@@ -2417,9 +2486,12 @@ async function init() {
   setupAutoSave();
   setupModals();
   
+  // Check for URL prefill (resend links from deadline-missed emails)
+  const isResendPrefill = handleUrlPrefill();
+  
   // Only restore form state when returning from Stripe checkout
-  // Fresh visits should start with a clean form
-  if (!isCheckoutReturn) {
+  // Fresh visits and resend prefills should NOT restore old state
+  if (!isCheckoutReturn && !isResendPrefill) {
     clearFormState();
   }
   
