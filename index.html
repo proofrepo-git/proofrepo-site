@@ -1815,6 +1815,26 @@
             <button class="btn btn-outline btn-full" id="backToLoginBtn" style="margin-top: 8px;">Back to Sign In</button>
             <div id="resetStatus" class="auth-status"></div>
           </div>
+
+          <!-- Reset Password Form (shown when ?reset= token in URL) -->
+          <div id="resetPasswordSection" style="display: none;">
+            <p class="auth-subtitle">Choose a new password for your account.</p>
+            <div class="form-group">
+              <label class="form-label">New Password</label>
+              <input type="password" class="form-input" id="newPassword" placeholder="Minimum 8 characters">
+              <div class="password-requirements" id="resetPwReqs">
+                <span id="resetReqLength">✗ 8+ characters</span>
+                <span id="resetReqNumber">✗ 1 number</span>
+                <span id="resetReqSpecial">✗ 1 special character</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Confirm Password</label>
+              <input type="password" class="form-input" id="confirmNewPassword" placeholder="Re-enter new password">
+            </div>
+            <button class="btn btn-primary btn-full" id="resetPasswordBtn">Reset Password</button>
+            <div id="resetPasswordStatus" class="auth-status"></div>
+          </div>
         </div>
       </div>
 
@@ -3218,6 +3238,77 @@ async function handleForgotPassword() {
   btn.textContent = 'Send Reset Link';
 }
 
+async function handleResetPassword() {
+  const pw = ($('#newPassword')?.value || '');
+  const pw2 = ($('#confirmNewPassword')?.value || '');
+  const btn = $('#resetPasswordBtn');
+  
+  if (pw.length < 8 || !/\d/.test(pw) || !/[!@#$%^&*(),.?":{}|<>_\-+=\[\]\\\/`~;']/.test(pw)) {
+    showAuthStatus('resetPasswordStatus', 'Password must be 8+ chars with 1 number and 1 special character', 'error');
+    return;
+  }
+  
+  if (pw !== pw2) {
+    showAuthStatus('resetPasswordStatus', 'Passwords do not match', 'error');
+    return;
+  }
+  
+  const resetToken = new URLSearchParams(window.location.search).get('reset');
+  if (!resetToken) {
+    showAuthStatus('resetPasswordStatus', 'Missing reset token', 'error');
+    return;
+  }
+  
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Resetting...';
+  
+  try {
+    const res = await fetch(`${API}/auth/reset-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: resetToken, password: pw })
+    });
+    
+    const data = await res.json();
+    
+    if (data.ok) {
+      showAuthStatus('resetPasswordStatus', '✓ Password reset! You can now sign in with your new password.', 'success');
+      // Clean URL and show login after a moment
+      setTimeout(() => {
+        window.history.replaceState({}, '', window.location.pathname);
+        $('#resetPasswordSection').style.display = 'none';
+        $('#roleSelect').value = 'returning';
+        handleRoleChange('returning');
+      }, 2500);
+    } else {
+      showAuthStatus('resetPasswordStatus', data.error || 'Reset failed', 'error');
+    }
+  } catch (e) {
+    showAuthStatus('resetPasswordStatus', 'Error connecting to server', 'error');
+  }
+  
+  btn.disabled = false;
+  btn.textContent = 'Reset Password';
+}
+
+// Check URL for reset token and show reset form
+function checkResetToken() {
+  const params = new URLSearchParams(window.location.search);
+  const resetToken = params.get('reset');
+  if (!resetToken) return false;
+  
+  // Show returning customer path with reset form
+  $('#roleSelect').value = 'returning';
+  handleRoleChange('returning');
+  
+  // Hide the login/forgot sections, show reset form
+  $('#loginSection').style.display = 'none';
+  $('#forgotPasswordSection').style.display = 'none';
+  $('#resetPasswordSection').style.display = 'block';
+  
+  return true;
+}
+
 function handleLogout() {
   state.isLoggedIn = false;
   state.authToken = null;
@@ -3365,6 +3456,22 @@ function setupAuthListeners() {
   });
   $('#sendResetBtn')?.addEventListener('click', handleForgotPassword);
   $('#backToLoginBtn')?.addEventListener('click', showLoginSection);
+  
+  // Reset password (from email link)
+  $('#resetPasswordBtn')?.addEventListener('click', handleResetPassword);
+  $('#newPassword')?.addEventListener('input', e => {
+    const pw = e.target.value;
+    const update = (id, ok) => {
+      const el = $(`#${id}`);
+      if (el) { el.textContent = (ok ? '✓ ' : '✗ ') + el.textContent.slice(2); el.style.color = ok ? '#10b981' : '#ef4444'; }
+    };
+    update('resetReqLength', pw.length >= 8);
+    update('resetReqNumber', /\d/.test(pw));
+    update('resetReqSpecial', /[!@#$%^&*(),.?":{}|<>_\-+=\[\]\\\/`~;']/.test(pw));
+  });
+  $('#confirmNewPassword')?.addEventListener('keypress', e => {
+    if (e.key === 'Enter') handleResetPassword();
+  });
   
   // Logout
   $('#logoutBtn')?.addEventListener('click', handleLogout);
@@ -3779,8 +3886,11 @@ async function init() {
   // Set up auth event listeners
   setupAuthListeners();
   
+  // Check for password reset token in URL (takes priority)
+  const isResetFlow = checkResetToken();
+  
   // Check for existing session
-  const hasSession = await checkExistingSession();
+  const hasSession = !isResetFlow && await checkExistingSession();
   
   if (hasSession) {
     // Already logged in - show auditor flow
