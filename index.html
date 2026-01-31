@@ -1464,6 +1464,265 @@
       font-weight: 600;
     }
 
+    /* Dashboard Styles */
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .dashboard-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0;
+    }
+
+    .dashboard-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin: 4px 0 0;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .stat-card.highlight {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(37, 99, 235, 0.1));
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .stat-card.highlight .stat-value {
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .request-section {
+      margin-bottom: 32px;
+    }
+
+    .section-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 0 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .requests-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .request-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .request-card:hover {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .request-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .request-company {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 0;
+    }
+
+    .request-frameworks {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .request-fw-tag {
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      background: rgba(37, 99, 235, 0.15);
+      color: var(--primary);
+      border-radius: 4px;
+      font-weight: 500;
+    }
+
+    .request-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .request-status.pending {
+      color: var(--warning);
+    }
+
+    .request-status.complete {
+      color: var(--accent);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .request-meta {
+      display: flex;
+      gap: 20px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .request-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .request-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .request-action-btn {
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .request-action-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .request-action-btn.primary {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    .request-action-btn.primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+    }
+
+    .empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: 12px;
+      opacity: 0.5;
+    }
+
+    .empty-state-text {
+      font-size: 0.95rem;
+    }
+
+    .loading-placeholder {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .back-link {
+      margin-bottom: 16px;
+    }
+
+    .back-link a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    .back-link a:hover {
+      color: var(--primary);
+    }
+
+    @media (max-width: 768px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .dashboard-header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .dashboard-header button {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      .request-card-header {
+        flex-direction: column;
+        gap: 8px;
+      }
+      .request-meta {
+        flex-direction: column;
+        gap: 8px;
+      }
+    }
+
     /* Save Template Bar */
     .save-template-bar {
       display: flex;
@@ -1939,7 +2198,59 @@
         <span>⚠️ Please verify your email to send requests. <a href="#" id="resendVerifyLink">Resend verification</a></span>
       </div>
 
+      <!-- Dashboard View (shown for logged-in users) -->
+      <div id="dashboardView" style="display: none;">
+        <div class="dashboard-header">
+          <div>
+            <h2 class="dashboard-title">Your Evidence Requests</h2>
+            <p class="dashboard-subtitle">Manage your compliance evidence collection</p>
+          </div>
+          <button class="btn btn-accent" id="newRequestBtn">+ New Evidence Request</button>
+        </div>
+        
+        <!-- Stats Cards -->
+        <div class="stats-grid" id="statsGrid">
+          <div class="stat-card">
+            <div class="stat-value" id="statActive">-</div>
+            <div class="stat-label">Active Requests</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statCompleted">-</div>
+            <div class="stat-label">Completed</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statEvidence">-</div>
+            <div class="stat-label">Evidence Items Collected</div>
+          </div>
+          <div class="stat-card highlight">
+            <div class="stat-value" id="statThisMonth">-</div>
+            <div class="stat-label">Requests This Month</div>
+          </div>
+        </div>
+        
+        <!-- Active Requests Section -->
+        <div class="request-section">
+          <h3 class="section-title">Active Requests</h3>
+          <div id="activeRequestsList" class="requests-list">
+            <div class="loading-placeholder">Loading requests...</div>
+          </div>
+        </div>
+        
+        <!-- Completed Requests Section -->
+        <div class="request-section">
+          <h3 class="section-title">Completed</h3>
+          <div id="completedRequestsList" class="requests-list">
+            <div class="loading-placeholder">Loading requests...</div>
+          </div>
+        </div>
+      </div>
+
       <div id="auditorFlow" style="display: none;">
+        <!-- Back to dashboard link (shown when coming from dashboard) -->
+        <div id="backToDashboard" class="back-link" style="display: none;">
+          <a href="#" id="backToDashboardLink">← Back to Dashboard</a>
+        </div>
+        
         <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">
           Define what evidence you need, then we'll email your client a guided upload link.
         </p>
@@ -2911,10 +3222,9 @@ async function checkCheckoutReturn() {
     restoreFormState(savedState);
   }
   
-  // If logged in, show auditor flow immediately — polling will update credits
+  // If logged in, show dashboard — polling will update credits
   if (hasSession || state.isLoggedIn) {
-    showAuditorFlow();
-    setChipEmails('auditorEmailsContainer', [state.user?.email || '']);
+    showDashboard();
   } else {
     // Legacy: not logged in, show code-based flow
     if (savedState?.role === 'auditor') {
@@ -2972,10 +3282,8 @@ async function checkCheckoutReturn() {
         if (paymentSec) paymentSec.classList.remove('visible');
         state.paymentVisible = false;
         
-        // Make sure we're in auditor flow with credits visible
-        showAuditorFlow();
-        updateLoggedInBar();
-        updateMainButton();
+        // Show dashboard with credits visible
+        showDashboard();
         break;
       }
       
@@ -3072,6 +3380,277 @@ function showForgotPassword() {
   $('#loginSection').style.display = 'none';
   $('#forgotPasswordSection').style.display = 'block';
 }
+
+// ==================== DASHBOARD FUNCTIONS ====================
+
+async function showDashboard() {
+  // Hide auth flows
+  $('#newUserFlow').style.display = 'none';
+  $('#returningUserFlow').style.display = 'none';
+  $('#auditorFlow').style.display = 'none';
+  
+  // Show logged in bar
+  $('#loggedInBar').style.display = 'flex';
+  updateLoggedInBar();
+  
+  // Show verification notice if not verified
+  if (state.user && !state.user.verified) {
+    $('#verificationNotice').style.display = 'block';
+  }
+  
+  // Show dashboard
+  $('#dashboardView').style.display = 'block';
+  
+  // Fetch and render dashboard data
+  await fetchAndRenderDashboard();
+  
+  // Scroll to top
+  $('#dashboardView').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+async function fetchAndRenderDashboard() {
+  if (!state.authToken) return;
+  
+  try {
+    const res = await fetch(`${API}/auth/requests`, {
+      headers: { 'Authorization': `Bearer ${state.authToken}` }
+    });
+    
+    const data = await res.json();
+    
+    if (data.ok) {
+      renderDashboard(data.requests || [], data.stats || {});
+    } else {
+      renderDashboardError('Failed to load requests');
+    }
+  } catch (e) {
+    console.error('Dashboard fetch error:', e);
+    renderDashboardError('Error loading dashboard');
+  }
+}
+
+function renderDashboard(requests, stats) {
+  // Update stats
+  $('#statActive').textContent = stats.activeRequests || 0;
+  $('#statCompleted').textContent = stats.completedRequests || 0;
+  $('#statEvidence').textContent = stats.totalEvidenceCollected || 0;
+  $('#statThisMonth').textContent = stats.requestsThisMonth || 0;
+  
+  // Split requests into active and completed
+  const active = requests.filter(r => r.status === 'pending');
+  const completed = requests.filter(r => r.status === 'complete');
+  
+  // Render active requests
+  const activeList = $('#activeRequestsList');
+  if (active.length === 0) {
+    activeList.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">📋</div>
+        <div class="empty-state-text">No active requests. Click "New Evidence Request" to get started.</div>
+      </div>
+    `;
+  } else {
+    activeList.innerHTML = active.map(r => renderRequestCard(r, 'active')).join('');
+  }
+  
+  // Render completed requests
+  const completedList = $('#completedRequestsList');
+  if (completed.length === 0) {
+    completedList.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">✓</div>
+        <div class="empty-state-text">No completed requests yet.</div>
+      </div>
+    `;
+  } else {
+    completedList.innerHTML = completed.map(r => renderRequestCard(r, 'completed')).join('');
+  }
+  
+  // Wire up action buttons
+  wireRequestActions();
+}
+
+function renderRequestCard(req, type) {
+  const deadline = req.deadlineISO ? new Date(req.deadlineISO) : null;
+  const created = new Date(req.createdAt);
+  const now = new Date();
+  
+  // Format dates
+  const deadlineStr = deadline ? deadline.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'No deadline';
+  const createdStr = created.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  
+  // Check if overdue
+  const isOverdue = deadline && deadline < now && req.status === 'pending';
+  
+  // Status display
+  let statusHtml = '';
+  if (req.status === 'pending') {
+    if (isOverdue) {
+      statusHtml = '<div class="request-status pending"><span class="status-dot"></span> Overdue</div>';
+    } else {
+      statusHtml = '<div class="request-status pending"><span class="status-dot"></span> Waiting for upload</div>';
+    }
+  } else {
+    const submittedDate = req.submittedAt ? new Date(req.submittedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+    statusHtml = `<div class="request-status complete"><span class="status-dot"></span> Completed${submittedDate ? ` ${submittedDate}` : ''}</div>`;
+  }
+  
+  // Framework tags
+  const fwTags = (req.frameworks || []).map(fw => `<span class="request-fw-tag">${esc(fw)}</span>`).join('');
+  
+  // Client link URL
+  const clientLink = `${location.origin}?t=${req.token}`;
+  
+  // Actions based on type
+  let actionsHtml = '';
+  if (type === 'active') {
+    actionsHtml = `
+      <button class="request-action-btn" data-action="copy-link" data-token="${esc(req.token)}">Copy Client Link</button>
+      <button class="request-action-btn" data-action="resend" data-token="${esc(req.token)}">Resend Email</button>
+    `;
+  } else {
+    actionsHtml = `
+      <button class="request-action-btn primary" data-action="view-pack" data-token="${esc(req.token)}">View ProofPack</button>
+      <button class="request-action-btn" data-action="copy-link" data-token="${esc(req.token)}">Copy Client Link</button>
+    `;
+  }
+  
+  return `
+    <div class="request-card" data-token="${esc(req.token)}">
+      <div class="request-card-header">
+        <div>
+          <h4 class="request-company">${esc(req.company || 'Unnamed Request')}</h4>
+          <div class="request-frameworks">${fwTags}</div>
+        </div>
+        ${statusHtml}
+      </div>
+      <div class="request-meta">
+        <div class="request-meta-item">
+          <span>📧</span> ${esc(req.clientEmail || 'No client email')}
+        </div>
+        <div class="request-meta-item">
+          <span>📅</span> Due: ${deadlineStr}
+        </div>
+        <div class="request-meta-item">
+          <span>📋</span> ${req.totalItems || 0} evidence items
+        </div>
+      </div>
+      <div class="request-actions">
+        ${actionsHtml}
+      </div>
+    </div>
+  `;
+}
+
+function wireRequestActions() {
+  // Copy link buttons
+  $$('[data-action="copy-link"]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const token = btn.dataset.token;
+      const link = `${location.origin}?t=${token}`;
+      try {
+        await navigator.clipboard.writeText(link);
+        const originalText = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = originalText, 2000);
+      } catch (e) {
+        alert('Link: ' + link);
+      }
+    });
+  });
+  
+  // Resend email buttons
+  $$('[data-action="resend"]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const token = btn.dataset.token;
+      // For now, just copy the link - full resend would need a new endpoint
+      const link = `${location.origin}?t=${token}`;
+      try {
+        await navigator.clipboard.writeText(link);
+        btn.textContent = 'Link Copied!';
+        setTimeout(() => btn.textContent = 'Resend Email', 2000);
+      } catch (e) {
+        alert('Share this link with your client: ' + link);
+      }
+    });
+  });
+  
+  // View pack buttons
+  $$('[data-action="view-pack"]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const token = btn.dataset.token;
+      // Open the viewer - this will show the pack if available
+      window.open(`${API}/d?t=${token}`, '_blank');
+    });
+  });
+}
+
+function renderDashboardError(message) {
+  $('#activeRequestsList').innerHTML = `<div class="empty-state"><div class="empty-state-text">${esc(message)}</div></div>`;
+  $('#completedRequestsList').innerHTML = '';
+}
+
+function showComposerFromDashboard() {
+  // Hide dashboard
+  $('#dashboardView').style.display = 'none';
+  
+  // Show back link
+  $('#backToDashboard').style.display = 'block';
+  
+  // Reset form for new request
+  resetComposerForm();
+  
+  // Show auditor flow
+  $('#auditorFlow').style.display = 'block';
+  if (Object.keys(composerState).length === 0) initComposerState();
+  renderComposer();
+  
+  // Set auditor email to current user
+  if (state.user?.email) {
+    setChipEmails('auditorEmailsContainer', [state.user.email]);
+  }
+  
+  // Scroll to form
+  $('#auditorFlow').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function resetComposerForm() {
+  // Clear client info
+  const clientCompany = $('#clientCompany');
+  if (clientCompany) clientCompany.value = '';
+  
+  // Clear client emails
+  setChipEmails('clientEmailsContainer', []);
+  
+  // Reset deadline to 5 days from now
+  const picker = $('#deadlinePicker');
+  if (picker && picker._flatpickr) {
+    const defaultDeadline = new Date();
+    defaultDeadline.setDate(defaultDeadline.getDate() + 5);
+    defaultDeadline.setHours(17, 0, 0, 0);
+    picker._flatpickr.setDate(defaultDeadline);
+  }
+  
+  // Reset composer state
+  composerState = {};
+  customFrameworks = [];
+  initComposerState();
+  
+  // Hide template loaded notice
+  const notice = $('#templateLoadedNotice');
+  if (notice) notice.style.display = 'none';
+}
+
+function backToDashboard() {
+  // Hide composer
+  $('#auditorFlow').style.display = 'none';
+  $('#backToDashboard').style.display = 'none';
+  
+  // Show dashboard
+  showDashboard();
+}
+
+// ==================== END DASHBOARD FUNCTIONS ====================
 
 function showAuditorFlow() {
   // Hide auth flows
@@ -3293,10 +3872,7 @@ async function handleSignup() {
         state.user = data.user;
         localStorage.setItem('proofrepo_token', data.token);
         
-        // Pre-fill email
-        setChipEmails('auditorEmailsContainer', [email]);
-        
-        setTimeout(() => showAuditorFlow(), 1500);
+        setTimeout(() => showDashboard(), 1500);
       }
     } else {
       showAuthStatus('signupStatus', data.error || 'Error creating account', 'error');
@@ -3341,10 +3917,7 @@ async function handleLogin() {
       
       showAuthStatus('loginStatus', '✓ Signed in!', 'success');
       
-      // Pre-fill email
-      setChipEmails('auditorEmailsContainer', [data.user.email]);
-      
-      setTimeout(() => showAuditorFlow(), 500);
+      setTimeout(() => showDashboard(), 500);
     } else {
       showAuthStatus('loginStatus', data.error || 'Invalid email or password', 'error');
     }
@@ -3712,6 +4285,17 @@ function setupAuthListeners() {
   $('#dismissTemplateNotice')?.addEventListener('click', () => {
     $('#templateLoadedNotice').style.display = 'none';
   });
+  
+  // Dashboard: New Request button
+  $('#newRequestBtn')?.addEventListener('click', () => {
+    showComposerFromDashboard();
+  });
+  
+  // Dashboard: Back to Dashboard link
+  $('#backToDashboardLink')?.addEventListener('click', e => {
+    e.preventDefault();
+    backToDashboard();
+  });
 }
 
 function showPaymentSection() {
@@ -3940,6 +4524,11 @@ async function sendRequest() {
       // Update local credits if logged in
       if (state.isLoggedIn && state.user) {
         state.user.credits = Math.max(0, (state.user.credits || 0) - 1);
+        // Add token to local requests list
+        if (data.token) {
+          state.user.requests = state.user.requests || [];
+          state.user.requests.unshift(data.token);
+        }
         updateLoggedInBar();
       }
       
@@ -3948,11 +4537,15 @@ async function sendRequest() {
       if (state.isTrialUser) {
         // Special message for trial users
         alert(`Success! ${state.trialMode === 'test' ? 'Test request' : 'Evidence request'} sent to ${clientList}.\n\nCheck your email for next steps!`);
+        window.location.reload();
+      } else if (state.isLoggedIn) {
+        // Show success and go to dashboard
+        alert('Success! Evidence request sent to ' + clientList);
+        backToDashboard();
       } else {
         alert('Success! Evidence request sent to ' + clientList + '\n\nClient link: ' + (data.magicLink || ''));
+        window.location.reload();
       }
-      
-      window.location.reload();
     } else {
       alert('Error: ' + (data.error || 'Unknown error'));
       btn.disabled = false;
@@ -4119,8 +4712,7 @@ async function init() {
   if (!isResetFlow && !isCheckoutReturn) {
     hasSession = await checkExistingSession();
     if (hasSession) {
-      setChipEmails('auditorEmailsContainer', [state.user.email]);
-      showAuditorFlow();
+      showDashboard();
     }
   }
   
