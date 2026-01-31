@@ -3609,24 +3609,45 @@ async function showDashboard() {
 }
 
 async function fetchAndRenderDashboard() {
-  if (!state.authToken) return;
-  
-  try {
-    const res = await fetch(`${API}/auth/requests`, {
-      headers: { 'Authorization': `Bearer ${state.authToken}` }
-    });
-    
-    const data = await res.json();
-    
-    if (data.ok) {
-      renderDashboard(data.requests || [], data.stats || {});
-    } else {
-      renderDashboardError('Failed to load requests');
-    }
-  } catch (e) {
-    console.error('Dashboard fetch error:', e);
-    renderDashboardError('Error loading dashboard');
+  if (!state.authToken) {
+    renderDashboardError('Not authenticated');
+    return;
   }
+  
+  // Show loading state
+  $('#activeRequestsList').innerHTML = '<div class="loading-placeholder">Loading requests...</div>';
+  $('#completedRequestsList').innerHTML = '<div class="loading-placeholder">Loading...</div>';
+  
+  let retries = 2;
+  while (retries >= 0) {
+    try {
+      const res = await fetch(`${API}/auth/requests`, {
+        headers: { 'Authorization': `Bearer ${state.authToken}` }
+      });
+      
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
+      
+      const data = await res.json();
+      
+      if (data.ok) {
+        renderDashboard(data.requests || [], data.stats || {});
+        return; // Success - exit
+      } else {
+        throw new Error(data.error || 'Failed to load');
+      }
+    } catch (e) {
+      console.error('Dashboard fetch error (retries left: ' + retries + '):', e);
+      retries--;
+      if (retries >= 0) {
+        await new Promise(r => setTimeout(r, 500)); // Wait 500ms before retry
+      }
+    }
+  }
+  
+  // All retries failed
+  renderDashboardError('Error loading dashboard. Please refresh the page.');
 }
 
 function renderDashboard(requests, stats) {
