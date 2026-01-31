@@ -20,6 +20,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  
+  <!-- Flatpickr Date/Time Picker -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <style>
     :root {
       --bg: #050a14;
@@ -1145,6 +1150,111 @@
       .card { padding: 20px; }
       .form-row { grid-template-columns: 1fr; }
     }
+
+    /* Flatpickr custom styling to match ProofRepo theme */
+    .flatpickr-calendar {
+      background: var(--surface-elevated) !important;
+      border: 1px solid var(--border) !important;
+      border-radius: 12px !important;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4) !important;
+      font-family: 'Inter', system-ui, sans-serif !important;
+    }
+    .flatpickr-months {
+      background: var(--surface) !important;
+      border-radius: 12px 12px 0 0 !important;
+      padding: 8px 0 !important;
+    }
+    .flatpickr-months .flatpickr-month {
+      color: var(--text) !important;
+      fill: var(--text) !important;
+    }
+    .flatpickr-current-month {
+      color: var(--text) !important;
+      font-weight: 600 !important;
+    }
+    .flatpickr-current-month .flatpickr-monthDropdown-months {
+      background: var(--surface) !important;
+      color: var(--text) !important;
+    }
+    .flatpickr-current-month input.cur-year {
+      color: var(--text) !important;
+    }
+    .flatpickr-months .flatpickr-prev-month, 
+    .flatpickr-months .flatpickr-next-month {
+      fill: var(--text-muted) !important;
+      color: var(--text-muted) !important;
+    }
+    .flatpickr-months .flatpickr-prev-month:hover, 
+    .flatpickr-months .flatpickr-next-month:hover {
+      fill: var(--accent) !important;
+      color: var(--accent) !important;
+    }
+    .flatpickr-weekdays {
+      background: var(--surface) !important;
+    }
+    span.flatpickr-weekday {
+      color: var(--text-muted) !important;
+      font-weight: 500 !important;
+    }
+    .flatpickr-day {
+      color: var(--text) !important;
+      border-radius: 6px !important;
+    }
+    .flatpickr-day:hover {
+      background: var(--border) !important;
+      border-color: var(--border) !important;
+    }
+    .flatpickr-day.today {
+      border-color: var(--accent) !important;
+    }
+    .flatpickr-day.selected {
+      background: var(--accent) !important;
+      border-color: var(--accent) !important;
+      color: #000 !important;
+      font-weight: 600 !important;
+    }
+    .flatpickr-day.flatpickr-disabled {
+      color: var(--text-muted) !important;
+      opacity: 0.4 !important;
+    }
+    .flatpickr-day.prevMonthDay,
+    .flatpickr-day.nextMonthDay {
+      color: var(--text-muted) !important;
+      opacity: 0.5 !important;
+    }
+    .flatpickr-time {
+      background: var(--surface) !important;
+      border-top: 1px solid var(--border) !important;
+    }
+    .flatpickr-time input {
+      color: var(--text) !important;
+      background: var(--surface-elevated) !important;
+      border: 1px solid var(--border) !important;
+      border-radius: 6px !important;
+    }
+    .flatpickr-time input:hover,
+    .flatpickr-time input:focus {
+      background: var(--surface) !important;
+      border-color: var(--accent) !important;
+    }
+    .flatpickr-time .flatpickr-am-pm {
+      color: var(--text) !important;
+      background: var(--surface-elevated) !important;
+      border: 1px solid var(--border) !important;
+      border-radius: 6px !important;
+    }
+    .flatpickr-time .flatpickr-am-pm:hover {
+      background: var(--border) !important;
+    }
+    .numInputWrapper span {
+      border-color: var(--border) !important;
+    }
+    .numInputWrapper span:hover {
+      background: var(--border) !important;
+    }
+    .numInputWrapper span svg path {
+      fill: var(--text-muted) !important;
+    }
   </style>
 </head>
 <body>
@@ -1236,24 +1346,11 @@
           </div>
         </div>
 
-        <!-- Simplified Deadline - NO TIME PICKER -->
+        <!-- Deadline with Calendar Picker -->
         <div class="form-group">
           <label class="form-label">Deadline</label>
-          <select class="form-select" id="deadlineSelect">
-            <option value="8">8 hours</option>
-            <option value="12">12 hours</option>
-            <option value="24">24 hours</option>
-            <option value="48">2 days</option>
-            <option value="72">3 days</option>
-            <option value="120" selected>5 days</option>
-            <option value="168">1 week</option>
-            <option value="240">10 days</option>
-            <option value="336">2 weeks</option>
-            <option value="504">3 weeks</option>
-            <option value="720">1 month</option>
-            <option value="1080">45 days</option>
-            <option value="1440">2 months</option>
-          </select>
+          <input type="text" class="form-control" id="deadlinePicker" placeholder="Select date and time..." readonly>
+          <small class="form-hint" id="deadlineHint" style="margin-top:6px;display:block;color:var(--text-muted);font-size:12px;"></small>
         </div>
 
         <div class="form-group">
@@ -1748,7 +1845,7 @@ function saveFormState() {
       auditorEmails: getChipEmails('auditorEmailsContainer'),
       clientCompany: $('#clientCompany')?.value || '',
       clientEmails: getChipEmails('clientEmailsContainer'),
-      deadlineHours: $('#deadlineSelect')?.value || '120',
+      deadlineISO: deadlinePicker?.selectedDates[0]?.toISOString() || null,
       globalInstructions: $('#globalInstructions')?.value || '',
       appliedCode: state.code || '',
       composerState: composerState,
@@ -1786,7 +1883,9 @@ function restoreFormState(data) {
   } else if (data.clientEmail) {
     setChipEmails('clientEmailsContainer', [data.clientEmail]);
   }
-  if (data.deadlineHours) $('#deadlineSelect').value = data.deadlineHours;
+  if (data.deadlineISO) {
+    setDeadlineFromISO(data.deadlineISO);
+  }
   if (data.appliedCode) { 
     state.code = data.appliedCode; 
     if ($('#auditorCode')) $('#auditorCode').value = data.appliedCode; 
@@ -1801,22 +1900,108 @@ function clearFormState() {
 }
 
 function setupAutoSave() {
-  ['roleSelect', 'clientCompany', 'deadlineSelect'].forEach(id => {
+  ['roleSelect', 'clientCompany'].forEach(id => {
     const el = $(`#${id}`);
     if (el) { 
       el.addEventListener('change', saveFormState); 
       el.addEventListener('input', saveFormState); 
     }
   });
+  // Note: deadlinePicker saves via its onChange callback
 }
 
-// ==================== DEADLINE LOGIC (SIMPLIFIED) ====================
+// ==================== DEADLINE LOGIC (FLATPICKR CALENDAR) ====================
+
+let deadlinePicker = null;
+
+function initDeadlinePicker() {
+  const defaultDate = new Date();
+  defaultDate.setDate(defaultDate.getDate() + 5); // Default: 5 days from now
+  defaultDate.setHours(17, 0, 0, 0); // Default: 5:00 PM
+  
+  deadlinePicker = flatpickr('#deadlinePicker', {
+    enableTime: true,
+    dateFormat: 'F j, Y at h:i K', // "January 30, 2026 at 5:00 PM"
+    altInput: true,
+    altFormat: 'F j, Y at h:i K',
+    minDate: 'today',
+    maxDate: new Date().fp_incr(90), // Max 90 days out
+    defaultDate: defaultDate,
+    time_24hr: false,
+    minuteIncrement: 15,
+    disableMobile: false,
+    theme: 'dark',
+    onReady: function(selectedDates, dateStr, instance) {
+      updateDeadlineHint(selectedDates[0]);
+      // Style the input to match our theme
+      instance.altInput.style.backgroundColor = 'var(--surface)';
+      instance.altInput.style.border = '1px solid var(--border)';
+      instance.altInput.style.color = 'var(--text)';
+      instance.altInput.style.borderRadius = '8px';
+      instance.altInput.style.padding = '12px 14px';
+      instance.altInput.style.fontSize = '14px';
+      instance.altInput.style.cursor = 'pointer';
+    },
+    onChange: function(selectedDates, dateStr, instance) {
+      updateDeadlineHint(selectedDates[0]);
+      saveFormState();
+    }
+  });
+}
+
+function updateDeadlineHint(date) {
+  const hint = $('#deadlineHint');
+  if (!hint || !date) return;
+  
+  const now = new Date();
+  const diff = date - now;
+  const hours = Math.round(diff / (1000 * 60 * 60));
+  const days = Math.round(diff / (1000 * 60 * 60 * 24));
+  
+  if (hours < 24) {
+    hint.textContent = `⏰ ${hours} hours from now`;
+    hint.style.color = '#f59e0b'; // Warning orange
+  } else if (days === 1) {
+    hint.textContent = `📅 Tomorrow`;
+    hint.style.color = 'var(--text-muted)';
+  } else if (days < 7) {
+    hint.textContent = `📅 ${days} days from now`;
+    hint.style.color = 'var(--text-muted)';
+  } else if (days < 14) {
+    hint.textContent = `📅 About 1 week from now`;
+    hint.style.color = 'var(--text-muted)';
+  } else if (days < 30) {
+    hint.textContent = `📅 ${Math.round(days / 7)} weeks from now`;
+    hint.style.color = 'var(--text-muted)';
+  } else {
+    hint.textContent = `📅 About ${Math.round(days / 30)} month(s) from now`;
+    hint.style.color = 'var(--text-muted)';
+  }
+}
 
 function calculateDeadline() {
-  const hours = parseInt($('#deadlineSelect')?.value || '120', 10);
-  const deadline = new Date();
-  deadline.setTime(deadline.getTime() + hours * 60 * 60 * 1000);
-  return deadline;
+  if (deadlinePicker && deadlinePicker.selectedDates.length > 0) {
+    return deadlinePicker.selectedDates[0];
+  }
+  // Fallback: 5 days from now
+  const fallback = new Date();
+  fallback.setDate(fallback.getDate() + 5);
+  fallback.setHours(17, 0, 0, 0);
+  return fallback;
+}
+
+function setDeadlineFromISO(isoString) {
+  if (deadlinePicker && isoString) {
+    try {
+      const date = new Date(isoString);
+      if (!isNaN(date.getTime())) {
+        deadlinePicker.setDate(date, true);
+        updateDeadlineHint(date);
+      }
+    } catch (e) {
+      console.warn('Invalid deadline ISO:', isoString);
+    }
+  }
 }
 
 // ==================== FRAMEWORK HELPERS ====================
@@ -2453,15 +2638,21 @@ function handleUrlPrefill() {
   const cleanUrl = window.location.pathname;
   window.history.replaceState({}, '', cleanUrl);
   
-  // Show a subtle toast or scroll to deadline (since that's all they need to change)
+  // Scroll to deadline picker (since that's all they need to change)
   setTimeout(() => {
-    const deadlineSelect = $('#deadlineSelect');
-    if (deadlineSelect) {
-      deadlineSelect.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      deadlineSelect.focus();
+    const deadlineInput = $('#deadlinePicker');
+    if (deadlineInput && deadlinePicker) {
+      deadlineInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
       // Flash the deadline field
-      deadlineSelect.style.outline = '2px solid var(--accent)';
-      setTimeout(() => { deadlineSelect.style.outline = ''; }, 2000);
+      const altInput = deadlinePicker.altInput || deadlineInput;
+      altInput.style.outline = '2px solid var(--accent)';
+      altInput.style.boxShadow = '0 0 10px rgba(56, 189, 248, 0.3)';
+      setTimeout(() => { 
+        altInput.style.outline = ''; 
+        altInput.style.boxShadow = '';
+      }, 2500);
+      // Open the picker
+      deadlinePicker.open();
     }
   }, 300);
   
@@ -2476,6 +2667,9 @@ async function init() {
   // Initialize chip inputs FIRST (before any state restore)
   initChipInput('auditorEmailsContainer');
   initChipInput('clientEmailsContainer');
+  
+  // Initialize date picker
+  initDeadlinePicker();
   
   initComposerState();
   
