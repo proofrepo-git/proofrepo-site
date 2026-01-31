@@ -1469,36 +1469,36 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       flex-wrap: wrap;
-      gap: 16px;
+      gap: 12px;
     }
 
     .dashboard-title {
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       font-weight: 700;
       color: var(--text);
       margin: 0;
     }
 
     .dashboard-subtitle {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: var(--text-muted);
-      margin: 4px 0 0;
+      margin: 2px 0 0;
     }
 
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin-bottom: 32px;
+      gap: 12px;
+      margin-bottom: 24px;
     }
 
     .stat-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px;
+      border-radius: 10px;
+      padding: 14px 12px;
       text-align: center;
     }
 
@@ -1508,7 +1508,7 @@
     }
 
     .stat-value {
-      font-size: 2rem;
+      font-size: 1.75rem;
       font-weight: 700;
       color: var(--text);
       line-height: 1;
@@ -1519,19 +1519,19 @@
     }
 
     .stat-label {
-      font-size: 0.8rem;
+      font-size: 0.7rem;
       color: var(--text-muted);
-      margin-top: 8px;
+      margin-top: 6px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
     .request-section {
-      margin-bottom: 32px;
+      margin-bottom: 24px;
     }
 
     .section-title {
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 600;
       color: var(--text);
       margin: 0 0 16px;
@@ -1542,31 +1542,31 @@
     .requests-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     .request-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px 20px;
+      border-radius: 10px;
+      padding: 12px 16px;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
 
     .request-card:hover {
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
     }
 
     .request-card-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
 
     .request-company {
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 600;
       color: var(--text);
       margin: 0;
@@ -1574,25 +1574,25 @@
 
     .request-frameworks {
       display: flex;
-      gap: 6px;
+      gap: 4px;
       flex-wrap: wrap;
-      margin-top: 4px;
+      margin-top: 3px;
     }
 
     .request-fw-tag {
-      font-size: 0.7rem;
-      padding: 2px 8px;
+      font-size: 0.65rem;
+      padding: 2px 6px;
       background: rgba(37, 99, 235, 0.15);
       color: var(--primary);
-      border-radius: 4px;
+      border-radius: 3px;
       font-weight: 500;
     }
 
     .request-status {
       display: flex;
       align-items: center;
-      gap: 6px;
-      font-size: 0.85rem;
+      gap: 5px;
+      font-size: 0.8rem;
       font-weight: 500;
     }
 
@@ -1605,37 +1605,37 @@
     }
 
     .status-dot {
-      width: 8px;
-      height: 8px;
+      width: 6px;
+      height: 6px;
       border-radius: 50%;
       background: currentColor;
     }
 
     .request-meta {
       display: flex;
-      gap: 20px;
-      font-size: 0.85rem;
+      gap: 16px;
+      font-size: 0.8rem;
       color: var(--text-muted);
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       flex-wrap: wrap;
     }
 
     .request-meta-item {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
     }
 
     .request-actions {
       display: flex;
-      gap: 8px;
+      gap: 6px;
       flex-wrap: wrap;
     }
 
     .request-action-btn {
-      padding: 6px 12px;
-      font-size: 0.8rem;
-      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 0.75rem;
+      border-radius: 5px;
       border: 1px solid var(--border);
       background: var(--bg);
       color: var(--text);
@@ -1658,27 +1658,123 @@
       background: var(--primary-hover);
     }
 
+    .request-action-btn.danger {
+      color: var(--error);
+    }
+
+    .request-action-btn.danger:hover {
+      border-color: var(--error);
+      background: rgba(239, 68, 68, 0.1);
+    }
+
     .empty-state {
       text-align: center;
-      padding: 40px 20px;
+      padding: 24px 16px;
       color: var(--text-muted);
     }
 
     .empty-state-icon {
-      font-size: 3rem;
-      margin-bottom: 12px;
+      font-size: 2rem;
+      margin-bottom: 8px;
       opacity: 0.5;
     }
 
     .empty-state-text {
-      font-size: 0.95rem;
+      font-size: 0.85rem;
     }
 
     .loading-placeholder {
       text-align: center;
-      padding: 40px 20px;
+      padding: 24px 16px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .section-count {
+      font-weight: 400;
       color: var(--text-muted);
       font-size: 0.9rem;
+    }
+
+    /* Template Cards */
+    .templates-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .template-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      transition: border-color 0.2s;
+    }
+
+    .template-card:hover {
+      border-color: var(--primary);
+    }
+
+    .template-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .template-name {
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.95rem;
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .template-meta {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .template-actions {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+      margin-left: 12px;
+    }
+
+    .template-action-btn {
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .template-action-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .template-action-btn.use {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    .template-action-btn.use:hover {
+      background: var(--primary-hover);
+    }
+
+    .template-action-btn.delete:hover {
+      border-color: var(--error);
+      color: var(--error);
     }
 
     .back-link {
@@ -2009,7 +2105,7 @@
         <p>Build guided evidence request checklists and let ProofRepo handle collection and follow-up.</p>
       </div>
 
-      <div class="role-selector">
+      <div id="roleSelectSection" class="role-selector">
         <label class="form-label">Getting started</label>
         <select id="roleSelect">
           <option value="">Select...</option>
@@ -2241,6 +2337,17 @@
           <h3 class="section-title">Completed</h3>
           <div id="completedRequestsList" class="requests-list">
             <div class="loading-placeholder">Loading requests...</div>
+          </div>
+        </div>
+        
+        <!-- Saved Templates Section -->
+        <div class="request-section">
+          <h3 class="section-title">
+            Saved Templates
+            <span class="section-count" id="templateCount">(0)</span>
+          </h3>
+          <div id="templatesList" class="templates-list">
+            <div class="loading-placeholder">Loading templates...</div>
           </div>
         </div>
       </div>
@@ -3384,10 +3491,11 @@ function showForgotPassword() {
 // ==================== DASHBOARD FUNCTIONS ====================
 
 async function showDashboard() {
-  // Hide auth flows
+  // Hide auth flows and role selector
   $('#newUserFlow').style.display = 'none';
   $('#returningUserFlow').style.display = 'none';
   $('#auditorFlow').style.display = 'none';
+  $('#roleSelectSection').style.display = 'none';
   
   // Show logged in bar
   $('#loggedInBar').style.display = 'flex';
@@ -3466,8 +3574,182 @@ function renderDashboard(requests, stats) {
     completedList.innerHTML = completed.map(r => renderRequestCard(r, 'completed')).join('');
   }
   
+  // Render templates
+  renderTemplatesSection();
+  
   // Wire up action buttons
   wireRequestActions();
+  wireTemplateActions();
+}
+
+function renderTemplatesSection() {
+  const templates = state.user?.templates || [];
+  const templatesList = $('#templatesList');
+  const templateCount = $('#templateCount');
+  
+  templateCount.textContent = `(${templates.length})`;
+  
+  if (templates.length === 0) {
+    templatesList.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">💾</div>
+        <div class="empty-state-text">No saved templates. Create a request and save it as a template for reuse.</div>
+      </div>
+    `;
+  } else {
+    templatesList.innerHTML = templates.map(t => renderTemplateCard(t)).join('');
+  }
+}
+
+function renderTemplateCard(template) {
+  const created = new Date(template.createdAt);
+  const createdStr = created.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  
+  // Count frameworks enabled
+  const fwCount = Object.values(template.composerState || {}).filter(fw => fw.enabled).length;
+  
+  // Count total items
+  let itemCount = 0;
+  for (const fwKey in template.composerState || {}) {
+    const fw = template.composerState[fwKey];
+    if (!fw.enabled) continue;
+    for (const gKey in fw.groups || {}) {
+      const g = fw.groups[gKey];
+      if (g.excluded) continue;
+      for (const iKey in g.items || {}) {
+        if (g.items[iKey].included) itemCount++;
+      }
+    }
+  }
+  
+  return `
+    <div class="template-card" data-template-id="${esc(template.id)}">
+      <div class="template-info">
+        <h4 class="template-name">${esc(template.name)}</h4>
+        <div class="template-meta">${fwCount} framework${fwCount !== 1 ? 's' : ''} · ${itemCount} items · Created ${createdStr}</div>
+      </div>
+      <div class="template-actions">
+        <button class="template-action-btn use" data-action="use-template" data-id="${esc(template.id)}">Use</button>
+        <button class="template-action-btn" data-action="duplicate-template" data-id="${esc(template.id)}">Duplicate</button>
+        <button class="template-action-btn delete" data-action="delete-template" data-id="${esc(template.id)}">Delete</button>
+      </div>
+    </div>
+  `;
+}
+
+function wireTemplateActions() {
+  // Use template
+  $$('[data-action="use-template"]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.id;
+      useTemplateFromDashboard(id);
+    });
+  });
+  
+  // Duplicate template
+  $$('[data-action="duplicate-template"]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id = btn.dataset.id;
+      await duplicateTemplate(id);
+    });
+  });
+  
+  // Delete template
+  $$('[data-action="delete-template"]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id = btn.dataset.id;
+      await deleteTemplateFromDashboard(id);
+    });
+  });
+}
+
+function useTemplateFromDashboard(templateId) {
+  const template = state.user?.templates?.find(t => t.id === templateId);
+  if (!template) return;
+  
+  // Hide dashboard, show composer
+  $('#dashboardView').style.display = 'none';
+  $('#backToDashboard').style.display = 'block';
+  
+  // Reset form first
+  resetComposerForm();
+  
+  // Load template
+  loadTemplate(templateId);
+  
+  // Show auditor flow
+  $('#auditorFlow').style.display = 'block';
+  
+  // Set auditor email
+  if (state.user?.email) {
+    setChipEmails('auditorEmailsContainer', [state.user.email]);
+  }
+  
+  $('#auditorFlow').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+async function duplicateTemplate(templateId) {
+  const template = state.user?.templates?.find(t => t.id === templateId);
+  if (!template) return;
+  
+  const newName = prompt('Enter name for duplicated template:', template.name + ' (Copy)');
+  if (!newName || !newName.trim()) return;
+  
+  try {
+    const res = await fetch(`${API}/auth/templates`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${state.authToken}`
+      },
+      body: JSON.stringify({
+        name: newName.trim(),
+        composerState: template.composerState,
+        customFrameworks: template.customFrameworks,
+        globalInstructions: template.globalInstructions || ''
+      })
+    });
+    
+    const data = await res.json();
+    
+    if (data.ok && data.template) {
+      state.user.templates = state.user.templates || [];
+      state.user.templates.push(data.template);
+      renderTemplatesSection();
+      wireTemplateActions();
+    } else {
+      alert(data.error || 'Error duplicating template');
+    }
+  } catch (e) {
+    alert('Error duplicating template');
+  }
+}
+
+async function deleteTemplateFromDashboard(templateId) {
+  const template = state.user?.templates?.find(t => t.id === templateId);
+  if (!template) return;
+  
+  if (!confirm(`Delete template "${template.name}"? This cannot be undone.`)) return;
+  
+  try {
+    const res = await fetch(`${API}/auth/templates?id=${templateId}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${state.authToken}` }
+    });
+    
+    const data = await res.json();
+    
+    if (data.ok) {
+      state.user.templates = state.user.templates.filter(t => t.id !== templateId);
+      renderTemplatesSection();
+      wireTemplateActions();
+      updateLoggedInBar(); // Update template dropdown in composer if visible
+    } else {
+      alert(data.error || 'Error deleting template');
+    }
+  } catch (e) {
+    alert('Error deleting template');
+  }
 }
 
 function renderRequestCard(req, type) {
@@ -4038,6 +4320,9 @@ function handleLogout() {
   // Reset UI
   $('#loggedInBar').style.display = 'none';
   $('#auditorFlow').style.display = 'none';
+  $('#dashboardView').style.display = 'none';
+  $('#verificationNotice').style.display = 'none';
+  $('#roleSelectSection').style.display = 'block';
   $('#roleSelect').value = '';
 }
 
