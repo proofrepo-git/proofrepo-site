@@ -2806,21 +2806,30 @@ async function checkCheckoutReturn() {
   url.searchParams.delete('session_id');
   window.history.replaceState({}, '', url.toString());
   
+  // Check for existing session first (user might still be logged in)
+  const hasSession = await checkExistingSession();
+  
   // Restore saved form state
   const savedState = loadFormState();
   if (savedState) {
     restoreFormState(savedState);
-    if (savedState.role === 'auditor') {
-      handleRoleChange('auditor');
-    }
-  } else {
-    $('#roleSelect').value = 'auditor';
-    handleRoleChange('auditor');
   }
   
-  // Show payment section (but hide purchase options)
-  showPaymentSection();
-  $('#purchaseSection').classList.add('hidden');
+  // If logged in, show auditor flow immediately — polling will update credits
+  if (hasSession || state.isLoggedIn) {
+    showAuditorFlow();
+    setChipEmails('auditorEmailsContainer', [state.user?.email || '']);
+  } else {
+    // Legacy: not logged in, show code-based flow
+    if (savedState?.role === 'auditor') {
+      handleRoleChange('auditor');
+    } else {
+      $('#roleSelect').value = 'auditor';
+      handleRoleChange('auditor');
+    }
+    showPaymentSection();
+    $('#purchaseSection').classList.add('hidden');
+  }
   
   // Show success banner
   const successBanner = $('#successBanner');
@@ -2830,14 +2839,11 @@ async function checkCheckoutReturn() {
   
   const codeInput = $('#auditorCode');
   const codeStatus = $('#codeStatus');
-  codeInput.value = '';
-  codeInput.placeholder = 'Loading...';
-  codeStatus.className = 'code-status checking';
-  codeStatus.innerHTML = '<span class="spinner"></span> Retrieving your code...';
   
   // Aggressive polling - keep trying every second for 90 seconds
   let code = null;
   let creditsText = '';
+  let accountCredited = false;
   
   for (let attempt = 0; attempt < 90; attempt++) {
     try {
@@ -2846,8 +2852,33 @@ async function checkCheckoutReturn() {
       
       console.log(`Attempt ${attempt + 1}:`, data);
       
+      // v6: Account-based credit return
+      if (data.ok && data.accountCredit) {
+        accountCredited = true;
+        
+        // Update local state with new credit balance
+        if (state.user) {
+          state.user.credits = typeof data.credits === 'number' ? data.credits : state.user.credits;
+        }
+        
+        // Refresh session to get latest account state
+        await checkExistingSession();
+        
+        successCodeDisplay.textContent = `+${data.creditsAdded} credits added!`;
+        successBanner.querySelector('p:last-of-type').textContent = `Your account now has ${data.creditsDisplay}. You're ready to send requests.`;
+        
+        // Hide code input section since account users don't need codes
+        if (codeInput) codeInput.closest('.form-group')?.classList.add('hidden');
+        if (codeStatus) codeStatus.textContent = '';
+        
+        // Make sure we're in auditor flow with credits visible
+        showAuditorFlow();
+        updateMainButton();
+        break;
+      }
+      
+      // Legacy: code-based return
       if (data.ok && data.code) {
-        // SUCCESS! Got the code
         code = data.code;
         state.code = code;
         state.codeValid = true;
@@ -2856,8 +2887,10 @@ async function checkCheckoutReturn() {
         break;
       }
       
-      // Keep trying regardless of response - webhook might not have fired yet
-      codeStatus.innerHTML = `<span class="spinner"></span> Retrieving your code... (${attempt + 1}s)`;
+      // Keep trying
+      if (codeStatus) {
+        codeStatus.innerHTML = `<span class="spinner"></span> Processing your purchase... (${attempt + 1}s)`;
+      }
       
     } catch (e) {
       console.error('Checkout check error:', e);
@@ -2866,23 +2899,33 @@ async function checkCheckoutReturn() {
     await new Promise(r => setTimeout(r, 1000));
   }
   
-  if (code) {
-    // Success - show the code
-    successCodeDisplay.textContent = code;
-    codeInput.value = code;
-    codeInput.placeholder = 'ENTER CODE';
-    codeInput.classList.add('valid');
-    codeStatus.className = 'code-status valid';
-    codeStatus.textContent = `✓ Valid — ${creditsText}`;
-    saveFormState();
-  } else {
-    // Fallback - tell them to check email
-    successCodeDisplay.textContent = 'Check your email';
-    successBanner.querySelector('p:last-of-type').textContent = 'Your code should arrive shortly. Enter it below when you receive it.';
-    codeInput.value = '';
-    codeInput.placeholder = 'ENTER CODE';
-    codeStatus.className = 'code-status';
-    codeStatus.textContent = 'Enter the code from your email';
+  if (!accountCredited) {
+    if (code) {
+      // Legacy success - show the code
+      successCodeDisplay.textContent = code;
+      if (codeInput) {
+        codeInput.value = code;
+        codeInput.placeholder = 'ENTER CODE';
+        codeInput.classList.add('valid');
+      }
+      if (codeStatus) {
+        codeStatus.className = 'code-status valid';
+        codeStatus.textContent = `✓ Valid — ${creditsText}`;
+      }
+      saveFormState();
+    } else {
+      // Fallback - tell them to check email
+      successCodeDisplay.textContent = 'Check your email';
+      successBanner.querySelector('p:last-of-type').textContent = 'Your code should arrive shortly. Enter it below when you receive it.';
+      if (codeInput) {
+        codeInput.value = '';
+        codeInput.placeholder = 'ENTER CODE';
+      }
+      if (codeStatus) {
+        codeStatus.className = 'code-status';
+        codeStatus.textContent = 'Enter the code from your email';
+      }
+    }
   }
   
   updateMainButton();
@@ -3640,9 +3683,13 @@ async function handleCheckout() {
   
   try {
     const auditorEmails = getChipEmails('auditorEmailsContainer');
+    const checkoutHeaders = { 'Content-Type': 'application/json' };
+    if (state.authToken) {
+      checkoutHeaders['Authorization'] = `Bearer ${state.authToken}`;
+    }
     const res = await fetch(`${API}/checkout`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: checkoutHeaders,
       body: JSON.stringify({
         tier: state.selectedTier,
         email: auditorEmails[0] || '',
@@ -3889,17 +3936,18 @@ async function init() {
   // Check for password reset token in URL (takes priority)
   const isResetFlow = checkResetToken();
   
-  // Check for existing session
-  const hasSession = !isResetFlow && await checkExistingSession();
+  // Check for checkout return (handles its own session check)
+  const isCheckoutReturn = !isResetFlow && await checkCheckoutReturn();
   
-  if (hasSession) {
-    // Already logged in - show auditor flow
-    setChipEmails('auditorEmailsContainer', [state.user.email]);
-    showAuditorFlow();
+  // Check for existing session (skip if checkout return already handled it)
+  let hasSession = false;
+  if (!isResetFlow && !isCheckoutReturn) {
+    hasSession = await checkExistingSession();
+    if (hasSession) {
+      setChipEmails('auditorEmailsContainer', [state.user.email]);
+      showAuditorFlow();
+    }
   }
-  
-  // Check for checkout return
-  const isCheckoutReturn = await checkCheckoutReturn();
   
   // ALWAYS set up all event listeners
   setupAutoSave();
