@@ -3499,9 +3499,6 @@ async function loadTemplate(templateId) {
   if (template.customFrameworks) {
     customFrameworks = JSON.parse(JSON.stringify(template.customFrameworks));
   }
-  if (template.defaultAuditorEmails?.length) {
-    setChipEmails('auditorEmailsContainer', template.defaultAuditorEmails);
-  }
   
   // Render first, THEN set global instructions (render rebuilds the textarea)
   renderComposer();
@@ -3590,8 +3587,7 @@ async function saveAsTemplate() {
           name,
           composerState: includeInstructions ? composerState : stripInstructions(composerState),
           customFrameworks,
-          globalInstructions: includeInstructions ? ($('#globalInstructions')?.value || '') : '',
-          defaultAuditorEmails: getChipEmails('auditorEmailsContainer')
+          globalInstructions: includeInstructions ? ($('#globalInstructions')?.value || '') : ''
         })
       });
       
