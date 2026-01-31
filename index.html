@@ -2871,8 +2871,14 @@ async function checkCheckoutReturn() {
         if (codeInput) codeInput.closest('.form-group')?.classList.add('hidden');
         if (codeStatus) codeStatus.textContent = '';
         
+        // Hide the entire payment section — user has credits now
+        const paymentSec = $('#paymentSection');
+        if (paymentSec) paymentSec.classList.remove('visible');
+        state.paymentVisible = false;
+        
         // Make sure we're in auditor flow with credits visible
         showAuditorFlow();
+        updateLoggedInBar();
         updateMainButton();
         break;
       }
@@ -3395,15 +3401,18 @@ async function loadTemplate(templateId) {
   if (template.customFrameworks) {
     customFrameworks = JSON.parse(JSON.stringify(template.customFrameworks));
   }
-  if (template.globalInstructions) {
-    const gi = $('#globalInstructions');
-    if (gi) gi.value = template.globalInstructions;
-  }
   if (template.defaultAuditorEmails?.length) {
     setChipEmails('auditorEmailsContainer', template.defaultAuditorEmails);
   }
   
+  // Render first, THEN set global instructions (render rebuilds the textarea)
   renderComposer();
+  
+  if (template.globalInstructions) {
+    const gi = $('#globalInstructions');
+    if (gi) gi.value = template.globalInstructions;
+  }
+  
   $('#templateSelect').value = '';
 }
 
@@ -3413,40 +3422,91 @@ async function saveAsTemplate() {
     return;
   }
   
-  const name = prompt('Template name (e.g., "SOC 2 Annual"):');
-  if (!name?.trim()) return;
+  const bar = $('#saveTemplateBar');
+  if (!bar) return;
   
-  const includeInstructions = confirm('Include item-level instructions?');
+  // Check if inline form is already showing
+  if (bar.querySelector('.save-template-form')) return;
   
-  try {
-    const res = await fetch(`${API}/auth/templates`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${state.authToken}`
-      },
-      body: JSON.stringify({
-        name: name.trim(),
-        composerState: includeInstructions ? composerState : stripInstructions(composerState),
-        customFrameworks,
-        globalInstructions: includeInstructions ? ($('#globalInstructions')?.value || '') : '',
-        defaultAuditorEmails: getChipEmails('auditorEmailsContainer')
-      })
-    });
-    
-    const data = await res.json();
-    
-    if (data.ok && data.template) {
-      state.user.templates = state.user.templates || [];
-      state.user.templates.push(data.template);
-      updateLoggedInBar();
-      alert('Template saved!');
-    } else {
-      alert(data.error || 'Error saving template');
+  // Build inline form
+  const form = document.createElement('div');
+  form.className = 'save-template-form';
+  form.style.cssText = 'margin-top: 10px; display: flex; flex-direction: column; gap: 8px;';
+  form.innerHTML = `
+    <input type="text" class="form-input" id="templateNameInput" placeholder='Template name (e.g., "SOC 2 Annual")' style="font-size: 0.9rem;">
+    <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-muted); cursor: pointer;">
+      <input type="checkbox" id="includeInstructionsCheck" checked> Include item-level instructions
+    </label>
+    <div style="display: flex; gap: 8px;">
+      <button type="button" class="btn btn-sm btn-accent" id="confirmSaveTemplateBtn">Save</button>
+      <button type="button" class="btn btn-sm btn-outline" id="cancelSaveTemplateBtn">Cancel</button>
+    </div>
+    <div id="saveTemplateStatus" style="font-size: 0.85rem;"></div>
+  `;
+  bar.appendChild(form);
+  
+  const nameInput = $('#templateNameInput');
+  nameInput.focus();
+  
+  // Cancel
+  $('#cancelSaveTemplateBtn').addEventListener('click', () => form.remove());
+  nameInput.addEventListener('keypress', e => {
+    if (e.key === 'Enter') $('#confirmSaveTemplateBtn').click();
+  });
+  
+  // Save
+  $('#confirmSaveTemplateBtn').addEventListener('click', async () => {
+    const name = (nameInput.value || '').trim();
+    if (!name) {
+      $('#saveTemplateStatus').textContent = 'Please enter a template name';
+      $('#saveTemplateStatus').style.color = '#ef4444';
+      nameInput.focus();
+      return;
     }
-  } catch (e) {
-    alert('Error saving template');
-  }
+    
+    const includeInstructions = $('#includeInstructionsCheck').checked;
+    const btn = $('#confirmSaveTemplateBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>';
+    
+    try {
+      const res = await fetch(`${API}/auth/templates`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${state.authToken}`
+        },
+        body: JSON.stringify({
+          name,
+          composerState: includeInstructions ? composerState : stripInstructions(composerState),
+          customFrameworks,
+          globalInstructions: includeInstructions ? ($('#globalInstructions')?.value || '') : '',
+          defaultAuditorEmails: getChipEmails('auditorEmailsContainer')
+        })
+      });
+      
+      const data = await res.json();
+      
+      if (data.ok && data.template) {
+        state.user.templates = state.user.templates || [];
+        state.user.templates.push(data.template);
+        updateLoggedInBar();
+        $('#saveTemplateStatus').textContent = '✓ Template saved!';
+        $('#saveTemplateStatus').style.color = '#10b981';
+        setTimeout(() => form.remove(), 1500);
+      } else {
+        $('#saveTemplateStatus').textContent = data.error || 'Error saving template';
+        $('#saveTemplateStatus').style.color = '#ef4444';
+        btn.disabled = false;
+        btn.textContent = 'Save';
+      }
+    } catch (e) {
+      $('#saveTemplateStatus').textContent = 'Error saving template';
+      $('#saveTemplateStatus').style.color = '#ef4444';
+      btn.disabled = false;
+      btn.textContent = 'Save';
+    }
+  });
 }
 
 function stripInstructions(cs) {
@@ -3624,7 +3684,11 @@ async function handleMainAction() {
   
   // Check if user can send (logged in with credits, or trial user, or needs payment)
   if (state.isLoggedIn && state.user?.credits > 0) {
-    // Logged in with credits - send directly
+    // Logged in with credits - hide payment if visible and send directly
+    if (state.paymentVisible) {
+      $('#paymentSection').classList.remove('visible');
+      state.paymentVisible = false;
+    }
     await sendRequest();
   } else if (state.isTrialUser && state.codeValid) {
     // Trial user - send directly
