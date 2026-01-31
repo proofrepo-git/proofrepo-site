@@ -1057,6 +1057,367 @@
       margin: 0;
     }
 
+    /* ==================== AUTH STYLES ==================== */
+    .auth-flow {
+      margin-bottom: 20px;
+    }
+
+    .auth-box {
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .auth-box h3 {
+      margin: 0 0 6px;
+      font-size: 1.15rem;
+    }
+
+    .auth-subtitle {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+    }
+
+    .auth-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .auth-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .auth-option:hover {
+      border-color: var(--primary);
+    }
+
+    .auth-option:has(input:checked) {
+      border-color: var(--primary);
+      background: rgba(37, 99, 235, 0.08);
+    }
+
+    .auth-option input[type="radio"] {
+      margin-top: 2px;
+      accent-color: var(--primary);
+    }
+
+    .auth-option-content {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .auth-option-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .auth-option-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .auth-section {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .auth-status {
+      margin-top: 12px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    .auth-status.visible { display: block; }
+    .auth-status.success { background: rgba(16, 185, 129, 0.1); color: var(--accent); border: 1px solid rgba(16, 185, 129, 0.3); }
+    .auth-status.error { background: rgba(239, 68, 68, 0.1); color: var(--error); border: 1px solid rgba(239, 68, 68, 0.3); }
+    .auth-status.loading { background: rgba(37, 99, 235, 0.1); color: var(--text-muted); border: 1px solid rgba(37, 99, 235, 0.3); }
+
+    .auth-footnote {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 12px;
+    }
+
+    .code-style {
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .success-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 8px;
+      margin-bottom: 16px;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .success-icon {
+      font-size: 1.1rem;
+    }
+
+    .trial-modes {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .trial-mode {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 14px;
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .trial-mode:hover {
+      border-color: var(--accent);
+    }
+
+    .trial-mode:has(input:checked) {
+      border-color: var(--accent);
+      background: rgba(16, 185, 129, 0.08);
+    }
+
+    .trial-mode input[type="radio"] {
+      margin-top: 3px;
+      accent-color: var(--accent);
+    }
+
+    .trial-mode-content {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .trial-mode-content strong {
+      font-size: 0.9rem;
+    }
+
+    .trial-mode-content span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .info-box {
+      padding: 12px 14px;
+      background: rgba(37, 99, 235, 0.1);
+      border: 1px solid rgba(37, 99, 235, 0.2);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 10px;
+    }
+
+    .password-reqs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .password-reqs .req {
+      font-size: 0.75rem;
+      padding: 4px 8px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-muted);
+    }
+
+    .password-reqs .req.valid {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: rgba(16, 185, 129, 0.4);
+      color: var(--accent);
+    }
+
+    .login-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .checkbox-label input {
+      accent-color: var(--primary);
+    }
+
+    .text-link {
+      font-size: 0.85rem;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .text-link:hover {
+      text-decoration: underline;
+    }
+
+    .logged-in-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 16px;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-email {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .credits-badge {
+      padding: 4px 10px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 14px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .credits-badge.low {
+      background: rgba(245, 158, 11, 0.15);
+      border-color: rgba(245, 158, 11, 0.3);
+      color: var(--warning);
+    }
+
+    .credits-badge.empty {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: rgba(239, 68, 68, 0.3);
+      color: var(--error);
+    }
+
+    .user-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .template-select {
+      padding: 6px 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .trial-notice {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      background: rgba(37, 99, 235, 0.1);
+      border: 1px solid rgba(37, 99, 235, 0.2);
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-size: 0.9rem;
+    }
+
+    .trial-badge {
+      padding: 2px 8px;
+      background: var(--primary);
+      color: white;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .verification-notice {
+      padding: 10px 16px;
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-size: 0.9rem;
+      color: var(--warning);
+    }
+
+    .verification-notice a {
+      color: var(--warning);
+      font-weight: 600;
+    }
+
+    /* Save Template Bar */
+    .save-template-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-top: 16px;
+    }
+
+    .save-template-bar span {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 600px) {
+      .logged-in-bar {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+      }
+      .user-actions {
+        justify-content: space-between;
+      }
+      .login-options {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+      }
+    }
+
     .marquee-fixed {
       position: fixed;
       left: 0;
@@ -1313,10 +1674,173 @@
       <div class="role-selector">
         <label class="form-label">What brings you here?</label>
         <select id="roleSelect">
-          <option value="">Select your role...</option>
-          <option value="auditor">I'm requesting evidence from a client</option>
-          <option value="client">I'm responding to an evidence request</option>
+          <option value="">Select...</option>
+          <option value="new">I'm new to ProofRepo</option>
+          <option value="returning">I'm a returning customer</option>
         </select>
+      </div>
+
+      <!-- Auth Flow: New User -->
+      <div id="newUserFlow" class="auth-flow" style="display: none;">
+        <div class="auth-box">
+          <h3>Welcome to ProofRepo!</h3>
+          <p class="auth-subtitle">Choose how you'd like to get started:</p>
+          
+          <div class="auth-options">
+            <label class="auth-option">
+              <input type="radio" name="newUserType" value="trial" checked>
+              <span class="auth-option-content">
+                <span class="auth-option-title">I have a trial code</span>
+                <span class="auth-option-desc">Distributed to select members of the compliance community</span>
+              </span>
+            </label>
+            <label class="auth-option">
+              <input type="radio" name="newUserType" value="account">
+              <span class="auth-option-content">
+                <span class="auth-option-title">Create an account</span>
+                <span class="auth-option-desc">Purchase credits and save templates</span>
+              </span>
+            </label>
+          </div>
+
+          <!-- Trial Code Entry -->
+          <div id="trialCodeSection" class="auth-section">
+            <div class="form-group">
+              <label class="form-label">Trial Code</label>
+              <input type="text" class="form-input code-style" id="trialCodeInput" placeholder="ENTER TRIAL CODE">
+            </div>
+            <button class="btn btn-primary btn-full" id="applyTrialBtn">Apply Code</button>
+            <div id="trialStatus" class="auth-status"></div>
+          </div>
+
+          <!-- Trial Mode Selection (shown after valid trial code) -->
+          <div id="trialModeSection" class="auth-section" style="display: none;">
+            <div class="success-box">
+              <span class="success-icon">✓</span>
+              <span>Trial code accepted! 1 free request.</span>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Your email</label>
+              <input type="email" class="form-input" id="trialUserEmail" placeholder="you@company.com">
+              <span class="form-hint">We'll send confirmation and results here</span>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Trial mode</label>
+              <div class="trial-modes">
+                <label class="trial-mode">
+                  <input type="radio" name="trialMode" value="live" checked>
+                  <span class="trial-mode-content">
+                    <strong>Live request</strong>
+                    <span>Send to a real client</span>
+                  </span>
+                </label>
+                <label class="trial-mode">
+                  <input type="radio" name="trialMode" value="test">
+                  <span class="trial-mode-content">
+                    <strong>Test mode</strong>
+                    <span>Send to myself (experience both sides)</span>
+                  </span>
+                </label>
+              </div>
+              <div id="testModeExplainer" class="info-box" style="display: none;">
+                You'll receive both the auditor confirmation and client request emails. Upload test evidence, then view the results as if you were the auditor.
+              </div>
+            </div>
+            
+            <button class="btn btn-accent btn-full" id="startTrialBtn">Continue to Request Builder</button>
+          </div>
+
+          <!-- Account Creation -->
+          <div id="accountSection" class="auth-section" style="display: none;">
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-input" id="signupEmail" placeholder="you@company.com">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Password</label>
+              <input type="password" class="form-input" id="signupPassword" placeholder="Create a password">
+              <div class="password-reqs">
+                <span class="req" data-req="length">8+ characters</span>
+                <span class="req" data-req="number">1 number</span>
+                <span class="req" data-req="special">1 special character</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Confirm Password</label>
+              <input type="password" class="form-input" id="signupPasswordConfirm" placeholder="Confirm password">
+            </div>
+            <button class="btn btn-primary btn-full" id="signupBtn">Create Account</button>
+            <p class="auth-footnote">We'll send a verification email to confirm your account.</p>
+            <div id="signupStatus" class="auth-status"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Auth Flow: Returning User -->
+      <div id="returningUserFlow" class="auth-flow" style="display: none;">
+        <div class="auth-box">
+          <h3>Welcome back!</h3>
+          
+          <!-- Login Form -->
+          <div id="loginSection">
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-input" id="loginEmail" placeholder="you@company.com">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Password</label>
+              <input type="password" class="form-input" id="loginPassword" placeholder="Your password">
+            </div>
+            <div class="login-options">
+              <label class="checkbox-label">
+                <input type="checkbox" id="rememberMe" checked>
+                <span>Remember me for 30 days</span>
+              </label>
+              <a href="#" id="forgotPasswordLink" class="text-link">Forgot password?</a>
+            </div>
+            <button class="btn btn-primary btn-full" id="loginBtn">Sign In</button>
+            <div id="loginStatus" class="auth-status"></div>
+          </div>
+
+          <!-- Forgot Password -->
+          <div id="forgotPasswordSection" style="display: none;">
+            <p class="auth-subtitle">Enter your email and we'll send a reset link.</p>
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-input" id="resetEmail" placeholder="you@company.com">
+            </div>
+            <button class="btn btn-primary btn-full" id="sendResetBtn">Send Reset Link</button>
+            <button class="btn btn-outline btn-full" id="backToLoginBtn" style="margin-top: 8px;">Back to Sign In</button>
+            <div id="resetStatus" class="auth-status"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Logged In Header Bar (shown when authenticated) -->
+      <div id="loggedInBar" class="logged-in-bar" style="display: none;">
+        <div class="user-info">
+          <span class="user-email" id="currentUserEmail"></span>
+          <span class="credits-badge" id="creditsDisplay">0 credits</span>
+        </div>
+        <div class="user-actions">
+          <select id="templateSelect" class="template-select" style="display: none;">
+            <option value="">Load template...</option>
+          </select>
+          <button class="btn btn-sm btn-outline" id="logoutBtn">Sign Out</button>
+        </div>
+      </div>
+
+      <!-- Trial Notice Bar -->
+      <div id="trialNoticeBar" class="trial-notice" style="display: none;">
+        <span class="trial-badge">TRIAL</span>
+        <span>You're using a trial credit. <a href="#" id="createAccountLink">Create an account</a> to save templates.</span>
+      </div>
+
+      <!-- Verification Notice -->
+      <div id="verificationNotice" class="verification-notice" style="display: none;">
+        <span>⚠️ Please verify your email to send requests. <a href="#" id="resendVerifyLink">Resend verification</a></span>
       </div>
 
       <div id="auditorFlow" style="display: none;">
@@ -1409,13 +1933,6 @@
         <button class="btn btn-primary btn-full" id="mainActionBtn" style="margin-top: 24px;">
           Continue
         </button>
-      </div>
-
-      <div id="clientFlow" style="display: none;">
-        <p style="color: var(--text-muted);">
-          Please use the link provided by your compliance team to upload evidence. 
-          If you don't have a link, contact the person who requested evidence from you to get one.
-        </p>
       </div>
     </div>
   </main>
@@ -1732,7 +2249,14 @@ let state = {
   codeCredits: 0, 
   selectedTier: null, 
   paymentVisible: false,
-  isCheckoutReturn: false
+  isCheckoutReturn: false,
+  // Auth state
+  isLoggedIn: false,
+  isTrialUser: false,
+  user: null,         // { id, email, credits, verified, templates }
+  authToken: null,
+  trialMode: 'live',  // 'live' or 'test'
+  trialEmail: ''
 };
 
 const $ = s => document.querySelector(s);
@@ -2044,10 +2568,34 @@ function renderComposer() {
   }
   const savedGlobalInstr = $('#globalInstructions')?.value || '';
   html += `<div class="global-instructions"><label class="form-label">Overall instructions for client</label><textarea class="form-textarea" id="globalInstructions" placeholder="Example: Please provide evidence covering Jan–Dec 2025. Screenshots acceptable. Redact any secrets or credentials.">${esc(savedGlobalInstr)}</textarea><p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">Shown prominently to your client above the checklist.</p></div>`;
+  
+  // Save template bar (only show when logged in or trial user who might want to save)
+  html += `<div class="save-template-bar" id="saveTemplateBar">
+    <span>💾 Save this configuration for future use</span>
+    <button type="button" class="btn btn-sm btn-outline" id="saveTemplateBtn">Save as Template</button>
+  </div>`;
+  
   c.innerHTML = html;
   wireComposer();
   const gi = $('#globalInstructions');
   if (gi) gi.addEventListener('input', saveFormState);
+  
+  // Wire save template button
+  const saveBtn = $('#saveTemplateBtn');
+  if (saveBtn) {
+    saveBtn.addEventListener('click', () => {
+      if (!state.isLoggedIn) {
+        if (confirm('Create an account to save templates. Go to account creation?')) {
+          $('#roleSelect').value = 'new';
+          handleRoleChange('new');
+          showNewUserSection('account');
+          if (state.trialEmail) $('#signupEmail').value = state.trialEmail;
+        }
+      } else {
+        saveAsTemplate();
+      }
+    });
+  }
 }
 
 function renderFwBody(fwKey, fw) {
@@ -2325,12 +2873,524 @@ async function checkCheckoutReturn() {
 
 function handleRoleChange(role) {
   state.role = role;
-  $('#auditorFlow').style.display = role === 'auditor' ? 'block' : 'none';
-  $('#clientFlow').style.display = role === 'client' ? 'block' : 'none';
-  if (role === 'auditor') { 
-    if (Object.keys(composerState).length === 0) initComposerState(); 
-    renderComposer();
+  
+  // Hide all flows first
+  $('#newUserFlow').style.display = 'none';
+  $('#returningUserFlow').style.display = 'none';
+  $('#auditorFlow').style.display = 'none';
+  $('#loggedInBar').style.display = 'none';
+  $('#trialNoticeBar').style.display = 'none';
+  $('#verificationNotice').style.display = 'none';
+  
+  if (role === 'new') {
+    $('#newUserFlow').style.display = 'block';
+    showNewUserSection('trial'); // Default to trial
+  } else if (role === 'returning') {
+    $('#returningUserFlow').style.display = 'block';
+    showLoginSection();
   }
+  // Note: 'auditor' role is set internally after auth
+}
+
+function showNewUserSection(type) {
+  $('#trialCodeSection').style.display = type === 'trial' ? 'block' : 'none';
+  $('#trialModeSection').style.display = 'none';
+  $('#accountSection').style.display = type === 'account' ? 'block' : 'none';
+}
+
+function showLoginSection() {
+  $('#loginSection').style.display = 'block';
+  $('#forgotPasswordSection').style.display = 'none';
+}
+
+function showForgotPassword() {
+  $('#loginSection').style.display = 'none';
+  $('#forgotPasswordSection').style.display = 'block';
+}
+
+function showAuditorFlow() {
+  // Hide auth flows
+  $('#newUserFlow').style.display = 'none';
+  $('#returningUserFlow').style.display = 'none';
+  
+  // Show appropriate header
+  if (state.isLoggedIn) {
+    $('#loggedInBar').style.display = 'flex';
+    updateLoggedInBar();
+    
+    // Show verification notice if not verified
+    if (state.user && !state.user.verified) {
+      $('#verificationNotice').style.display = 'block';
+    }
+  } else if (state.isTrialUser) {
+    $('#trialNoticeBar').style.display = 'flex';
+  }
+  
+  // Show auditor flow
+  $('#auditorFlow').style.display = 'block';
+  if (Object.keys(composerState).length === 0) initComposerState();
+  renderComposer();
+  
+  // Scroll to form
+  $('#auditorFlow').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function updateLoggedInBar() {
+  if (!state.user) return;
+  
+  $('#currentUserEmail').textContent = state.user.email;
+  
+  const credits = state.user.credits || 0;
+  const badge = $('#creditsDisplay');
+  badge.textContent = `${credits} credit${credits !== 1 ? 's' : ''}`;
+  badge.className = 'credits-badge' + (credits === 0 ? ' empty' : credits <= 2 ? ' low' : '');
+  
+  // Update template selector
+  const templates = state.user.templates || [];
+  const select = $('#templateSelect');
+  if (templates.length > 0) {
+    select.style.display = 'block';
+    select.innerHTML = '<option value="">Load template...</option>';
+    templates.forEach(t => {
+      select.innerHTML += `<option value="${esc(t.id)}">${esc(t.name)}</option>`;
+    });
+  } else {
+    select.style.display = 'none';
+  }
+}
+
+// ==================== AUTH FUNCTIONS ====================
+
+async function checkExistingSession() {
+  const token = localStorage.getItem('proofrepo_token');
+  if (!token) return false;
+  
+  try {
+    const res = await fetch(`${API}/auth/me`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    
+    if (res.ok) {
+      const data = await res.json();
+      if (data.ok && data.user) {
+        state.isLoggedIn = true;
+        state.authToken = token;
+        state.user = data.user;
+        return true;
+      }
+    }
+    
+    // Invalid token
+    localStorage.removeItem('proofrepo_token');
+    return false;
+  } catch (e) {
+    return false;
+  }
+}
+
+function showAuthStatus(elementId, message, type) {
+  const el = $(`#${elementId}`);
+  if (!el) return;
+  el.textContent = message;
+  el.className = `auth-status visible ${type}`;
+}
+
+function hideAuthStatus(elementId) {
+  const el = $(`#${elementId}`);
+  if (el) el.className = 'auth-status';
+}
+
+async function handleApplyTrialCode() {
+  const code = ($('#trialCodeInput')?.value || '').trim().toUpperCase();
+  const btn = $('#applyTrialBtn');
+  
+  if (!code) {
+    showAuthStatus('trialStatus', 'Please enter a trial code', 'error');
+    return;
+  }
+  
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Checking...';
+  showAuthStatus('trialStatus', 'Validating code...', 'loading');
+  
+  try {
+    const res = await fetch(`${API}/auth/validate-trial?code=${encodeURIComponent(code)}`);
+    const data = await res.json();
+    
+    if (data.ok && data.valid) {
+      state.code = code;
+      state.codeValid = true;
+      state.codeCredits = data.credits || 1;
+      
+      hideAuthStatus('trialStatus');
+      
+      // Show trial mode section
+      $('#trialCodeSection').style.display = 'none';
+      $('#trialModeSection').style.display = 'block';
+    } else {
+      showAuthStatus('trialStatus', data.error || 'Invalid trial code', 'error');
+    }
+  } catch (e) {
+    showAuthStatus('trialStatus', 'Error validating code. Please try again.', 'error');
+  }
+  
+  btn.disabled = false;
+  btn.textContent = 'Apply Code';
+}
+
+function handleTrialModeChange() {
+  const mode = document.querySelector('input[name="trialMode"]:checked')?.value || 'live';
+  state.trialMode = mode;
+  $('#testModeExplainer').style.display = mode === 'test' ? 'block' : 'none';
+}
+
+async function handleStartTrial() {
+  const email = ($('#trialUserEmail')?.value || '').trim().toLowerCase();
+  
+  if (!email || !email.includes('@') || !email.includes('.')) {
+    alert('Please enter a valid email address');
+    return;
+  }
+  
+  state.trialEmail = email;
+  state.isTrialUser = true;
+  
+  // Pre-fill auditor email
+  setChipEmails('auditorEmailsContainer', [email]);
+  
+  // If test mode, also pre-fill client email
+  if (state.trialMode === 'test') {
+    setChipEmails('clientEmailsContainer', [email]);
+    $('#clientCompany').value = 'Test Company';
+  }
+  
+  showAuditorFlow();
+}
+
+function validatePassword(password) {
+  const reqs = {
+    length: password.length >= 8,
+    number: /\d/.test(password),
+    special: /[!@#$%^&*(),.?":{}|<>_\-+=\[\]\\\/`~;']/.test(password)
+  };
+  
+  Object.entries(reqs).forEach(([key, valid]) => {
+    const el = $(`.password-reqs .req[data-req="${key}"]`);
+    if (el) el.classList.toggle('valid', valid);
+  });
+  
+  return Object.values(reqs).every(Boolean);
+}
+
+async function handleSignup() {
+  const email = ($('#signupEmail')?.value || '').trim().toLowerCase();
+  const password = $('#signupPassword')?.value || '';
+  const confirm = $('#signupPasswordConfirm')?.value || '';
+  const btn = $('#signupBtn');
+  
+  if (!email || !email.includes('@')) {
+    showAuthStatus('signupStatus', 'Please enter a valid email', 'error');
+    return;
+  }
+  
+  if (!validatePassword(password)) {
+    showAuthStatus('signupStatus', 'Password does not meet requirements', 'error');
+    return;
+  }
+  
+  if (password !== confirm) {
+    showAuthStatus('signupStatus', 'Passwords do not match', 'error');
+    return;
+  }
+  
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Creating...';
+  showAuthStatus('signupStatus', 'Creating account...', 'loading');
+  
+  try {
+    const res = await fetch(`${API}/auth/signup`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    
+    const data = await res.json();
+    
+    if (data.ok) {
+      showAuthStatus('signupStatus', '✓ Account created! Check your email to verify.', 'success');
+      
+      // Auto-login but mark as unverified
+      if (data.token && data.user) {
+        state.isLoggedIn = true;
+        state.authToken = data.token;
+        state.user = data.user;
+        localStorage.setItem('proofrepo_token', data.token);
+        
+        // Pre-fill email
+        setChipEmails('auditorEmailsContainer', [email]);
+        
+        setTimeout(() => showAuditorFlow(), 1500);
+      }
+    } else {
+      showAuthStatus('signupStatus', data.error || 'Error creating account', 'error');
+    }
+  } catch (e) {
+    showAuthStatus('signupStatus', 'Error connecting to server', 'error');
+  }
+  
+  btn.disabled = false;
+  btn.textContent = 'Create Account';
+}
+
+async function handleLogin() {
+  const email = ($('#loginEmail')?.value || '').trim().toLowerCase();
+  const password = $('#loginPassword')?.value || '';
+  const remember = $('#rememberMe')?.checked;
+  const btn = $('#loginBtn');
+  
+  if (!email || !password) {
+    showAuthStatus('loginStatus', 'Please enter email and password', 'error');
+    return;
+  }
+  
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Signing in...';
+  showAuthStatus('loginStatus', 'Signing in...', 'loading');
+  
+  try {
+    const res = await fetch(`${API}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password, remember })
+    });
+    
+    const data = await res.json();
+    
+    if (data.ok && data.token) {
+      state.isLoggedIn = true;
+      state.authToken = data.token;
+      state.user = data.user;
+      localStorage.setItem('proofrepo_token', data.token);
+      
+      showAuthStatus('loginStatus', '✓ Signed in!', 'success');
+      
+      // Pre-fill email
+      setChipEmails('auditorEmailsContainer', [data.user.email]);
+      
+      setTimeout(() => showAuditorFlow(), 500);
+    } else {
+      showAuthStatus('loginStatus', data.error || 'Invalid email or password', 'error');
+    }
+  } catch (e) {
+    showAuthStatus('loginStatus', 'Error connecting to server', 'error');
+  }
+  
+  btn.disabled = false;
+  btn.textContent = 'Sign In';
+}
+
+async function handleForgotPassword() {
+  const email = ($('#resetEmail')?.value || '').trim().toLowerCase();
+  const btn = $('#sendResetBtn');
+  
+  if (!email || !email.includes('@')) {
+    showAuthStatus('resetStatus', 'Please enter a valid email', 'error');
+    return;
+  }
+  
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Sending...';
+  
+  try {
+    await fetch(`${API}/auth/forgot-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    
+    // Always show success to prevent enumeration
+    showAuthStatus('resetStatus', '✓ If an account exists, a reset link was sent.', 'success');
+  } catch (e) {
+    showAuthStatus('resetStatus', 'Error sending reset link', 'error');
+  }
+  
+  btn.disabled = false;
+  btn.textContent = 'Send Reset Link';
+}
+
+function handleLogout() {
+  state.isLoggedIn = false;
+  state.authToken = null;
+  state.user = null;
+  localStorage.removeItem('proofrepo_token');
+  
+  // Reset UI
+  $('#loggedInBar').style.display = 'none';
+  $('#auditorFlow').style.display = 'none';
+  $('#roleSelect').value = '';
+}
+
+async function handleResendVerification() {
+  if (!state.authToken) return;
+  
+  try {
+    const res = await fetch(`${API}/auth/resend-verification`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${state.authToken}` }
+    });
+    
+    const data = await res.json();
+    alert(data.ok ? 'Verification email sent!' : (data.error || 'Error sending email'));
+  } catch (e) {
+    alert('Error sending verification email');
+  }
+}
+
+// ==================== TEMPLATE FUNCTIONS ====================
+
+async function loadTemplate(templateId) {
+  if (!templateId || !state.user?.templates) return;
+  
+  const template = state.user.templates.find(t => t.id === templateId);
+  if (!template) return;
+  
+  // Restore composer state
+  if (template.composerState) {
+    composerState = JSON.parse(JSON.stringify(template.composerState));
+  }
+  if (template.customFrameworks) {
+    customFrameworks = JSON.parse(JSON.stringify(template.customFrameworks));
+  }
+  if (template.globalInstructions) {
+    const gi = $('#globalInstructions');
+    if (gi) gi.value = template.globalInstructions;
+  }
+  if (template.defaultAuditorEmails?.length) {
+    setChipEmails('auditorEmailsContainer', template.defaultAuditorEmails);
+  }
+  
+  renderComposer();
+  $('#templateSelect').value = '';
+}
+
+async function saveAsTemplate() {
+  if (!state.isLoggedIn) {
+    alert('Please sign in to save templates');
+    return;
+  }
+  
+  const name = prompt('Template name (e.g., "SOC 2 Annual"):');
+  if (!name?.trim()) return;
+  
+  const includeInstructions = confirm('Include item-level instructions?');
+  
+  try {
+    const res = await fetch(`${API}/auth/templates`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${state.authToken}`
+      },
+      body: JSON.stringify({
+        name: name.trim(),
+        composerState: includeInstructions ? composerState : stripInstructions(composerState),
+        customFrameworks,
+        globalInstructions: includeInstructions ? ($('#globalInstructions')?.value || '') : '',
+        defaultAuditorEmails: getChipEmails('auditorEmailsContainer')
+      })
+    });
+    
+    const data = await res.json();
+    
+    if (data.ok && data.template) {
+      state.user.templates = state.user.templates || [];
+      state.user.templates.push(data.template);
+      updateLoggedInBar();
+      alert('Template saved!');
+    } else {
+      alert(data.error || 'Error saving template');
+    }
+  } catch (e) {
+    alert('Error saving template');
+  }
+}
+
+function stripInstructions(cs) {
+  const stripped = JSON.parse(JSON.stringify(cs));
+  for (const fwKey in stripped) {
+    for (const gKey in stripped[fwKey]?.groups || {}) {
+      for (const iKey in stripped[fwKey].groups[gKey]?.items || {}) {
+        stripped[fwKey].groups[gKey].items[iKey].instructions = '';
+      }
+    }
+  }
+  return stripped;
+}
+
+function setupAuthListeners() {
+  // New user type toggle
+  $$('input[name="newUserType"]').forEach(r => {
+    r.addEventListener('change', e => showNewUserSection(e.target.value));
+  });
+  
+  // Trial code
+  $('#applyTrialBtn')?.addEventListener('click', handleApplyTrialCode);
+  $('#trialCodeInput')?.addEventListener('keypress', e => {
+    if (e.key === 'Enter') handleApplyTrialCode();
+  });
+  
+  // Trial mode
+  $$('input[name="trialMode"]').forEach(r => {
+    r.addEventListener('change', handleTrialModeChange);
+  });
+  $('#startTrialBtn')?.addEventListener('click', handleStartTrial);
+  
+  // Signup
+  $('#signupPassword')?.addEventListener('input', e => validatePassword(e.target.value));
+  $('#signupBtn')?.addEventListener('click', handleSignup);
+  $('#signupPasswordConfirm')?.addEventListener('keypress', e => {
+    if (e.key === 'Enter') handleSignup();
+  });
+  
+  // Login
+  $('#loginBtn')?.addEventListener('click', handleLogin);
+  $('#loginPassword')?.addEventListener('keypress', e => {
+    if (e.key === 'Enter') handleLogin();
+  });
+  
+  // Forgot password
+  $('#forgotPasswordLink')?.addEventListener('click', e => {
+    e.preventDefault();
+    showForgotPassword();
+  });
+  $('#sendResetBtn')?.addEventListener('click', handleForgotPassword);
+  $('#backToLoginBtn')?.addEventListener('click', showLoginSection);
+  
+  // Logout
+  $('#logoutBtn')?.addEventListener('click', handleLogout);
+  
+  // Resend verification
+  $('#resendVerifyLink')?.addEventListener('click', e => {
+    e.preventDefault();
+    handleResendVerification();
+  });
+  
+  // Create account from trial notice
+  $('#createAccountLink')?.addEventListener('click', e => {
+    e.preventDefault();
+    $('#roleSelect').value = 'new';
+    handleRoleChange('new');
+    showNewUserSection('account');
+    // Pre-fill email if we have it
+    if (state.trialEmail) {
+      $('#signupEmail').value = state.trialEmail;
+    }
+  });
+  
+  // Template selector
+  $('#templateSelect')?.addEventListener('change', e => {
+    if (e.target.value) loadTemplate(e.target.value);
+  });
 }
 
 function showPaymentSection() {
@@ -2343,16 +3403,23 @@ function updateMainButton() {
   const btn = $('#mainActionBtn');
   if (!btn) return;
   
-  if (!state.paymentVisible) {
-    // Stage 1: Continue button (blue)
+  // If logged in with credits or trial user - show Send directly
+  if ((state.isLoggedIn && state.user?.credits > 0) || state.isTrialUser) {
+    btn.textContent = 'Send Evidence Request';
+    btn.className = 'btn btn-accent btn-full';
+    btn.disabled = false;
+  } else if (state.isLoggedIn && !state.user?.verified) {
+    btn.textContent = 'Verify Email to Continue';
+    btn.className = 'btn btn-primary btn-full';
+    btn.disabled = false;
+  } else if (!state.paymentVisible) {
     btn.textContent = 'Continue';
     btn.className = 'btn btn-primary btn-full';
     btn.disabled = false;
   } else {
-    // Stage 2: Always show Send button (green, always enabled)
     btn.textContent = 'Send Evidence Request';
     btn.className = 'btn btn-accent btn-full';
-    btn.disabled = false; // ALWAYS ENABLED - we validate on click
+    btn.disabled = false;
   }
 }
 
@@ -2379,37 +3446,52 @@ function selectTier(tier) {
 async function handleMainAction() {
   const btn = $('#mainActionBtn');
   
-  if (!state.paymentVisible) {
-    // STAGE 1: Validate form and show payment section
-    const auditorEmails = getChipEmails('auditorEmailsContainer');
-    const clientEmails = getChipEmails('clientEmailsContainer');
-    const company = ($('#clientCompany')?.value || '').trim();
-    
-    if (auditorEmails.length === 0) {
-      alert('Please enter at least one team email address.');
-      return;
-    }
-    if (!company) {
-      alert('Please enter the client company name.');
-      return;
-    }
-    if (clientEmails.length === 0) {
-      alert('Please enter at least one client email address.');
-      return;
-    }
-    
-    const evidence = getPayload();
-    if (evidence.length === 0) {
-      alert('Please select at least one evidence item to request.');
-      return;
-    }
-    
-    saveFormState();
+  // Validation
+  const auditorEmails = getChipEmails('auditorEmailsContainer');
+  const clientEmails = getChipEmails('clientEmailsContainer');
+  const company = ($('#clientCompany')?.value || '').trim();
+  
+  if (auditorEmails.length === 0) {
+    alert('Please enter at least one team email address.');
+    return;
+  }
+  if (!company) {
+    alert('Please enter the client company name.');
+    return;
+  }
+  if (clientEmails.length === 0) {
+    alert('Please enter at least one client email address.');
+    return;
+  }
+  
+  const evidence = getPayload();
+  if (evidence.length === 0) {
+    alert('Please select at least one evidence item to request.');
+    return;
+  }
+  
+  saveFormState();
+  
+  // Check if user can send (logged in with credits, or trial user, or needs payment)
+  if (state.isLoggedIn && state.user?.credits > 0) {
+    // Logged in with credits - send directly
+    await sendRequest();
+  } else if (state.isTrialUser && state.codeValid) {
+    // Trial user - send directly
+    await sendRequest();
+  } else if (state.isLoggedIn && (!state.user?.credits || state.user.credits === 0)) {
+    // Logged in but no credits - show payment
     showPaymentSection();
     $('#paymentSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
-    
+  } else if (state.isLoggedIn && !state.user?.verified) {
+    // Logged in but not verified
+    alert('Please verify your email before sending requests. Check your inbox for the verification link.');
+  } else if (!state.paymentVisible) {
+    // Not logged in, not trial - show payment section
+    showPaymentSection();
+    $('#paymentSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
   } else {
-    // STAGE 2: Validate code on click, then send if valid
+    // Payment visible, validate code and send
     const code = ($('#auditorCode')?.value || '').trim().toUpperCase();
     
     if (!code) {
@@ -2418,7 +3500,6 @@ async function handleMainAction() {
       return;
     }
     
-    // If not already validated, validate now
     if (!state.codeValid || state.code !== code) {
       btn.disabled = true;
       btn.innerHTML = '<span class="spinner"></span> Checking code...';
@@ -2437,7 +3518,6 @@ async function handleMainAction() {
       saveFormState();
     }
     
-    // Code is valid - send the request
     await sendRequest();
   }
 }
@@ -2496,10 +3576,16 @@ async function sendRequest() {
   const auditorEmails = getChipEmails('auditorEmailsContainer');
   const clientEmails = getChipEmails('clientEmailsContainer');
   
+  // Build headers
+  const headers = { 'Content-Type': 'application/json' };
+  if (state.authToken) {
+    headers['Authorization'] = `Bearer ${state.authToken}`;
+  }
+  
   try {
     const res = await fetch(`${API}/request`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify({
         auditorEmail: auditorEmails[0] || '',
         auditorEmails: auditorEmails,
@@ -2508,9 +3594,12 @@ async function sendRequest() {
         company: $('#clientCompany').value,
         frameworks: frameworks,
         deadlineISO: deadline.toISOString(),
-        auditorCode: state.code,
+        auditorCode: state.code || '',
         globalInstructions: $('#globalInstructions')?.value || '',
-        requestedEvidence: requestedEvidence
+        requestedEvidence: requestedEvidence,
+        // Trial flags
+        isTrialRequest: state.isTrialUser,
+        trialMode: state.trialMode
       })
     });
     
@@ -2518,8 +3607,22 @@ async function sendRequest() {
     
     if (data.ok) {
       clearFormState();
+      
+      // Update local credits if logged in
+      if (state.isLoggedIn && state.user) {
+        state.user.credits = Math.max(0, (state.user.credits || 0) - 1);
+        updateLoggedInBar();
+      }
+      
       const clientList = clientEmails.join(', ');
-      alert('Success! Evidence request sent to ' + clientList + '\n\nClient link: ' + (data.magicLink || ''));
+      
+      if (state.isTrialUser) {
+        // Special message for trial users
+        alert(`Success! ${state.trialMode === 'test' ? 'Test request' : 'Evidence request'} sent to ${clientList}.\n\nCheck your email for next steps!`);
+      } else {
+        alert('Success! Evidence request sent to ' + clientList + '\n\nClient link: ' + (data.magicLink || ''));
+      }
+      
       window.location.reload();
     } else {
       alert('Error: ' + (data.error || 'Unknown error'));
@@ -2673,7 +3776,19 @@ async function init() {
   
   initComposerState();
   
-  // Check for checkout return FIRST
+  // Set up auth event listeners
+  setupAuthListeners();
+  
+  // Check for existing session
+  const hasSession = await checkExistingSession();
+  
+  if (hasSession) {
+    // Already logged in - show auditor flow
+    setChipEmails('auditorEmailsContainer', [state.user.email]);
+    showAuditorFlow();
+  }
+  
+  // Check for checkout return
   const isCheckoutReturn = await checkCheckoutReturn();
   
   // ALWAYS set up all event listeners
@@ -2684,8 +3799,7 @@ async function init() {
   const isResendPrefill = handleUrlPrefill();
   
   // Only restore form state when returning from Stripe checkout
-  // Fresh visits and resend prefills should NOT restore old state
-  if (!isCheckoutReturn && !isResendPrefill) {
+  if (!isCheckoutReturn && !isResendPrefill && !hasSession) {
     clearFormState();
   }
   
