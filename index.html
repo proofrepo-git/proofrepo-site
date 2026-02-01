@@ -467,77 +467,7 @@
       margin-bottom: 12px;
     }
 
-    .evidence-item {
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-      padding: 12px;
-      margin-bottom: 8px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--surface);
-    }
-
-    .evidence-item.included {
-      border-color: var(--primary);
-      background: rgba(37, 99, 235, 0.1);
-    }
-
-    .evidence-item input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      margin-top: 2px;
-      accent-color: var(--primary);
-      flex-shrink: 0;
-    }
-
-    .ei-content {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .ei-title {
-      font-weight: 500;
-      margin-bottom: 4px;
-    }
-
-    .ei-hint {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-    }
-
-    .ei-instr {
-      margin-top: 8px;
-    }
-
-    .ei-instr label {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    .ei-instr textarea {
-      width: 100%;
-      min-height: 50px;
-      padding: 8px 10px;
-      font-size: 0.9rem;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      color: var(--text);
-      resize: vertical;
-    }
-
-    .ei-instr textarea::placeholder {
-      color: #6b7a9a;
-    }
-
-    .ei-instr textarea:focus {
-      outline: none;
-      border-color: var(--primary);
-    }
+    /* Old evidence-item styles removed - new styles are in the Enhanced Evidence Items section below */
 
     .more-toggle {
       margin: 12px 0;
@@ -2158,29 +2088,236 @@
       color: white;
     }
     
-    /* Enhanced Evidence Items */
-    .ei-description {
+    /* Enhanced Evidence Items - Two Zone Layout */
+    .evidence-item {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 12px;
+      background: var(--surface);
+      overflow: hidden;
+    }
+    .evidence-item.included {
+      border-color: var(--accent);
+      background: rgba(16, 185, 129, 0.05);
+    }
+    .ei-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      background: var(--surface-elevated);
+      border-bottom: 1px solid var(--border);
+    }
+    .ei-header input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+    .ei-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      flex: 1;
+    }
+    .ei-body {
+      display: none;
+    }
+    .evidence-item.included .ei-body {
+      display: block;
+    }
+    
+    /* Client-Facing Zone */
+    .ei-client-zone {
+      padding: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .ei-zone-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+    .ei-zone-header.client {
+      color: var(--accent);
+    }
+    .ei-zone-header.guidance {
+      color: var(--text-muted);
+    }
+    .ei-field-label {
       font-size: 0.8rem;
       color: var(--text-muted);
-      margin-top: 4px;
-      line-height: 1.4;
+      margin-bottom: 4px;
+      display: block;
     }
-    .ei-meta {
+    .ei-description-textarea {
+      width: 100%;
+      min-height: 70px;
+      padding: 10px 12px;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 0.85rem;
+      font-family: inherit;
+      line-height: 1.5;
+      resize: vertical;
+    }
+    .ei-description-textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+    }
+    .ei-description-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+      justify-content: flex-end;
+    }
+    .ei-action-btn {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: all 0.15s;
+    }
+    .ei-action-btn:hover {
+      color: var(--text);
+      background: var(--surface-elevated);
+    }
+    
+    /* Format Chips */
+    .ei-formats-section {
+      margin-top: 12px;
+    }
+    .ei-format-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .ei-format-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      background: rgba(37, 99, 235, 0.15);
+      color: #60a5fa;
+      border-radius: 14px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    .ei-format-chip .chip-remove {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      cursor: pointer;
+      font-size: 10px;
+      line-height: 1;
+      transition: background 0.15s;
+    }
+    .ei-format-chip .chip-remove:hover {
+      background: rgba(255,255,255,0.4);
+    }
+    .ei-add-format {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      background: var(--surface-elevated);
+      color: var(--text-muted);
+      border: 1px dashed var(--border);
+      border-radius: 14px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .ei-add-format:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .ei-format-input {
+      width: 100px;
+      padding: 4px 8px;
+      font-size: 0.8rem;
+      background: var(--surface-elevated);
+      border: 1px solid var(--primary);
+      border-radius: 14px;
+      color: var(--text);
+      outline: none;
+    }
+    
+    /* Additional Instructions */
+    .ei-instructions-section {
+      margin-top: 12px;
+    }
+    .ei-instructions-textarea {
+      width: 100%;
+      min-height: 50px;
+      padding: 10px 12px;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 0.85rem;
+      font-family: inherit;
+      line-height: 1.5;
+      resize: vertical;
+    }
+    .ei-instructions-textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+    }
+    
+    /* ProofRepo Guidance Zone */
+    .ei-guidance-zone {
+      padding: 12px 14px;
+      background: rgba(0,0,0,0.2);
+    }
+    .ei-guidance-zone.collapsed {
+      padding: 8px 14px;
+    }
+    .ei-guidance-zone.collapsed .ei-guidance-content {
+      display: none;
+    }
+    .ei-guidance-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+    .ei-guidance-toggle-btn {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .ei-guidance-content {
+      margin-top: 10px;
+    }
+    .ei-guidance-meta {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-top: 6px;
+      margin-bottom: 8px;
       font-size: 0.75rem;
     }
     .ei-tag {
-      padding: 2px 6px;
+      padding: 2px 8px;
       border-radius: 4px;
       background: var(--surface);
       color: var(--text-muted);
-    }
-    .ei-tag.format {
-      background: rgba(37, 99, 235, 0.15);
-      color: #60a5fa;
     }
     .ei-tag.control {
       background: rgba(16, 185, 129, 0.15);
@@ -2194,17 +2331,83 @@
       background: rgba(139, 92, 246, 0.15);
       color: #a78bfa;
     }
-    .ei-common-issue {
-      font-size: 0.75rem;
+    .ei-tip {
+      font-size: 0.8rem;
       color: var(--warning);
-      margin-top: 6px;
-      padding: 6px 8px;
+      padding: 8px 10px;
       background: rgba(245, 158, 11, 0.1);
-      border-radius: 4px;
-      border-left: 2px solid var(--warning);
+      border-radius: 6px;
+      border-left: 3px solid var(--warning);
+      line-height: 1.4;
     }
-    .ei-common-issue::before {
-      content: '⚠️ Common issue: ';
+    .ei-tip::before {
+      content: '💡 Tip: ';
+      font-weight: 600;
+    }
+    
+    /* Preview Modal */
+    .preview-modal-content {
+      max-width: 700px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .preview-item {
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 12px;
+      background: var(--surface-elevated);
+    }
+    .preview-item-title {
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .preview-item-framework {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .preview-item-description {
+      font-size: 0.9rem;
+      color: var(--text);
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+    .preview-item-format {
+      display: inline-block;
+      padding: 3px 8px;
+      background: rgba(37, 99, 235, 0.15);
+      color: #60a5fa;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      margin-right: 6px;
+      margin-bottom: 4px;
+    }
+    .preview-item-instructions {
+      font-size: 0.85rem;
+      color: var(--accent);
+      font-style: italic;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border);
+    }
+    
+    /* Preview/Send Button Row */
+    .action-button-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .action-button-row .btn {
+      flex: 1;
+    }
+    .btn-preview {
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    .btn-preview:hover {
+      background: var(--border);
     }
     
     /* Audit Period Group */
@@ -2669,10 +2872,15 @@
           </div>
         </div>
 
-        <!-- Main Action Button -->
-        <button class="btn btn-primary btn-full" id="mainActionBtn" style="margin-top: 24px;">
-          Continue
-        </button>
+        <!-- Action Buttons Row -->
+        <div class="action-button-row" style="margin-top: 24px;">
+          <button class="btn btn-preview" id="previewClientBtn" style="flex: 0 0 auto; padding: 12px 20px;">
+            👁️ Preview Client View
+          </button>
+          <button class="btn btn-primary" id="mainActionBtn" style="flex: 1;">
+            Continue
+          </button>
+        </div>
       </div>
     </div>
   </main>
@@ -2828,6 +3036,26 @@
       <div class="modal-actions">
         <button type="button" class="btn btn-outline" id="cancelGroupBtn">Cancel</button>
         <button type="button" class="btn btn-primary" id="saveGroupBtn">Add Control Group</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Client Preview Modal -->
+  <div id="previewModal" class="modal-overlay hidden">
+    <div class="modal preview-modal-content">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 style="margin: 0;">👁️ Client Preview</h3>
+        <button type="button" class="btn btn-sm btn-outline" onclick="closePreviewModal()">✕ Close</button>
+      </div>
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px; padding: 10px; background: var(--surface-elevated); border-radius: 6px;">
+        This is how your client will see the evidence request checklist. Review to ensure it looks professional before sending.
+      </p>
+      <div id="previewModalContent">
+        <!-- Content injected by showClientPreview() -->
+      </div>
+      <div class="modal-actions" style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border);">
+        <button type="button" class="btn btn-outline" onclick="closePreviewModal()">Close Preview</button>
+        <button type="button" class="btn btn-primary" onclick="closePreviewModal(); $('#mainActionBtn').click();">Looks Good — Send Request</button>
       </div>
     </div>
   </div>
@@ -3594,7 +3822,14 @@ function initComposerState() {
     for (const g of (fw.controlGroups || [])) {
       composerState[fwKey].groups[g.id] = { expanded: false, showMore: false, excluded: false, items: {} };
       for (const item of (g.items || [])) {
-        composerState[fwKey].groups[g.id].items[item.id] = { included: item.common, instructions: '' };
+        composerState[fwKey].groups[g.id].items[item.id] = { 
+          included: item.common, 
+          instructions: '',
+          // New editable fields - null means use default from library
+          editedDescription: null,
+          editedFormats: null,
+          guidanceCollapsed: false
+        };
       }
     }
   }
@@ -3683,48 +3918,121 @@ function renderItem(fwKey, gid, item, gs) {
   const st = gs?.items?.[item.id];
   const inc = st?.included ?? item.common;
   const instr = st?.instructions || '';
+  const guidanceCollapsed = st?.guidanceCollapsed ?? false;
   
-  // Build enhanced meta tags
-  let metaHtml = '';
-  if (item.expectedFormat || item.controlRef || item.evidenceType) {
-    metaHtml = '<div class="ei-meta">';
-    if (item.expectedFormat) {
-      metaHtml += `<span class="ei-tag format">📄 ${esc(item.expectedFormat)}</span>`;
-    }
-    if (item.controlRef) {
-      metaHtml += `<span class="ei-tag control">${esc(item.controlRef)}</span>`;
-    }
-    if (item.evidenceType === 'period-of-time') {
-      metaHtml += '<span class="ei-tag period">📆 Period</span>';
-    } else if (item.evidenceType === 'point-in-time') {
-      metaHtml += '<span class="ei-tag point">📍 Point-in-time</span>';
-    }
-    metaHtml += '</div>';
+  // Get current description (edited or default with audit period injected)
+  const auditPeriod = getAuditPeriodString();
+  let defaultDescription = item.description || item.hint || '';
+  if (auditPeriod && item.evidenceType === 'period-of-time' && defaultDescription.includes('{{auditPeriod}}')) {
+    defaultDescription = defaultDescription.replace(/\{\{auditPeriod\}\}/g, auditPeriod);
+  }
+  const currentDescription = st?.editedDescription !== null ? st.editedDescription : defaultDescription;
+  
+  // Get current formats (edited or default)
+  const defaultFormats = item.expectedFormat ? item.expectedFormat.split(/,\s*|or\s+|\s+or\s+/).map(f => f.trim()).filter(Boolean) : [];
+  const currentFormats = st?.editedFormats !== null ? st.editedFormats : defaultFormats;
+  
+  // Build format chips HTML
+  let formatChipsHtml = '';
+  currentFormats.forEach((fmt, idx) => {
+    formatChipsHtml += `<span class="ei-format-chip" data-format-chip="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}-${idx}">📄 ${esc(fmt)}<span class="chip-remove" data-remove-format="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}-${idx}">×</span></span>`;
+  });
+  formatChipsHtml += `<span class="ei-add-format" data-add-format="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">+ Add format</span>`;
+  
+  // Build guidance meta tags
+  let guidanceMetaHtml = '';
+  if (item.controlRef) {
+    guidanceMetaHtml += `<span class="ei-tag control">${esc(item.controlRef)}</span>`;
+  }
+  if (item.evidenceType === 'period-of-time') {
+    guidanceMetaHtml += '<span class="ei-tag period">📆 Period-of-time</span>';
+  } else if (item.evidenceType === 'point-in-time') {
+    guidanceMetaHtml += '<span class="ei-tag point">📍 Point-in-time</span>';
   }
   
-  // Show description if available, fallback to hint
-  const descText = item.description || item.hint || '';
-  const descHtml = descText ? `<div class="ei-description">${esc(descText)}</div>` : '';
+  // Build common issue tip
+  const tipHtml = item.commonIssue ? `<div class="ei-tip">${esc(item.commonIssue)}</div>` : '';
   
-  // Common issue warning (shown when item is included)
-  const issueHtml = (item.commonIssue && inc) ? `<div class="ei-common-issue">${esc(item.commonIssue)}</div>` : '';
+  // Check if description was edited (to show reset button)
+  const descriptionEdited = st?.editedDescription !== null;
+  const formatsEdited = st?.editedFormats !== null;
   
-  return `<div class="evidence-item ${inc ? 'included' : ''}" data-fw="${esc(fwKey)}" data-group="${esc(gid)}" data-item="${esc(item.id)}"><input type="checkbox" ${inc ? 'checked' : ''}><div class="ei-content"><div class="ei-title">${esc(item.title)}</div>${descHtml}${metaHtml}${issueHtml}<div class="ei-instr"><label>Instructions for client (optional)</label><textarea placeholder="e.g., Please include date range, reviewer sign-off, specific format..." data-item-instr="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">${esc(instr)}</textarea></div></div></div>`;
+  return `<div class="evidence-item ${inc ? 'included' : ''}" data-fw="${esc(fwKey)}" data-group="${esc(gid)}" data-item="${esc(item.id)}">
+    <div class="ei-header">
+      <input type="checkbox" ${inc ? 'checked' : ''} title="Include this item in request">
+      <div class="ei-title">${esc(item.title)}</div>
+    </div>
+    <div class="ei-body">
+      <!-- Client-Facing Zone -->
+      <div class="ei-client-zone">
+        <div class="ei-zone-header client">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+          Client will see
+        </div>
+        
+        <label class="ei-field-label">Description / guidance for client:</label>
+        <textarea class="ei-description-textarea" data-desc-edit="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}" placeholder="Describe what evidence the client should provide...">${esc(currentDescription)}</textarea>
+        <div class="ei-description-actions">
+          <button type="button" class="ei-action-btn" data-desc-clear="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">Clear</button>
+          ${descriptionEdited ? `<button type="button" class="ei-action-btn" data-desc-reset="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">Reset to default</button>` : ''}
+        </div>
+        
+        <div class="ei-formats-section">
+          <label class="ei-field-label">Expected format${currentFormats.length > 1 ? 's' : ''}:</label>
+          <div class="ei-format-chips" data-formats-container="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">
+            ${formatChipsHtml}
+          </div>
+          ${formatsEdited ? `<div class="ei-description-actions"><button type="button" class="ei-action-btn" data-formats-reset="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">Reset formats</button></div>` : ''}
+        </div>
+        
+        <div class="ei-instructions-section">
+          <label class="ei-field-label">Additional instructions (optional):</label>
+          <textarea class="ei-instructions-textarea" data-item-instr="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}" placeholder="Add any extra context, date ranges, or specific requirements...">${esc(instr)}</textarea>
+        </div>
+      </div>
+      
+      <!-- ProofRepo Guidance Zone -->
+      <div class="ei-guidance-zone ${guidanceCollapsed ? 'collapsed' : ''}" data-guidance-zone="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">
+        <div class="ei-guidance-toggle" data-guidance-toggle="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">
+          <div class="ei-zone-header guidance">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+            ProofRepo guidance (only you see this)
+          </div>
+          <button type="button" class="ei-guidance-toggle-btn">${guidanceCollapsed ? '▶ Show' : '▼ Hide'}</button>
+        </div>
+        <div class="ei-guidance-content">
+          ${guidanceMetaHtml ? `<div class="ei-guidance-meta">${guidanceMetaHtml}</div>` : ''}
+          ${tipHtml}
+          ${!guidanceMetaHtml && !tipHtml ? '<p style="color: var(--text-muted); font-size: 0.8rem;">No additional guidance for this item.</p>' : ''}
+        </div>
+      </div>
+    </div>
+  </div>`;
 }
 
 function wireComposer() {
+  const allFw = getAllFrameworks();
+  
+  // Framework toggles
   $$('[data-fw-toggle]').forEach(cb => {
     cb.addEventListener('change', e => {
       const k = e.target.dataset.fwToggle;
       if (!composerState[k]) composerState[k] = { enabled: false, groups: {} };
       composerState[k].enabled = e.target.checked;
-      const allFw = getAllFrameworks();
       const fw = allFw[k];
       if (fw && composerState[k].enabled) {
         for (const g of (fw.controlGroups || [])) {
           if (!composerState[k].groups[g.id]) {
             composerState[k].groups[g.id] = { expanded: false, showMore: false, excluded: false, items: {} };
-            for (const item of (g.items || [])) composerState[k].groups[g.id].items[item.id] = { included: item.common, instructions: '' };
+            for (const item of (g.items || [])) {
+              composerState[k].groups[g.id].items[item.id] = { 
+                included: item.common, 
+                instructions: '',
+                editedDescription: null,
+                editedFormats: null,
+                guidanceCollapsed: false
+              };
+            }
           }
         }
       }
@@ -3732,6 +4040,8 @@ function wireComposer() {
       saveFormState();
     });
   });
+  
+  // Control group headers (expand/collapse)
   $$('.cg-header').forEach(h => {
     h.addEventListener('click', e => {
       if (e.target.closest('.cg-exclude') || e.target.closest('.cg-include')) return;
@@ -3741,21 +4051,186 @@ function wireComposer() {
       renderComposer();
     });
   });
+  
+  // Exclude/include group buttons
   $$('[data-exclude-group]').forEach(btn => {
     btn.addEventListener('click', e => { e.stopPropagation(); const [fk, gid] = btn.dataset.excludeGroup.split('-'); composerState[fk].groups[gid].excluded = true; renderComposer(); saveFormState(); });
   });
   $$('[data-include-group]').forEach(btn => {
     btn.addEventListener('click', e => { e.stopPropagation(); const [fk, gid] = btn.dataset.includeGroup.split('-'); composerState[fk].groups[gid].excluded = false; renderComposer(); saveFormState(); });
   });
+  
+  // Show more toggle
   $$('.more-toggle').forEach(t => {
     t.addEventListener('click', e => { e.stopPropagation(); const fk = t.dataset.fw, gid = t.dataset.group; composerState[fk].groups[gid].showMore = !composerState[fk].groups[gid].showMore; renderComposer(); });
   });
+  
+  // Evidence item checkboxes
   $$('.evidence-item input[type="checkbox"]').forEach(cb => {
-    cb.addEventListener('change', e => { const el = e.target.closest('.evidence-item'); const { fw, group, item } = el.dataset; composerState[fw].groups[group].items[item].included = e.target.checked; renderComposer(); saveFormState(); });
+    cb.addEventListener('change', e => { 
+      const el = e.target.closest('.evidence-item'); 
+      const { fw, group, item } = el.dataset; 
+      composerState[fw].groups[group].items[item].included = e.target.checked; 
+      renderComposer(); 
+      saveFormState(); 
+    });
   });
+  
+  // Description textarea edits
+  $$('[data-desc-edit]').forEach(ta => {
+    ta.addEventListener('input', e => {
+      const parts = ta.dataset.descEdit.split('-');
+      const [fw, group] = [parts[0], parts[1]];
+      const item = parts.slice(2).join('-');
+      if (composerState[fw]?.groups?.[group]?.items?.[item]) {
+        composerState[fw].groups[group].items[item].editedDescription = e.target.value;
+        saveFormState();
+      }
+    });
+  });
+  
+  // Description clear button
+  $$('[data-desc-clear]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const parts = btn.dataset.descClear.split('-');
+      const [fw, group] = [parts[0], parts[1]];
+      const item = parts.slice(2).join('-');
+      if (composerState[fw]?.groups?.[group]?.items?.[item]) {
+        composerState[fw].groups[group].items[item].editedDescription = '';
+        renderComposer();
+        saveFormState();
+      }
+    });
+  });
+  
+  // Description reset button
+  $$('[data-desc-reset]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const parts = btn.dataset.descReset.split('-');
+      const [fw, group] = [parts[0], parts[1]];
+      const item = parts.slice(2).join('-');
+      if (composerState[fw]?.groups?.[group]?.items?.[item]) {
+        composerState[fw].groups[group].items[item].editedDescription = null;
+        renderComposer();
+        saveFormState();
+      }
+    });
+  });
+  
+  // Format chip remove
+  $$('[data-remove-format]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const parts = btn.dataset.removeFormat.split('-');
+      const [fw, group] = [parts[0], parts[1]];
+      const itemId = parts.slice(2, -1).join('-');
+      const formatIdx = parseInt(parts[parts.length - 1], 10);
+      
+      const itemState = composerState[fw]?.groups?.[group]?.items?.[itemId];
+      if (itemState) {
+        // Get library item for default formats
+        const fwObj = allFw[fw];
+        const grpObj = fwObj?.controlGroups?.find(g => g.id === group);
+        const libItem = grpObj?.items?.find(i => i.id === itemId);
+        const defaultFormats = libItem?.expectedFormat ? libItem.expectedFormat.split(/,\s*|or\s+|\s+or\s+/).map(f => f.trim()).filter(Boolean) : [];
+        
+        // Get current formats
+        let currentFormats = itemState.editedFormats !== null ? [...itemState.editedFormats] : [...defaultFormats];
+        currentFormats.splice(formatIdx, 1);
+        itemState.editedFormats = currentFormats;
+        
+        renderComposer();
+        saveFormState();
+      }
+    });
+  });
+  
+  // Add format button
+  $$('[data-add-format]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const parts = btn.dataset.addFormat.split('-');
+      const [fw, group] = [parts[0], parts[1]];
+      const itemId = parts.slice(2).join('-');
+      
+      // Replace button with input
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'ei-format-input';
+      input.placeholder = 'e.g., CSV';
+      btn.replaceWith(input);
+      input.focus();
+      
+      const addFormat = (val) => {
+        const fmt = val.trim();
+        if (fmt) {
+          const itemState = composerState[fw]?.groups?.[group]?.items?.[itemId];
+          if (itemState) {
+            const fwObj = allFw[fw];
+            const grpObj = fwObj?.controlGroups?.find(g => g.id === group);
+            const libItem = grpObj?.items?.find(i => i.id === itemId);
+            const defaultFormats = libItem?.expectedFormat ? libItem.expectedFormat.split(/,\s*|or\s+|\s+or\s+/).map(f => f.trim()).filter(Boolean) : [];
+            
+            let currentFormats = itemState.editedFormats !== null ? [...itemState.editedFormats] : [...defaultFormats];
+            if (!currentFormats.includes(fmt)) {
+              currentFormats.push(fmt);
+              itemState.editedFormats = currentFormats;
+            }
+          }
+        }
+        renderComposer();
+        saveFormState();
+      };
+      
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Enter') { addFormat(input.value); }
+        if (e.key === 'Escape') { renderComposer(); }
+      });
+      input.addEventListener('blur', () => { addFormat(input.value); });
+    });
+  });
+  
+  // Reset formats button
+  $$('[data-formats-reset]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const parts = btn.dataset.formatsReset.split('-');
+      const [fw, group] = [parts[0], parts[1]];
+      const item = parts.slice(2).join('-');
+      if (composerState[fw]?.groups?.[group]?.items?.[item]) {
+        composerState[fw].groups[group].items[item].editedFormats = null;
+        renderComposer();
+        saveFormState();
+      }
+    });
+  });
+  
+  // Additional instructions textarea
   $$('[data-item-instr]').forEach(ta => {
-    ta.addEventListener('input', e => { const parts = ta.dataset.itemInstr.split('-'); const [fw, group] = [parts[0], parts[1]]; const item = parts.slice(2).join('-'); if (composerState[fw]?.groups?.[group]?.items?.[item]) composerState[fw].groups[group].items[item].instructions = e.target.value; saveFormState(); });
+    ta.addEventListener('input', e => { 
+      const parts = ta.dataset.itemInstr.split('-'); 
+      const [fw, group] = [parts[0], parts[1]]; 
+      const item = parts.slice(2).join('-'); 
+      if (composerState[fw]?.groups?.[group]?.items?.[item]) {
+        composerState[fw].groups[group].items[item].instructions = e.target.value; 
+        saveFormState();
+      }
+    });
   });
+  
+  // Guidance zone toggle
+  $$('[data-guidance-toggle]').forEach(toggle => {
+    toggle.addEventListener('click', () => {
+      const parts = toggle.dataset.guidanceToggle.split('-');
+      const [fw, group] = [parts[0], parts[1]];
+      const item = parts.slice(2).join('-');
+      if (composerState[fw]?.groups?.[group]?.items?.[item]) {
+        composerState[fw].groups[group].items[item].guidanceCollapsed = !composerState[fw].groups[group].items[item].guidanceCollapsed;
+        renderComposer();
+      }
+    });
+  });
+  
+  // Add custom item
   $$('[data-add-item]').forEach(btn => {
     btn.addEventListener('click', () => {
       const fk = btn.dataset.addItem, gid = btn.dataset.group;
@@ -3764,14 +4239,26 @@ function wireComposer() {
       const title = (nameInput?.value || '').trim(), instructions = (instrInput?.value || '').trim();
       if (!title) { alert('Please enter a request name.'); return; }
       const cid = 'c_' + Math.random().toString(36).slice(2, 8);
-      const allFw = getAllFrameworks();
       const fw = allFw[fk], grp = fw?.controlGroups?.find(g => g.id === gid);
-      if (grp) { grp.items.push({ id: cid, title, common: true, hint: '' }); composerState[fk].groups[gid].items[cid] = { included: true, instructions }; }
+      if (grp) { 
+        grp.items.push({ id: cid, title, common: true, hint: '' }); 
+        composerState[fk].groups[gid].items[cid] = { 
+          included: true, 
+          instructions,
+          editedDescription: null,
+          editedFormats: null,
+          guidanceCollapsed: false
+        }; 
+      }
       nameInput.value = ''; instrInput.value = '';
       renderComposer(); saveFormState();
     });
   });
+  
+  // Add framework modal
   $('#addFwChip')?.addEventListener('click', () => { $('#addFwModal').classList.remove('hidden'); });
+  
+  // Add group modal
   $$('[data-add-group-btn]').forEach(btn => {
     btn.addEventListener('click', () => { $('#customGroupFwKey').value = btn.dataset.addGroupBtn; $('#addGroupModal').classList.remove('hidden'); });
   });
@@ -3785,6 +4272,9 @@ function wireComposer() {
       applyTemplateLevel(level);
     });
   });
+  
+  // Preview button
+  $('#previewClientBtn')?.addEventListener('click', showClientPreview);
 }
 
 // Apply template level (Quick/Standard/Thorough) to current selections
@@ -3799,7 +4289,13 @@ function applyTemplateLevel(level) {
       
       for (const item of (g.items || [])) {
         if (!composerState[fk].groups[g.id].items[item.id]) {
-          composerState[fk].groups[g.id].items[item.id] = { included: false, instructions: '' };
+          composerState[fk].groups[g.id].items[item.id] = { 
+            included: false, 
+            instructions: '',
+            editedDescription: null,
+            editedFormats: null,
+            guidanceCollapsed: false
+          };
         }
         
         // Determine if item should be included based on template level
@@ -3840,10 +4336,25 @@ function getPayload() {
         const is = gs.items?.[item.id];
         if (!is?.included) continue;
         
-        // Build description with audit period injection for period-of-time items
-        let description = item.description || item.hint || '';
-        if (auditPeriod && item.evidenceType === 'period-of-time' && description.includes('{{auditPeriod}}')) {
-          description = description.replace(/\{\{auditPeriod\}\}/g, auditPeriod);
+        // Get description - use edited if available, otherwise default with audit period injection
+        let description;
+        if (is.editedDescription !== null) {
+          // Use the auditor's edited version
+          description = is.editedDescription;
+        } else {
+          // Use default with audit period injection for period-of-time items
+          description = item.description || item.hint || '';
+          if (auditPeriod && item.evidenceType === 'period-of-time' && description.includes('{{auditPeriod}}')) {
+            description = description.replace(/\{\{auditPeriod\}\}/g, auditPeriod);
+          }
+        }
+        
+        // Get formats - use edited if available, otherwise default
+        let expectedFormats;
+        if (is.editedFormats !== null) {
+          expectedFormats = is.editedFormats;
+        } else {
+          expectedFormats = item.expectedFormat ? item.expectedFormat.split(/,\s*|or\s+|\s+or\s+/).map(f => f.trim()).filter(Boolean) : [];
         }
         
         result.push({ 
@@ -3852,10 +4363,11 @@ function getPayload() {
           group: g.title, 
           title: item.title, 
           instructions: is.instructions || '',
-          // Enhanced fields
+          // Client-facing fields (edited or defaults)
           description: description,
+          expectedFormats: expectedFormats, // Now an array
+          // Auditor-only fields (for reference, not shown to client)
           evidenceType: item.evidenceType || 'point-in-time',
-          expectedFormat: item.expectedFormat || null,
           controlRef: item.controlRef || null,
           commonIssue: item.commonIssue || null
         });
@@ -3863,6 +4375,77 @@ function getPayload() {
     }
   }
   return result;
+}
+
+// Show preview of what client will see
+function showClientPreview() {
+  const payload = getPayload();
+  const company = $('#clientCompany')?.value || 'Your Client';
+  const globalInstr = $('#globalInstructions')?.value || '';
+  
+  if (payload.length === 0) {
+    alert('No evidence items selected. Please select at least one item to preview.');
+    return;
+  }
+  
+  // Group by framework
+  const grouped = {};
+  for (const item of payload) {
+    const key = item.framework || 'General';
+    if (!grouped[key]) grouped[key] = [];
+    grouped[key].push(item);
+  }
+  
+  let previewHtml = `
+    <div style="margin-bottom: 16px;">
+      <h4 style="margin: 0 0 8px;">Evidence Request for ${esc(company)}</h4>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">${payload.length} item${payload.length !== 1 ? 's' : ''} requested</p>
+    </div>
+  `;
+  
+  if (globalInstr) {
+    previewHtml += `
+      <div style="padding: 12px; background: rgba(16, 185, 129, 0.1); border-radius: 8px; margin-bottom: 16px; border-left: 3px solid var(--accent);">
+        <strong style="font-size: 0.85rem;">Instructions from auditor:</strong>
+        <p style="margin: 6px 0 0; font-size: 0.9rem;">${esc(globalInstr)}</p>
+      </div>
+    `;
+  }
+  
+  for (const [framework, items] of Object.entries(grouped)) {
+    previewHtml += `<div style="margin-bottom: 16px;"><h5 style="margin: 0 0 10px; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase;">${esc(framework)}</h5>`;
+    
+    for (const item of items) {
+      let formatsHtml = '';
+      if (item.expectedFormats && item.expectedFormats.length > 0) {
+        formatsHtml = item.expectedFormats.map(f => `<span class="preview-item-format">📄 ${esc(f)}</span>`).join('');
+      }
+      
+      previewHtml += `
+        <div class="preview-item">
+          <div class="preview-item-title">${esc(item.title)}</div>
+          ${item.description ? `<div class="preview-item-description">${esc(item.description)}</div>` : ''}
+          ${formatsHtml ? `<div style="margin-top: 8px;">${formatsHtml}</div>` : ''}
+          ${item.instructions ? `<div class="preview-item-instructions">📝 ${esc(item.instructions)}</div>` : ''}
+        </div>
+      `;
+    }
+    
+    previewHtml += '</div>';
+  }
+  
+  // Show modal
+  const modal = $('#previewModal');
+  const content = $('#previewModalContent');
+  if (modal && content) {
+    content.innerHTML = previewHtml;
+    modal.classList.remove('hidden');
+  }
+}
+
+function closePreviewModal() {
+  const modal = $('#previewModal');
+  if (modal) modal.classList.add('hidden');
 }
 
 // ==================== CODE VALIDATION ====================
