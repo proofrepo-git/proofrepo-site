@@ -2129,6 +2129,91 @@
     .numInputWrapper span svg path {
       fill: var(--text-muted) !important;
     }
+    
+    /* Template Level Selector */
+    .template-level-section {
+      background: var(--surface-elevated);
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .template-level-btn {
+      padding: 6px 14px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .template-level-btn:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+    .template-level-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+    
+    /* Enhanced Evidence Items */
+    .ei-description {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+    .ei-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 6px;
+      font-size: 0.75rem;
+    }
+    .ei-tag {
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: var(--surface);
+      color: var(--text-muted);
+    }
+    .ei-tag.format {
+      background: rgba(37, 99, 235, 0.15);
+      color: #60a5fa;
+    }
+    .ei-tag.control {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+    }
+    .ei-tag.period {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+    }
+    .ei-tag.point {
+      background: rgba(139, 92, 246, 0.15);
+      color: #a78bfa;
+    }
+    .ei-common-issue {
+      font-size: 0.75rem;
+      color: var(--warning);
+      margin-top: 6px;
+      padding: 6px 8px;
+      background: rgba(245, 158, 11, 0.1);
+      border-radius: 4px;
+      border-left: 2px solid var(--warning);
+    }
+    .ei-common-issue::before {
+      content: '⚠️ Common issue: ';
+    }
+    
+    /* Audit Period Group */
+    .audit-period-group {
+      background: var(--surface-elevated);
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
   </style>
 </head>
 <body>
@@ -2483,6 +2568,25 @@
           <small class="form-hint" id="deadlineHint" style="margin-top:6px;display:block;color:var(--text-muted);font-size:12px;"></small>
         </div>
 
+        <!-- Audit Period (Optional) -->
+        <div class="form-group audit-period-group">
+          <label class="form-label">Audit Period <span style="font-weight:normal;color:var(--text-muted);">(optional)</span></label>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">
+            For period-of-time evidence (logs, reviews, scans), these dates help clients understand what timeframe is required.
+          </p>
+          <div class="form-row" style="gap: 16px;">
+            <div style="flex:1;">
+              <label class="form-label" style="font-size:0.8rem;">Start Date</label>
+              <input type="text" class="form-control" id="auditPeriodStart" placeholder="e.g., Jan 1, 2025" readonly>
+            </div>
+            <div style="flex:1;">
+              <label class="form-label" style="font-size:0.8rem;">End Date</label>
+              <input type="text" class="form-control" id="auditPeriodEnd" placeholder="e.g., Dec 31, 2025" readonly>
+            </div>
+          </div>
+          <small id="auditPeriodHint" style="margin-top:6px;display:block;color:var(--text-muted);font-size:12px;"></small>
+        </div>
+
         <div class="form-group">
           <label class="form-label">Evidence Request</label>
           
@@ -2502,6 +2606,16 @@
                 <p>Frameworks, evidence items, and instructions have been restored. If you make changes, remember to save as a new template below.</p>
               </div>
               <button type="button" class="notice-dismiss" id="dismissTemplateNotice">×</button>
+            </div>
+          </div>
+          
+          <!-- Template Level Selector -->
+          <div id="templateLevelSection" class="template-level-section" style="margin-bottom: 12px;">
+            <label style="font-size: 0.85rem; color: var(--text-muted); margin-right: 10px;">Template level:</label>
+            <div class="template-level-buttons" style="display: inline-flex; gap: 8px;">
+              <button type="button" class="template-level-btn" data-level="quickStart" title="Essential items only (~15-25 items)">Quick</button>
+              <button type="button" class="template-level-btn active" data-level="standard" title="Comprehensive coverage (~30-45 items)">Standard</button>
+              <button type="button" class="template-level-btn" data-level="thorough" title="Complete evidence set (~45-70 items)">Thorough</button>
             </div>
           </div>
           
@@ -2722,146 +2836,363 @@
 const API = 'https://proofrepo-intake.atucker5.workers.dev';
 const STORAGE_KEY = 'proofrepo_form_state';
 
+
+// ENHANCED FRAMEWORK LIBRARY v2.0
+// Includes 7 frameworks with enhanced fields:
+// - description: Detailed professional description
+// - evidenceType: 'point-in-time' or 'period-of-time'
+// - expectedFormat: PDF, Excel, Screenshot, etc.
+// - controlRef: Control reference (CC6.1, A.8.5, etc.)
+// - commonIssue: Common rejection reasons
+// - frequency: annual, quarterly, monthly, etc.
+
 const FRAMEWORK_LIBRARY = {
   SOC2: {
-    label: 'SOC 2', description: 'Service Organization Control 2', defaultOn: true,
+    label: 'SOC 2', 
+    description: 'Service Organization Control 2 - Trust Services Criteria',
+    defaultOn: true,
     controlGroups: [
-      { id: 'governance', title: 'Governance & Policies', description: 'Security policies and organizational governance',
+      { 
+        id: 'cc1_environment', 
+        title: 'CC1: Control Environment', 
+        description: 'Organization structure, integrity, ethics, and oversight',
         items: [
-          { id: 'info_sec_policy', title: 'Information Security Policy', common: true, hint: 'Current policy document with approval date' },
-          { id: 'security_roles', title: 'Security Roles & Responsibilities', common: true, hint: 'Org chart or RACI showing security ownership' },
-          { id: 'acceptable_use', title: 'Acceptable Use Policy', common: true, hint: 'Employee IT usage guidelines' },
-          { id: 'code_of_conduct', title: 'Code of Conduct', common: false, hint: 'Ethics and conduct expectations' },
-          { id: 'data_classification', title: 'Data Classification Policy', common: false, hint: 'How data is categorized by sensitivity' },
-          { id: 'remote_work', title: 'Remote Work Policy', common: false, hint: 'Security requirements for remote workers' },
-        ]},
-      { id: 'risk', title: 'Risk Assessment', description: 'How risks are identified and managed',
+          { id: 'org_chart', title: 'Organization Chart', common: true, hint: 'Current org chart showing security reporting', description: 'Provide the current organizational chart showing key positions, reporting relationships, and security/IT governance structure.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'CC1.1', commonIssue: 'Must show security reporting lines, not just general org structure.', frequency: 'annual' },
+          { id: 'info_sec_policy', title: 'Information Security Policy', common: true, hint: 'Current policy with approval date', description: 'Provide the organization\'s current Information Security Policy document. This should include version number, approval date, and executive sign-off.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'CC1.1, CC1.2', commonIssue: 'Often rejected if missing signature/approval date. Ensure document shows formal adoption.', frequency: 'annual' },
+          { id: 'code_of_conduct', title: 'Code of Conduct', common: true, hint: 'Ethics and conduct expectations', description: 'Provide the Code of Conduct or Ethics Policy establishing expectations for employee behavior.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'CC1.1', commonIssue: 'Should be a formal document, not just employee handbook excerpt.', frequency: 'annual' },
+          { id: 'security_roles', title: 'Security Roles & Responsibilities', common: true, hint: 'RACI showing security ownership', description: 'Provide documentation defining security roles and responsibilities (RACI matrix, job descriptions, or responsibility assignment).', evidenceType: 'point-in-time', expectedFormat: 'PDF or Excel', controlRef: 'CC1.3', commonIssue: 'Must clearly assign accountability for security, not just list job titles.', frequency: 'annual' },
+          { id: 'hr_policies', title: 'HR Security Policies', common: false, hint: 'Background checks, onboarding', description: 'Provide HR policies covering background checks, onboarding security requirements, and employee screening.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'CC1.4', commonIssue: 'Should include background check requirements and timing.', frequency: 'annual' },
+          { id: 'board_oversight', title: 'Board/Executive Oversight', common: false, hint: 'Evidence of governance oversight', description: 'Provide evidence of board or executive committee oversight of information security during {{auditPeriod}} (meeting minutes, presentations, reports).', evidenceType: 'period-of-time', expectedFormat: 'PDF', controlRef: 'CC1.2', commonIssue: 'Need evidence security was actually discussed at governance level.', frequency: 'quarterly' }
+        ]
+      },
+      { 
+        id: 'cc2_communication', 
+        title: 'CC2: Communication & Information', 
+        description: 'Internal and external communication of policies and objectives',
         items: [
-          { id: 'risk_assessment', title: 'Risk Assessment', common: true, hint: 'Most recent risk assessment with ratings' },
-          { id: 'risk_register', title: 'Risk Register', common: true, hint: 'List of risks with owners and status' },
-          { id: 'risk_treatment', title: 'Risk Treatment Plan', common: true, hint: 'How identified risks are being addressed' },
-          { id: 'risk_acceptance', title: 'Risk Acceptance Documentation', common: false, hint: 'Formal acceptance of residual risks' },
-        ]},
-      { id: 'awareness', title: 'Security Awareness & Training', description: 'Employee security education',
+          { id: 'security_awareness_program', title: 'Security Awareness Program', common: true, hint: 'Training program documentation', description: 'Provide documentation of the security awareness program including topics covered, delivery method, and frequency requirements.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'CC2.2', commonIssue: 'Should show program content, not just completion rates.', frequency: 'annual' },
+          { id: 'security_training_completion', title: 'Security Training Completion', common: true, hint: 'Training records for audit period', description: 'Provide security awareness training completion records for {{auditPeriod}}. Include employee name, completion date, and course name.', evidenceType: 'period-of-time', expectedFormat: 'Excel or PDF', controlRef: 'CC2.2', commonIssue: 'WRONG DATE RANGE is top rejection cause. Verify dates cover full audit period.', frequency: 'annual' },
+          { id: 'acceptable_use_policy', title: 'Acceptable Use Policy', common: true, hint: 'IT usage guidelines', description: 'Provide the Acceptable Use Policy defining permitted use of company IT resources, including email, internet, and devices.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'CC2.1', commonIssue: 'Should cover modern scenarios (BYOD, cloud services, remote work).', frequency: 'annual' },
+          { id: 'policy_acknowledgments', title: 'Policy Acknowledgment Records', common: false, hint: 'Employee sign-offs', description: 'Provide evidence that employees acknowledged security policies during {{auditPeriod}}.', evidenceType: 'period-of-time', expectedFormat: 'Excel or PDF', controlRef: 'CC2.2', commonIssue: 'Should show acknowledgment, not just distribution.', frequency: 'annual' },
+          { id: 'phishing_testing', title: 'Phishing Test Results', common: false, hint: 'Simulated phishing results', description: 'Provide phishing simulation test results from {{auditPeriod}} including click rates and remediation actions.', evidenceType: 'period-of-time', expectedFormat: 'PDF', controlRef: 'CC2.2', commonIssue: 'Should show trend data and follow-up training for clickers.', frequency: 'quarterly' }
+        ]
+      },
+      { 
+        id: 'cc3_risk', 
+        title: 'CC3: Risk Assessment', 
+        description: 'Risk identification, assessment, and management processes',
         items: [
-          { id: 'security_training', title: 'Security Awareness Training', common: true, hint: 'Training completion report or LMS screenshot' },
-          { id: 'training_materials', title: 'Training Materials', common: false, hint: 'Topics covered in training' },
-          { id: 'phishing_testing', title: 'Phishing Test Results', common: false, hint: 'Simulated phishing campaign results' },
-        ]},
-      { id: 'incident', title: 'Incident Response', description: 'How security incidents are handled',
+          { id: 'risk_assessment', title: 'Risk Assessment', common: true, hint: 'Annual risk assessment', description: 'Provide the most recent comprehensive risk assessment covering information security risks, including methodology, identified risks, and risk ratings.', evidenceType: 'period-of-time', expectedFormat: 'PDF or Excel', controlRef: 'CC3.1, CC3.2', commonIssue: 'Must be from within audit period. Generic templates without specific findings are rejected.', frequency: 'annual' },
+          { id: 'risk_register', title: 'Risk Register', common: true, hint: 'Current risk register', description: 'Provide the current risk register showing identified risks, owners, ratings, and treatment status.', evidenceType: 'point-in-time', expectedFormat: 'Excel', controlRef: 'CC3.2', commonIssue: 'Should show risk owners and treatment decisions, not just a list of risks.', frequency: 'quarterly' },
+          { id: 'risk_treatment_plan', title: 'Risk Treatment Plan', common: true, hint: 'How risks are addressed', description: 'Provide risk treatment plans for significant identified risks showing planned mitigations and timelines.', evidenceType: 'point-in-time', expectedFormat: 'PDF or Excel', controlRef: 'CC3.2', commonIssue: 'Should show concrete actions, not just "accept" or "mitigate" decisions.', frequency: 'annual' },
+          { id: 'third_party_risk_assessment', title: 'Third-Party Risk Assessments', common: false, hint: 'Vendor risk evaluations', description: 'Provide third-party/vendor risk assessments conducted during {{auditPeriod}} for critical vendors.', evidenceType: 'period-of-time', expectedFormat: 'PDF or Excel', controlRef: 'CC3.4', commonIssue: 'Focus on high-risk vendors. May not be needed if no new vendors.', frequency: 'annual' }
+        ]
+      },
+      { 
+        id: 'cc6_access', 
+        title: 'CC6: Logical & Physical Access', 
+        description: 'Access controls for systems and data',
         items: [
-          { id: 'ir_plan', title: 'Incident Response Plan', common: true, hint: 'IR procedures and escalation paths' },
-          { id: 'ir_team', title: 'IR Team Contacts', common: true, hint: 'Who is on the IR team' },
-          { id: 'incident_log', title: 'Security Incident Log', common: true, hint: 'Record of incidents (or attestation of none)' },
-          { id: 'ir_testing', title: 'IR Plan Testing', common: false, hint: 'Tabletop exercises or IR tests' },
-          { id: 'postmortem', title: 'Incident Postmortems', common: false, hint: 'Post-incident review samples' },
-        ]},
-      { id: 'access', title: 'Access Control', description: 'How user access is managed',
+          { id: 'access_control_policy', title: 'Access Control Policy', common: true, hint: 'Access management policy', description: 'Provide the Access Control Policy defining how access is requested, approved, provisioned, and revoked.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'CC6.1', commonIssue: 'Should include least privilege and need-to-know principles.', frequency: 'annual' },
+          { id: 'user_access_review', title: 'User Access Reviews', common: true, hint: 'Periodic access review evidence', description: 'Provide user access review documentation from {{auditPeriod}}. Include the user list reviewed, reviewer name, review date, and approval/remediation decisions for each user.', evidenceType: 'period-of-time', expectedFormat: 'Excel or PDF', controlRef: 'CC6.2', commonIssue: 'Must show actual review decisions, not just that a review occurred. Include evidence of remediation for inappropriate access.', frequency: 'quarterly' },
+          { id: 'privileged_access_list', title: 'Privileged Access Listing', common: true, hint: 'Admin/elevated access users', description: 'Provide current listing of users with privileged/administrative access including system, access level, and business justification.', evidenceType: 'point-in-time', expectedFormat: 'Excel', controlRef: 'CC6.1, CC6.3', commonIssue: 'Should include justification for each privileged user.', frequency: 'quarterly' },
+          { id: 'mfa_config', title: 'MFA Configuration', common: true, hint: 'Multi-factor authentication setup', description: 'Provide screenshots showing MFA is enabled and enforced for all users accessing production systems and sensitive data.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot', controlRef: 'CC6.1', commonIssue: 'Must show MFA is enforced, not just available. Include IdP configuration.', frequency: 'annual' },
+          { id: 'password_policy_config', title: 'Password Policy Configuration', common: true, hint: 'Password requirements', description: 'Provide screenshot of password policy configuration from identity provider or Active Directory showing complexity, length, and expiration settings.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot', controlRef: 'CC6.1', commonIssue: 'Should show technical enforcement, not just written policy.', frequency: 'annual' },
+          { id: 'onboarding_samples', title: 'New User Provisioning Samples', common: false, hint: 'Sample new hire access requests', description: 'Provide 2-3 sample new user access provisioning tickets from {{auditPeriod}} showing request, approval, and completion.', evidenceType: 'period-of-time', expectedFormat: 'PDF or Screenshot', controlRef: 'CC6.2', commonIssue: 'Approval must come before access was granted.', frequency: 'quarterly' },
+          { id: 'offboarding_samples', title: 'Terminated User Access Removal', common: true, hint: 'Sample termination access removal', description: 'Provide 2-3 sample termination cases from {{auditPeriod}} showing access was removed timely (within 24 hours of termination).', evidenceType: 'period-of-time', expectedFormat: 'PDF or Screenshot', controlRef: 'CC6.2', commonIssue: 'Access removal date must be on or before termination date. Late removals are findings.', frequency: 'quarterly' },
+          { id: 'encryption_at_rest', title: 'Encryption at Rest', common: true, hint: 'Data-at-rest encryption', description: 'Provide evidence of encryption at rest for databases, file storage, and backups containing sensitive data.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot', controlRef: 'CC6.1, CC6.7', commonIssue: 'Should show encryption is enabled in system settings, not just policy.', frequency: 'annual' },
+          { id: 'encryption_in_transit', title: 'Encryption in Transit', common: false, hint: 'TLS/SSL configuration', description: 'Provide evidence of TLS 1.2+ enforcement for data in transit including certificate configuration and protocol settings.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot', controlRef: 'CC6.1, CC6.7', commonIssue: 'Should show TLS 1.2 minimum; TLS 1.0/1.1 should be disabled.', frequency: 'annual' }
+        ]
+      },
+      { 
+        id: 'cc7_operations', 
+        title: 'CC7: System Operations', 
+        description: 'Security operations, monitoring, and vulnerability management',
         items: [
-          { id: 'access_review', title: 'User Access Review', common: true, hint: 'Periodic access review with approvals' },
-          { id: 'mfa_evidence', title: 'MFA Enforcement', common: true, hint: 'Screenshot showing MFA is required' },
-          { id: 'access_policy', title: 'Access Control Policy', common: true, hint: 'Policy defining access principles' },
-          { id: 'jml_process', title: 'Joiner/Mover/Leaver Process', common: true, hint: 'How access is granted and revoked' },
-          { id: 'jml_samples', title: 'JML Process Samples', common: false, hint: '2-3 onboarding/offboarding examples' },
-          { id: 'privileged_list', title: 'Privileged Access List', common: true, hint: 'Admin users and justification' },
-          { id: 'privileged_controls', title: 'Privileged Access Controls', common: false, hint: 'PAM, just-in-time access, etc.' },
-          { id: 'sso_config', title: 'SSO Configuration', common: false, hint: 'Single sign-on setup' },
-          { id: 'password_policy', title: 'Password Policy', common: false, hint: 'Password requirements' },
-        ]},
-      { id: 'operations', title: 'System Operations & Monitoring', description: 'How systems are monitored and maintained',
+          { id: 'vulnerability_scanning', title: 'Vulnerability Scan Reports', common: true, hint: 'Vuln scan results', description: 'Provide vulnerability scan reports from {{auditPeriod}} showing internal and external scan results including severity ratings and remediation status.', evidenceType: 'period-of-time', expectedFormat: 'PDF', controlRef: 'CC7.1', commonIssue: 'WRONG DATE RANGE common. Should include monthly or quarterly scans for full period.', frequency: 'monthly' },
+          { id: 'vulnerability_remediation', title: 'Vulnerability Remediation Evidence', common: true, hint: 'How vulns were fixed', description: 'Provide evidence of vulnerability remediation during {{auditPeriod}} showing critical/high vulnerabilities were addressed within SLA.', evidenceType: 'period-of-time', expectedFormat: 'PDF or Excel', controlRef: 'CC7.1', commonIssue: 'Should show tickets/tracking, not just before/after scans.', frequency: 'quarterly' },
+          { id: 'penetration_testing', title: 'Penetration Test Report', common: true, hint: 'Annual pentest report', description: 'Provide the most recent penetration test report including scope, findings, severity ratings, and remediation recommendations.', evidenceType: 'period-of-time', expectedFormat: 'PDF', controlRef: 'CC7.1', commonIssue: 'Must be from within audit period. Third-party pentests preferred.', frequency: 'annual' },
+          { id: 'security_monitoring', title: 'Security Monitoring Configuration', common: true, hint: 'SIEM/monitoring setup', description: 'Provide documentation of security monitoring and alerting configuration including what events trigger alerts and escalation procedures.', evidenceType: 'point-in-time', expectedFormat: 'PDF or Screenshot', controlRef: 'CC7.2', commonIssue: 'Should show specific alert rules, not just that monitoring exists.', frequency: 'annual' },
+          { id: 'endpoint_protection', title: 'Endpoint Protection', common: true, hint: 'EDR/antivirus coverage', description: 'Provide evidence of endpoint protection deployment including coverage report showing all endpoints have current protection.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot or PDF', controlRef: 'CC7.1', commonIssue: 'Should show coverage percentage and list any exceptions.', frequency: 'quarterly' },
+          { id: 'security_alert_samples', title: 'Security Alert Samples', common: false, hint: 'Sample security alerts', description: 'Provide 3-5 sample security alerts from {{auditPeriod}} showing alert, investigation, and resolution.', evidenceType: 'period-of-time', expectedFormat: 'PDF or Screenshot', controlRef: 'CC7.2, CC7.3', commonIssue: 'Should show investigation steps, not just alert acknowledgment.', frequency: 'quarterly' }
+        ]
+      },
+      { 
+        id: 'cc8_change', 
+        title: 'CC8: Change Management', 
+        description: 'Change control for systems and applications',
         items: [
-          { id: 'logging', title: 'Logging & Audit Trails', common: true, hint: 'What is logged, where, retention period' },
-          { id: 'monitoring', title: 'Monitoring & Alerting', common: true, hint: 'Tools used and how alerts are handled' },
-          { id: 'siem', title: 'SIEM / Log Aggregation', common: false, hint: 'Centralized logging solution' },
-          { id: 'vuln_scanning', title: 'Vulnerability Scanning', common: true, hint: 'Scan results or summary' },
-          { id: 'patch_mgmt', title: 'Patch Management', common: false, hint: 'How patches are applied' },
-          { id: 'endpoint', title: 'Endpoint Protection', common: false, hint: 'Antivirus/EDR coverage' },
-          { id: 'backups', title: 'Backup & Recovery', common: false, hint: 'Backup config and testing' },
-        ]},
-      { id: 'change', title: 'Change Management', description: 'How changes are controlled',
+          { id: 'change_management_policy', title: 'Change Management Policy', common: true, hint: 'Change control requirements', description: 'Provide the Change Management Policy defining requirements for requesting, approving, testing, and deploying changes.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'CC8.1', commonIssue: 'Should address both application and infrastructure changes.', frequency: 'annual' },
+          { id: 'change_log', title: 'Change Log', common: true, hint: 'Record of changes', description: 'Provide change log showing changes deployed during {{auditPeriod}} including change ID, description, date, and approver.', evidenceType: 'period-of-time', expectedFormat: 'Excel or Screenshot', controlRef: 'CC8.1', commonIssue: 'Should be comprehensive, not just major releases.', frequency: 'quarterly' },
+          { id: 'change_samples', title: 'Change Ticket Samples', common: true, hint: 'Sample change approvals', description: 'Provide 3-5 sample change tickets from {{auditPeriod}} showing request, approval, testing evidence, and deployment.', evidenceType: 'period-of-time', expectedFormat: 'PDF or Screenshot', controlRef: 'CC8.1', commonIssue: 'Approval must occur BEFORE deployment. Show different change types if possible.', frequency: 'quarterly' },
+          { id: 'branch_protection', title: 'Branch Protection Rules', common: true, hint: 'Code merge controls', description: 'Provide screenshot of branch protection configuration showing required reviews, approvals, and merge restrictions for main/production branches.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot', controlRef: 'CC8.1', commonIssue: 'Should show enforcement, not just optional settings.', frequency: 'annual' },
+          { id: 'code_review_evidence', title: 'Code Review Evidence', common: false, hint: 'Pull request approvals', description: 'Provide 3-5 sample pull requests from {{auditPeriod}} showing code review comments and approvals before merge.', evidenceType: 'period-of-time', expectedFormat: 'Screenshot', controlRef: 'CC8.1', commonIssue: 'Should show actual review comments, not just approval click.', frequency: 'quarterly' }
+        ]
+      },
+      { 
+        id: 'cc9_risk_mitigation', 
+        title: 'CC9: Risk Mitigation', 
+        description: 'Vendor management and business continuity',
         items: [
-          { id: 'change_log', title: 'Change Log / Deployments', common: true, hint: 'Record of recent changes' },
-          { id: 'change_policy', title: 'Change Management Policy', common: true, hint: 'Change control requirements' },
-          { id: 'code_review', title: 'Code Review Evidence', common: true, hint: 'PR approvals, branch protection' },
-          { id: 'change_approval', title: 'Change Approval Process', common: false, hint: 'How changes are approved' },
-          { id: 'emergency_change', title: 'Emergency Change Process', common: false, hint: 'How urgent changes work' },
-        ]},
-      { id: 'vendor', title: 'Vendor Management', description: 'How third-party risks are managed',
+          { id: 'vendor_inventory', title: 'Vendor Inventory', common: true, hint: 'List of vendors with risk tiers', description: 'Provide current vendor inventory including vendor name, services provided, data accessed, and risk tier.', evidenceType: 'point-in-time', expectedFormat: 'Excel', controlRef: 'CC9.2', commonIssue: 'Should include all vendors with access to sensitive data or systems.', frequency: 'annual' },
+          { id: 'vendor_management_policy', title: 'Vendor Management Policy', common: true, hint: 'Third-party risk policy', description: 'Provide the Vendor Management Policy defining how vendors are evaluated, approved, and monitored.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'CC9.2', commonIssue: 'Should include risk assessment requirements and ongoing monitoring.', frequency: 'annual' },
+          { id: 'vendor_assessments', title: 'Vendor Security Assessments', common: false, hint: 'Sample vendor reviews', description: 'Provide 2-3 sample vendor security assessments from {{auditPeriod}} showing due diligence performed.', evidenceType: 'period-of-time', expectedFormat: 'PDF', controlRef: 'CC9.2', commonIssue: 'Should show actual assessment, not just questionnaire sent.', frequency: 'annual' },
+          { id: 'vendor_soc_reports', title: 'Vendor SOC Reports', common: false, hint: 'Critical vendor SOC reports', description: 'Provide current SOC 2 reports from critical vendors (cloud providers, hosting, key SaaS).', evidenceType: 'period-of-time', expectedFormat: 'PDF', controlRef: 'CC9.2', commonIssue: 'Review for exceptions that affect your controls.', frequency: 'annual' },
+          { id: 'bcp_plan', title: 'Business Continuity Plan', common: true, hint: 'BCP document', description: 'Provide the current Business Continuity Plan including critical processes, recovery objectives (RTO/RPO), and recovery procedures.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'CC9.1', commonIssue: 'Should be specific to the service, not generic corporate BCP.', frequency: 'annual' },
+          { id: 'dr_plan', title: 'Disaster Recovery Plan', common: true, hint: 'IT recovery procedures', description: 'Provide the Disaster Recovery Plan for IT systems including failover procedures and recovery steps.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'CC9.1', commonIssue: 'Should include specific systems and step-by-step procedures.', frequency: 'annual' },
+          { id: 'bcp_dr_testing', title: 'BCP/DR Test Results', common: true, hint: 'Recovery test evidence', description: 'Provide evidence of BCP/DR testing during {{auditPeriod}} including test scenario, results, and lessons learned.', evidenceType: 'period-of-time', expectedFormat: 'PDF', controlRef: 'CC9.1', commonIssue: 'Should show actual test execution, not just planning documents.', frequency: 'annual' },
+          { id: 'backup_config', title: 'Backup Configuration', common: true, hint: 'Backup settings', description: 'Provide backup configuration showing frequency, retention, and encryption settings for critical systems.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot', controlRef: 'CC9.1', commonIssue: 'Should show all production systems are included.', frequency: 'annual' },
+          { id: 'backup_monitoring', title: 'Backup Completion Logs', common: false, hint: 'Backup success evidence', description: 'Provide backup completion logs from {{auditPeriod}} showing successful backups.', evidenceType: 'period-of-time', expectedFormat: 'Screenshot or PDF', controlRef: 'CC9.1', commonIssue: 'Should show how failures are detected and resolved.', frequency: 'quarterly' }
+        ]
+      },
+      { 
+        id: 'incident_response', 
+        title: 'Incident Response', 
+        description: 'Security incident handling and response',
         items: [
-          { id: 'vendor_list', title: 'Vendor Inventory', common: true, hint: 'List with risk tiers' },
-          { id: 'vendor_policy', title: 'Vendor Management Policy', common: true, hint: 'Policy for vendor evaluation' },
-          { id: 'vendor_assessments', title: 'Vendor Assessments', common: false, hint: 'Sample security questionnaires' },
-          { id: 'critical_vendors', title: 'Critical Vendors List', common: false, hint: 'Cloud providers, key dependencies' },
-        ]},
+          { id: 'ir_plan', title: 'Incident Response Plan', common: true, hint: 'IR procedures and contacts', description: 'Provide the Incident Response Plan including incident classification, response procedures, escalation paths, and communication templates.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'CC7.4, CC7.5', commonIssue: 'Should be actionable with specific steps, not just high-level policy.', frequency: 'annual' },
+          { id: 'ir_team', title: 'IR Team & Contacts', common: true, hint: 'Incident response team', description: 'Provide documentation of the incident response team including roles, responsibilities, and contact information.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'CC7.4', commonIssue: 'Should include on-call rotation if applicable.', frequency: 'annual' },
+          { id: 'incident_log', title: 'Security Incident Log', common: true, hint: 'Record of incidents', description: 'Provide security incident log from {{auditPeriod}} showing incidents, severity, response, and resolution. If no incidents occurred, provide a signed attestation.', evidenceType: 'period-of-time', expectedFormat: 'Excel or PDF', controlRef: 'CC7.4, CC7.5', commonIssue: 'Zero incidents is acceptable but requires management attestation.', frequency: 'quarterly' },
+          { id: 'ir_testing', title: 'IR Plan Testing', common: false, hint: 'Tabletop or simulation', description: 'Provide evidence of incident response testing during {{auditPeriod}} including tabletop exercises or simulations.', evidenceType: 'period-of-time', expectedFormat: 'PDF', controlRef: 'CC7.5', commonIssue: 'Should include lessons learned and plan updates.', frequency: 'annual' }
+        ]
+      }
     ]
   },
+  
   ISO27001: {
-    label: 'ISO 27001', description: 'Information Security Management System', defaultOn: false,
+    label: 'ISO 27001', 
+    description: 'Information Security Management System (ISMS)',
+    defaultOn: false,
     controlGroups: [
-      { id: 'isms', title: 'ISMS Documentation', description: 'Core ISMS documents',
+      { 
+        id: 'isms_core', 
+        title: 'ISMS Core Documentation', 
+        description: 'Mandatory ISMS documents per Clauses 4-10',
         items: [
-          { id: 'scope', title: 'ISMS Scope', common: true, hint: 'Boundaries of ISMS' },
-          { id: 'policy', title: 'ISMS Policy', common: true, hint: 'Top-level security policy' },
-          { id: 'soa', title: 'Statement of Applicability', common: true, hint: 'Which controls apply' },
-          { id: 'risk_iso', title: 'Risk Assessment', common: true, hint: 'ISO 27001 risk assessment' },
-          { id: 'risk_treatment_iso', title: 'Risk Treatment Plan', common: true, hint: 'How risks are treated' },
-          { id: 'internal_audit', title: 'Internal Audit Results', common: true, hint: 'Recent ISMS audit' },
-          { id: 'mgmt_review', title: 'Management Review', common: true, hint: 'Management review minutes' },
-        ]},
-      { id: 'annex', title: 'Annex A Controls', description: 'Evidence for applicable controls',
+          { id: 'isms_scope', title: 'ISMS Scope Statement', common: true, hint: 'Boundaries of the ISMS', description: 'Provide the ISMS Scope Statement defining organizational boundaries, locations, assets, and technologies covered by the ISMS.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'Clause 4.3', commonIssue: 'Must clearly define what is IN and OUT of scope.', frequency: 'annual' },
+          { id: 'isms_policy', title: 'ISMS Policy', common: true, hint: 'Top-level security policy', description: 'Provide the Information Security Policy (ISMS Policy) establishing management commitment and security objectives.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'Clause 5.2', commonIssue: 'Must be signed by top management and communicated to employees.', frequency: 'annual' },
+          { id: 'risk_assessment_iso', title: 'Risk Assessment Report', common: true, hint: 'ISO 27001 risk assessment', description: 'Provide the risk assessment report following the documented risk methodology. Include asset inventory, threat analysis, and risk ratings.', evidenceType: 'period-of-time', expectedFormat: 'PDF or Excel', controlRef: 'Clause 6.1.2', commonIssue: 'Must follow documented methodology consistently.', frequency: 'annual' },
+          { id: 'risk_treatment_plan_iso', title: 'Risk Treatment Plan', common: true, hint: 'Risk treatment decisions', description: 'Provide the Risk Treatment Plan showing treatment decisions (accept, mitigate, transfer, avoid) for each identified risk with implementation status.', evidenceType: 'point-in-time', expectedFormat: 'Excel', controlRef: 'Clause 6.1.3', commonIssue: 'Each risk must have a documented treatment decision.', frequency: 'annual' },
+          { id: 'soa', title: 'Statement of Applicability (SoA)', common: true, hint: 'Which Annex A controls apply', description: 'Provide the Statement of Applicability showing all Annex A controls with justification for inclusion/exclusion and implementation status.', evidenceType: 'point-in-time', expectedFormat: 'Excel', controlRef: 'Clause 6.1.3', commonIssue: 'Every Annex A control must be listed with clear justification.', frequency: 'annual' },
+          { id: 'internal_audit_results', title: 'Internal Audit Results', common: true, hint: 'Recent ISMS audit', description: 'Provide internal audit report(s) from {{auditPeriod}} covering ISMS effectiveness and control implementation.', evidenceType: 'period-of-time', expectedFormat: 'PDF', controlRef: 'Clause 9.2', commonIssue: 'Must be conducted by qualified, independent auditors.', frequency: 'annual' },
+          { id: 'management_review', title: 'Management Review Minutes', common: true, hint: 'Management review meeting', description: 'Provide management review meeting minutes from {{auditPeriod}} covering ISMS performance, audit results, and improvement decisions.', evidenceType: 'period-of-time', expectedFormat: 'PDF', controlRef: 'Clause 9.3', commonIssue: 'Must address all required inputs per Clause 9.3.', frequency: 'annual' },
+          { id: 'nonconformity_log', title: 'Nonconformity & Corrective Actions', common: false, hint: 'NC tracking and resolution', description: 'Provide log of nonconformities from {{auditPeriod}} with corrective actions, root cause analysis, and closure evidence.', evidenceType: 'period-of-time', expectedFormat: 'Excel or PDF', controlRef: 'Clause 10.1', commonIssue: 'All NCs must have documented corrective actions.', frequency: 'quarterly' }
+        ]
+      },
+      { 
+        id: 'annex_a', 
+        title: 'Annex A Controls (Sample)', 
+        description: 'Evidence for key Annex A controls',
         items: [
-          { id: 'asset_inventory', title: 'Asset Inventory', common: true, hint: 'Information assets list' },
-          { id: 'access_iso', title: 'Access Control', common: true, hint: 'Access control implementation' },
-          { id: 'crypto', title: 'Cryptography', common: false, hint: 'Encryption controls' },
-          { id: 'physical', title: 'Physical Security', common: false, hint: 'Physical access controls' },
-          { id: 'supplier', title: 'Supplier Security', common: false, hint: 'Third-party management' },
-        ]},
+          { id: 'asset_inventory_iso', title: 'Information Asset Inventory', common: true, hint: 'Registry of information assets', description: 'Provide the information asset inventory including asset name, owner, classification, and location.', evidenceType: 'point-in-time', expectedFormat: 'Excel', controlRef: 'A.5.9', commonIssue: 'Must include all information assets in scope, not just IT systems.', frequency: 'annual' },
+          { id: 'access_control_iso', title: 'Access Control Evidence', common: true, hint: 'Implementation of access controls', description: 'Provide evidence of access control implementation including user access reviews, privilege management, and authentication controls.', evidenceType: 'period-of-time', expectedFormat: 'Excel or Screenshot', controlRef: 'A.5.15, A.5.16, A.5.17', commonIssue: 'Should show both policy and technical implementation.', frequency: 'quarterly' },
+          { id: 'cryptography', title: 'Cryptographic Controls', common: false, hint: 'Encryption implementation', description: 'Provide evidence of cryptographic controls including encryption at rest, in transit, and key management procedures.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot or PDF', controlRef: 'A.8.24', commonIssue: 'Include key management procedures.', frequency: 'annual' },
+          { id: 'physical_security', title: 'Physical Security', common: false, hint: 'Physical access controls', description: 'Provide evidence of physical security controls for facilities containing information assets (access logs, visitor procedures).', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'A.7.1, A.7.2', commonIssue: 'May rely on cloud provider SOC report if applicable.', frequency: 'annual' },
+          { id: 'supplier_security', title: 'Supplier Security', common: false, hint: 'Third-party security management', description: 'Provide evidence of supplier security management including assessments, contracts, and ongoing monitoring.', evidenceType: 'period-of-time', expectedFormat: 'PDF or Excel', controlRef: 'A.5.19, A.5.20, A.5.21', commonIssue: 'Focus on suppliers with access to information assets.', frequency: 'annual' }
+        ]
+      }
     ]
   },
+  
+  SOC1: {
+    label: 'SOC 1', 
+    description: 'Service Organization Control 1 (ICFR)',
+    defaultOn: false,
+    controlGroups: [
+      { 
+        id: 'soc1_control_env', 
+        title: 'Control Environment', 
+        description: 'Organizational governance and human resources',
+        items: [
+          { id: 'soc1_org_chart', title: 'Organization Chart', common: true, hint: 'Key positions and reporting', description: 'Provide the current organization chart showing key positions related to processing activities, including finance, IT, and operations management.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'COSO: Control Environment', commonIssue: 'Should show positions relevant to financial processing.', frequency: 'annual' },
+          { id: 'soc1_code_conduct', title: 'Code of Conduct', common: true, hint: 'Ethics expectations', description: 'Provide the Code of Conduct or Ethics Policy establishing expectations for employee integrity and ethical behavior.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'COSO: Control Environment', commonIssue: 'Should address ethical behavior related to financial processing.', frequency: 'annual' },
+          { id: 'soc1_bg_checks', title: 'Background Check Evidence', common: true, hint: 'Background checks for new hires', description: 'Provide evidence of background check completion for new hires during {{auditPeriod}} involved in financial transaction processing.', evidenceType: 'period-of-time', expectedFormat: 'PDF', controlRef: 'COSO: Control Environment', commonIssue: 'Focus on roles with access to financial data.', frequency: 'quarterly' }
+        ]
+      },
+      { 
+        id: 'soc1_logical_access', 
+        title: 'Logical Access Controls', 
+        description: 'System access and authentication',
+        items: [
+          { id: 'soc1_access_policy', title: 'Logical Access Policy', common: true, hint: 'System access policy', description: 'Provide the Logical Access Policy defining requirements for requesting, approving, and reviewing access to financial systems.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'CC6.1, CC6.2', commonIssue: 'Should cover all in-scope financial systems.', frequency: 'annual' },
+          { id: 'soc1_user_list', title: 'User Access Listing', common: true, hint: 'Current user access', description: 'Provide current user access listings for in-scope financial systems showing username, access level, and department.', evidenceType: 'point-in-time', expectedFormat: 'Excel', controlRef: 'CC6.2', commonIssue: 'Should include all systems that process financial transactions.', frequency: 'quarterly' },
+          { id: 'soc1_access_review', title: 'User Access Reviews', common: true, hint: 'Periodic access review', description: 'Provide user access review documentation from {{auditPeriod}} showing all users with access to financial systems were reviewed.', evidenceType: 'period-of-time', expectedFormat: 'PDF or Excel', controlRef: 'CC6.2', commonIssue: 'Should show action taken for inappropriate access.', frequency: 'quarterly' },
+          { id: 'soc1_segregation', title: 'Segregation of Duties', common: true, hint: 'SoD matrix', description: 'Provide segregation of duties matrix showing separation of development, testing, approval, and deployment.', evidenceType: 'point-in-time', expectedFormat: 'Excel', controlRef: 'CC8.1, CC5.1', commonIssue: 'Critical for SOC 1: developer cannot approve and deploy own code.', frequency: 'annual' }
+        ]
+      },
+      { 
+        id: 'soc1_change', 
+        title: 'Change Management', 
+        description: 'Change control for financial systems',
+        items: [
+          { id: 'soc1_change_policy', title: 'Change Management Policy', common: true, hint: 'Change control requirements', description: 'Provide the Change Management Policy defining requirements for requesting, approving, testing, and implementing changes to financial systems.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'CC8.1', commonIssue: 'Should address both application and infrastructure changes.', frequency: 'annual' },
+          { id: 'soc1_change_log', title: 'Change Log', common: true, hint: 'Record of changes', description: 'Provide log of changes made to financial systems during {{auditPeriod}} including change description, requester, approver, and date.', evidenceType: 'period-of-time', expectedFormat: 'Excel', controlRef: 'CC8.1', commonIssue: 'Log should be comprehensive.', frequency: 'quarterly' },
+          { id: 'soc1_change_samples', title: 'Change Request Samples', common: true, hint: 'Sample change tickets', description: 'Provide 3-5 sample change requests from {{auditPeriod}} showing testing evidence and approval before implementation.', evidenceType: 'period-of-time', expectedFormat: 'PDF', controlRef: 'CC8.1', commonIssue: 'Approval must occur before deployment.', frequency: 'quarterly' }
+        ]
+      },
+      { 
+        id: 'soc1_processing', 
+        title: 'Data Processing Integrity', 
+        description: 'Transaction processing controls',
+        items: [
+          { id: 'soc1_procedures', title: 'Processing Procedures', common: true, hint: 'Transaction processing docs', description: 'Provide documented procedures for processing financial transactions including input, processing, and output controls.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'PI1.1, PI1.2', commonIssue: 'Should cover the complete transaction lifecycle.', frequency: 'annual' },
+          { id: 'soc1_reconciliations', title: 'Reconciliation Reports', common: true, hint: 'Input/output reconciliations', description: 'Provide reconciliation reports from {{auditPeriod}} showing processing completeness and accuracy.', evidenceType: 'period-of-time', expectedFormat: 'PDF or Excel', controlRef: 'PI1.4', commonIssue: 'Reconciliations should be performed independently.', frequency: 'monthly' },
+          { id: 'soc1_ipe_testing', title: 'IPE Testing', common: true, hint: 'Testing of system reports', description: 'Provide evidence of testing Information Produced by the Entity (IPE) used in control operation.', evidenceType: 'period-of-time', expectedFormat: 'PDF', controlRef: 'PI1.4', commonIssue: 'Critical for SOC 1: reports must be reliable.', frequency: 'annual' }
+        ]
+      }
+    ]
+  },
+  
+  NISTCSF: {
+    label: 'NIST CSF', 
+    description: 'NIST Cybersecurity Framework 2.0',
+    defaultOn: false,
+    controlGroups: [
+      { 
+        id: 'nist_govern', 
+        title: 'GOVERN', 
+        description: 'Organizational context, strategy, roles, policies',
+        items: [
+          { id: 'nist_context', title: 'Organizational Context', common: true, hint: 'Mission and dependencies', description: 'Provide documentation of organizational context including mission, key stakeholders, legal requirements, and critical dependencies.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'GV.OC', commonIssue: 'Should identify critical assets and processes.', frequency: 'annual' },
+          { id: 'nist_risk_strategy', title: 'Risk Management Strategy', common: true, hint: 'Risk tolerance and approach', description: 'Provide documentation of cybersecurity risk management strategy including risk tolerance levels.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'GV.RM', commonIssue: 'Strategy should be approved by leadership.', frequency: 'annual' },
+          { id: 'nist_roles', title: 'Cybersecurity Roles', common: true, hint: 'Responsibility assignments', description: 'Provide documentation of cybersecurity roles and responsibilities including accountability assignments.', evidenceType: 'point-in-time', expectedFormat: 'PDF or Excel', controlRef: 'GV.RR', commonIssue: 'Should clearly assign accountability.', frequency: 'annual' },
+          { id: 'nist_policies', title: 'Cybersecurity Policies', common: true, hint: 'Policy set', description: 'Provide cybersecurity policies covering key security domains with evidence of approval and communication.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'GV.PO', commonIssue: 'Policies should be approved and communicated.', frequency: 'annual' }
+        ]
+      },
+      { 
+        id: 'nist_protect', 
+        title: 'PROTECT', 
+        description: 'Access control, awareness, data security',
+        items: [
+          { id: 'nist_access', title: 'Access Management', common: true, hint: 'Access controls', description: 'Provide documentation of identity and access management including policy, provisioning, and access review.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'PR.AA', commonIssue: 'Should cover full access lifecycle.', frequency: 'annual' },
+          { id: 'nist_mfa', title: 'Multi-Factor Authentication', common: true, hint: 'MFA implementation', description: 'Provide evidence of MFA configuration for sensitive systems and remote access.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot', controlRef: 'PR.AA', commonIssue: 'MFA should be required for sensitive access.', frequency: 'annual' },
+          { id: 'nist_awareness', title: 'Security Awareness', common: true, hint: 'Training program', description: 'Provide security awareness program documentation and training completion records from {{auditPeriod}}.', evidenceType: 'period-of-time', expectedFormat: 'PDF or Excel', controlRef: 'PR.AT', commonIssue: 'Training should cover all personnel.', frequency: 'annual' },
+          { id: 'nist_encryption', title: 'Data Protection', common: true, hint: 'Encryption controls', description: 'Provide evidence of encryption at rest and in transit for sensitive data.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot or PDF', controlRef: 'PR.DS', commonIssue: 'Should cover all sensitive data locations.', frequency: 'annual' }
+        ]
+      },
+      { 
+        id: 'nist_detect', 
+        title: 'DETECT', 
+        description: 'Monitoring and vulnerability management',
+        items: [
+          { id: 'nist_monitoring', title: 'Continuous Monitoring', common: true, hint: 'Security monitoring', description: 'Provide documentation of continuous monitoring including what is monitored and alerting configuration.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot or PDF', controlRef: 'DE.CM', commonIssue: 'Should show what events generate alerts.', frequency: 'annual' },
+          { id: 'nist_vuln', title: 'Vulnerability Management', common: true, hint: 'Vuln scanning and remediation', description: 'Provide vulnerability scan reports from {{auditPeriod}} including findings and remediation status.', evidenceType: 'period-of-time', expectedFormat: 'PDF', controlRef: 'DE.CM', commonIssue: 'Should show regular scanning and remediation.', frequency: 'quarterly' }
+        ]
+      },
+      { 
+        id: 'nist_respond', 
+        title: 'RESPOND', 
+        description: 'Incident response',
+        items: [
+          { id: 'nist_ir_plan', title: 'Incident Response Plan', common: true, hint: 'IR procedures', description: 'Provide the Incident Response Plan including classification, response procedures, and escalation paths.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'RS.MA', commonIssue: 'Plan should be detailed enough to be actionable.', frequency: 'annual' },
+          { id: 'nist_incident_log', title: 'Incident Log', common: true, hint: 'Security incidents', description: 'Provide security incident log from {{auditPeriod}}. If none, provide attestation.', evidenceType: 'period-of-time', expectedFormat: 'Excel or PDF', controlRef: 'RS.AN', commonIssue: 'Zero incidents requires attestation.', frequency: 'quarterly' }
+        ]
+      }
+    ]
+  },
+  
+  CMMC: {
+    label: 'CMMC Level 2', 
+    description: 'Cybersecurity Maturity Model Certification',
+    defaultOn: false,
+    controlGroups: [
+      { 
+        id: 'cmmc_core', 
+        title: 'Core Required Documents', 
+        description: 'Mandatory CMMC documentation',
+        items: [
+          { id: 'cmmc_ssp', title: 'System Security Plan (SSP)', common: true, hint: 'Documents all 110 practices', description: 'Provide the System Security Plan documenting how each of the 110 NIST 800-171 practices is implemented covering the CUI boundary.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'CA.L2-3.12.4', commonIssue: 'Must address each of 110 practices with specific details.', frequency: 'annual' },
+          { id: 'cmmc_poam', title: 'Plan of Action & Milestones', common: true, hint: 'Tracks unmet practices', description: 'Provide the POA&M listing practices not fully implemented with remediation actions and target dates.', evidenceType: 'point-in-time', expectedFormat: 'Excel or PDF', controlRef: 'CA.L2-3.12.2', commonIssue: 'POA&M entries must have realistic milestones.', frequency: 'quarterly' },
+          { id: 'cmmc_cui_inventory', title: 'CUI Inventory', common: true, hint: 'CUI locations and types', description: 'Provide inventory of CUI handled including category, location, handling requirements, and authorized personnel.', evidenceType: 'point-in-time', expectedFormat: 'Excel', controlRef: 'MP.L2-3.8.1', commonIssue: 'Must identify all CUI types and locations.', frequency: 'annual' },
+          { id: 'cmmc_boundary', title: 'CUI Boundary Diagram', common: true, hint: 'Network diagram with CUI enclave', description: 'Provide network diagram showing the CUI boundary including systems and security controls at boundary points.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'SC.L2-3.13.5', commonIssue: 'Must clearly show what is inside/outside CUI boundary.', frequency: 'annual' }
+        ]
+      },
+      { 
+        id: 'cmmc_access', 
+        title: 'Access Control (AC)', 
+        description: 'Access to CUI systems',
+        items: [
+          { id: 'cmmc_access_policy', title: 'Access Control Policy', common: true, hint: 'CUI access policy', description: 'Provide Access Control Policy defining who can access CUI systems and access restrictions.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'AC.L2-3.1.1', commonIssue: 'Must specifically address CUI system access.', frequency: 'annual' },
+          { id: 'cmmc_user_list', title: 'CUI System User Listing', common: true, hint: 'Authorized CUI users', description: 'Provide current listing of users authorized to access CUI systems.', evidenceType: 'point-in-time', expectedFormat: 'Excel', controlRef: 'AC.L2-3.1.1', commonIssue: 'Should be limited to personnel with need-to-know.', frequency: 'quarterly' },
+          { id: 'cmmc_fips', title: 'FIPS-Validated Encryption', common: true, hint: 'FIPS 140-2 cryptography', description: 'Provide evidence that FIPS 140-2 validated cryptographic modules are used to protect CUI.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'SC.L2-3.13.11', commonIssue: 'Non-FIPS encryption is not acceptable for CUI.', frequency: 'annual' }
+        ]
+      }
+    ]
+  },
+  
   HIPAA: {
-    label: 'HIPAA', description: 'Health Insurance Portability and Accountability Act', defaultOn: false,
+    label: 'HIPAA', 
+    description: 'Health Insurance Portability and Accountability Act',
+    defaultOn: false,
     controlGroups: [
-      { id: 'admin', title: 'Administrative Safeguards', description: 'Administrative controls for PHI',
+      { 
+        id: 'hipaa_admin', 
+        title: 'Administrative Safeguards', 
+        description: 'Security management and workforce security',
         items: [
-          { id: 'risk_hipaa', title: 'Security Risk Analysis', common: true, hint: 'HIPAA risk analysis' },
-          { id: 'policies_hipaa', title: 'HIPAA Policies', common: true, hint: 'Security policies' },
-          { id: 'training_hipaa', title: 'Workforce Training', common: true, hint: 'HIPAA training records' },
-          { id: 'sanctions', title: 'Sanction Policy', common: false, hint: 'Violation consequences' },
-        ]},
-      { id: 'technical', title: 'Technical Safeguards', description: 'Technical controls for PHI',
+          { id: 'hipaa_risk_analysis', title: 'Security Risk Analysis', common: true, hint: 'HIPAA risk assessment', description: 'Provide risk analysis covering ePHI as required by HIPAA. Include identified risks, ratings, and treatment decisions.', evidenceType: 'period-of-time', expectedFormat: 'PDF or Excel', controlRef: '§164.308(a)(1)(ii)(A)', commonIssue: 'Must specifically address ePHI risks. Generic IT assessments are insufficient.', frequency: 'annual' },
+          { id: 'hipaa_security_officer', title: 'Security Officer Designation', common: true, hint: 'Assigned security responsibility', description: 'Provide documentation showing a Security Officer has been designated for HIPAA compliance.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: '§164.308(a)(2)', commonIssue: 'Must be a specific, named individual.', frequency: 'annual' },
+          { id: 'hipaa_training', title: 'Security Awareness Training', common: true, hint: 'HIPAA training records', description: 'Provide training program documentation and completion records from {{auditPeriod}}.', evidenceType: 'period-of-time', expectedFormat: 'PDF or Excel', controlRef: '§164.308(a)(5)', commonIssue: 'Training must address HIPAA requirements.', frequency: 'annual' },
+          { id: 'hipaa_incident', title: 'Security Incident Procedures', common: true, hint: 'Incident handling', description: 'Provide Security Incident Response Procedures covering incidents involving ePHI.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: '§164.308(a)(6)', commonIssue: 'Must address breach notification.', frequency: 'annual' },
+          { id: 'hipaa_contingency', title: 'Contingency Plan', common: true, hint: 'Emergency operations', description: 'Provide the Contingency Plan covering data backup, disaster recovery, and emergency operations for ePHI.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: '§164.308(a)(7)', commonIssue: 'Must address ePHI availability in emergencies.', frequency: 'annual' },
+          { id: 'hipaa_baa_inventory', title: 'Business Associate Inventory', common: true, hint: 'List of BAs', description: 'Provide inventory of Business Associates with ePHI access including BAA status.', evidenceType: 'point-in-time', expectedFormat: 'Excel', controlRef: '§164.308(b)', commonIssue: 'Must have BAA with all entities accessing ePHI.', frequency: 'annual' }
+        ]
+      },
+      { 
+        id: 'hipaa_technical', 
+        title: 'Technical Safeguards', 
+        description: 'Access control, audit controls, transmission security',
         items: [
-          { id: 'access_hipaa', title: 'Access Controls', common: true, hint: 'PHI access controls' },
-          { id: 'audit_hipaa', title: 'Audit Controls', common: true, hint: 'PHI access logging' },
-          { id: 'integrity', title: 'Integrity Controls', common: false, hint: 'PHI integrity mechanisms' },
-          { id: 'transmission', title: 'Transmission Security', common: false, hint: 'PHI encryption in transit' },
-        ]},
-      { id: 'ba', title: 'Business Associates', description: 'BA agreements',
-        items: [
-          { id: 'baa_list', title: 'BAA Inventory', common: true, hint: 'List of BAAs' },
-          { id: 'baa_samples', title: 'Sample BAAs', common: false, hint: 'Executed BAA examples' },
-        ]},
+          { id: 'hipaa_access', title: 'Access Controls', common: true, hint: 'ePHI access controls', description: 'Provide evidence of access control configuration for ePHI systems including unique user IDs and auto-logoff.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot', controlRef: '§164.312(a)(1)', commonIssue: 'Must ensure only authorized access to ePHI.', frequency: 'annual' },
+          { id: 'hipaa_audit', title: 'Audit Controls', common: true, hint: 'ePHI access logging', description: 'Provide evidence of audit controls for ePHI systems including configuration and sample logs.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot or PDF', controlRef: '§164.312(b)', commonIssue: 'Must log ePHI access.', frequency: 'annual' },
+          { id: 'hipaa_encryption', title: 'Encryption', common: true, hint: 'ePHI encryption', description: 'Provide evidence of encryption for ePHI at rest and in transit.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot', controlRef: '§164.312(a)(2)(iv), §164.312(e)', commonIssue: 'Must cover all ePHI storage and transmission.', frequency: 'annual' }
+        ]
+      }
     ]
   },
+  
   GDPR: {
-    label: 'GDPR', description: 'General Data Protection Regulation', defaultOn: false,
+    label: 'GDPR', 
+    description: 'General Data Protection Regulation (Supplementary)',
+    defaultOn: false,
     controlGroups: [
-      { id: 'core', title: 'Core Requirements', description: 'Fundamental GDPR compliance',
+      { 
+        id: 'gdpr_core', 
+        title: 'Core Requirements', 
+        description: 'Fundamental GDPR compliance',
         items: [
-          { id: 'ropa', title: 'Record of Processing Activities', common: true, hint: 'Article 30 records' },
-          { id: 'privacy_notice', title: 'Privacy Notice', common: true, hint: 'Public privacy policy' },
-          { id: 'lawful_basis', title: 'Lawful Basis Documentation', common: true, hint: 'Legal basis per activity' },
-          { id: 'dpia', title: 'Data Protection Impact Assessments', common: false, hint: 'DPIAs for high-risk processing' },
-        ]},
-      { id: 'rights', title: 'Data Subject Rights', description: 'Handling data subject requests',
+          { id: 'gdpr_ropa', title: 'Record of Processing Activities', common: true, hint: 'Article 30 records', description: 'Provide the Record of Processing Activities as required by Article 30. Include processing purpose, data categories, recipients, and retention.', evidenceType: 'point-in-time', expectedFormat: 'Excel', controlRef: 'Article 30', commonIssue: 'Must include all required fields per Article 30(1).', frequency: 'annual' },
+          { id: 'gdpr_privacy_notice', title: 'Privacy Notice', common: true, hint: 'Public privacy policy', description: 'Provide the current Privacy Notice/Policy informing data subjects about data processing.', evidenceType: 'point-in-time', expectedFormat: 'PDF or URL', controlRef: 'Articles 13, 14', commonIssue: 'Must be clear and include all required information.', frequency: 'annual' },
+          { id: 'gdpr_lawful_basis', title: 'Lawful Basis Documentation', common: true, hint: 'Legal basis for processing', description: 'Provide documentation showing the lawful basis for each processing activity.', evidenceType: 'point-in-time', expectedFormat: 'PDF or Excel', controlRef: 'Article 6', commonIssue: 'Each processing activity must have documented lawful basis.', frequency: 'annual' }
+        ]
+      },
+      { 
+        id: 'gdpr_rights', 
+        title: 'Data Subject Rights', 
+        description: 'Handling data subject requests',
         items: [
-          { id: 'dsar', title: 'DSAR Process', common: true, hint: 'How requests are handled' },
-          { id: 'consent', title: 'Consent Records', common: false, hint: 'Consent mechanisms' },
-        ]},
-      { id: 'processors', title: 'Processors & Transfers', description: 'Third parties and transfers',
+          { id: 'gdpr_dsar', title: 'DSAR Process', common: true, hint: 'Data subject request process', description: 'Provide documentation of the Data Subject Access Request process including intake, verification, and fulfillment.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'Articles 15-22', commonIssue: 'Must be able to respond within 30 days.', frequency: 'annual' },
+          { id: 'gdpr_dsar_log', title: 'DSAR Log', common: false, hint: 'Log of requests', description: 'Provide log of Data Subject Requests from {{auditPeriod}}. If none, provide attestation.', evidenceType: 'period-of-time', expectedFormat: 'Excel or PDF', controlRef: 'Articles 15-22', commonIssue: 'Response times must meet GDPR requirements.', frequency: 'quarterly' }
+        ]
+      },
+      { 
+        id: 'gdpr_processors', 
+        title: 'Processors & Transfers', 
+        description: 'Third-party processors and transfers',
         items: [
-          { id: 'dpa', title: 'Data Processing Agreements', common: true, hint: 'DPAs with processors' },
-          { id: 'transfers', title: 'Transfer Mechanisms', common: false, hint: 'SCCs, adequacy, etc.' },
-        ]},
+          { id: 'gdpr_processor_list', title: 'Processor Inventory', common: true, hint: 'List of processors', description: 'Provide inventory of data processors including services and data accessed.', evidenceType: 'point-in-time', expectedFormat: 'Excel', controlRef: 'Article 28', commonIssue: 'Must have DPAs with all processors.', frequency: 'annual' },
+          { id: 'gdpr_dpa', title: 'Data Processing Agreements', common: true, hint: 'Sample DPAs', description: 'Provide sample Data Processing Agreements showing required Article 28 provisions.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'Article 28(3)', commonIssue: 'DPAs must include all required provisions.', frequency: 'annual' }
+        ]
+      },
+      { 
+        id: 'gdpr_security', 
+        title: 'Security & Breach', 
+        description: 'Security measures and breach notification',
+        items: [
+          { id: 'gdpr_security_measures', title: 'Security Measures', common: true, hint: 'TOMs documentation', description: 'Provide documentation of technical and organizational security measures (TOMs).', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'Article 32', commonIssue: 'Should address confidentiality, integrity, availability.', frequency: 'annual' },
+          { id: 'gdpr_breach_procedure', title: 'Breach Notification Procedure', common: true, hint: 'Breach process', description: 'Provide the breach notification procedure including 72-hour supervisory authority notification.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'Articles 33, 34', commonIssue: 'Must enable 72-hour notification.', frequency: 'annual' }
+        ]
+      }
     ]
   }
 };
@@ -3097,6 +3428,99 @@ function initDeadlinePicker() {
       saveFormState();
     }
   });
+  
+  // Initialize audit period pickers
+  initAuditPeriodPickers();
+}
+
+let auditPeriodStartPicker, auditPeriodEndPicker;
+
+function initAuditPeriodPickers() {
+  const commonOpts = {
+    enableTime: false,
+    dateFormat: 'F j, Y', // "January 1, 2025"
+    altInput: true,
+    altFormat: 'F j, Y',
+    disableMobile: false,
+    theme: 'dark',
+    onReady: function(selectedDates, dateStr, instance) {
+      instance.altInput.style.backgroundColor = 'var(--surface)';
+      instance.altInput.style.border = '1px solid var(--border)';
+      instance.altInput.style.color = 'var(--text)';
+      instance.altInput.style.borderRadius = '8px';
+      instance.altInput.style.padding = '12px 14px';
+      instance.altInput.style.fontSize = '14px';
+      instance.altInput.style.cursor = 'pointer';
+    },
+    onChange: function() {
+      updateAuditPeriodHint();
+      saveFormState();
+    }
+  };
+  
+  // Default: start of current year
+  const defaultStart = new Date();
+  defaultStart.setMonth(0, 1);
+  defaultStart.setHours(0, 0, 0, 0);
+  
+  // Default: end of current year (or today if past Dec 31)
+  const defaultEnd = new Date();
+  defaultEnd.setMonth(11, 31);
+  defaultEnd.setHours(0, 0, 0, 0);
+  
+  auditPeriodStartPicker = flatpickr('#auditPeriodStart', {
+    ...commonOpts,
+    maxDate: new Date().fp_incr(365), // Up to 1 year from now
+    onChange: function(selectedDates) {
+      if (selectedDates[0] && auditPeriodEndPicker) {
+        auditPeriodEndPicker.set('minDate', selectedDates[0]);
+      }
+      updateAuditPeriodHint();
+      saveFormState();
+    }
+  });
+  
+  auditPeriodEndPicker = flatpickr('#auditPeriodEnd', {
+    ...commonOpts,
+    maxDate: new Date().fp_incr(365),
+    onChange: function(selectedDates) {
+      if (selectedDates[0] && auditPeriodStartPicker) {
+        auditPeriodStartPicker.set('maxDate', selectedDates[0]);
+      }
+      updateAuditPeriodHint();
+      saveFormState();
+    }
+  });
+}
+
+function updateAuditPeriodHint() {
+  const hint = $('#auditPeriodHint');
+  if (!hint) return;
+  
+  const startDate = auditPeriodStartPicker?.selectedDates[0];
+  const endDate = auditPeriodEndPicker?.selectedDates[0];
+  
+  if (startDate && endDate) {
+    const months = Math.round((endDate - startDate) / (1000 * 60 * 60 * 24 * 30));
+    hint.textContent = `📆 ${months} month audit period — date range will be included in period-based evidence requests`;
+    hint.style.color = 'var(--accent)';
+  } else if (startDate || endDate) {
+    hint.textContent = `⚠️ Please set both start and end dates for the audit period`;
+    hint.style.color = 'var(--warning)';
+  } else {
+    hint.textContent = '';
+  }
+}
+
+function getAuditPeriodString() {
+  const startDate = auditPeriodStartPicker?.selectedDates[0];
+  const endDate = auditPeriodEndPicker?.selectedDates[0];
+  
+  if (startDate && endDate) {
+    const opts = { year: 'numeric', month: 'short', day: 'numeric' };
+    return `${startDate.toLocaleDateString('en-US', opts)} - ${endDate.toLocaleDateString('en-US', opts)}`;
+  }
+  return null;
 }
 
 function updateDeadlineHint(date) {
@@ -3259,7 +3683,33 @@ function renderItem(fwKey, gid, item, gs) {
   const st = gs?.items?.[item.id];
   const inc = st?.included ?? item.common;
   const instr = st?.instructions || '';
-  return `<div class="evidence-item ${inc ? 'included' : ''}" data-fw="${esc(fwKey)}" data-group="${esc(gid)}" data-item="${esc(item.id)}"><input type="checkbox" ${inc ? 'checked' : ''}><div class="ei-content"><div class="ei-title">${esc(item.title)}</div>${item.hint ? `<div class="ei-hint">${esc(item.hint)}</div>` : ''}<div class="ei-instr"><label>Instructions for client (optional)</label><textarea placeholder="e.g., Please include date range, reviewer sign-off, specific format..." data-item-instr="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">${esc(instr)}</textarea></div></div></div>`;
+  
+  // Build enhanced meta tags
+  let metaHtml = '';
+  if (item.expectedFormat || item.controlRef || item.evidenceType) {
+    metaHtml = '<div class="ei-meta">';
+    if (item.expectedFormat) {
+      metaHtml += `<span class="ei-tag format">📄 ${esc(item.expectedFormat)}</span>`;
+    }
+    if (item.controlRef) {
+      metaHtml += `<span class="ei-tag control">${esc(item.controlRef)}</span>`;
+    }
+    if (item.evidenceType === 'period-of-time') {
+      metaHtml += '<span class="ei-tag period">📆 Period</span>';
+    } else if (item.evidenceType === 'point-in-time') {
+      metaHtml += '<span class="ei-tag point">📍 Point-in-time</span>';
+    }
+    metaHtml += '</div>';
+  }
+  
+  // Show description if available, fallback to hint
+  const descText = item.description || item.hint || '';
+  const descHtml = descText ? `<div class="ei-description">${esc(descText)}</div>` : '';
+  
+  // Common issue warning (shown when item is included)
+  const issueHtml = (item.commonIssue && inc) ? `<div class="ei-common-issue">${esc(item.commonIssue)}</div>` : '';
+  
+  return `<div class="evidence-item ${inc ? 'included' : ''}" data-fw="${esc(fwKey)}" data-group="${esc(gid)}" data-item="${esc(item.id)}"><input type="checkbox" ${inc ? 'checked' : ''}><div class="ei-content"><div class="ei-title">${esc(item.title)}</div>${descHtml}${metaHtml}${issueHtml}<div class="ei-instr"><label>Instructions for client (optional)</label><textarea placeholder="e.g., Please include date range, reviewer sign-off, specific format..." data-item-instr="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">${esc(instr)}</textarea></div></div></div>`;
 }
 
 function wireComposer() {
@@ -3325,11 +3775,60 @@ function wireComposer() {
   $$('[data-add-group-btn]').forEach(btn => {
     btn.addEventListener('click', () => { $('#customGroupFwKey').value = btn.dataset.addGroupBtn; $('#addGroupModal').classList.remove('hidden'); });
   });
+  
+  // Template level buttons
+  $$('.template-level-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const level = btn.dataset.level;
+      $$('.template-level-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      applyTemplateLevel(level);
+    });
+  });
+}
+
+// Apply template level (Quick/Standard/Thorough) to current selections
+function applyTemplateLevel(level) {
+  const allFw = getAllFrameworks();
+  
+  for (const [fk, fw] of Object.entries(allFw)) {
+    if (!composerState[fk]?.enabled) continue;
+    
+    for (const g of (fw.controlGroups || [])) {
+      if (!composerState[fk].groups[g.id]) continue;
+      
+      for (const item of (g.items || [])) {
+        if (!composerState[fk].groups[g.id].items[item.id]) {
+          composerState[fk].groups[g.id].items[item.id] = { included: false, instructions: '' };
+        }
+        
+        // Determine if item should be included based on template level
+        let shouldInclude = false;
+        if (level === 'quickStart') {
+          // Only common items
+          shouldInclude = item.common === true;
+        } else if (level === 'standard') {
+          // Common items (same as quickStart for now, but could be expanded)
+          shouldInclude = item.common === true;
+        } else if (level === 'thorough') {
+          // All items
+          shouldInclude = true;
+        }
+        
+        composerState[fk].groups[g.id].items[item.id].included = shouldInclude;
+      }
+    }
+  }
+  
+  renderComposer();
+  saveFormState();
 }
 
 function getPayload() {
   const result = [];
   const allFw = getAllFrameworks();
+  const auditPeriod = getAuditPeriodString();
+  
   for (const [fk, fs] of Object.entries(composerState)) {
     if (!fs.enabled) continue;
     const fw = allFw[fk];
@@ -3340,7 +3839,26 @@ function getPayload() {
       for (const item of (g.items || [])) {
         const is = gs.items?.[item.id];
         if (!is?.included) continue;
-        result.push({ id: item.id, framework: fw.label || fk, group: g.title, title: item.title, instructions: is.instructions || '' });
+        
+        // Build description with audit period injection for period-of-time items
+        let description = item.description || item.hint || '';
+        if (auditPeriod && item.evidenceType === 'period-of-time' && description.includes('{{auditPeriod}}')) {
+          description = description.replace(/\{\{auditPeriod\}\}/g, auditPeriod);
+        }
+        
+        result.push({ 
+          id: item.id, 
+          framework: fw.label || fk, 
+          group: g.title, 
+          title: item.title, 
+          instructions: is.instructions || '',
+          // Enhanced fields
+          description: description,
+          evidenceType: item.evidenceType || 'point-in-time',
+          expectedFormat: item.expectedFormat || null,
+          controlRef: item.controlRef || null,
+          commonIssue: item.commonIssue || null
+        });
       }
     }
   }
@@ -4993,6 +5511,10 @@ async function sendRequest() {
   const auditorEmails = getChipEmails('auditorEmailsContainer');
   const clientEmails = getChipEmails('clientEmailsContainer');
   
+  // Get audit period dates if set
+  const auditPeriodStart = auditPeriodStartPicker?.selectedDates[0]?.toISOString() || null;
+  const auditPeriodEnd = auditPeriodEndPicker?.selectedDates[0]?.toISOString() || null;
+  
   // Build headers
   const headers = { 'Content-Type': 'application/json' };
   if (state.authToken) {
@@ -5014,6 +5536,9 @@ async function sendRequest() {
         auditorCode: state.code || '',
         globalInstructions: $('#globalInstructions')?.value || '',
         requestedEvidence: requestedEvidence,
+        // Audit period for period-of-time evidence
+        auditPeriodStart: auditPeriodStart,
+        auditPeriodEnd: auditPeriodEnd,
         // Trial flags
         isTrialRequest: state.isTrialUser,
         trialMode: state.trialMode
