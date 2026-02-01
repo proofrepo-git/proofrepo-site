@@ -2100,45 +2100,74 @@
       border-color: var(--accent);
       background: rgba(16, 185, 129, 0.05);
     }
+    
+    /* === COMPACT EVIDENCE ITEM LAYOUT === */
     .ei-header {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 12px 14px;
+      gap: 8px;
+      padding: 8px 12px;
       background: var(--surface-elevated);
       border-bottom: 1px solid var(--border);
     }
     .ei-header input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
       cursor: pointer;
+      flex-shrink: 0;
     }
     .ei-title {
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       flex: 1;
     }
     .ei-body {
       display: none;
     }
     .evidence-item.included .ei-body {
-      display: block;
+      display: flex;
+      flex-wrap: wrap;
     }
     
-    /* Client-Facing Zone */
+    /* Two-Column Layout: Client Zone + Guidance Side-by-Side */
     .ei-client-zone {
-      padding: 14px;
-      border-bottom: 1px solid var(--border);
+      flex: 1;
+      min-width: 280px;
+      padding: 10px 12px;
+      border-right: 1px solid var(--border);
     }
+    .ei-guidance-zone {
+      width: 260px;
+      flex-shrink: 0;
+      padding: 10px 12px;
+      background: rgba(0,0,0,0.15);
+      font-size: 0.82rem;
+    }
+    /* Stack on narrow screens */
+    @media (max-width: 700px) {
+      .evidence-item.included .ei-body {
+        flex-direction: column;
+      }
+      .ei-client-zone {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+      .ei-guidance-zone {
+        width: 100%;
+      }
+    }
+    
+    /* Zone Headers - Compact */
     .ei-zone-header {
       display: flex;
       align-items: center;
-      gap: 6px;
-      font-size: 0.75rem;
+      gap: 5px;
+      font-size: 0.7rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
+      opacity: 0.8;
     }
     .ei-zone-header.client {
       color: var(--accent);
@@ -2146,44 +2175,49 @@
     .ei-zone-header.guidance {
       color: var(--text-muted);
     }
+    
+    /* Field Labels - Inline */
     .ei-field-label {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       color: var(--text-muted);
-      margin-bottom: 4px;
+      margin-bottom: 3px;
       display: block;
     }
+    
+    /* Description Textarea - Compact */
     .ei-description-textarea {
       width: 100%;
-      min-height: 70px;
-      padding: 10px 12px;
+      min-height: 48px;
+      max-height: 120px;
+      padding: 8px 10px;
       background: var(--surface-elevated);
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: 5px;
       color: var(--text);
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-family: inherit;
-      line-height: 1.5;
+      line-height: 1.45;
       resize: vertical;
     }
     .ei-description-textarea:focus {
       outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
     }
     .ei-description-actions {
       display: flex;
-      gap: 8px;
-      margin-top: 6px;
+      gap: 6px;
+      margin-top: 4px;
       justify-content: flex-end;
     }
     .ei-action-btn {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: var(--text-muted);
       background: none;
       border: none;
       cursor: pointer;
-      padding: 2px 6px;
-      border-radius: 4px;
+      padding: 2px 5px;
+      border-radius: 3px;
       transition: all 0.15s;
     }
     .ei-action-btn:hover {
@@ -2191,37 +2225,47 @@
       background: var(--surface-elevated);
     }
     
-    /* Format Chips */
-    .ei-formats-section {
-      margin-top: 12px;
+    /* Format Chips - Inline Row */
+    .ei-formats-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    .ei-formats-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
     }
     .ei-format-chips {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 6px;
+      gap: 5px;
+      align-items: center;
     }
     .ei-format-chip {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
-      padding: 4px 10px;
+      gap: 3px;
+      padding: 2px 8px;
       background: rgba(37, 99, 235, 0.15);
       color: #60a5fa;
-      border-radius: 14px;
-      font-size: 0.8rem;
+      border-radius: 10px;
+      font-size: 0.75rem;
       font-weight: 500;
     }
     .ei-format-chip .chip-remove {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 14px;
-      height: 14px;
+      width: 12px;
+      height: 12px;
       border-radius: 50%;
       background: rgba(255,255,255,0.2);
       cursor: pointer;
-      font-size: 10px;
+      font-size: 9px;
       line-height: 1;
       transition: background 0.15s;
     }
@@ -2231,13 +2275,13 @@
     .ei-add-format {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
-      padding: 4px 10px;
-      background: var(--surface-elevated);
+      gap: 3px;
+      padding: 2px 8px;
+      background: transparent;
       color: var(--text-muted);
       border: 1px dashed var(--border);
-      border-radius: 14px;
-      font-size: 0.8rem;
+      border-radius: 10px;
+      font-size: 0.72rem;
       cursor: pointer;
       transition: all 0.15s;
     }
@@ -2246,46 +2290,60 @@
       color: var(--primary);
     }
     .ei-format-input {
-      width: 100px;
-      padding: 4px 8px;
-      font-size: 0.8rem;
+      width: 80px;
+      padding: 2px 6px;
+      font-size: 0.75rem;
       background: var(--surface-elevated);
       border: 1px solid var(--primary);
-      border-radius: 14px;
+      border-radius: 10px;
       color: var(--text);
       outline: none;
     }
+    .ei-formats-reset {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 2px 4px;
+      opacity: 0.7;
+    }
+    .ei-formats-reset:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
     
-    /* Additional Instructions */
-    .ei-instructions-section {
-      margin-top: 12px;
+    /* Additional Instructions - Compact */
+    .ei-instructions-row {
+      margin-top: 8px;
     }
     .ei-instructions-textarea {
       width: 100%;
-      min-height: 50px;
-      padding: 10px 12px;
+      min-height: 32px;
+      max-height: 80px;
+      padding: 6px 8px;
       background: var(--surface-elevated);
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: 5px;
       color: var(--text);
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-family: inherit;
-      line-height: 1.5;
+      line-height: 1.4;
       resize: vertical;
+    }
+    .ei-instructions-textarea::placeholder {
+      color: var(--text-muted);
+      font-size: 0.78rem;
     }
     .ei-instructions-textarea:focus {
       outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
     }
     
-    /* ProofRepo Guidance Zone */
-    .ei-guidance-zone {
-      padding: 12px 14px;
-      background: rgba(0,0,0,0.2);
-    }
+    /* Guidance Zone - Compact Sidebar */
     .ei-guidance-zone.collapsed {
-      padding: 8px 14px;
+      padding: 6px 12px;
     }
     .ei-guidance-zone.collapsed .ei-guidance-content {
       display: none;
@@ -2297,27 +2355,28 @@
       cursor: pointer;
     }
     .ei-guidance-toggle-btn {
-      font-size: 0.75rem;
+      font-size: 0.68rem;
       color: var(--text-muted);
       background: none;
       border: none;
       cursor: pointer;
+      padding: 0;
     }
     .ei-guidance-content {
-      margin-top: 10px;
+      margin-top: 6px;
     }
     .ei-guidance-meta {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 8px;
-      font-size: 0.75rem;
+      gap: 5px;
+      margin-bottom: 6px;
     }
     .ei-tag {
-      padding: 2px 8px;
-      border-radius: 4px;
+      padding: 1px 6px;
+      border-radius: 3px;
       background: var(--surface);
       color: var(--text-muted);
+      font-size: 0.7rem;
     }
     .ei-tag.control {
       background: rgba(16, 185, 129, 0.15);
@@ -2332,17 +2391,20 @@
       color: #a78bfa;
     }
     .ei-tip {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: var(--warning);
-      padding: 8px 10px;
-      background: rgba(245, 158, 11, 0.1);
-      border-radius: 6px;
-      border-left: 3px solid var(--warning);
-      line-height: 1.4;
+      padding: 6px 8px;
+      background: rgba(245, 158, 11, 0.08);
+      border-radius: 4px;
+      border-left: 2px solid var(--warning);
+      line-height: 1.35;
     }
-    .ei-tip::before {
-      content: '💡 Tip: ';
+    .ei-tip-label {
       font-weight: 600;
+      font-size: 0.7rem;
+      display: block;
+      margin-bottom: 2px;
+      opacity: 0.9;
     }
     
     /* Preview Modal */
@@ -3952,7 +4014,7 @@ function renderItem(fwKey, gid, item, gs) {
   }
   
   // Build common issue tip
-  const tipHtml = item.commonIssue ? `<div class="ei-tip">${esc(item.commonIssue)}</div>` : '';
+  const tipHtml = item.commonIssue ? `<div class="ei-tip"><span class="ei-tip-label">💡 Tip</span>${esc(item.commonIssue)}</div>` : '';
   
   // Check if description was edited (to show reset button)
   const descriptionEdited = st?.editedDescription !== null;
@@ -3967,44 +4029,42 @@ function renderItem(fwKey, gid, item, gs) {
       <!-- Client-Facing Zone -->
       <div class="ei-client-zone">
         <div class="ei-zone-header client">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
-          Client will see
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+          Client sees
         </div>
         
-        <label class="ei-field-label">Description / guidance for client:</label>
+        <label class="ei-field-label">Guidance for client:</label>
         <textarea class="ei-description-textarea" data-desc-edit="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}" placeholder="Describe what evidence the client should provide...">${esc(currentDescription)}</textarea>
         <div class="ei-description-actions">
           <button type="button" class="ei-action-btn" data-desc-clear="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">Clear</button>
-          ${descriptionEdited ? `<button type="button" class="ei-action-btn" data-desc-reset="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">Reset to default</button>` : ''}
+          ${descriptionEdited ? `<button type="button" class="ei-action-btn" data-desc-reset="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">↺ Reset</button>` : ''}
         </div>
         
-        <div class="ei-formats-section">
-          <label class="ei-field-label">Expected format${currentFormats.length > 1 ? 's' : ''}:</label>
+        <div class="ei-formats-row">
+          <span class="ei-formats-label">Format:</span>
           <div class="ei-format-chips" data-formats-container="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">
             ${formatChipsHtml}
           </div>
-          ${formatsEdited ? `<div class="ei-description-actions"><button type="button" class="ei-action-btn" data-formats-reset="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">Reset formats</button></div>` : ''}
+          ${formatsEdited ? `<button type="button" class="ei-formats-reset" data-formats-reset="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">↺ reset</button>` : ''}
         </div>
         
-        <div class="ei-instructions-section">
-          <label class="ei-field-label">Additional instructions (optional):</label>
-          <textarea class="ei-instructions-textarea" data-item-instr="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}" placeholder="Add any extra context, date ranges, or specific requirements...">${esc(instr)}</textarea>
+        <div class="ei-instructions-row">
+          <textarea class="ei-instructions-textarea" data-item-instr="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}" placeholder="+ Add extra instructions for client...">${esc(instr)}</textarea>
         </div>
       </div>
       
-      <!-- ProofRepo Guidance Zone -->
+      <!-- ProofRepo Guidance Zone (sidebar) -->
       <div class="ei-guidance-zone ${guidanceCollapsed ? 'collapsed' : ''}" data-guidance-zone="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">
         <div class="ei-guidance-toggle" data-guidance-toggle="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">
           <div class="ei-zone-header guidance">
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
-            ProofRepo guidance (only you see this)
+            <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+            Your reference
           </div>
-          <button type="button" class="ei-guidance-toggle-btn">${guidanceCollapsed ? '▶ Show' : '▼ Hide'}</button>
+          <button type="button" class="ei-guidance-toggle-btn">${guidanceCollapsed ? '▶' : '▼'}</button>
         </div>
         <div class="ei-guidance-content">
           ${guidanceMetaHtml ? `<div class="ei-guidance-meta">${guidanceMetaHtml}</div>` : ''}
           ${tipHtml}
-          ${!guidanceMetaHtml && !tipHtml ? '<p style="color: var(--text-muted); font-size: 0.8rem;">No additional guidance for this item.</p>' : ''}
         </div>
       </div>
     </div>
