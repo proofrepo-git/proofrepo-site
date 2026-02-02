@@ -2479,6 +2479,82 @@
       border-radius: 8px;
       border: 1px solid var(--border);
     }
+
+    /* Draft Save Indicator */
+    .draft-indicator {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      z-index: 999;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      opacity: 0;
+      background: #065f46;
+      color: #d1fae5;
+    }
+    .draft-indicator.visible { opacity: 1; }
+    .draft-indicator.saving { background: #1e3a5f; color: #bfdbfe; }
+
+    /* Trial Dashboard Feature Badges */
+    .feature-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #1e3a5f, #0f2440);
+      color: #60a5fa;
+      border: 1px solid #1e40af33;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    /* Dashboard Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 32px 20px;
+      color: var(--text-muted);
+    }
+    .empty-state-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      opacity: 0.5;
+    }
+    .empty-state-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .empty-state-desc {
+      font-size: 13px;
+      line-height: 1.5;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    /* Draft Resume Card */
+    .draft-card {
+      background: linear-gradient(135deg, #0f2440, #1a1a3e);
+      border: 1px solid #2563eb44;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .draft-card-info { flex: 1; }
+    .draft-card-info h4 { margin: 0 0 4px; font-size: 15px; color: #93c5fd; }
+    .draft-card-info p { margin: 0; font-size: 13px; color: var(--text-muted); }
+    .draft-card-actions { display: flex; gap: 8px; flex-shrink: 0; }
   </style>
 </head>
 <body>
@@ -2732,6 +2808,18 @@
             <p class="dashboard-subtitle">Manage your compliance evidence collection</p>
           </div>
           <button class="btn btn-accent" id="newRequestBtn">+ New Evidence Request</button>
+        </div>
+        
+        <!-- Draft Resume Card (shown if draft exists) -->
+        <div id="draftResumeCard" class="draft-card" style="display: none;">
+          <div class="draft-card-info">
+            <h4>📝 Unsent Draft</h4>
+            <p id="draftResumeDesc">You have an in-progress evidence request.</p>
+          </div>
+          <div class="draft-card-actions">
+            <button class="btn btn-sm btn-primary" id="resumeDraftBtn">Resume</button>
+            <button class="btn btn-sm btn-secondary" id="discardDraftBtn" style="font-size:12px;">Discard</button>
+          </div>
         </div>
         
         <!-- Low Credit Alert -->
@@ -6097,7 +6185,8 @@ let state = {
   user: null,         // { id, email, credits, verified, templates }
   authToken: null,
   trialMode: 'live',  // 'live' or 'test'
-  trialEmail: ''
+  trialEmail: '',
+  trialCode: ''
 };
 
 const $ = s => document.querySelector(s);
@@ -6201,24 +6290,143 @@ function setChipEmails(containerId, emails) {
   (emails || []).forEach(email => addChip(container, email));
 }
 
-// ==================== LOCAL STORAGE ====================
+// ==================== LOCAL STORAGE + SERVER DRAFT SAVE ====================
+
+let _draftSaveTimer = null;
+let _lastDraftJson = '';
+let _currentDraftSaving = false;
+
+function getDraftPayload() {
+  return {
+    auditorEmails: getChipEmails('auditorEmailsContainer'),
+    clientCompany: $('#clientCompany')?.value || '',
+    clientEmails: getChipEmails('clientEmailsContainer'),
+    deadlineISO: deadlinePicker?.selectedDates[0]?.toISOString() || null,
+    globalInstructions: $('#globalInstructions')?.value || '',
+    composerState: composerState,
+    customFrameworks: customFrameworks,
+    auditPeriodStart: $('#auditPeriodStart')?.value || null,
+    auditPeriodEnd: $('#auditPeriodEnd')?.value || null,
+  };
+}
 
 function saveFormState() {
   try {
     const data = {
       role: $('#roleSelect')?.value || '',
-      auditorEmails: getChipEmails('auditorEmailsContainer'),
-      clientCompany: $('#clientCompany')?.value || '',
-      clientEmails: getChipEmails('clientEmailsContainer'),
-      deadlineISO: deadlinePicker?.selectedDates[0]?.toISOString() || null,
-      globalInstructions: $('#globalInstructions')?.value || '',
+      ...getDraftPayload(),
       appliedCode: state.code || '',
-      composerState: composerState,
-      customFrameworks: customFrameworks,
       savedAt: Date.now()
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   } catch (e) { console.warn('Could not save form state:', e); }
+  // Debounce server save
+  scheduleDraftServerSave();
+}
+
+function scheduleDraftServerSave() {
+  if (_draftSaveTimer) clearTimeout(_draftSaveTimer);
+  _draftSaveTimer = setTimeout(saveDraftToServer, 5000);
+}
+
+async function saveDraftToServer() {
+  if (_currentDraftSaving) return;
+  const payload = getDraftPayload();
+  const snap = JSON.stringify(payload);
+  if (snap === _lastDraftJson) return; // no changes
+
+  _currentDraftSaving = true;
+  showDraftIndicator('saving');
+
+  try {
+    if (state.isLoggedIn && state.authToken) {
+      const res = await fetch(API + '/auth/drafts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + state.authToken },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) {
+        _lastDraftJson = snap;
+        showDraftIndicator('saved');
+      }
+    } else if (state.isTrialUser && state.trialCode && state.trialEmail) {
+      const res = await fetch(API + '/draft/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...payload, email: state.trialEmail, code: state.trialCode, trialMode: state.trialMode }),
+      });
+      if (res.ok) {
+        _lastDraftJson = snap;
+        showDraftIndicator('saved');
+      }
+    }
+  } catch (e) {
+    console.warn('Draft server save failed:', e);
+  }
+  _currentDraftSaving = false;
+}
+
+async function loadDraftFromServer() {
+  try {
+    if (state.isLoggedIn && state.authToken) {
+      const res = await fetch(API + '/auth/drafts', {
+        headers: { 'Authorization': 'Bearer ' + state.authToken },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        return data.draft || null;
+      }
+    } else if (state.isTrialUser && state.trialCode && state.trialEmail) {
+      const res = await fetch(API + '/draft/load?code=' + encodeURIComponent(state.trialCode) + '&email=' + encodeURIComponent(state.trialEmail));
+      if (res.ok) {
+        const data = await res.json();
+        return data.draft || null;
+      }
+    }
+  } catch (e) {
+    console.warn('Draft server load failed:', e);
+  }
+  return null;
+}
+
+async function deleteDraftFromServer() {
+  try {
+    if (state.isLoggedIn && state.authToken) {
+      await fetch(API + '/auth/drafts', {
+        method: 'DELETE',
+        headers: { 'Authorization': 'Bearer ' + state.authToken },
+      });
+    }
+    // Trial drafts auto-expire via TTL, no explicit delete needed
+  } catch (e) {
+    console.warn('Draft delete failed:', e);
+  }
+}
+
+function showDraftIndicator(status) {
+  const el = $('#draftIndicator');
+  if (!el) return;
+  if (status === 'saving') {
+    el.textContent = 'Saving draft...';
+    el.className = 'draft-indicator visible saving';
+  } else if (status === 'saved') {
+    el.textContent = '\u2713 Draft saved';
+    el.className = 'draft-indicator visible';
+    setTimeout(() => { el.className = 'draft-indicator'; }, 2500);
+  }
+}
+
+function restoreDraftData(draft) {
+  if (!draft) return false;
+  if (draft.auditorEmails?.length) setChipEmails('auditorEmailsContainer', draft.auditorEmails);
+  if (draft.clientCompany) $('#clientCompany').value = draft.clientCompany;
+  if (draft.clientEmails?.length) setChipEmails('clientEmailsContainer', draft.clientEmails);
+  if (draft.deadlineISO) setDeadlineFromISO(draft.deadlineISO);
+  if (draft.globalInstructions && $('#globalInstructions')) $('#globalInstructions').value = draft.globalInstructions;
+  if (draft.composerState && Object.keys(draft.composerState).length) composerState = draft.composerState;
+  if (draft.customFrameworks?.length) customFrameworks = draft.customFrameworks;
+  _lastDraftJson = JSON.stringify(getDraftPayload());
+  return true;
 }
 
 function loadFormState() {
@@ -6226,7 +6434,8 @@ function loadFormState() {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
     const data = JSON.parse(raw);
-    if (data.savedAt && (Date.now() - data.savedAt) > 24 * 60 * 60 * 1000) {
+    // Extended to 14 days to match server TTL
+    if (data.savedAt && (Date.now() - data.savedAt) > 14 * 24 * 60 * 60 * 1000) {
       localStorage.removeItem(STORAGE_KEY);
       return null;
     }
@@ -6261,7 +6470,8 @@ function restoreFormState(data) {
 }
 
 function clearFormState() { 
-  try { localStorage.removeItem(STORAGE_KEY); } catch (e) {} 
+  try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+  deleteDraftFromServer();
 }
 
 function setupAutoSave() {
@@ -6272,7 +6482,8 @@ function setupAutoSave() {
       el.addEventListener('input', saveFormState); 
     }
   });
-  // Note: deadlinePicker saves via its onChange callback
+  // Periodic server save every 60s as safety net
+  setInterval(() => { if (state.isLoggedIn || state.isTrialUser) saveDraftToServer(); }, 60000);
 }
 
 // ==================== DEADLINE LOGIC (FLATPICKR CALENDAR) ====================
@@ -7686,11 +7897,70 @@ async function showDashboard() {
   // Show dashboard
   $('#dashboardView').style.display = 'block';
   
+  // Reset dashboard title (in case it was changed by trial view)
+  const title = $('#dashboardView').querySelector('.dashboard-title');
+  const subtitle = $('#dashboardView').querySelector('.dashboard-subtitle');
+  if (title) title.textContent = 'Your Evidence Requests';
+  if (subtitle) subtitle.textContent = 'Manage your compliance evidence collection';
+  
+  // Reset "New Request" button
+  const newReqBtn = $('#newRequestBtn');
+  if (newReqBtn) newReqBtn.textContent = '+ New Evidence Request';
+  
+  // Remove any trial feature badges
+  $('#dashboardView').querySelectorAll('.feature-badge').forEach(b => b.remove());
+  
   // Fetch and render dashboard data
   await fetchAndRenderDashboard();
   
+  // Check for saved draft
+  const serverDraft = await loadDraftFromServer();
+  const draftCard = $('#draftResumeCard');
+  if (serverDraft && draftCard) {
+    const company = serverDraft.clientCompany || 'Untitled';
+    const savedDate = serverDraft.savedAt ? new Date(serverDraft.savedAt).toLocaleDateString() : '';
+    const desc = $('#draftResumeDesc');
+    if (desc) desc.textContent = (company !== '' ? company : 'Untitled request') + (savedDate ? ' \u2014 saved ' + savedDate : '');
+    draftCard.style.display = 'flex';
+    
+    // Remove old listeners by replacing elements
+    const resumeBtn = $('#resumeDraftBtn');
+    const discardBtn = $('#discardDraftBtn');
+    if (resumeBtn) {
+      const newResume = resumeBtn.cloneNode(true);
+      resumeBtn.parentNode.replaceChild(newResume, resumeBtn);
+      newResume.id = 'resumeDraftBtn';
+      newResume.addEventListener('click', () => {
+        restoreDraftData(serverDraft);
+        draftCard.style.display = 'none';
+        showAuditorFlowFromDashboard();
+        if (Object.keys(composerState).length === 0) initComposerState();
+        renderComposer();
+      });
+    }
+    if (discardBtn) {
+      const newDiscard = discardBtn.cloneNode(true);
+      discardBtn.parentNode.replaceChild(newDiscard, discardBtn);
+      newDiscard.id = 'discardDraftBtn';
+      newDiscard.addEventListener('click', () => {
+        draftCard.style.display = 'none';
+        deleteDraftFromServer();
+      });
+    }
+  } else if (draftCard) {
+    draftCard.style.display = 'none';
+  }
+  
   // Scroll to top
   $('#dashboardView').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function showAuditorFlowFromDashboard() {
+  $('#dashboardView').style.display = 'none';
+  $('#auditorFlow').style.display = 'block';
+  $('#backToDashboard').style.display = 'block';
+  if (Object.keys(composerState).length === 0) initComposerState();
+  renderComposer();
 }
 
 async function fetchAndRenderDashboard() {
@@ -8206,9 +8476,10 @@ function backToDashboard() {
 // ==================== END DASHBOARD FUNCTIONS ====================
 
 function showAuditorFlow() {
-  // Hide auth flows
+  // Hide auth flows and dashboard
   $('#newUserFlow').style.display = 'none';
   $('#returningUserFlow').style.display = 'none';
+  $('#dashboardView').style.display = 'none';
   
   // Show appropriate header
   if (state.isLoggedIn) {
@@ -8353,6 +8624,7 @@ async function handleStartTrial() {
   
   state.trialEmail = email;
   state.isTrialUser = true;
+  state.trialCode = ($('#trialCodeInput')?.value || '').trim().toUpperCase();
   
   // Pre-fill auditor email
   setChipEmails('auditorEmailsContainer', [email]);
@@ -8363,7 +8635,109 @@ async function handleStartTrial() {
     $('#clientCompany').value = 'Test Company';
   }
   
-  showAuditorFlow();
+  // Show trial dashboard instead of going straight to builder
+  showTrialDashboard();
+}
+
+async function showTrialDashboard() {
+  // Hide auth flows
+  $('#newUserFlow').style.display = 'none';
+  $('#returningUserFlow').style.display = 'none';
+  
+  // Show trial notice bar
+  $('#trialNoticeBar').style.display = 'flex';
+  
+  // Configure dashboard for trial view
+  const dashboard = $('#dashboardView');
+  dashboard.style.display = 'block';
+  
+  // Update header
+  const title = dashboard.querySelector('.dashboard-title');
+  const subtitle = dashboard.querySelector('.dashboard-subtitle');
+  if (title) title.textContent = 'Welcome to ProofRepo';
+  if (subtitle) subtitle.textContent = 'Here\'s what your dashboard looks like with an account';
+  
+  // Set stats to demo values
+  $('#statActive').textContent = '0';
+  $('#statCompleted').textContent = '0';
+  $('#statEvidence').textContent = '0';
+  $('#statThisMonth').textContent = '0';
+  
+  // Active Requests - trial empty state
+  const activeList = $('#activeRequestsList');
+  if (activeList) {
+    activeList.innerHTML = '<div class="empty-state">' +
+      '<div class="empty-state-icon">\ud83d\udce8</div>' +
+      '<div class="empty-state-title">Track Evidence Requests</div>' +
+      '<div class="empty-state-desc">See real-time status of every request you send \u2014 pending, in-progress, submitted. Never wonder where your evidence stands.</div>' +
+      '</div>';
+  }
+  
+  // Completed - trial empty state
+  const completedList = $('#completedRequestsList');
+  if (completedList) {
+    completedList.innerHTML = '<div class="empty-state">' +
+      '<div class="empty-state-icon">\u2705</div>' +
+      '<div class="empty-state-title">Review Completed ProofPacks</div>' +
+      '<div class="empty-state-desc">Download organized evidence, view match reports, and copy workpaper-ready logs. All in one place.</div>' +
+      '</div>';
+  }
+  
+  // Templates - trial empty state with badge
+  const templatesList = $('#templatesList');
+  if (templatesList) {
+    templatesList.innerHTML = '<div class="empty-state">' +
+      '<div class="empty-state-icon">\ud83d\udcbe</div>' +
+      '<div class="empty-state-title">Saved Templates <span class="feature-badge">\u2726 Account Feature</span></div>' +
+      '<div class="empty-state-desc">Save your evidence configurations for repeat audits. Load a template and send a new request in seconds \u2014 no rebuilding from scratch.</div>' +
+      '</div>';
+  }
+  
+  // Add feature badges to section titles
+  const sectionTitles = dashboard.querySelectorAll('.section-title');
+  sectionTitles.forEach(t => {
+    if (t.textContent.includes('Active') || t.textContent.includes('Completed') || t.textContent.includes('Template')) {
+      if (!t.querySelector('.feature-badge')) {
+        t.insertAdjacentHTML('beforeend', ' <span class="feature-badge">\u2726 Account Feature</span>');
+      }
+    }
+  });
+  
+  // Hide credit alert for trial users
+  const creditAlert = $('#creditAlert');
+  if (creditAlert) creditAlert.style.display = 'none';
+  
+  // Check for saved draft from server
+  const serverDraft = await loadDraftFromServer();
+  if (serverDraft) {
+    const draftCard = $('#draftResumeCard');
+    if (draftCard) {
+      const company = serverDraft.clientCompany || 'Untitled';
+      const savedDate = serverDraft.savedAt ? new Date(serverDraft.savedAt).toLocaleDateString() : '';
+      const desc = $('#draftResumeDesc');
+      if (desc) desc.textContent = company + (savedDate ? ' \u2014 saved ' + savedDate : '');
+      draftCard.style.display = 'flex';
+      
+      $('#resumeDraftBtn')?.addEventListener('click', () => {
+        restoreDraftData(serverDraft);
+        showAuditorFlow();
+        if (Object.keys(composerState).length === 0) initComposerState();
+        renderComposer();
+      });
+      
+      $('#discardDraftBtn')?.addEventListener('click', () => {
+        draftCard.style.display = 'none';
+        deleteDraftFromServer();
+      });
+    }
+  }
+  
+  // Change "New Request" button to work for trial
+  const newReqBtn = $('#newRequestBtn');
+  if (newReqBtn) {
+    newReqBtn.textContent = '\u2192 Start Your Free Request';
+    newReqBtn.onclick = () => showAuditorFlow();
+  }
 }
 
 function validatePassword(password) {
@@ -9349,5 +9723,6 @@ async function init() {
 
 document.addEventListener('DOMContentLoaded', init);
 </script>
+<div id="draftIndicator" class="draft-indicator"></div>
 </body>
 </html>
