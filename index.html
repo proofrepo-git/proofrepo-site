@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ProofRepo "” Compliance ProofPacks in Seconds</title>
+  <title>ProofRepo &mdash; Compliance ProofPacks in Seconds</title>
   <meta name="description" content="Streamlined evidence collection for SOC 2, ISO 27001, HIPAA, GDPR audits. Send your client a guided upload link, get a structured ProofPack." />
   
   <!-- MAGIC LINK REDIRECT - Must be in head, executes immediately -->
@@ -2576,7 +2576,7 @@
 
   <section class="hero">
     <div class="hero-badge">Compliance ProofPacks in Seconds</div>
-    <h1>Streamlined evidence collection "” without the chaos</h1>
+    <h1>Streamlined evidence collection &mdash; without the chaos</h1>
     <p><strong>Compliance teams:</strong> Define exactly what evidence you need. Send your client a guided upload link.</p>
     <p><strong>Companies:</strong> Upload evidence with clear guidance. No more "wrong file" corrections.</p>
     <div class="hero-features">
@@ -2598,9 +2598,9 @@
   <main class="main-container">
     <!-- Success Banner -->
     <div id="successBanner" class="success-banner">
-      <h3>âœ“ Payment Successful!</h3>
+      <h3>&#10003; Payment Successful!</h3>
       <p>Your code is ready to use:</p>
-      <div class="code-display" id="successCodeDisplay">"”</div>
+      <div class="code-display" id="successCodeDisplay">&mdash;</div>
       <p style="font-size: 0.85rem;">This code has been auto-filled below. Click "Send Request" when ready.</p>
     </div>
 
@@ -2655,7 +2655,7 @@
           <!-- Trial Mode Selection (shown after valid trial code) -->
           <div id="trialModeSection" class="auth-section" style="display: none;">
             <div class="success-box">
-              <span class="success-icon">âœ“</span>
+              <span class="success-icon">&#10003;</span>
               <span>Trial code accepted! 1 free request.</span>
             </div>
             
@@ -2797,7 +2797,7 @@
 
       <!-- Verification Notice -->
       <div id="verificationNotice" class="verification-notice" style="display: none;">
-        <span>âš ï¸ Please verify your email to send requests. <a href="#" id="resendVerifyLink">Resend verification</a></span>
+        <span>&#9888; Please verify your email to send requests. <a href="#" id="resendVerifyLink">Resend verification</a></span>
       </div>
 
       <!-- Dashboard View (shown for logged-in users) -->
@@ -2825,7 +2825,7 @@
         <!-- Low Credit Alert -->
         <div id="creditAlert" class="credit-alert" style="display: none;">
           <div class="credit-alert-content">
-            <div class="credit-alert-icon">âš ï¸</div>
+            <div class="credit-alert-icon">&#9888;</div>
             <div class="credit-alert-text">
               <strong id="creditAlertTitle">Running low on credits</strong>
               <span id="creditAlertDesc">You have <span id="creditAlertCount">0</span> credit(s) remaining.</span>
@@ -2885,7 +2885,7 @@
       <div id="auditorFlow" style="display: none;">
         <!-- Back to dashboard link (shown when coming from dashboard) -->
         <div id="backToDashboard" class="back-link" style="display: none;">
-          <a href="#" id="backToDashboardLink">â† Back to Dashboard</a>
+          <a href="#" id="backToDashboardLink">&larr; Back to Dashboard</a>
         </div>
         
         <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">
@@ -2940,6 +2940,13 @@
           <small id="auditPeriodHint" style="margin-top:6px;display:block;color:var(--text-muted);font-size:12px;"></small>
         </div>
 
+        <!-- Engagement Reference (Optional) -->
+        <div class="form-group">
+          <label class="form-label">Engagement Reference <span style="font-weight:normal;color:var(--text-muted);">(optional)</span></label>
+          <input type="text" class="form-input" id="engagementRef" placeholder="e.g., Acme SOC 2 FY2025 or WP-ACC-001">
+          <small style="margin-top:4px;display:block;color:var(--text-muted);font-size:12px;">Appears on the Evidence Summary PDF. Useful for tying to your workpaper binder.</small>
+        </div>
+
         <div class="form-group">
           <label class="form-label">Evidence Request</label>
           
@@ -2953,7 +2960,7 @@
           <!-- Template Loaded Notification -->
           <div id="templateLoadedNotice" class="template-loaded-notice" style="display: none;">
             <div class="notice-content">
-              <span class="notice-icon">âœ“</span>
+              <span class="notice-icon">&#10003;</span>
               <div class="notice-text">
                 <strong>Template loaded:</strong> <span id="loadedTemplateName"></span>
                 <p>Frameworks, evidence items, and instructions have been restored. If you make changes, remember to save as a new template below.</p>
@@ -2965,7 +2972,7 @@
           <!-- Template level now per-framework in composer -->
           
           <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
-            Check frameworks, then customize what evidence you need. Items with âœ“ are included by default.
+            Check frameworks, then customize what evidence you need. Items with &#10003; are included by default.
           </p>
           <div id="composer"></div>
         </div>
@@ -2985,7 +2992,7 @@
 
           <!-- Purchase section - hidden after checkout return -->
           <div id="purchaseSection" class="purchase-section">
-            <p class="divider-text">"” or purchase credits "”</p>
+            <p class="divider-text">&mdash; or purchase credits &mdash;</p>
             <div class="pricing-grid">
               <div class="pricing-card" data-tier="single">
                 <div class="pricing-card-name">Single</div>
@@ -3017,7 +3024,7 @@
         <!-- Action Buttons Row -->
         <div class="action-button-row" style="margin-top: 24px;">
           <button class="btn btn-preview" id="previewClientBtn" style="flex: 0 0 auto; padding: 12px 20px;">
-            ¸ Preview Client View
+            &#128065; Preview Client View
           </button>
           <button class="btn btn-primary" id="mainActionBtn" style="flex: 1;">
             Continue
@@ -3136,12 +3143,12 @@
       <a href="/terms.html">Terms of Service</a>
       <a href="/cdn-cgi/l/email-protection#7605030606190402360604191910041306195815191b">Contact</a>
     </div>
-    <p>Â© <span id="year"></span> ProofRepo. All rights reserved.</p>
+    <p>&copy; <span id="year"></span> ProofRepo. All rights reserved.</p>
   </footer>
 
   <div class="marquee-fixed">
     <div class="marquee">
-      <div>&nbsp;Guided compliance evidence collection "¢ Built for compliance teams "¢ SOC 2, ISO 27001, HIPAA, GDPR & more "¢ Get started with a free trial "¢&nbsp;&nbsp;&nbsp;&nbsp;Guided compliance evidence collection "¢ Built for compliance teams "¢ SOC 2, ISO 27001, HIPAA, GDPR & more "¢ Get started with a free trial "¢</div>
+      <div>&nbsp;Guided compliance evidence collection  &bull; Built for compliance teams  &bull; SOC 2, ISO 27001, HIPAA, GDPR & more  &bull; Get started with a free trial  &bull;&nbsp;&nbsp;&nbsp;&nbsp;Guided compliance evidence collection  &bull; Built for compliance teams  &bull; SOC 2, ISO 27001, HIPAA, GDPR & more  &bull; Get started with a free trial  &bull;</div>
     </div>
   </div>
 
@@ -3186,8 +3193,8 @@
   <div id="previewModal" class="modal-overlay hidden">
     <div class="modal preview-modal-content">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-        <h3 style="margin: 0;">¸ Client Preview</h3>
-        <button type="button" class="btn btn-sm btn-outline" onclick="closePreviewModal()">âœ• Close</button>
+        <h3 style="margin: 0;">&#128065; Client Preview</h3>
+        <button type="button" class="btn btn-sm btn-outline" onclick="closePreviewModal()">&#10005; Close</button>
       </div>
       <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px; padding: 10px; background: var(--surface-elevated); border-radius: 6px;">
         This is how your client will see the evidence request checklist. Review to ensure it looks professional before sending.
@@ -3197,7 +3204,7 @@
       </div>
       <div class="modal-actions" style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border);">
         <button type="button" class="btn btn-outline" onclick="closePreviewModal()">Close Preview</button>
-        <button type="button" class="btn btn-primary" onclick="closePreviewModal(); $('#mainActionBtn').click();">Looks Good "” Send Request</button>
+        <button type="button" class="btn btn-primary" onclick="closePreviewModal(); $('#mainActionBtn').click();">Looks Good &mdash; Send Request</button>
       </div>
     </div>
   </div>
@@ -6030,26 +6037,26 @@ HIPAA: {
       title: 'Administrative Safeguards',
       description: 'Security management, workforce security, and contingency planning',
       items: [
-        { id: 'hipaa_risk_analysis', title: 'Security Risk Analysis', common: true, hint: 'HIPAA risk assessment', description: 'Provide risk analysis covering ePHI as required by HIPAA. Include identified risks, ratings, and treatment decisions.', evidenceType: 'period-of-time', expectedFormat: 'PDF or Excel', controlRef: 'Â§164.308(a)(1)(ii)(A)', commonIssue: ' Must specifically address ePHI risks. Generic IT assessments are insufficient.', frequency: 'annual' },
-        { id: 'hipaa_risk_management', title: 'Risk Management Plan', common: true, hint: 'Managing identified risks', description: 'Provide documentation showing how identified ePHI risks are managed.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'Â§164.308(a)(1)(ii)(B)', commonIssue: ' Should show how each risk is addressed.', frequency: 'annual' },
-        { id: 'hipaa_sanction_policy', title: 'Sanction Policy', common: true, hint: 'Consequences for violations', description: 'Provide the Sanction Policy defining consequences for security policy violations.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'Â§164.308(a)(1)(ii)(C)', commonIssue: 'Must be documented and communicated.', frequency: 'annual' },
-        { id: 'hipaa_activity_review', title: 'Information System Activity Review', common: true, hint: 'Review of audit logs', description: 'Provide evidence of regular system activity review during {{auditPeriod}} for systems containing ePHI.', evidenceType: 'period-of-time', expectedFormat: 'PDF', controlRef: 'Â§164.308(a)(1)(ii)(D)', commonIssue: ' Should show regular, documented review.', frequency: 'quarterly' },
-        { id: 'hipaa_security_officer', title: 'Security Officer Designation', common: true, hint: 'Assigned security responsibility', description: 'Provide documentation showing a Security Officer has been designated for HIPAA compliance.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'Â§164.308(a)(2)', commonIssue: ' Must be a specific, named individual.', frequency: 'annual' },
-        { id: 'hipaa_workforce_authorization', title: 'Workforce Authorization', common: true, hint: 'How ePHI access is authorized', description: 'Provide documentation of workforce authorization procedures for ePHI access.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'Â§164.308(a)(3)', commonIssue: 'Access should be based on job functions.', frequency: 'annual' },
-        { id: 'hipaa_termination', title: 'Termination Procedures', common: true, hint: 'Access removal upon termination', description: 'Provide termination procedures and sample termination cases from {{auditPeriod}}.', evidenceType: 'period-of-time', expectedFormat: 'PDF', controlRef: 'Â§164.308(a)(3)(ii)(C)', commonIssue: ' Access must be removed timely.', frequency: 'quarterly' },
-        { id: 'hipaa_training', title: 'Security Awareness Training', common: true, hint: 'HIPAA training', description: 'Provide training program documentation and completion records from {{auditPeriod}}.', evidenceType: 'period-of-time', expectedFormat: 'PDF or Excel', controlRef: 'Â§164.308(a)(5)', commonIssue: ' Training must address HIPAA requirements.', frequency: 'annual' },
-        { id: 'hipaa_malware', title: 'Protection from Malicious Software', common: true, hint: 'Anti-malware controls', description: 'Provide evidence of malware protection on systems containing ePHI.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot or PDF', controlRef: 'Â§164.308(a)(5)(ii)(B)', commonIssue: ' All ePHI systems should have current protection.', frequency: 'quarterly' },
-        { id: 'hipaa_login_monitoring', title: 'Log-in Monitoring', common: true, hint: 'Monitoring of logins', description: 'Provide evidence of login monitoring for ePHI systems.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot or PDF', controlRef: 'Â§164.308(a)(5)(ii)(C)', commonIssue: 'Should detect failed login attempts.', frequency: 'annual' },
-        { id: 'hipaa_password', title: 'Password Management', common: true, hint: 'Password procedures', description: 'Provide password management procedures and configuration for ePHI systems.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot or PDF', controlRef: 'Â§164.308(a)(5)(ii)(D)', commonIssue: 'Should include complexity and expiration.', frequency: 'annual' },
-        { id: 'hipaa_incident', title: 'Security Incident Procedures', common: true, hint: 'Incident handling', description: 'Provide Security Incident Response Procedures covering incidents involving ePHI.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'Â§164.308(a)(6)', commonIssue: 'Must address breach notification.', frequency: 'annual' },
-        { id: 'hipaa_incident_log', title: 'Security Incident Log', common: true, hint: 'Log of incidents', description: 'Provide security incident log from {{auditPeriod}}. If none, provide attestation.', evidenceType: 'period-of-time', expectedFormat: 'Excel or PDF', controlRef: 'Â§164.308(a)(6)(ii)', commonIssue: ' All incidents must be documented.', frequency: 'quarterly' },
-        { id: 'hipaa_contingency', title: 'Contingency Plan', common: true, hint: 'Emergency operations plan', description: 'Provide the Contingency Plan covering data backup, disaster recovery, and emergency operations for ePHI.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'Â§164.308(a)(7)', commonIssue: ' Must address ePHI availability in emergencies.', frequency: 'annual' },
-        { id: 'hipaa_backup', title: 'Data Backup Plan', common: true, hint: 'Backup procedures', description: 'Provide data backup plan and evidence of backup completion from {{auditPeriod}}.', evidenceType: 'period-of-time', expectedFormat: 'PDF or Screenshot', controlRef: 'Â§164.308(a)(7)(ii)(A)', commonIssue: ' Backups must be retrievable exact copies.', frequency: 'quarterly' },
-        { id: 'hipaa_dr', title: 'Disaster Recovery Plan', common: true, hint: 'Recovery procedures', description: 'Provide the Disaster Recovery Plan for ePHI systems.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'Â§164.308(a)(7)(ii)(B)', commonIssue: ' Should include specific procedures.', frequency: 'annual' },
-        { id: 'hipaa_contingency_testing', title: 'Contingency Plan Testing', common: true, hint: 'Testing of backup/recovery', description: 'Provide evidence of contingency plan testing during {{auditPeriod}}.', evidenceType: 'period-of-time', expectedFormat: 'PDF', controlRef: 'Â§164.308(a)(7)(ii)(D)', commonIssue: ' Testing should verify plans work.', frequency: 'annual' },
-        { id: 'hipaa_evaluation', title: 'Periodic Evaluation', common: true, hint: 'Periodic evaluation', description: 'Provide evidence of periodic evaluation during {{auditPeriod}} assessing HIPAA compliance.', evidenceType: 'period-of-time', expectedFormat: 'PDF', controlRef: 'Â§164.308(a)(8)', commonIssue: ' Should be performed after changes.', frequency: 'annual' },
-        { id: 'hipaa_baa_inventory', title: 'Business Associate Inventory', common: true, hint: 'List of BAs', description: 'Provide inventory of Business Associates with ePHI access including BAA status.', evidenceType: 'point-in-time', expectedFormat: 'Excel', controlRef: 'Â§164.308(b)', commonIssue: ' Must have BAA with all entities accessing ePHI.', frequency: 'annual' },
-        { id: 'hipaa_baa_samples', title: 'Business Associate Agreement Samples', common: true, hint: 'Sample BAAs', description: 'Provide sample Business Associate Agreements showing required provisions.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'Â§164.308(b)(4)', commonIssue: 'BAAs must contain all required provisions.', frequency: 'annual' },
+        { id: 'hipaa_risk_analysis', title: 'Security Risk Analysis', common: true, hint: 'HIPAA risk assessment', description: 'Provide risk analysis covering ePHI as required by HIPAA. Include identified risks, ratings, and treatment decisions.', evidenceType: 'period-of-time', expectedFormat: 'PDF or Excel', controlRef: '&sect;164.308(a)(1)(ii)(A)', commonIssue: ' Must specifically address ePHI risks. Generic IT assessments are insufficient.', frequency: 'annual' },
+        { id: 'hipaa_risk_management', title: 'Risk Management Plan', common: true, hint: 'Managing identified risks', description: 'Provide documentation showing how identified ePHI risks are managed.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: '&sect;164.308(a)(1)(ii)(B)', commonIssue: ' Should show how each risk is addressed.', frequency: 'annual' },
+        { id: 'hipaa_sanction_policy', title: 'Sanction Policy', common: true, hint: 'Consequences for violations', description: 'Provide the Sanction Policy defining consequences for security policy violations.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: '&sect;164.308(a)(1)(ii)(C)', commonIssue: 'Must be documented and communicated.', frequency: 'annual' },
+        { id: 'hipaa_activity_review', title: 'Information System Activity Review', common: true, hint: 'Review of audit logs', description: 'Provide evidence of regular system activity review during {{auditPeriod}} for systems containing ePHI.', evidenceType: 'period-of-time', expectedFormat: 'PDF', controlRef: '&sect;164.308(a)(1)(ii)(D)', commonIssue: ' Should show regular, documented review.', frequency: 'quarterly' },
+        { id: 'hipaa_security_officer', title: 'Security Officer Designation', common: true, hint: 'Assigned security responsibility', description: 'Provide documentation showing a Security Officer has been designated for HIPAA compliance.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: '&sect;164.308(a)(2)', commonIssue: ' Must be a specific, named individual.', frequency: 'annual' },
+        { id: 'hipaa_workforce_authorization', title: 'Workforce Authorization', common: true, hint: 'How ePHI access is authorized', description: 'Provide documentation of workforce authorization procedures for ePHI access.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: '&sect;164.308(a)(3)', commonIssue: 'Access should be based on job functions.', frequency: 'annual' },
+        { id: 'hipaa_termination', title: 'Termination Procedures', common: true, hint: 'Access removal upon termination', description: 'Provide termination procedures and sample termination cases from {{auditPeriod}}.', evidenceType: 'period-of-time', expectedFormat: 'PDF', controlRef: '&sect;164.308(a)(3)(ii)(C)', commonIssue: ' Access must be removed timely.', frequency: 'quarterly' },
+        { id: 'hipaa_training', title: 'Security Awareness Training', common: true, hint: 'HIPAA training', description: 'Provide training program documentation and completion records from {{auditPeriod}}.', evidenceType: 'period-of-time', expectedFormat: 'PDF or Excel', controlRef: '&sect;164.308(a)(5)', commonIssue: ' Training must address HIPAA requirements.', frequency: 'annual' },
+        { id: 'hipaa_malware', title: 'Protection from Malicious Software', common: true, hint: 'Anti-malware controls', description: 'Provide evidence of malware protection on systems containing ePHI.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot or PDF', controlRef: '&sect;164.308(a)(5)(ii)(B)', commonIssue: ' All ePHI systems should have current protection.', frequency: 'quarterly' },
+        { id: 'hipaa_login_monitoring', title: 'Log-in Monitoring', common: true, hint: 'Monitoring of logins', description: 'Provide evidence of login monitoring for ePHI systems.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot or PDF', controlRef: '&sect;164.308(a)(5)(ii)(C)', commonIssue: 'Should detect failed login attempts.', frequency: 'annual' },
+        { id: 'hipaa_password', title: 'Password Management', common: true, hint: 'Password procedures', description: 'Provide password management procedures and configuration for ePHI systems.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot or PDF', controlRef: '&sect;164.308(a)(5)(ii)(D)', commonIssue: 'Should include complexity and expiration.', frequency: 'annual' },
+        { id: 'hipaa_incident', title: 'Security Incident Procedures', common: true, hint: 'Incident handling', description: 'Provide Security Incident Response Procedures covering incidents involving ePHI.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: '&sect;164.308(a)(6)', commonIssue: 'Must address breach notification.', frequency: 'annual' },
+        { id: 'hipaa_incident_log', title: 'Security Incident Log', common: true, hint: 'Log of incidents', description: 'Provide security incident log from {{auditPeriod}}. If none, provide attestation.', evidenceType: 'period-of-time', expectedFormat: 'Excel or PDF', controlRef: '&sect;164.308(a)(6)(ii)', commonIssue: ' All incidents must be documented.', frequency: 'quarterly' },
+        { id: 'hipaa_contingency', title: 'Contingency Plan', common: true, hint: 'Emergency operations plan', description: 'Provide the Contingency Plan covering data backup, disaster recovery, and emergency operations for ePHI.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: '&sect;164.308(a)(7)', commonIssue: ' Must address ePHI availability in emergencies.', frequency: 'annual' },
+        { id: 'hipaa_backup', title: 'Data Backup Plan', common: true, hint: 'Backup procedures', description: 'Provide data backup plan and evidence of backup completion from {{auditPeriod}}.', evidenceType: 'period-of-time', expectedFormat: 'PDF or Screenshot', controlRef: '&sect;164.308(a)(7)(ii)(A)', commonIssue: ' Backups must be retrievable exact copies.', frequency: 'quarterly' },
+        { id: 'hipaa_dr', title: 'Disaster Recovery Plan', common: true, hint: 'Recovery procedures', description: 'Provide the Disaster Recovery Plan for ePHI systems.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: '&sect;164.308(a)(7)(ii)(B)', commonIssue: ' Should include specific procedures.', frequency: 'annual' },
+        { id: 'hipaa_contingency_testing', title: 'Contingency Plan Testing', common: true, hint: 'Testing of backup/recovery', description: 'Provide evidence of contingency plan testing during {{auditPeriod}}.', evidenceType: 'period-of-time', expectedFormat: 'PDF', controlRef: '&sect;164.308(a)(7)(ii)(D)', commonIssue: ' Testing should verify plans work.', frequency: 'annual' },
+        { id: 'hipaa_evaluation', title: 'Periodic Evaluation', common: true, hint: 'Periodic evaluation', description: 'Provide evidence of periodic evaluation during {{auditPeriod}} assessing HIPAA compliance.', evidenceType: 'period-of-time', expectedFormat: 'PDF', controlRef: '&sect;164.308(a)(8)', commonIssue: ' Should be performed after changes.', frequency: 'annual' },
+        { id: 'hipaa_baa_inventory', title: 'Business Associate Inventory', common: true, hint: 'List of BAs', description: 'Provide inventory of Business Associates with ePHI access including BAA status.', evidenceType: 'point-in-time', expectedFormat: 'Excel', controlRef: '&sect;164.308(b)', commonIssue: ' Must have BAA with all entities accessing ePHI.', frequency: 'annual' },
+        { id: 'hipaa_baa_samples', title: 'Business Associate Agreement Samples', common: true, hint: 'Sample BAAs', description: 'Provide sample Business Associate Agreements showing required provisions.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: '&sect;164.308(b)(4)', commonIssue: 'BAAs must contain all required provisions.', frequency: 'annual' },
         { id: 'hipaa_workforce_security_policy', title: 'Workforce Security Policy', common: true, hint: 'Policies for workforce access to ePHI', description: 'Provide workforce security policies ensuring appropriate access to ePHI based on role. Include access authorization and supervision procedures.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: '§164.308(a)(3)', commonIssue: 'Policy should define access levels based on job functions.', frequency: 'annual' },
         { id: 'hipaa_workforce_clearance', title: 'Workforce Clearance Procedures', common: true, hint: 'Verify workforce member clearance', description: 'Provide procedures for determining workforce members have appropriate access to ePHI. Include authorization documentation from {{auditPeriod}}.', evidenceType: 'period-of-time', expectedFormat: 'PDF', controlRef: '§164.308(a)(3)(ii)(B)', commonIssue: '⏰ Clearance should be verified before access is granted.', frequency: 'quarterly' },
         { id: 'hipaa_access_establishment', title: 'Access Establishment & Modification', common: true, hint: 'Procedures for granting and modifying ePHI access', description: 'Provide procedures for establishing and modifying ePHI access. Include access request and modification samples from {{auditPeriod}}.', evidenceType: 'period-of-time', expectedFormat: 'PDF or Excel', controlRef: '§164.308(a)(4)(ii)(C)', commonIssue: '⏰ All access changes should be documented and approved.', frequency: 'quarterly' },
@@ -6077,10 +6084,10 @@ HIPAA: {
       title: 'Physical Safeguards',
       description: 'Physical access controls and device security',
       items: [
-        { id: 'hipaa_facility', title: 'Facility Access Controls', common: true, hint: 'Physical access to ePHI locations', description: 'Provide documentation of facility access controls for ePHI locations.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'Â§164.310(a)', commonIssue: 'May rely on cloud provider. Document responsibility.', frequency: 'annual' },
-        { id: 'hipaa_workstation_use', title: 'Workstation Use Policy', common: true, hint: 'Workstation security policies', description: 'Provide Workstation Use Policy for workstations accessing ePHI.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'Â§164.310(b)', commonIssue: 'Should address physical and logical security.', frequency: 'annual' },
-        { id: 'hipaa_workstation_security', title: 'Workstation Security', common: true, hint: 'Workstation controls', description: 'Provide evidence of workstation security measures including encryption and screen locks.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot or PDF', controlRef: 'Â§164.310(c)', commonIssue: 'All workstations with ePHI access should be secured.', frequency: 'annual' },
-        { id: 'hipaa_device_media', title: 'Device and Media Controls', common: true, hint: 'Hardware and media policies', description: 'Provide documentation of controls over devices and media containing ePHI.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: 'Â§164.310(d)', commonIssue: 'Must address entire lifecycle.', frequency: 'annual' },
+        { id: 'hipaa_facility', title: 'Facility Access Controls', common: true, hint: 'Physical access to ePHI locations', description: 'Provide documentation of facility access controls for ePHI locations.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: '&sect;164.310(a)', commonIssue: 'May rely on cloud provider. Document responsibility.', frequency: 'annual' },
+        { id: 'hipaa_workstation_use', title: 'Workstation Use Policy', common: true, hint: 'Workstation security policies', description: 'Provide Workstation Use Policy for workstations accessing ePHI.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: '&sect;164.310(b)', commonIssue: 'Should address physical and logical security.', frequency: 'annual' },
+        { id: 'hipaa_workstation_security', title: 'Workstation Security', common: true, hint: 'Workstation controls', description: 'Provide evidence of workstation security measures including encryption and screen locks.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot or PDF', controlRef: '&sect;164.310(c)', commonIssue: 'All workstations with ePHI access should be secured.', frequency: 'annual' },
+        { id: 'hipaa_device_media', title: 'Device and Media Controls', common: true, hint: 'Hardware and media policies', description: 'Provide documentation of controls over devices and media containing ePHI.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: '&sect;164.310(d)', commonIssue: 'Must address entire lifecycle.', frequency: 'annual' },
         { id: 'hipaa_contingency_operations', title: 'Contingency Operations Access', common: false, hint: 'Physical access during contingency', description: 'Provide procedures for physical access to ePHI facilities during contingency operations.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: '§164.310(a)(2)(i)', commonIssue: 'Must address emergency access to critical systems.', frequency: 'annual' },
         { id: 'hipaa_facility_security_plan', title: 'Facility Security Plan', common: true, hint: 'Physical security plan', description: 'Provide facility security plan documenting physical safeguards for facilities containing ePHI.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: '§164.310(a)(2)(ii)', commonIssue: 'Plan should address all physical access points.', frequency: 'annual' },
         { id: 'hipaa_access_control_validation', title: 'Access Control & Validation', common: true, hint: 'Physical access control procedures', description: 'Provide procedures for controlling and validating physical access to ePHI systems. Include visitor management and access verification.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: '§164.310(a)(2)(iii)', commonIssue: 'Must validate access rights before granting entry.', frequency: 'annual' },
@@ -6096,15 +6103,15 @@ HIPAA: {
       title: 'Technical Safeguards',
       description: 'Access control, audit controls, integrity, and transmission security',
       items: [
-        { id: 'hipaa_access_control', title: 'Access Control Configuration', common: true, hint: 'Technical access controls', description: 'Provide evidence of access control configuration for ePHI systems.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot', controlRef: 'Â§164.312(a)(1)', commonIssue: 'Must ensure only authorized access.', frequency: 'annual' },
-        { id: 'hipaa_unique_user', title: 'Unique User Identification', common: true, hint: 'Unique identification', description: 'Provide evidence that all users accessing ePHI are uniquely identified (no shared accounts).', evidenceType: 'point-in-time', expectedFormat: 'Screenshot', controlRef: 'Â§164.312(a)(2)(i)', commonIssue: 'Shared accounts are not permitted.', frequency: 'annual' },
-        { id: 'hipaa_automatic_logoff', title: 'Automatic Logoff', common: true, hint: 'Session timeout', description: 'Provide evidence of automatic logoff configuration for ePHI systems.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot', controlRef: 'Â§164.312(a)(2)(iii)', commonIssue: 'Timeout should be appropriate for environment.', frequency: 'annual' },
-        { id: 'hipaa_encryption_rest', title: 'Encryption at Rest', common: true, hint: 'ePHI encryption at rest', description: 'Provide evidence of encryption for ePHI at rest.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot', controlRef: 'Â§164.312(a)(2)(iv)', commonIssue: 'Must cover all ePHI storage locations.', frequency: 'annual' },
-        { id: 'hipaa_audit_controls', title: 'Audit Controls', common: true, hint: 'Audit logging', description: 'Provide evidence of audit controls for ePHI systems including configuration and samples.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot or PDF', controlRef: 'Â§164.312(b)', commonIssue: 'Must log ePHI access.', frequency: 'annual' },
-        { id: 'hipaa_audit_samples', title: 'Audit Log Samples', common: true, hint: 'Sample audit logs', description: 'Provide sample audit logs from {{auditPeriod}} showing ePHI access logging.', evidenceType: 'period-of-time', expectedFormat: 'Screenshot or PDF', controlRef: 'Â§164.312(b)', commonIssue: ' Logs should contain sufficient detail.', frequency: 'quarterly' },
-        { id: 'hipaa_integrity', title: 'Integrity Controls', common: true, hint: 'ePHI integrity controls', description: 'Provide evidence of integrity controls for ePHI to detect unauthorized alteration.', evidenceType: 'point-in-time', expectedFormat: 'PDF or Screenshot', controlRef: 'Â§164.312(c)', commonIssue: ' Should protect against alteration.', frequency: 'annual' },
-        { id: 'hipaa_authentication', title: 'Person or Entity Authentication', common: true, hint: 'Identity verification', description: 'Provide evidence of authentication methods for verifying identity before ePHI access.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot or PDF', controlRef: 'Â§164.312(d)', commonIssue: 'Should include MFA where appropriate.', frequency: 'annual' },
-        { id: 'hipaa_transmission', title: 'Transmission Security', common: true, hint: 'ePHI in transit', description: 'Provide evidence of transmission security controls including encryption of ePHI in transit.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot or PDF', controlRef: 'Â§164.312(e)', commonIssue: 'Must protect against unauthorized access.', frequency: 'annual' },
+        { id: 'hipaa_access_control', title: 'Access Control Configuration', common: true, hint: 'Technical access controls', description: 'Provide evidence of access control configuration for ePHI systems.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot', controlRef: '&sect;164.312(a)(1)', commonIssue: 'Must ensure only authorized access.', frequency: 'annual' },
+        { id: 'hipaa_unique_user', title: 'Unique User Identification', common: true, hint: 'Unique identification', description: 'Provide evidence that all users accessing ePHI are uniquely identified (no shared accounts).', evidenceType: 'point-in-time', expectedFormat: 'Screenshot', controlRef: '&sect;164.312(a)(2)(i)', commonIssue: 'Shared accounts are not permitted.', frequency: 'annual' },
+        { id: 'hipaa_automatic_logoff', title: 'Automatic Logoff', common: true, hint: 'Session timeout', description: 'Provide evidence of automatic logoff configuration for ePHI systems.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot', controlRef: '&sect;164.312(a)(2)(iii)', commonIssue: 'Timeout should be appropriate for environment.', frequency: 'annual' },
+        { id: 'hipaa_encryption_rest', title: 'Encryption at Rest', common: true, hint: 'ePHI encryption at rest', description: 'Provide evidence of encryption for ePHI at rest.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot', controlRef: '&sect;164.312(a)(2)(iv)', commonIssue: 'Must cover all ePHI storage locations.', frequency: 'annual' },
+        { id: 'hipaa_audit_controls', title: 'Audit Controls', common: true, hint: 'Audit logging', description: 'Provide evidence of audit controls for ePHI systems including configuration and samples.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot or PDF', controlRef: '&sect;164.312(b)', commonIssue: 'Must log ePHI access.', frequency: 'annual' },
+        { id: 'hipaa_audit_samples', title: 'Audit Log Samples', common: true, hint: 'Sample audit logs', description: 'Provide sample audit logs from {{auditPeriod}} showing ePHI access logging.', evidenceType: 'period-of-time', expectedFormat: 'Screenshot or PDF', controlRef: '&sect;164.312(b)', commonIssue: ' Logs should contain sufficient detail.', frequency: 'quarterly' },
+        { id: 'hipaa_integrity', title: 'Integrity Controls', common: true, hint: 'ePHI integrity controls', description: 'Provide evidence of integrity controls for ePHI to detect unauthorized alteration.', evidenceType: 'point-in-time', expectedFormat: 'PDF or Screenshot', controlRef: '&sect;164.312(c)', commonIssue: ' Should protect against alteration.', frequency: 'annual' },
+        { id: 'hipaa_authentication', title: 'Person or Entity Authentication', common: true, hint: 'Identity verification', description: 'Provide evidence of authentication methods for verifying identity before ePHI access.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot or PDF', controlRef: '&sect;164.312(d)', commonIssue: 'Should include MFA where appropriate.', frequency: 'annual' },
+        { id: 'hipaa_transmission', title: 'Transmission Security', common: true, hint: 'ePHI in transit', description: 'Provide evidence of transmission security controls including encryption of ePHI in transit.', evidenceType: 'point-in-time', expectedFormat: 'Screenshot or PDF', controlRef: '&sect;164.312(e)', commonIssue: 'Must protect against unauthorized access.', frequency: 'annual' },
         { id: 'hipaa_emergency_access', title: 'Emergency Access Procedure', common: true, hint: 'Emergency access to ePHI', description: 'Provide procedures for obtaining emergency access to ePHI. Include break-glass procedures and audit trail requirements.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: '§164.312(a)(2)(ii)', commonIssue: 'Emergency access must still be logged and reviewed.', frequency: 'annual' },
         { id: 'hipaa_entity_authentication', title: 'Person/Entity Authentication', common: true, hint: 'Verify identity before access', description: 'Provide documentation of procedures to verify identity of persons or entities seeking ePHI access.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: '§164.312(d)', commonIssue: 'Must authenticate before granting access.', frequency: 'annual' },
         { id: 'hipaa_integrity_mechanism', title: 'ePHI Integrity Mechanism', common: true, hint: 'Protect ePHI from alteration', description: 'Provide evidence of mechanisms to authenticate ePHI and protect against improper alteration or destruction.', evidenceType: 'point-in-time', expectedFormat: 'PDF or Screenshot', controlRef: '§164.312(c)(2)', commonIssue: 'Should include hash verification or digital signatures.', frequency: 'annual' },
@@ -6307,6 +6314,7 @@ function getDraftPayload() {
     customFrameworks: customFrameworks,
     auditPeriodStart: $('#auditPeriodStart')?.value || null,
     auditPeriodEnd: $('#auditPeriodEnd')?.value || null,
+    engagementRef: $('#engagementRef')?.value || '',
   };
 }
 
@@ -6405,14 +6413,14 @@ async function deleteDraftFromServer() {
 
 function showDraftIndicator(status) {
   const el = $('#draftIndicator');
-  if (!el) return;
+  const inlineEl = $('#draftStatusText');
   if (status === 'saving') {
-    el.textContent = 'Saving draft...';
-    el.className = 'draft-indicator visible saving';
+    if (el) { el.textContent = 'Saving draft...'; el.className = 'draft-indicator visible saving'; }
+    if (inlineEl) inlineEl.textContent = 'Saving...';
   } else if (status === 'saved') {
-    el.textContent = '\u2713 Draft saved';
-    el.className = 'draft-indicator visible';
-    setTimeout(() => { el.className = 'draft-indicator'; }, 2500);
+    const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    if (el) { el.textContent = '\u2713 Draft saved'; el.className = 'draft-indicator visible'; setTimeout(() => { el.className = 'draft-indicator'; }, 2500); }
+    if (inlineEl) inlineEl.textContent = '\u2713 Draft saved at ' + now;
   }
 }
 
@@ -6423,6 +6431,7 @@ function restoreDraftData(draft) {
   if (draft.clientEmails?.length) setChipEmails('clientEmailsContainer', draft.clientEmails);
   if (draft.deadlineISO) setDeadlineFromISO(draft.deadlineISO);
   if (draft.globalInstructions && $('#globalInstructions')) $('#globalInstructions').value = draft.globalInstructions;
+  if (draft.engagementRef && $('#engagementRef')) $('#engagementRef').value = draft.engagementRef;
   if (draft.composerState && Object.keys(draft.composerState).length) composerState = draft.composerState;
   if (draft.customFrameworks?.length) customFrameworks = draft.customFrameworks;
   _lastDraftJson = JSON.stringify(getDraftPayload());
@@ -6597,10 +6606,10 @@ function updateAuditPeriodHint() {
   
   if (startDate && endDate) {
     const months = Math.round((endDate - startDate) / (1000 * 60 * 60 * 24 * 30));
-    hint.textContent = ` ${months} month audit period "” date range will be included in period-based evidence requests`;
+    hint.textContent = ` ${months} month audit period &mdash; date range will be included in period-based evidence requests`;
     hint.style.color = 'var(--accent)';
   } else if (startDate || endDate) {
-    hint.textContent = `âš ï¸ Please set both start and end dates for the audit period`;
+    hint.textContent = `&#9888; Please set both start and end dates for the audit period`;
     hint.style.color = 'var(--warning)';
   } else {
     hint.textContent = '';
@@ -6730,7 +6739,7 @@ function renderComposer() {
       tplOptions += `<option value="${lvl}" ${currentLevel === lvl ? 'selected' : ''}>${tplLevels.labels[i]}</option>`;
     });
     html += `<div class="framework-tag-wrapper ${on ? 'selected' : ''}">
-      <label class="framework-tag ${on ? 'selected' : ''}"><input type="checkbox" ${on ? 'checked' : ''} data-fw-toggle="${esc(fwKey)}">${on ? 'âœ“' : ''} ${esc(fw.label)}</label>
+      <label class="framework-tag ${on ? 'selected' : ''}"><input type="checkbox" ${on ? 'checked' : ''} data-fw-toggle="${esc(fwKey)}">${on ? '&#10003;' : ''} ${esc(fw.label)}</label>
       ${on ? `<select class="fw-template-select" data-fw-template="${esc(fwKey)}">${tplOptions}</select>` : ''}
     </div>`;
   }
@@ -6740,12 +6749,19 @@ function renderComposer() {
     html += renderFwBody(fwKey, fw);
   }
   const savedGlobalInstr = $('#globalInstructions')?.value || '';
-  html += `<div class="global-instructions"><label class="form-label">Overall instructions for client</label><textarea class="form-textarea" id="globalInstructions" placeholder="Example: Please provide evidence covering Jan"“Dec 2025. Screenshots acceptable. Redact any secrets or credentials.">${esc(savedGlobalInstr)}</textarea><p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">Shown prominently to your client above the checklist.</p></div>`;
+  html += `<div class="global-instructions"><label class="form-label">Overall instructions for client</label><textarea class="form-textarea" id="globalInstructions" placeholder="Example: Please provide evidence covering Jan &ndash; Dec 2025. Screenshots acceptable. Redact any secrets or credentials.">${esc(savedGlobalInstr)}</textarea><p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">Shown prominently to your client above the checklist.</p></div>`;
   
   // Save template bar (only show when logged in or trial user who might want to save)
   html += `<div class="save-template-bar" id="saveTemplateBar">
-    <span> Save this configuration for future use</span>
-    <button type="button" class="btn btn-sm btn-outline" id="saveTemplateBtn">Save as Template</button>
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;width:100%;">
+      <span style="flex:1;min-width:200px;">
+        <span id="draftStatusText" style="font-size:12px;color:var(--text-muted);">Your progress is auto-saved.</span>
+      </span>
+      <div style="display:flex;gap:8px;">
+        <button type="button" class="btn btn-sm btn-outline" id="saveDraftNowBtn" style="font-size:12px;">Save Draft Now</button>
+        <button type="button" class="btn btn-sm btn-outline" id="saveTemplateBtn">Save as Template</button>
+      </div>
+    </div>
   </div>`;
   
   c.innerHTML = html;
@@ -6753,6 +6769,21 @@ function renderComposer() {
   const gi = $('#globalInstructions');
   if (gi) gi.addEventListener('input', saveFormState);
   
+  // Wire save draft now button
+  const saveDraftBtn = $('#saveDraftNowBtn');
+  if (saveDraftBtn) {
+    saveDraftBtn.addEventListener('click', async () => {
+      saveDraftBtn.textContent = 'Saving...';
+      saveDraftBtn.disabled = true;
+      saveFormState();
+      await saveDraftToServer();
+      const statusEl = $('#draftStatusText');
+      if (statusEl) statusEl.textContent = '\u2713 Draft saved just now';
+      saveDraftBtn.textContent = 'Save Draft Now';
+      saveDraftBtn.disabled = false;
+    });
+  }
+
   // Wire save template button
   const saveBtn = $('#saveTemplateBtn');
   if (saveBtn) {
@@ -6772,7 +6803,7 @@ function renderComposer() {
 }
 
 function renderFwBody(fwKey, fw) {
-  let html = `<div style="margin-top: 16px; margin-bottom: 8px;"><strong>${esc(fw.label)}</strong>${fw.description ? ` <span style="color: var(--text-muted);">"” ${esc(fw.description)}</span>` : ''}</div>`;
+  let html = `<div style="margin-top: 16px; margin-bottom: 8px;"><strong>${esc(fw.label)}</strong>${fw.description ? ` <span style="color: var(--text-muted);">&mdash; ${esc(fw.description)}</span>` : ''}</div>`;
   for (const g of (fw.controlGroups || [])) html += renderGroup(fwKey, g);
   html += `<button type="button" class="btn btn-sm btn-outline" style="width: 100%; margin-top: 8px; border-style: dashed;" data-add-group-btn="${esc(fwKey)}">+ Add control group</button>`;
   return html;
@@ -6794,7 +6825,7 @@ function renderGroup(fwKey, g) {
       html += `<div class="extra-items" style="display: ${more ? 'block' : 'none'};">`;
       for (const item of extra) html += renderItem(fwKey, g.id, item, gs);
       html += '</div>';
-      html += `<div class="more-toggle" data-fw="${esc(fwKey)}" data-group="${esc(g.id)}">${more ? 'âˆ’ Show fewer options' : `+ Show ${extra.length} more options`}</div>`;
+      html += `<div class="more-toggle" data-fw="${esc(fwKey)}" data-group="${esc(g.id)}">${more ? '- Show fewer options' : `+ Show ${extra.length} more options`}</div>`;
     }
     html += `<div class="add-custom-section"><h4>Add custom request to "${esc(g.title)}"</h4><div class="custom-form"><input class="form-input" placeholder="e.g., Network Diagram, Encryption Key Rotation Log" data-custom-name="${esc(fwKey)}-${esc(g.id)}"><textarea class="form-textarea" placeholder="Instructions for client (describe what you need, date ranges, format...)" data-custom-instr="${esc(fwKey)}-${esc(g.id)}" style="min-height: 50px;"></textarea><button type="button" class="btn btn-sm btn-outline" data-add-item="${esc(fwKey)}" data-group="${esc(g.id)}">+ Add request</button></div></div>`;
   }
@@ -6862,7 +6893,7 @@ function renderItem(fwKey, gid, item, gs) {
         <textarea class="ei-description-textarea" data-desc-edit="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}" placeholder="Describe what evidence the client should provide...">${esc(currentDescription)}</textarea>
         <div class="ei-description-actions">
           <button type="button" class="ei-action-btn" data-desc-clear="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">Clear</button>
-          ${descriptionEdited ? `<button type="button" class="ei-action-btn" data-desc-reset="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">â†º Reset</button>` : ''}
+          ${descriptionEdited ? `<button type="button" class="ei-action-btn" data-desc-reset="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">&#8634; Reset</button>` : ''}
         </div>
         
         <div class="ei-formats-row">
@@ -6870,7 +6901,7 @@ function renderItem(fwKey, gid, item, gs) {
           <div class="ei-format-chips" data-formats-container="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">
             ${formatChipsHtml}
           </div>
-          ${formatsEdited ? `<button type="button" class="ei-formats-reset" data-formats-reset="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">â†º reset</button>` : ''}
+          ${formatsEdited ? `<button type="button" class="ei-formats-reset" data-formats-reset="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">&#8634; reset</button>` : ''}
         </div>
         
         <div class="ei-instructions-row">
@@ -7678,7 +7709,7 @@ function updateCodeUI(result) {
     codeInput.classList.remove('invalid');
     codeInput.classList.add('valid');
     codeStatus.className = 'code-status valid';
-    codeStatus.textContent = `âœ“ Valid "” ${result.message}`;
+    codeStatus.textContent = `&#10003; Valid &mdash; ${result.message}`;
     state.codeValid = true;
     state.codeCredits = result.credits;
   } else if (result.error) {
@@ -7717,7 +7748,7 @@ async function checkCheckoutReturn() {
     restoreFormState(savedState);
   }
   
-  // If logged in, show dashboard "” polling will update credits
+  // If logged in, show dashboard &mdash; polling will update credits
   if (hasSession || state.isLoggedIn) {
     showDashboard();
   } else {
@@ -7772,7 +7803,7 @@ async function checkCheckoutReturn() {
         if (codeInput) codeInput.closest('.form-group')?.classList.add('hidden');
         if (codeStatus) codeStatus.textContent = '';
         
-        // Hide the entire payment section "” user has credits now
+        // Hide the entire payment section &mdash; user has credits now
         const paymentSec = $('#paymentSection');
         if (paymentSec) paymentSec.classList.remove('visible');
         state.paymentVisible = false;
@@ -7815,7 +7846,7 @@ async function checkCheckoutReturn() {
       }
       if (codeStatus) {
         codeStatus.className = 'code-status valid';
-        codeStatus.textContent = `âœ“ Valid "” ${creditsText}`;
+        codeStatus.textContent = `&#10003; Valid &mdash; ${creditsText}`;
       }
       saveFormState();
     } else {
@@ -8054,7 +8085,7 @@ function renderDashboard(requests, stats) {
   if (completed.length === 0) {
     completedList.innerHTML = `
       <div class="empty-state">
-        <div class="empty-state-icon">âœ“</div>
+        <div class="empty-state-icon">&#10003;</div>
         <div class="empty-state-text">No completed requests yet.</div>
       </div>
     `;
@@ -8299,7 +8330,7 @@ function renderRequestCard(req, type) {
   if (isOverdue) {
     overdueAlertHtml = `
       <div class="request-overdue-alert">
-        âš ï¸ Deadline passed ${daysOverdue > 0 ? `${daysOverdue} day${daysOverdue !== 1 ? 's' : ''} ago` : 'today'}. Client can still upload late, or you can extend the deadline.
+        &#9888; Deadline passed ${daysOverdue > 0 ? `${daysOverdue} day${daysOverdue !== 1 ? 's' : ''} ago` : 'today'}. Client can still upload late, or you can extend the deadline.
       </div>
     `;
   }
@@ -8790,7 +8821,7 @@ async function handleSignup() {
     const data = await res.json();
     
     if (data.ok) {
-      showAuthStatus('signupStatus', 'âœ“ Account created! Check your email to verify.', 'success');
+      showAuthStatus('signupStatus', '&#10003; Account created! Check your email to verify.', 'success');
       
       // Auto-login but mark as unverified
       if (data.token && data.user) {
@@ -8842,7 +8873,7 @@ async function handleLogin() {
       state.user = data.user;
       localStorage.setItem('proofrepo_token', data.token);
       
-      showAuthStatus('loginStatus', 'âœ“ Signed in!', 'success');
+      showAuthStatus('loginStatus', '&#10003; Signed in!', 'success');
       
       setTimeout(() => showDashboard(), 500);
     } else {
@@ -8876,7 +8907,7 @@ async function handleForgotPassword() {
     });
     
     // Always show success to prevent enumeration
-    showAuthStatus('resetStatus', 'âœ“ If an account exists, a reset link was sent.', 'success');
+    showAuthStatus('resetStatus', '&#10003; If an account exists, a reset link was sent.', 'success');
   } catch (e) {
     showAuthStatus('resetStatus', 'Error sending reset link', 'error');
   }
@@ -8919,7 +8950,7 @@ async function handleResetPassword() {
     const data = await res.json();
     
     if (data.ok) {
-      showAuthStatus('resetPasswordStatus', 'âœ“ Password reset! You can now sign in with your new password.', 'success');
+      showAuthStatus('resetPasswordStatus', '&#10003; Password reset! You can now sign in with your new password.', 'success');
       // Clean URL and show login after a moment
       setTimeout(() => {
         window.history.replaceState({}, '', window.location.pathname);
@@ -9100,7 +9131,7 @@ async function saveAsTemplate() {
         state.user.templates = state.user.templates || [];
         state.user.templates.push(data.template);
         updateLoggedInBar();
-        $('#saveTemplateStatus').textContent = 'âœ“ Template saved!';
+        $('#saveTemplateStatus').textContent = '&#10003; Template saved!';
         $('#saveTemplateStatus').style.color = '#10b981';
         setTimeout(() => form.remove(), 1500);
       } else {
@@ -9175,7 +9206,7 @@ function setupAuthListeners() {
     const pw = e.target.value;
     const update = (id, ok) => {
       const el = $(`#${id}`);
-      if (el) { el.textContent = (ok ? 'âœ“ ' : 'X ') + el.textContent.slice(2); el.style.color = ok ? '#10b981' : '#ef4444'; }
+      if (el) { el.textContent = (ok ? '&#10003; ' : 'X ') + el.textContent.slice(2); el.style.color = ok ? '#10b981' : '#ef4444'; }
     };
     update('resetReqLength', pw.length >= 8);
     update('resetReqNumber', /\d/.test(pw));
@@ -9300,7 +9331,7 @@ function selectTier(tier) {
   if (tier) { 
     const prices = { single: '$59', pack5: '$249', pack15: '$499', pack50: '$1,249' }; 
     buyBtn.disabled = false; 
-    buyBtn.textContent = `Buy Credits "” ${prices[tier]}`;
+    buyBtn.textContent = `Buy Credits &mdash; ${prices[tier]}`;
     // ADD THIS: Highlight the button
     buyBtn.className = 'btn btn-accent btn-full';
   } else { 
@@ -9480,6 +9511,8 @@ async function sendRequest() {
         // Audit period for period-of-time evidence
         auditPeriodStart: auditPeriodStart,
         auditPeriodEnd: auditPeriodEnd,
+        // Engagement reference for workpaper PDF
+        engagementRef: $('#engagementRef')?.value?.trim() || null,
         // Trial flags
         isTrialRequest: state.isTrialUser,
         trialMode: state.trialMode
