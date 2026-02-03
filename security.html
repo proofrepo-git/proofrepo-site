@@ -3,58 +3,71 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Security — ProofRepo</title>
-  <meta name="description" content="ProofRepo Security Practices — How we protect your compliance evidence">
+  <title>Security &mdash; ProofRepo</title>
+  <meta name="description" content="ProofRepo Security Practices &mdash; How we protect your compliance evidence">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #050a14;
-      --surface: #0a1628;
-      --surface-elevated: #0f1d32;
-      --border: #1e3a5f;
-      --text: #e2e8f0;
-      --text-muted: #94a3b8;
-      --primary: #2563eb;
-      --accent: #10b981;
+      --bg: #FFFFFF;
+      --bg-subtle: #F8FAFC;
+      --surface: #FFFFFF;
+      --surface-elevated: #F8FAFC;
+      --border: #E2E8F0;
+      --border-strong: #CBD5E1;
+      --text: #0F172A;
+      --text-secondary: #334155;
+      --text-muted: #64748B;
+      --primary: #1E40AF;
+      --primary-hover: #1E3A8A;
+      --primary-light: #DBEAFE;
+      --accent: #0D9488;
+      --accent-light: #CCFBF1;
+      --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+      --shadow-card: 0 1px 3px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.06);
+      --radius-md: 12px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Inter', system-ui, sans-serif;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.7;
       font-size: 15px;
+      -webkit-font-smoothing: antialiased;
     }
+
     .header {
-      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       padding: 16px 24px;
-      background: rgba(5,10,20,0.9);
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.95);
       backdrop-filter: blur(10px);
       position: sticky;
       top: 0;
       z-index: 100;
-    }
-    .header-inner {
-      max-width: 800px;
+      max-width: 900px;
       margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
     }
     .logo {
       display: flex;
       align-items: center;
       gap: 10px;
+      font-family: 'Outfit', sans-serif;
       font-weight: 700;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       color: var(--text);
       text-decoration: none;
+      letter-spacing: -0.02em;
     }
     .back-link {
       color: var(--text-muted);
       text-decoration: none;
       font-size: 0.9rem;
+      font-weight: 500;
     }
     .back-link:hover { color: var(--text); }
     
@@ -65,13 +78,16 @@
     }
     
     h1 {
+      font-family: 'Outfit', sans-serif;
       font-size: 2rem;
       font-weight: 700;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
     }
     .subtitle {
       color: var(--text-muted);
-      margin-bottom: 32px;
+      margin-bottom: 36px;
+      font-size: 1.05rem;
     }
     
     .trust-badges {
@@ -81,35 +97,21 @@
       margin-bottom: 40px;
     }
     .trust-badge {
-      background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 16px 12px;
+      border-radius: var(--radius-md);
+      padding: 18px 12px;
       text-align: center;
+      background: var(--bg);
     }
-    .trust-badge-icon {
-      width: 36px;
-      height: 36px;
-      margin: 0 auto 8px;
-      background: #1E40AF;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .trust-badge-icon svg {
-      width: 18px;
-      height: 18px;
-      stroke: white;
-      fill: none;
-    }
-    .trust-badge h3 {
-      font-size: 0.85rem;
-      font-weight: 600;
+    .trust-badge-label {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--primary);
       margin-bottom: 2px;
     }
-    .trust-badge p {
-      font-size: 0.75rem;
+    .trust-badge-desc {
+      font-size: 0.78rem;
       color: var(--text-muted);
       margin: 0;
     }
@@ -119,10 +121,11 @@
     }
     
     .document {
-      background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: var(--radius-md);
       padding: 32px;
+      background: var(--bg);
+      box-shadow: var(--shadow-card);
     }
     
     .section {
@@ -137,29 +140,28 @@
     }
     
     h3 {
-      font-size: 1.1rem;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.05rem;
       font-weight: 600;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       color: var(--text);
     }
     
-    p { margin-bottom: 12px; color: var(--text-muted); }
+    p { margin-bottom: 12px; color: var(--text-secondary); }
     p:last-child { margin-bottom: 0; }
-    
-    ul, ol { margin: 12px 0; padding-left: 24px; color: var(--text-muted); }
+    ul { margin: 10px 0; padding-left: 22px; color: var(--text-secondary); }
     li { margin-bottom: 6px; }
-    
     a { color: var(--primary); text-decoration: none; }
     a:hover { text-decoration: underline; }
-    
-    strong { color: var(--text); }
+    strong { color: var(--text); font-weight: 600; }
     
     .highlight-box {
-      background: var(--surface-elevated);
+      background: var(--bg-subtle);
       border-left: 3px solid var(--accent);
-      padding: 16px;
+      padding: 14px 16px;
       margin: 16px 0;
       border-radius: 0 8px 8px 0;
+      font-size: 0.92rem;
     }
     
     .infra-table {
@@ -169,26 +171,29 @@
       font-size: 0.9rem;
     }
     .infra-table th, .infra-table td {
-      padding: 12px;
+      padding: 10px 12px;
       text-align: left;
       border-bottom: 1px solid var(--border);
     }
     .infra-table th {
       color: var(--text);
       font-weight: 600;
-      background: var(--surface-elevated);
+      background: var(--bg-subtle);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
     }
-    .infra-table td { color: var(--text-muted); }
+    .infra-table td { color: var(--text-secondary); }
     
     .contact-box {
-      background: var(--surface-elevated);
+      background: var(--bg-subtle);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 24px;
+      border-radius: var(--radius-md);
+      padding: 28px;
       text-align: center;
-      margin-top: 32px;
+      margin-top: 36px;
     }
-    .contact-box h3 { margin-bottom: 8px; }
+    .contact-box h3 { margin-bottom: 6px; }
     .contact-box p { margin-bottom: 16px; }
     .contact-btn {
       display: inline-flex;
@@ -196,12 +201,13 @@
       gap: 8px;
       background: var(--primary);
       color: white;
-      padding: 12px 24px;
+      padding: 11px 22px;
       border-radius: 8px;
       text-decoration: none;
-      font-weight: 500;
+      font-weight: 600;
+      font-size: 0.9rem;
     }
-    .contact-btn:hover { background: #1d4ed8; text-decoration: none; }
+    .contact-btn:hover { background: var(--primary-hover); text-decoration: none; }
     
     .footer {
       text-align: center;
@@ -218,23 +224,22 @@
       margin-bottom: 12px;
       flex-wrap: wrap;
     }
-    .footer-links a { color: var(--text-muted); }
+    .footer-links a { color: var(--text-muted); text-decoration: none; font-weight: 500; }
+    .footer-links a:hover { color: var(--text); }
   </style>
 </head>
 <body>
   <header class="header">
-    <div class="header-inner">
-      <a href="/" class="logo">
-        <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
-          <rect width="40" height="40" rx="9" fill="#1E40AF"/>
-          <path d="M11 7V33" stroke="#fff" stroke-width="4.8" stroke-linecap="square"/>
-          <path d="M13.2 7H19.5C24.2 7 27.5 10.3 27.5 15C27.5 19.7 24.2 23 19.5 23H13.2" stroke="#fff" stroke-width="4.8" fill="none" stroke-linecap="square"/>
-          <path d="M17.5 23L20 14.5L22 18L27.5 7.5" stroke="#93C5FD" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        ProofRepo
-      </a>
-      <a href="/" class="back-link">&larr; Back to home</a>
-    </div>
+    <a href="/" class="logo">
+      <svg width="30" height="30" viewBox="0 0 40 40" fill="none" style="flex-shrink:0;">
+        <rect width="40" height="40" rx="9" fill="#1E40AF"/>
+        <path d="M11 7V33" stroke="#fff" stroke-width="4.8" stroke-linecap="square"/>
+        <path d="M13.2 7H19.5C24.2 7 27.5 10.3 27.5 15C27.5 19.7 24.2 23 19.5 23H13.2" stroke="#fff" stroke-width="4.8" fill="none" stroke-linecap="square"/>
+        <path d="M17.5 23L20 14.5L22 18L27.5 7.5" stroke="#93C5FD" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      ProofRepo
+    </a>
+    <a href="/" class="back-link">&larr; Back to home</a>
   </header>
 
   <div class="container">
@@ -243,32 +248,20 @@
 
     <div class="trust-badges">
       <div class="trust-badge">
-        <div class="trust-badge-icon">
-          <svg viewBox="0 0 24 24" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-        </div>
-        <h3>AES-256</h3>
-        <p>Encryption at rest</p>
+        <div class="trust-badge-label">AES-256</div>
+        <p class="trust-badge-desc">Encryption at rest</p>
       </div>
       <div class="trust-badge">
-        <div class="trust-badge-icon">
-          <svg viewBox="0 0 24 24" stroke-width="2"><path d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-        </div>
-        <h3>TLS 1.2+</h3>
-        <p>Encryption in transit</p>
+        <div class="trust-badge-label">TLS 1.2+</div>
+        <p class="trust-badge-desc">Encryption in transit</p>
       </div>
       <div class="trust-badge">
-        <div class="trust-badge-icon">
-          <svg viewBox="0 0 24 24" stroke-width="2"><path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
-        </div>
-        <h3>PBKDF2</h3>
-        <p>Password hashing</p>
+        <div class="trust-badge-label">PBKDF2</div>
+        <p class="trust-badge-desc">Password hashing</p>
       </div>
       <div class="trust-badge">
-        <div class="trust-badge-icon">
-          <svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-        </div>
-        <h3>SOC 2 Infra</h3>
-        <p>Cloudflare-powered</p>
+        <div class="trust-badge-label">SOC 2</div>
+        <p class="trust-badge-desc">Cloudflare infrastructure</p>
       </div>
     </div>
 
@@ -332,9 +325,9 @@
 
         <p><strong>Client evidence uploads:</strong></p>
         <ul>
-          <li><strong>Signed URLs:</strong> Clients receive cryptographically signed links that grant access only to their specific evidence request. No account creation is required for clients.</li>
+          <li><strong>Signed URLs:</strong> Clients receive cryptographically signed links that grant access only to their specific evidence request. No account required.</li>
           <li><strong>Time-limited access:</strong> Download links expire after 72 hours. Upload links expire at the request deadline.</li>
-          <li><strong>Scoped access:</strong> Each link provides access only to its specific submission — clients cannot see other requests or submissions.</li>
+          <li><strong>Scoped access:</strong> Each link provides access only to its specific submission.</li>
         </ul>
       </div>
 
@@ -348,7 +341,7 @@
           <li><strong>On-demand deletion:</strong> Auditors can delete submissions immediately via the Pack Viewer</li>
         </ul>
         <div class="highlight-box">
-          <p>File retention is enforced at the infrastructure level through Cloudflare R2 lifecycle rules — deletion happens automatically regardless of any application-level issues.</p>
+          <p>File retention is enforced at the infrastructure level through Cloudflare R2 lifecycle rules &mdash; deletion happens automatically regardless of any application-level issues.</p>
         </div>
       </div>
 
@@ -364,27 +357,32 @@
 
       <div class="section">
         <h3>Responsible Disclosure</h3>
-        <p>If you discover a security vulnerability in ProofRepo, please report it responsibly:</p>
-        <ul>
-          <li>Email <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ea998f899f98839e93aa9a9885858c988f9a85c4898587">[email&#160;protected]</a></strong> with details</li>
-          <li>Include steps to reproduce, potential impact, and any supporting evidence</li>
-          <li>Give us reasonable time to investigate and address the issue before public disclosure</li>
-        </ul>
+        <p>If you discover a security vulnerability in ProofRepo, please report it to <strong>security@proofrepo.com</strong>. Include steps to reproduce, potential impact, and any supporting evidence. Give us reasonable time to investigate before public disclosure.</p>
       </div>
 
     </div>
 
     <div class="contact-box">
       <h3>Questions About Security?</h3>
-      <p>Our team is happy to answer questions about how we protect your data.</p>
-      <a href="/cdn-cgi/l/email-protection#bfccdadccacdd6cbc6ffcfcdd0d0d9cddacfd091dcd0d2" class="contact-btn">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-        </svg>
-        <span class="__cf_email__" data-cfemail="2350464056514a575a6353514c4c455146534c0d404c4e">[email&#160;protected]</span>
+      <p>We're happy to answer questions about how we protect your data.</p>
+      <a href="mailto:security@proofrepo.com" class="contact-btn">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        security@proofrepo.com
       </a>
     </div>
   </div>
+
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/security.html">Security</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+    </div>
+    <p>&copy; 2026 ProofRepo. All rights reserved.</p>
+  </footer>
+</body>
+</html>
 
   <footer class="footer">
     <div c
