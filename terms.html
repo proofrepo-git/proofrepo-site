@@ -51,15 +51,6 @@
       color: var(--text);
       text-decoration: none;
     }
-    .logo-icon {
-      width: 28px;
-      height: 28px;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
     .back-link {
       color: var(--text-muted);
       text-decoration: none;
@@ -73,17 +64,9 @@
       padding: 48px 24px 80px;
     }
     
-    h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-    .subtitle {
-      color: var(--text-muted);
-      margin-bottom: 32px;
-    }
+    h1 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
+    .subtitle { color: var(--text-muted); margin-bottom: 32px; }
     
-    /* Quick summary box */
     .summary-box {
       background: linear-gradient(135deg, rgba(37,99,235,0.1), rgba(16,185,129,0.1));
       border: 1px solid var(--border);
@@ -109,13 +92,12 @@
       font-size: 0.95rem;
     }
     .summary-box li::before {
-      content: "✓";
+      content: "\2713";
       color: var(--accent);
       font-weight: 600;
       flex-shrink: 0;
     }
     
-    /* Document content */
     .document {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -134,32 +116,13 @@
       border-bottom: none;
     }
     
-    h3 {
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin-bottom: 12px;
-      color: var(--text);
-    }
-    
-    p {
-      margin-bottom: 12px;
-      color: var(--text-muted);
-    }
+    h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; color: var(--text); }
+    p { margin-bottom: 12px; color: var(--text-muted); }
     p:last-child { margin-bottom: 0; }
-    
-    ul, ol {
-      margin: 12px 0;
-      padding-left: 24px;
-      color: var(--text-muted);
-    }
+    ul, ol { margin: 12px 0; padding-left: 24px; color: var(--text-muted); }
     li { margin-bottom: 6px; }
-    
-    a {
-      color: var(--primary);
-      text-decoration: none;
-    }
+    a { color: var(--primary); text-decoration: none; }
     a:hover { text-decoration: underline; }
-    
     strong { color: var(--text); }
     
     .highlight-box {
@@ -185,23 +148,22 @@
       margin-bottom: 12px;
       flex-wrap: wrap;
     }
-    .footer-links a {
-      color: var(--text-muted);
-    }
+    .footer-links a { color: var(--text-muted); }
   </style>
 </head>
 <body>
   <header class="header">
     <div class="header-inner">
       <a href="/" class="logo">
-        <div class="logo-icon">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-        </div>
+        <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
+          <rect width="40" height="40" rx="9" fill="#1E40AF"/>
+          <path d="M11 7V33" stroke="#fff" stroke-width="4.8" stroke-linecap="square"/>
+          <path d="M13.2 7H19.5C24.2 7 27.5 10.3 27.5 15C27.5 19.7 24.2 23 19.5 23H13.2" stroke="#fff" stroke-width="4.8" fill="none" stroke-linecap="square"/>
+          <path d="M17.5 23L20 14.5L22 18L27.5 7.5" stroke="#93C5FD" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
         ProofRepo
       </a>
-      <a href="/" class="back-link">← Back to home</a>
+      <a href="/" class="back-link">&larr; Back to home</a>
     </div>
   </header>
 
@@ -213,10 +175,11 @@
       <h2>The Short Version</h2>
       <ul>
         <li>ProofRepo helps compliance teams collect evidence from clients</li>
-        <li>You pay per evidence request using credits (no subscription required)</li>
+        <li>You create a free account, then purchase credits to send requests</li>
+        <li>Each evidence request uses one credit</li>
         <li>Credits are valid for 12 months from purchase</li>
         <li>Files are automatically deleted after 90 days</li>
-        <li>All sales are final — please use our trial before purchasing</li>
+        <li>All sales are final — please use our free trial before purchasing</li>
         <li>We're a delivery service, not legal or compliance advisors</li>
       </ul>
     </div>
@@ -225,73 +188,81 @@
       
       <div class="section">
         <h3>1. What ProofRepo Does</h3>
-        <p>ProofRepo is an evidence collection and delivery service. Compliance professionals create evidence requests, clients upload files, and both parties receive organized results. We facilitate the transfer — we don't provide legal, compliance, or audit advice.</p>
+        <p>ProofRepo is an evidence collection and delivery service for compliance professionals. Auditors create evidence requests specifying which documents they need, clients upload files through a guided interface, and both parties receive organized results as a ProofPack. We facilitate the transfer — we don't provide legal, compliance, or audit advice.</p>
       </div>
 
       <div class="section">
-        <h3>2. Using the Service</h3>
+        <h3>2. Accounts &amp; Using the Service</h3>
         <p>By using ProofRepo, you agree to these terms. You must be at least 18 years old and have authority to agree on behalf of any organization you represent.</p>
+        <p><strong>Account creation:</strong> To send evidence requests, you must create an account with a valid email address and password. You're responsible for maintaining the security of your account credentials.</p>
+        <p><strong>Trial access:</strong> You can try ProofRepo with a free trial credit before creating an account or purchasing credits. Trial requests have reduced file size and framework limits.</p>
         <p>You agree to:</p>
         <ul>
-          <li>Provide accurate information</li>
+          <li>Provide accurate information when creating your account</li>
           <li>Only upload content you have rights to share</li>
           <li>Not use the service for illegal purposes</li>
-          <li>Keep your credit codes secure</li>
+          <li>Keep your account credentials and credit codes secure</li>
         </ul>
       </div>
 
       <div class="section">
         <h3>3. Credits and Payment</h3>
-        <p><strong>How credits work:</strong> You purchase credits to send evidence requests. Each request uses one credit. Credits are tied to a unique code.</p>
+        <p><strong>How credits work:</strong> You purchase credits to send evidence requests. Each request uses one credit. Credits are added directly to your account upon purchase.</p>
         <div class="highlight-box">
-          <p><strong>Credit validity:</strong> Credits expire 12 months from purchase date. Unused credits are not refundable.</p>
+          <p><strong>Credit validity:</strong> Credits expire 12 months from purchase date. Unused credits are not refundable after this period.</p>
         </div>
-        <p><strong>Pricing:</strong> Current prices are displayed at checkout. We may adjust pricing for future purchases.</p>
-        <p><strong>Refunds:</strong> All sales are final. We offer a free trial so you can test the service before purchasing. If you experience a technical issue that prevents service delivery, contact us and we'll make it right.</p>
+        <p><strong>Pricing:</strong> Current prices are displayed at checkout. We may adjust pricing for future purchases, but existing credits are not affected.</p>
+        <p><strong>Refunds:</strong> All sales are final. We offer a free trial so you can test the full service flow before purchasing. If you experience a technical issue that prevents service delivery, contact us and we'll make it right.</p>
       </div>
 
       <div class="section">
         <h3>4. Your Content</h3>
         <p>You retain ownership of all content you upload. By using the service, you grant us permission to store and transmit your files as necessary to provide the service.</p>
-        <p><strong>Automatic deletion:</strong> All uploaded files are automatically deleted 90 days after submission. You can also delete submissions manually at any time through the Pack Viewer.</p>
+        <p><strong>Automatic deletion:</strong> All uploaded files are automatically deleted 90 days after submission. This is enforced at the infrastructure level through Cloudflare R2 lifecycle rules.</p>
+        <p><strong>Manual deletion:</strong> You can delete submissions at any time through the Pack Viewer without waiting for automatic deletion.</p>
         <p><strong>Your responsibility:</strong> You're responsible for ensuring you have the right to share any content you upload and that it doesn't violate any laws.</p>
       </div>
 
       <div class="section">
-        <h3>5. Privacy</h3>
+        <h3>5. Saved Templates</h3>
+        <p>ProofRepo allows you to save evidence request templates to your account for reuse. Templates are stored in your account and are only accessible to you. You can delete saved templates at any time.</p>
+      </div>
+
+      <div class="section">
+        <h3>6. Privacy</h3>
         <p>Our <a href="/privacy.html">Privacy Policy</a> explains how we collect, use, and protect your data. By using ProofRepo, you agree to our privacy practices.</p>
       </div>
 
       <div class="section">
-        <h3>6. Service Availability</h3>
+        <h3>7. Service Availability</h3>
         <p>We strive for high availability but don't guarantee uninterrupted service. We may modify or discontinue features with reasonable notice. For significant changes, we'll notify active users via email.</p>
       </div>
 
       <div class="section">
-        <h3>7. Limitations</h3>
-        <p>ProofRepo is provided "as is." We're a file transfer service — we don't guarantee that using ProofRepo will result in successful audits, compliance certification, or any particular outcome.</p>
+        <h3>8. Limitations</h3>
+        <p>ProofRepo is provided "as is." We're a file transfer and organization service — we don't guarantee that using ProofRepo will result in successful audits, compliance certification, or any particular outcome.</p>
         <p>To the maximum extent permitted by law, our liability is limited to the amount you paid us in the 12 months before any claim, or $100, whichever is greater.</p>
         <p>We're not liable for indirect, incidental, or consequential damages, including lost profits, data loss, or business interruption.</p>
       </div>
 
       <div class="section">
-        <h3>8. Termination</h3>
-        <p>You may stop using ProofRepo at any time. We may suspend or terminate access for violations of these terms. Upon termination, your right to use any remaining credits ends, but we'll fulfill any pending evidence requests.</p>
+        <h3>9. Termination</h3>
+        <p>You may stop using ProofRepo and delete your account at any time. We may suspend or terminate access for violations of these terms. Upon termination, your right to use any remaining credits ends, but we'll fulfill any pending evidence requests.</p>
       </div>
 
       <div class="section">
-        <h3>9. Disputes</h3>
+        <h3>10. Disputes</h3>
         <p>These terms are governed by applicable law. Any disputes will be resolved through binding arbitration rather than court, except for small claims. You agree to resolve disputes individually, not as part of a class action.</p>
       </div>
 
       <div class="section">
-        <h3>10. Changes to Terms</h3>
+        <h3>11. Changes to Terms</h3>
         <p>We may update these terms occasionally. Material changes will be communicated via email or prominent notice on our website. Continued use after changes constitutes acceptance.</p>
       </div>
 
       <div class="section">
-        <h3>11. Contact</h3>
-        <p>Questions about these terms? Email us at <strong>support@proofrepo.com</strong></p>
+        <h3>12. Contact</h3>
+        <p>Questions about these terms? Email us at <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6e1d1b1e1e011c1a2e1e1c0101081c0b1e01400d0103">[email&#160;protected]</a></strong></p>
       </div>
 
     </div>
@@ -302,9 +273,4 @@
       <a href="/">Home</a>
       <a href="/security.html">Security</a>
       <a href="/privacy.html">Privacy</a>
-      <a href="/terms.html">Terms</a>
-    </div>
-    <p>© 2026 ProofRepo. All rights reserved.</p>
-  </footer>
-</body>
-</html>
+      <a
