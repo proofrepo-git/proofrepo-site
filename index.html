@@ -1567,6 +1567,29 @@
       margin-bottom: 10px;
     }
 
+    .request-reminder-status {
+      font-size: 0.78rem;
+      padding: 6px 10px;
+      border-radius: 6px;
+      margin: 6px 0 4px;
+    }
+    .request-reminder-status.scheduled {
+      background: rgba(37, 99, 235, 0.1);
+      color: #60a5fa;
+    }
+    .request-reminder-status.imminent {
+      background: rgba(245, 158, 11, 0.1);
+      color: #f59e0b;
+    }
+    .request-reminder-status.overdue {
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+    }
+    .request-reminder-status.complete {
+      background: rgba(34, 197, 94, 0.1);
+      color: #22c55e;
+    }
+
     .request-card-header {
       display: flex;
       justify-content: space-between;
@@ -8334,6 +8357,22 @@ function renderRequestCard(req, type) {
       </div>
     `;
   }
+
+  // Reminder status indicator
+  let reminderHtml = '';
+  if (req.reminderStatus) {
+    const rs = req.reminderStatus;
+    if (rs.state === 'scheduled') {
+      const nextDate = new Date(rs.nextAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+      reminderHtml = '<div class="request-reminder-status scheduled">&#128276; Reminder scheduled: ' + nextDate + '</div>';
+    } else if (rs.state === 'imminent') {
+      reminderHtml = '<div class="request-reminder-status imminent">&#128276; Reminder sending soon</div>';
+    } else if (rs.state === 'overdue') {
+      reminderHtml = '<div class="request-reminder-status overdue">&#9888; Deadline-passed notifications sent</div>';
+    } else if (rs.state === 'cancelled') {
+      reminderHtml = '<div class="request-reminder-status complete">&#10003; Submitted &mdash; reminders cancelled</div>';
+    }
+  }
   
   return `
     <div class="request-card ${isOverdue ? 'overdue' : ''}" data-token="${esc(req.token)}">
@@ -8356,6 +8395,7 @@ function renderRequestCard(req, type) {
           <span>/span> ${req.totalItems || 0} evidence items
         </div>
       </div>
+      ${reminderHtml}
       <div class="request-actions">
         ${actionsHtml}
       </div>
