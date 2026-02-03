@@ -1636,6 +1636,11 @@
       color: var(--accent);
     }
 
+    .request-status.cancelled {
+      color: var(--text-muted);
+      opacity: 0.7;
+    }
+
     .status-dot {
       width: 6px;
       height: 6px;
@@ -8086,9 +8091,10 @@ function renderDashboard(requests, stats) {
     creditAlert.style.display = 'none';
   }
   
-  // Split requests into active and completed
+  // Split requests into active, completed, and cancelled
   const active = requests.filter(r => r.status === 'pending');
   const completed = requests.filter(r => r.status === 'complete');
+  const cancelled = requests.filter(r => r.status === 'cancelled');
   
   // Render active requests
   const activeList = $('#activeRequestsList');
@@ -8103,9 +8109,10 @@ function renderDashboard(requests, stats) {
     activeList.innerHTML = active.map(r => renderRequestCard(r, 'active')).join('');
   }
   
-  // Render completed requests
+  // Render completed requests (include cancelled at the bottom)
   const completedList = $('#completedRequestsList');
-  if (completed.length === 0) {
+  const allDone = [...completed, ...cancelled];
+  if (allDone.length === 0) {
     completedList.innerHTML = `
       <div class="empty-state">
         <div class="empty-state-icon">&#10003;</div>
@@ -8113,7 +8120,7 @@ function renderDashboard(requests, stats) {
       </div>
     `;
   } else {
-    completedList.innerHTML = completed.map(r => renderRequestCard(r, 'completed')).join('');
+    completedList.innerHTML = allDone.map(r => renderRequestCard(r, r.status === 'cancelled' ? 'cancelled' : 'completed')).join('');
   }
   
   // Render templates
@@ -8311,7 +8318,10 @@ function renderRequestCard(req, type) {
   
   // Status display
   let statusHtml = '';
-  if (req.status === 'pending') {
+  if (req.status === 'cancelled') {
+    const cancelDate = req.cancelledAt ? new Date(req.cancelledAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+    statusHtml = `<div class="request-status cancelled"><span class="status-dot"></span> Cancelled${cancelDate ? ` ${cancelDate}` : ''}</div>`;
+  } else if (req.status === 'pending') {
     if (isOverdue) {
       statusHtml = `<div class="request-status pending"><span class="status-dot"></span> Overdue ${daysOverdue > 0 ? `(${daysOverdue}d)` : ''}</div>`;
     } else {
@@ -8334,6 +8344,7 @@ function renderRequestCard(req, type) {
     actionsHtml = `
       <button class="request-action-btn" data-action="copy-link" data-token="${esc(req.token)}">Copy Client Link</button>
       <button class="request-action-btn" data-action="resend" data-token="${esc(req.token)}">Resend Email</button>
+      <button class="request-action-btn danger" data-action="cancel-request" data-token="${esc(req.token)}" data-company="${esc(req.company || '')}">Cancel</button>
     `;
     // Add extend deadline for overdue requests
     if (isOverdue && req.extendToken) {
@@ -8341,6 +8352,10 @@ function renderRequestCard(req, type) {
         <button class="request-action-btn primary" data-action="extend" data-extend-token="${esc(req.extendToken)}" data-company="${esc(req.company || '')}">Extend Deadline</button>
       `;
     }
+  } else if (type === 'cancelled') {
+    actionsHtml = `
+      <span style="font-size:0.8rem;color:var(--text-muted);opacity:0.6;">Credit refunded</span>
+    `;
   } else {
     actionsHtml = `
       <button class="request-action-btn primary" data-action="view-pack" data-token="${esc(req.token)}">View ProofPack</button>
@@ -8386,13 +8401,13 @@ function renderRequestCard(req, type) {
       </div>
       <div class="request-meta">
         <div class="request-meta-item">
-          <span>/span> ${esc(req.clientEmail || 'No client email')}
+          &#9993; ${esc(req.clientEmail || 'No client email')}
         </div>
         <div class="request-meta-item">
-          <span>/span> Due: ${deadlineStr}
+          &#128197; Due: ${deadlineStr}
         </div>
         <div class="request-meta-item">
-          <span>/span> ${req.totalItems || 0} evidence items
+          &#128196; ${req.totalItems || 0} evidence items
         </div>
       </div>
       ${reminderHtml}
@@ -8474,6 +8489,42 @@ function wireRequestActions() {
         alert('Error extending deadline: ' + e.message);
         btn.disabled = false;
         btn.textContent = 'Extend Deadline';
+      }
+    });
+  });
+
+  // Cancel request buttons
+  $$('[data-action="cancel-request"]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const token = btn.dataset.token;
+      const company = btn.dataset.company || 'this request';
+      
+      const confirmed = confirm(`Cancel the evidence request for "${company}"?\n\nThis will:\n• Deactivate the client upload link\n• Cancel any pending reminder emails\n• The request cannot be reopened\n\nAre you sure?`);
+      if (!confirmed) return;
+      
+      btn.disabled = true;
+      btn.textContent = 'Cancelling...';
+      
+      try {
+        const res = await fetch(`${API}/request/cancel`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${state.session?.token || ''}` },
+          body: JSON.stringify({ token }),
+        });
+        const data = await res.json();
+        
+        if (data.ok) {
+          // Refresh dashboard
+          await fetchAndRenderDashboard();
+        } else {
+          alert('Error cancelling request: ' + (data.error || 'Unknown error'));
+          btn.disabled = false;
+          btn.textContent = 'Cancel';
+        }
+      } catch (e) {
+        alert('Error cancelling request: ' + e.message);
+        btn.disabled = false;
+        btn.textContent = 'Cancel';
       }
     });
   });
