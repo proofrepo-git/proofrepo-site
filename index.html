@@ -7607,6 +7607,10 @@ async function showDashboard() {
   $('#auditorFlow').style.display = 'none';
   $('#roleSelectSection').style.display = 'none';
   
+  // Hide hero section — user is logged in, doesn't need the sales pitch
+  const heroEl = document.querySelector('.hero');
+  if (heroEl) heroEl.style.display = 'none';
+  
   // Show logged in bar
   $('#loggedInBar').style.display = 'flex';
   updateLoggedInBar();
@@ -8528,6 +8532,10 @@ function handleLogout() {
   $('#verificationNotice').style.display = 'none';
   $('#roleSelectSection').style.display = 'block';
   $('#roleSelect').value = '';
+  
+  // Restore hero section
+  const heroEl = document.querySelector('.hero');
+  if (heroEl) heroEl.style.display = '';
 }
 
 async function handleResendVerification() {
