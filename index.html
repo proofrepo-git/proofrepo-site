@@ -6590,19 +6590,24 @@ function initAuditPeriodPickers() {
     }
   };
   
-  // Default: start of current year
-  const defaultStart = new Date();
-  defaultStart.setMonth(0, 1);
-  defaultStart.setHours(0, 0, 0, 0);
+  // Default: most common audit period is the prior calendar year
+  // e.g., in Feb 2026, auditors are usually requesting for Jan 1 2025 – Dec 31 2025
+  const now = new Date();
+  const priorYear = now.getFullYear() - 1;
   
-  // Default: end of current year (or today if past Dec 31)
-  const defaultEnd = new Date();
-  defaultEnd.setMonth(11, 31);
-  defaultEnd.setHours(0, 0, 0, 0);
+  const defaultStart = new Date(priorYear, 0, 1); // Jan 1 of prior year
+  const defaultEnd = new Date(priorYear, 11, 31); // Dec 31 of prior year
   
   auditPeriodStartPicker = flatpickr('#auditPeriodStart', {
     ...commonOpts,
-    maxDate: new Date().fp_incr(365), // Up to 1 year from now
+    defaultDate: null, // Don't pre-select, just open to the right month
+    maxDate: new Date().fp_incr(365),
+    // Open calendar to Jan of prior year so user just clicks "1"
+    onOpen: function(selectedDates, dateStr, instance) {
+      if (!selectedDates.length) {
+        instance.jumpToDate(defaultStart);
+      }
+    },
     onChange: function(selectedDates) {
       if (selectedDates[0] && auditPeriodEndPicker) {
         auditPeriodEndPicker.set('minDate', selectedDates[0]);
@@ -6615,6 +6620,12 @@ function initAuditPeriodPickers() {
   auditPeriodEndPicker = flatpickr('#auditPeriodEnd', {
     ...commonOpts,
     maxDate: new Date().fp_incr(365),
+    // Open calendar to Dec of prior year so user just clicks "31"
+    onOpen: function(selectedDates, dateStr, instance) {
+      if (!selectedDates.length) {
+        instance.jumpToDate(defaultEnd);
+      }
+    },
     onChange: function(selectedDates) {
       if (selectedDates[0] && auditPeriodStartPicker) {
         auditPeriodStartPicker.set('maxDate', selectedDates[0]);
@@ -9133,6 +9144,20 @@ async function loadTemplate(templateId) {
     if (gi) gi.value = template.globalInstructions;
   }
   
+  // v16: Restore audit period dates
+  if (template.auditPeriodStart && auditPeriodStartPicker) {
+    auditPeriodStartPicker.setDate(new Date(template.auditPeriodStart), true);
+  }
+  if (template.auditPeriodEnd && auditPeriodEndPicker) {
+    auditPeriodEndPicker.setDate(new Date(template.auditPeriodEnd), true);
+  }
+  
+  // v16: Restore engagement ref
+  if (template.engagementRef) {
+    const engRef = $('#engagementRef');
+    if (engRef) engRef.value = template.engagementRef;
+  }
+  
   // Reset the select dropdown
   $('#templateSelect').value = '';
   
@@ -9212,7 +9237,11 @@ async function saveAsTemplate() {
           name,
           composerState: includeInstructions ? composerState : stripInstructions(composerState),
           customFrameworks,
-          globalInstructions: includeInstructions ? ($('#globalInstructions')?.value || '') : ''
+          globalInstructions: includeInstructions ? ($('#globalInstructions')?.value || '') : '',
+          // v16: Save audit period and engagement ref
+          auditPeriodStart: auditPeriodStartPicker?.selectedDates[0]?.toISOString() || null,
+          auditPeriodEnd: auditPeriodEndPicker?.selectedDates[0]?.toISOString() || null,
+          engagementRef: $('#engagementRef')?.value?.trim() || null,
         })
       });
       
