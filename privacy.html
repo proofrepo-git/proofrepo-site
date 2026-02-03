@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Privacy Policy — ProofRepo</title>
-  <meta name="description" content="ProofRepo Privacy Policy - How we handle your data">
+  <meta name="description" content="ProofRepo Privacy Policy — How we handle your data">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -51,15 +51,6 @@
       color: var(--text);
       text-decoration: none;
     }
-    .logo-icon {
-      width: 28px;
-      height: 28px;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
     .back-link {
       color: var(--text-muted);
       text-decoration: none;
@@ -73,17 +64,9 @@
       padding: 48px 24px 80px;
     }
     
-    h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-    .subtitle {
-      color: var(--text-muted);
-      margin-bottom: 32px;
-    }
+    h1 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
+    .subtitle { color: var(--text-muted); margin-bottom: 32px; }
     
-    /* Quick summary box */
     .summary-box {
       background: linear-gradient(135deg, rgba(37,99,235,0.1), rgba(16,185,129,0.1));
       border: 1px solid var(--border);
@@ -109,13 +92,12 @@
       font-size: 0.95rem;
     }
     .summary-box li::before {
-      content: "✓";
+      content: "\2713";
       color: var(--accent);
       font-weight: 600;
       flex-shrink: 0;
     }
     
-    /* Document content */
     .document {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -134,32 +116,13 @@
       border-bottom: none;
     }
     
-    h3 {
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin-bottom: 12px;
-      color: var(--text);
-    }
-    
-    p {
-      margin-bottom: 12px;
-      color: var(--text-muted);
-    }
+    h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; color: var(--text); }
+    p { margin-bottom: 12px; color: var(--text-muted); }
     p:last-child { margin-bottom: 0; }
-    
-    ul, ol {
-      margin: 12px 0;
-      padding-left: 24px;
-      color: var(--text-muted);
-    }
+    ul, ol { margin: 12px 0; padding-left: 24px; color: var(--text-muted); }
     li { margin-bottom: 6px; }
-    
-    a {
-      color: var(--primary);
-      text-decoration: none;
-    }
+    a { color: var(--primary); text-decoration: none; }
     a:hover { text-decoration: underline; }
-    
     strong { color: var(--text); }
     
     .highlight-box {
@@ -186,9 +149,7 @@
       font-weight: 600;
       background: var(--surface-elevated);
     }
-    .data-table td {
-      color: var(--text-muted);
-    }
+    .data-table td { color: var(--text-muted); }
     
     .footer {
       text-align: center;
@@ -205,23 +166,22 @@
       margin-bottom: 12px;
       flex-wrap: wrap;
     }
-    .footer-links a {
-      color: var(--text-muted);
-    }
+    .footer-links a { color: var(--text-muted); }
   </style>
 </head>
 <body>
   <header class="header">
     <div class="header-inner">
       <a href="/" class="logo">
-        <div class="logo-icon">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-        </div>
+        <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
+          <rect width="40" height="40" rx="9" fill="#1E40AF"/>
+          <path d="M11 7V33" stroke="#fff" stroke-width="4.8" stroke-linecap="square"/>
+          <path d="M13.2 7H19.5C24.2 7 27.5 10.3 27.5 15C27.5 19.7 24.2 23 19.5 23H13.2" stroke="#fff" stroke-width="4.8" fill="none" stroke-linecap="square"/>
+          <path d="M17.5 23L20 14.5L22 18L27.5 7.5" stroke="#93C5FD" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
         ProofRepo
       </a>
-      <a href="/" class="back-link">← Back to home</a>
+      <a href="/" class="back-link">&larr; Back to home</a>
     </div>
   </header>
 
@@ -233,10 +193,10 @@
       <h2>Privacy at a Glance</h2>
       <ul>
         <li>We collect only what's needed to provide the service</li>
+        <li>Passwords are hashed — we never store them in plaintext</li>
         <li>Files are automatically deleted after 90 days</li>
         <li>We never sell your data or use it for advertising</li>
         <li>We don't use tracking cookies or analytics</li>
-        <li>Your files are encrypted at rest and in transit</li>
         <li>You can request deletion of your data at any time</li>
       </ul>
     </div>
@@ -254,8 +214,13 @@
             <th>Retention</th>
           </tr>
           <tr>
-            <td>Email addresses</td>
-            <td>Send links and notifications</td>
+            <td>Account email &amp; password hash</td>
+            <td>Auditor authentication</td>
+            <td>Until account deletion</td>
+          </tr>
+          <tr>
+            <td>Client email addresses</td>
+            <td>Send upload links and notifications</td>
             <td>With request record (30 days)</td>
           </tr>
           <tr>
@@ -269,14 +234,19 @@
             <td>90 days (auto-deleted)</td>
           </tr>
           <tr>
+            <td>Saved templates</td>
+            <td>Reuse evidence request configurations</td>
+            <td>Until account deletion</td>
+          </tr>
+          <tr>
             <td>Payment info</td>
-            <td>Process purchases (via Stripe)</td>
-            <td>Handled by Stripe</td>
+            <td>Process credit purchases (via Stripe)</td>
+            <td>Handled entirely by Stripe</td>
           </tr>
         </table>
         
         <div class="highlight-box">
-          <p><strong>What we don't collect:</strong> We don't use analytics, tracking pixels, or advertising cookies. We don't collect device fingerprints or build user profiles.</p>
+          <p><strong>What we don't collect:</strong> We don't use analytics, tracking pixels, or advertising cookies. We don't collect device fingerprints or build user profiles. We never store plaintext passwords — only salted PBKDF2 hashes.</p>
         </div>
       </div>
 
@@ -284,11 +254,12 @@
         <h3>2. How We Use Your Data</h3>
         <p>We use your information to:</p>
         <ul>
+          <li>Authenticate your account and maintain your session</li>
           <li>Send evidence request links to clients</li>
-          <li>Notify requestors when evidence is submitted</li>
+          <li>Notify you when evidence is submitted</li>
           <li>Process credit purchases</li>
           <li>Provide download access to uploaded files</li>
-          <li>Send service-related communications (no marketing)</li>
+          <li>Send service-related communications (no marketing emails)</li>
         </ul>
       </div>
 
@@ -297,7 +268,7 @@
         <p><strong>By design:</strong> When you use ProofRepo, evidence is shared between the requestor and client specified in each request. This is the core function of the service.</p>
         <p><strong>Service providers:</strong> We use trusted providers to operate the service:</p>
         <ul>
-          <li><strong>Cloudflare</strong> — Hosting, storage, and security (US-based, SOC 2 certified)</li>
+          <li><strong>Cloudflare</strong> — Hosting, storage, compute, and KV data store (US-based, SOC 2 certified)</li>
           <li><strong>Stripe</strong> — Payment processing (PCI DSS Level 1 certified)</li>
           <li><strong>Resend</strong> — Email delivery (US-based)</li>
         </ul>
@@ -313,18 +284,22 @@
           </tr>
           <tr>
             <td>Uploaded files</td>
-            <td>90 days (automatic deletion)</td>
+            <td>90 days (automatic deletion via R2 lifecycle rules)</td>
           </tr>
           <tr>
             <td>Request metadata</td>
-            <td>30 days (system records only, not your emails)</td>
+            <td>30 days</td>
+          </tr>
+          <tr>
+            <td>Account data</td>
+            <td>Until the user deletes their account</td>
           </tr>
           <tr>
             <td>Credit/billing records</td>
-            <td>12 months</td>
+            <td>12 months (stored in account history)</td>
           </tr>
         </table>
-        <p>You can delete submissions immediately through the Pack Viewer without waiting for automatic deletion.</p>
+        <p>You can delete individual submissions immediately through the Pack Viewer, or request full account deletion by contacting us.</p>
       </div>
 
       <div class="section">
@@ -333,8 +308,9 @@
         <ul>
           <li>AES-256 encryption at rest</li>
           <li>TLS 1.2+ encryption in transit</li>
-          <li>Time-limited signed URLs (72-hour expiry)</li>
-          <li>No persistent user accounts (link-based access)</li>
+          <li>PBKDF2 password hashing (100,000 iterations, SHA-256)</li>
+          <li>HMAC-SHA256 signed session tokens</li>
+          <li>Time-limited signed URLs for client access (72-hour expiry)</li>
         </ul>
         <p>For more details, see our <a href="/security.html">Security Practices</a> page.</p>
       </div>
@@ -344,18 +320,18 @@
         <p>You have the right to:</p>
         <ul>
           <li><strong>Access</strong> — Request a copy of your data</li>
-          <li><strong>Deletion</strong> — Request we delete your data</li>
+          <li><strong>Deletion</strong> — Request we delete your data or your account</li>
           <li><strong>Correction</strong> — Request we correct inaccurate data</li>
           <li><strong>Portability</strong> — Receive your data in a standard format</li>
         </ul>
-        <p>To exercise these rights, email <strong>privacy@proofrepo.com</strong></p>
+        <p>To exercise these rights, email <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3747455e4156544e774745585851455247581954585a">[email&#160;protected]</a></strong></p>
       </div>
 
       <div class="section">
         <h3>7. Cookies</h3>
         <p>We use minimal, essential cookies only:</p>
         <ul>
-          <li>Session management (keeping you on the right page)</li>
+          <li>Authentication tokens (keeping you signed in)</li>
           <li>Security tokens (preventing abuse)</li>
         </ul>
         <p>We don't use tracking cookies, advertising cookies, or third-party analytics.</p>
@@ -368,21 +344,5 @@
 
       <div class="section">
         <h3>9. Contact</h3>
-        <p>Privacy questions? Email us at <strong>privacy@proofrepo.com</strong></p>
-        <p>General support: <strong>support@proofrepo.com</strong></p>
-      </div>
-
-    </div>
-  </div>
-
-  <footer class="footer">
-    <div class="footer-links">
-      <a href="/">Home</a>
-      <a href="/security.html">Security</a>
-      <a href="/privacy.html">Privacy</a>
-      <a href="/terms.html">Terms</a>
-    </div>
-    <p>© 2026 ProofRepo. All rights reserved.</p>
-  </footer>
-</body>
-</html>
+        <p>Privacy questions? Email us at <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4535372c3324263c0535372a2a233720352a6b262a28">[email&#160;protected]</a></strong></p>
+        <p>General support: <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0774727777687573477775686861756277682964686a">[emai
