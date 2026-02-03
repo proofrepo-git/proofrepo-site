@@ -3,134 +3,127 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Privacy Policy — ProofRepo</title>
-  <meta name="description" content="ProofRepo Privacy Policy — How we handle your data">
+  <title>Privacy Policy &mdash; ProofRepo</title>
+  <meta name="description" content="ProofRepo Privacy Policy &mdash; How we handle your data">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #050a14;
-      --surface: #0a1628;
-      --surface-elevated: #0f1d32;
-      --border: #1e3a5f;
-      --text: #e2e8f0;
-      --text-muted: #94a3b8;
-      --primary: #2563eb;
-      --accent: #10b981;
+      --bg: #FFFFFF;
+      --bg-subtle: #F8FAFC;
+      --surface: #FFFFFF;
+      --border: #E2E8F0;
+      --border-strong: #CBD5E1;
+      --text: #0F172A;
+      --text-secondary: #334155;
+      --text-muted: #64748B;
+      --primary: #1E40AF;
+      --primary-hover: #1E3A8A;
+      --accent: #0D9488;
+      --shadow-card: 0 1px 3px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.06);
+      --radius-md: 12px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Inter', system-ui, sans-serif;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.7;
       font-size: 15px;
+      -webkit-font-smoothing: antialiased;
     }
+
     .header {
-      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       padding: 16px 24px;
-      background: rgba(5,10,20,0.9);
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.95);
       backdrop-filter: blur(10px);
       position: sticky;
       top: 0;
       z-index: 100;
-    }
-    .header-inner {
-      max-width: 800px;
+      max-width: 900px;
       margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
     }
     .logo {
       display: flex;
       align-items: center;
       gap: 10px;
+      font-family: 'Outfit', sans-serif;
       font-weight: 700;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       color: var(--text);
       text-decoration: none;
+      letter-spacing: -0.02em;
     }
-    .back-link {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 0.9rem;
-    }
+    .back-link { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; }
     .back-link:hover { color: var(--text); }
     
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 48px 24px 80px;
-    }
+    .container { max-width: 800px; margin: 0 auto; padding: 48px 24px 80px; }
     
-    h1 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
-    .subtitle { color: var(--text-muted); margin-bottom: 32px; }
+    h1 { font-family: 'Outfit', sans-serif; font-size: 2rem; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.02em; }
+    .subtitle { color: var(--text-muted); margin-bottom: 36px; font-size: 1.05rem; }
     
     .summary-box {
-      background: linear-gradient(135deg, rgba(37,99,235,0.1), rgba(16,185,129,0.1));
+      background: var(--bg-subtle);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: var(--radius-md);
       padding: 24px;
-      margin-bottom: 40px;
+      margin-bottom: 36px;
     }
     .summary-box h2 {
-      font-size: 1rem;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem;
       font-weight: 600;
       margin-bottom: 12px;
       color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
     }
-    .summary-box ul {
-      list-style: none;
-      display: grid;
-      gap: 8px;
-    }
+    .summary-box ul { list-style: none; display: grid; gap: 7px; padding: 0; }
     .summary-box li {
       display: flex;
       align-items: flex-start;
       gap: 10px;
-      font-size: 0.95rem;
+      font-size: 0.93rem;
+      color: var(--text-secondary);
     }
     .summary-box li::before {
       content: "\2713";
       color: var(--accent);
-      font-weight: 600;
+      font-weight: 700;
       flex-shrink: 0;
     }
     
     .document {
-      background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: var(--radius-md);
       padding: 32px;
+      background: var(--bg);
+      box-shadow: var(--shadow-card);
     }
+    .section { margin-bottom: 28px; padding-bottom: 28px; border-bottom: 1px solid var(--border); }
+    .section:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
     
-    .section {
-      margin-bottom: 28px;
-      padding-bottom: 28px;
-      border-bottom: 1px solid var(--border);
-    }
-    .section:last-child {
-      margin-bottom: 0;
-      padding-bottom: 0;
-      border-bottom: none;
-    }
-    
-    h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; color: var(--text); }
-    p { margin-bottom: 12px; color: var(--text-muted); }
+    h3 { font-family: 'Outfit', sans-serif; font-size: 1.05rem; font-weight: 600; margin-bottom: 10px; color: var(--text); }
+    p { margin-bottom: 12px; color: var(--text-secondary); }
     p:last-child { margin-bottom: 0; }
-    ul, ol { margin: 12px 0; padding-left: 24px; color: var(--text-muted); }
+    ul { margin: 10px 0; padding-left: 22px; color: var(--text-secondary); }
     li { margin-bottom: 6px; }
     a { color: var(--primary); text-decoration: none; }
     a:hover { text-decoration: underline; }
-    strong { color: var(--text); }
+    strong { color: var(--text); font-weight: 600; }
     
     .highlight-box {
-      background: var(--surface-elevated);
+      background: var(--bg-subtle);
       border-left: 3px solid var(--accent);
-      padding: 16px;
+      padding: 14px 16px;
       margin: 16px 0;
       border-radius: 0 8px 8px 0;
+      font-size: 0.92rem;
     }
     
     .data-table {
@@ -140,16 +133,19 @@
       font-size: 0.9rem;
     }
     .data-table th, .data-table td {
-      padding: 12px;
+      padding: 10px 12px;
       text-align: left;
       border-bottom: 1px solid var(--border);
     }
     .data-table th {
       color: var(--text);
       font-weight: 600;
-      background: var(--surface-elevated);
+      background: var(--bg-subtle);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
     }
-    .data-table td { color: var(--text-muted); }
+    .data-table td { color: var(--text-secondary); }
     
     .footer {
       text-align: center;
@@ -159,30 +155,23 @@
       border-top: 1px solid var(--border);
       margin-top: 48px;
     }
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-      margin-bottom: 12px;
-      flex-wrap: wrap;
-    }
-    .footer-links a { color: var(--text-muted); }
+    .footer-links { display: flex; justify-content: center; gap: 24px; margin-bottom: 12px; flex-wrap: wrap; }
+    .footer-links a { color: var(--text-muted); text-decoration: none; font-weight: 500; }
+    .footer-links a:hover { color: var(--text); }
   </style>
 </head>
 <body>
   <header class="header">
-    <div class="header-inner">
-      <a href="/" class="logo">
-        <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
-          <rect width="40" height="40" rx="9" fill="#1E40AF"/>
-          <path d="M11 7V33" stroke="#fff" stroke-width="4.8" stroke-linecap="square"/>
-          <path d="M13.2 7H19.5C24.2 7 27.5 10.3 27.5 15C27.5 19.7 24.2 23 19.5 23H13.2" stroke="#fff" stroke-width="4.8" fill="none" stroke-linecap="square"/>
-          <path d="M17.5 23L20 14.5L22 18L27.5 7.5" stroke="#93C5FD" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        ProofRepo
-      </a>
-      <a href="/" class="back-link">&larr; Back to home</a>
-    </div>
+    <a href="/" class="logo">
+      <svg width="30" height="30" viewBox="0 0 40 40" fill="none" style="flex-shrink:0;">
+        <rect width="40" height="40" rx="9" fill="#1E40AF"/>
+        <path d="M11 7V33" stroke="#fff" stroke-width="4.8" stroke-linecap="square"/>
+        <path d="M13.2 7H19.5C24.2 7 27.5 10.3 27.5 15C27.5 19.7 24.2 23 19.5 23H13.2" stroke="#fff" stroke-width="4.8" fill="none" stroke-linecap="square"/>
+        <path d="M17.5 23L20 14.5L22 18L27.5 7.5" stroke="#93C5FD" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      ProofRepo
+    </a>
+    <a href="/" class="back-link">&larr; Back to home</a>
   </header>
 
   <div class="container">
@@ -190,10 +179,10 @@
     <p class="subtitle">Last updated: January 28, 2026</p>
 
     <div class="summary-box">
-      <h2>Privacy at a Glance</h2>
+      <h2>At a Glance</h2>
       <ul>
         <li>We collect only what's needed to provide the service</li>
-        <li>Passwords are hashed — we never store them in plaintext</li>
+        <li>Passwords are hashed &mdash; we never store them in plaintext</li>
         <li>Files are automatically deleted after 90 days</li>
         <li>We never sell your data or use it for advertising</li>
         <li>We don't use tracking cookies or analytics</li>
@@ -208,51 +197,22 @@
         <p>We collect information necessary to provide the evidence collection service:</p>
         
         <table class="data-table">
-          <tr>
-            <th>Data Type</th>
-            <th>Purpose</th>
-            <th>Retention</th>
-          </tr>
-          <tr>
-            <td>Account email &amp; password hash</td>
-            <td>Auditor authentication</td>
-            <td>Until account deletion</td>
-          </tr>
-          <tr>
-            <td>Client email addresses</td>
-            <td>Send upload links and notifications</td>
-            <td>With request record (30 days)</td>
-          </tr>
-          <tr>
-            <td>Company names</td>
-            <td>Identify submissions</td>
-            <td>With request record (30 days)</td>
-          </tr>
-          <tr>
-            <td>Uploaded files</td>
-            <td>Deliver to requestor</td>
-            <td>90 days (auto-deleted)</td>
-          </tr>
-          <tr>
-            <td>Saved templates</td>
-            <td>Reuse evidence request configurations</td>
-            <td>Until account deletion</td>
-          </tr>
-          <tr>
-            <td>Payment info</td>
-            <td>Process credit purchases (via Stripe)</td>
-            <td>Handled entirely by Stripe</td>
-          </tr>
+          <tr><th>Data Type</th><th>Purpose</th><th>Retention</th></tr>
+          <tr><td>Account email &amp; password hash</td><td>Auditor authentication</td><td>Until account deletion</td></tr>
+          <tr><td>Client email addresses</td><td>Send upload links and notifications</td><td>With request record (30 days)</td></tr>
+          <tr><td>Company names</td><td>Identify submissions</td><td>With request record (30 days)</td></tr>
+          <tr><td>Uploaded files</td><td>Deliver to requestor</td><td>90 days (auto-deleted)</td></tr>
+          <tr><td>Saved templates</td><td>Reuse evidence request configurations</td><td>Until account deletion</td></tr>
+          <tr><td>Payment info</td><td>Process credit purchases (via Stripe)</td><td>Handled entirely by Stripe</td></tr>
         </table>
         
         <div class="highlight-box">
-          <p><strong>What we don't collect:</strong> We don't use analytics, tracking pixels, or advertising cookies. We don't collect device fingerprints or build user profiles. We never store plaintext passwords — only salted PBKDF2 hashes.</p>
+          <p><strong>What we don't collect:</strong> We don't use analytics, tracking pixels, or advertising cookies. We don't collect device fingerprints or build user profiles. We never store plaintext passwords &mdash; only salted PBKDF2 hashes.</p>
         </div>
       </div>
 
       <div class="section">
         <h3>2. How We Use Your Data</h3>
-        <p>We use your information to:</p>
         <ul>
           <li>Authenticate your account and maintain your session</li>
           <li>Send evidence request links to clients</li>
@@ -266,45 +226,29 @@
       <div class="section">
         <h3>3. Who We Share With</h3>
         <p><strong>By design:</strong> When you use ProofRepo, evidence is shared between the requestor and client specified in each request. This is the core function of the service.</p>
-        <p><strong>Service providers:</strong> We use trusted providers to operate the service:</p>
+        <p><strong>Service providers:</strong></p>
         <ul>
-          <li><strong>Cloudflare</strong> — Hosting, storage, compute, and KV data store (US-based, SOC 2 certified)</li>
-          <li><strong>Stripe</strong> — Payment processing (PCI DSS Level 1 certified)</li>
-          <li><strong>Resend</strong> — Email delivery (US-based)</li>
+          <li><strong>Cloudflare</strong> &mdash; Hosting, storage, compute, and KV data store (SOC 2 certified)</li>
+          <li><strong>Stripe</strong> &mdash; Payment processing (PCI DSS Level 1)</li>
+          <li><strong>Resend</strong> &mdash; Email delivery (US-based)</li>
         </ul>
-        <p><strong>We never:</strong> Sell your data, share it with advertisers, or use it for purposes beyond providing the service.</p>
+        <p>We never sell your data, share it with advertisers, or use it for purposes beyond providing the service.</p>
       </div>
 
       <div class="section">
         <h3>4. Data Retention</h3>
         <table class="data-table">
-          <tr>
-            <th>Data</th>
-            <th>Retention Period</th>
-          </tr>
-          <tr>
-            <td>Uploaded files</td>
-            <td>90 days (automatic deletion via R2 lifecycle rules)</td>
-          </tr>
-          <tr>
-            <td>Request metadata</td>
-            <td>30 days</td>
-          </tr>
-          <tr>
-            <td>Account data</td>
-            <td>Until the user deletes their account</td>
-          </tr>
-          <tr>
-            <td>Credit/billing records</td>
-            <td>12 months (stored in account history)</td>
-          </tr>
+          <tr><th>Data</th><th>Retention Period</th></tr>
+          <tr><td>Uploaded files</td><td>90 days (automatic deletion via R2 lifecycle rules)</td></tr>
+          <tr><td>Request metadata</td><td>30 days</td></tr>
+          <tr><td>Account data</td><td>Until the user deletes their account</td></tr>
+          <tr><td>Credit/billing records</td><td>12 months (stored in account history)</td></tr>
         </table>
         <p>You can delete individual submissions immediately through the Pack Viewer, or request full account deletion by contacting us.</p>
       </div>
 
       <div class="section">
         <h3>5. Security</h3>
-        <p>We protect your data with:</p>
         <ul>
           <li>AES-256 encryption at rest</li>
           <li>TLS 1.2+ encryption in transit</li>
@@ -317,24 +261,18 @@
 
       <div class="section">
         <h3>6. Your Rights</h3>
-        <p>You have the right to:</p>
         <ul>
-          <li><strong>Access</strong> — Request a copy of your data</li>
-          <li><strong>Deletion</strong> — Request we delete your data or your account</li>
-          <li><strong>Correction</strong> — Request we correct inaccurate data</li>
-          <li><strong>Portability</strong> — Receive your data in a standard format</li>
+          <li><strong>Access</strong> &mdash; Request a copy of your data</li>
+          <li><strong>Deletion</strong> &mdash; Request we delete your data or your account</li>
+          <li><strong>Correction</strong> &mdash; Request we correct inaccurate data</li>
+          <li><strong>Portability</strong> &mdash; Receive your data in a standard format</li>
         </ul>
-        <p>To exercise these rights, email <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3747455e4156544e774745585851455247581954585a">[email&#160;protected]</a></strong></p>
+        <p>To exercise these rights, email <strong>privacy@proofrepo.com</strong></p>
       </div>
 
       <div class="section">
         <h3>7. Cookies</h3>
-        <p>We use minimal, essential cookies only:</p>
-        <ul>
-          <li>Authentication tokens (keeping you signed in)</li>
-          <li>Security tokens (preventing abuse)</li>
-        </ul>
-        <p>We don't use tracking cookies, advertising cookies, or third-party analytics.</p>
+        <p>We use minimal, essential cookies only: authentication tokens (keeping you signed in) and security tokens (preventing abuse). We don't use tracking cookies, advertising cookies, or third-party analytics.</p>
       </div>
 
       <div class="section">
@@ -344,5 +282,21 @@
 
       <div class="section">
         <h3>9. Contact</h3>
-        <p>Privacy questions? Email us at <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4535372c3324263c0535372a2a233720352a6b262a28">[email&#160;protected]</a></strong></p>
-        <p>General support: <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0774727777687573477775686861756277682964686a">[emai
+        <p>Privacy questions? Email us at <strong>privacy@proofrepo.com</strong></p>
+        <p>General support: <strong>support@proofrepo.com</strong></p>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/security.html">Security</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+    </div>
+    <p>&copy; 2026 ProofRepo. All rights reserved.</p>
+  </footer>
+</body>
+</html>
