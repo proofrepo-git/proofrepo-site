@@ -986,6 +986,22 @@
  border-color: var(--error);
  }
 
+ .request-action-btn.danger-text {
+ color: var(--error);
+ border-color: transparent;
+ font-size: 0.78rem;
+ }
+
+ .request-action-btn.danger-text:hover {
+ background: var(--error-light);
+ border-color: rgba(220, 38, 38, 0.2);
+ }
+
+ .reminder-info {
+ color: var(--primary);
+ font-size: 0.82rem;
+ }
+
  /* ==================== TEMPLATES ==================== */
  .templates-list {
  display: flex;
@@ -1338,6 +1354,11 @@
 
  .cg-body {
  border-top: 1px solid var(--border);
+ display: none;
+ }
+
+ .cg-body.open {
+ display: block;
  }
 
  /* ==================== EVIDENCE ITEMS ==================== */
@@ -1409,6 +1430,15 @@
  .ei-body {
  margin-top: 10px;
  padding-left: 28px;
+ display: grid;
+ grid-template-columns: 1fr 1fr;
+ gap: 12px;
+ }
+
+ @media (max-width: 768px) {
+ .ei-body {
+ grid-template-columns: 1fr;
+ }
  }
 
  .ei-client-zone {
@@ -1416,7 +1446,6 @@
  border: 1px solid var(--border);
  border-radius: var(--radius-sm);
  padding: 14px 16px;
- margin-bottom: 10px;
  }
 
  .ei-zone-header {
@@ -1588,7 +1617,7 @@
 
  /* Guidance zone (tips) */
  .ei-guidance-zone {
- margin-top: 10px;
+ margin-top: 0;
  }
 
  .ei-guidance-toggle {
@@ -3171,7 +3200,7 @@
 
  <!-- Verification Notice -->
  <div id="verificationNotice" class="verification-notice" style="display: none;">
- <span>&#x26A0; Please verify your email to send requests. <a href="#" id="resendVerifyLink">Resend verification</a></span>
+ <span>⚠ Please verify your email to send requests. <a href="#" id="resendVerifyLink">Resend verification</a></span>
  </div>
 
  <!-- Dashboard View (shown for logged-in users) -->
@@ -3218,7 +3247,7 @@
  
  <!-- Active Requests Section -->
  <div class="request-section">
- <h3 class="section-title">Active Requests</h3>
+ <h3 class="section-title">Active Requests <span class="section-count" id="activeCount">(0)</span></h3>
  <div id="activeRequestsList" class="requests-list">
  <div class="loading-placeholder">Loading requests...</div>
  </div>
@@ -3226,7 +3255,7 @@
  
  <!-- Completed Requests Section -->
  <div class="request-section">
- <h3 class="section-title">Completed</h3>
+ <h3 class="section-title">Completed <span class="section-count" id="completedCount">(0)</span></h3>
  <div id="completedRequestsList" class="requests-list">
  <div class="loading-placeholder">Loading requests...</div>
  </div>
@@ -3518,7 +3547,7 @@
  <footer class="footer">
  <div class="footer-about">
  <p>ProofRepo was built by a professional who got tired of chasing documents through email chains and shared drives. Founded in 2025. Independent and self-funded. Based in Jacksonville, FL.</p>
- <p class="footer-origin">Questions? <a href="mailto:support@proofrepo.com">support@proofrepo.com</a></p>
+ <p class="footer-origin">Questions? <a href="/cdn-cgi/l/email-protection#0f7c7a7f7f607d7b4f7f7d6060697d6a7f60216c6062"><span class="__cf_email__" data-cfemail="52212722223d20261222203d3d342037223d7c313d3f">[email&#160;protected]</span></a></p>
  </div>
  <div class="footer-links">
  <a href="#how-it-works">How it Works</a>
@@ -3592,7 +3621,7 @@
  </div>
  </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const API = 'https://proofrepo-intake.atucker5.workers.dev';
 const STORAGE_KEY = 'proofrepo_form_state';
 
@@ -6591,7 +6620,7 @@ function initDeadlinePicker() {
  time_24hr: false,
  minuteIncrement: 15,
  disableMobile: false,
- theme: 'dark',
+
  onReady: function(selectedDates, dateStr, instance) {
  updateDeadlineHint(selectedDates[0]);
  // Style the input to match our theme
@@ -6622,7 +6651,7 @@ function initAuditPeriodPickers() {
  altInput: true,
  altFormat: 'F j, Y',
  disableMobile: false,
- theme: 'dark',
+
  onReady: function(selectedDates, dateStr, instance) {
  instance.altInput.style.backgroundColor = 'var(--surface)';
  instance.altInput.style.border = '1px solid var(--border)';
@@ -6650,6 +6679,7 @@ function initAuditPeriodPickers() {
  
  auditPeriodStartPicker = flatpickr('#auditPeriodStart', {
  ...commonOpts,
+ defaultDate: defaultStart,
  maxDate: new Date().fp_incr(365), // Up to 1 year from now
  onChange: function(selectedDates) {
  if (selectedDates[0] && auditPeriodEndPicker) {
@@ -6662,6 +6692,7 @@ function initAuditPeriodPickers() {
  
  auditPeriodEndPicker = flatpickr('#auditPeriodEnd', {
  ...commonOpts,
+ defaultDate: defaultEnd,
  maxDate: new Date().fp_incr(365),
  onChange: function(selectedDates) {
  if (selectedDates[0] && auditPeriodStartPicker) {
@@ -6682,10 +6713,10 @@ function updateAuditPeriodHint() {
  
  if (startDate && endDate) {
  const months = Math.round((endDate - startDate) / (1000 * 60 * 60 * 24 * 30));
- hint.textContent = ` ${months} month audit period &mdash; date range will be included in period-based evidence requests`;
+ hint.textContent = ` ${months} month audit period \u2014 date range will be included in period-based evidence requests`;
  hint.style.color = 'var(--accent)';
  } else if (startDate || endDate) {
- hint.textContent = `&#x26A0; Please set both start and end dates for the audit period`;
+ hint.textContent = `\u26A0 Please set both start and end dates for the audit period`;
  hint.style.color = 'var(--warning)';
  } else {
  hint.textContent = '';
@@ -7690,14 +7721,14 @@ function updateCodeUI(result) {
  codeInput.classList.remove('invalid');
  codeInput.classList.add('valid');
  codeStatus.className = 'code-status valid';
- codeStatus.textContent = `&#x2713; Valid &mdash; ${result.message}`;
+ codeStatus.innerHTML = `&#x2713; Valid &mdash; ${result.message}`;
  state.codeValid = true;
  state.codeCredits = result.credits;
  } else if (result.error) {
  codeInput.classList.remove('valid');
  codeInput.classList.add('invalid');
  codeStatus.className = 'code-status invalid';
- codeStatus.textContent = `&#x2717; ${result.error}`;
+ codeStatus.innerHTML = `&#x2717; ${esc(result.error)}`;
  state.codeValid = false;
  } else {
  codeInput.classList.remove('valid', 'invalid');
@@ -7827,7 +7858,7 @@ async function checkCheckoutReturn() {
  }
  if (codeStatus) {
  codeStatus.className = 'code-status valid';
- codeStatus.textContent = `&#x2713; Valid &mdash; ${creditsText}`;
+ codeStatus.innerHTML = `&#x2713; Valid &mdash; ${esc(creditsText)}`;
  }
  saveFormState();
  } else {
@@ -8001,11 +8032,12 @@ function renderDashboard(requests, stats) {
  
  // Render active requests
  const activeList = $('#activeRequestsList');
+ $('#activeCount').textContent = `(${active.length})`;
  if (active.length === 0) {
  activeList.innerHTML = `
  <div class="empty-state">
- <div class="empty-state-icon"></div>
- <div class="empty-state-text">No active requests. Click "New Evidence Request" to get started.</div>
+ <div class="empty-state-icon">📋</div>
+ <div class="empty-state-text">No active requests. Click "+ New Evidence Request" to get started.</div>
  </div>
  `;
  } else {
@@ -8014,6 +8046,7 @@ function renderDashboard(requests, stats) {
  
  // Render completed requests
  const completedList = $('#completedRequestsList');
+ $('#completedCount').textContent = `(${completed.length})`;
  if (completed.length === 0) {
  completedList.innerHTML = `
  <div class="empty-state">
@@ -8043,7 +8076,7 @@ function renderTemplatesSection() {
  if (templates.length === 0) {
  templatesList.innerHTML = `
  <div class="empty-state">
- <div class="empty-state-icon"></div>
+ <div class="empty-state-icon">📄</div>
  <div class="empty-state-text">No saved templates. Create a request and save it as a template for reuse.</div>
  </div>
  `;
@@ -8244,15 +8277,15 @@ function renderRequestCard(req, type) {
  <button class="request-action-btn" data-action="copy-link" data-token="${esc(req.token)}">Copy Client Link</button>
  <button class="request-action-btn" data-action="resend" data-token="${esc(req.token)}">Resend Email</button>
  `;
- // Add extend deadline for overdue requests
- if (isOverdue && req.extendToken) {
+ // Add extend deadline for requests with a deadline
+ if (req.extendToken && req.deadlineISO) {
  actionsHtml += `
- <button class="request-action-btn primary" data-action="extend" data-extend-token="${esc(req.extendToken)}" data-company="${esc(req.company || '')}">Extend Deadline</button>
+ <button class="request-action-btn${isOverdue ? ' primary' : ''}" data-action="extend" data-extend-token="${esc(req.extendToken)}" data-company="${esc(req.company || '')}">Extend Deadline</button>
  `;
  }
  } else {
  actionsHtml = `
- <button class="request-action-btn primary" data-action="view-pack" data-token="${esc(req.token)}">View ProofPack</button>
+ <button class="request-action-btn primary" data-action="view-pack" data-token="${esc(req.token)}" data-viewer-url="${esc(req.viewerUrl || '')}">View ProofPack</button>
  <button class="request-action-btn" data-action="copy-link" data-token="${esc(req.token)}">Copy Client Link</button>
  `;
  }
@@ -8287,9 +8320,15 @@ function renderRequestCard(req, type) {
  <div class="request-meta-item">
  <span></span> ${req.totalItems || 0} evidence items
  </div>
+ ${req.reminderStatus && type === 'active' ? `
+ <div class="request-meta-item reminder-info">
+ <span></span> ${esc(req.reminderStatus.label)}${req.reminderStatus.nextAt ? ` (${new Date(req.reminderStatus.nextAt).toLocaleDateString('en-US', {month:'short',day:'numeric'})})` : ''}
+ </div>
+ ` : ''}
  </div>
  <div class="request-actions">
  ${actionsHtml}
+ ${type === 'active' ? `<button class="request-action-btn danger-text" data-action="cancel" data-token="${esc(req.token)}" data-company="${esc(req.company || '')}">Cancel Request</button>` : ''}
  </div>
  </div>
  `;
@@ -8331,9 +8370,12 @@ function wireRequestActions() {
  // View pack buttons
  $$('[data-action="view-pack"]').forEach(btn => {
  btn.addEventListener('click', () => {
- const token = btn.dataset.token;
- // Open the viewer - this will show the pack if available
- window.open(`${API}/d?t=${token}`, '_blank');
+ const viewerUrl = btn.dataset.viewerUrl;
+ if (viewerUrl) {
+ window.open(viewerUrl, '_blank');
+ } else {
+ alert('ProofPack viewer URL is not available yet. The client may not have submitted evidence.');
+ }
  });
  });
  
@@ -8366,6 +8408,43 @@ function wireRequestActions() {
  alert('Error extending deadline: ' + e.message);
  btn.disabled = false;
  btn.textContent = 'Extend Deadline';
+ }
+ });
+ });
+ 
+ // Cancel request buttons
+ $$('[data-action="cancel"]').forEach(btn => {
+ btn.addEventListener('click', async () => {
+ const token = btn.dataset.token;
+ const company = btn.dataset.company || 'this request';
+ 
+ if (!confirm(`Cancel the evidence request for "${company}"? This cannot be undone.`)) return;
+ 
+ btn.disabled = true;
+ btn.textContent = 'Cancelling...';
+ 
+ try {
+ const res = await fetch(`${API}/request/cancel`, {
+ method: 'POST',
+ headers: {
+ 'Content-Type': 'application/json',
+ 'Authorization': `Bearer ${state.authToken}`
+ },
+ body: JSON.stringify({ token })
+ });
+ const data = await res.json();
+ 
+ if (data.ok) {
+ await fetchAndRenderDashboard();
+ } else {
+ alert('Error cancelling: ' + (data.error || 'Unknown error'));
+ btn.disabled = false;
+ btn.textContent = 'Cancel Request';
+ }
+ } catch (e) {
+ alert('Error cancelling: ' + e.message);
+ btn.disabled = false;
+ btn.textContent = 'Cancel Request';
  }
  });
  });
@@ -8523,7 +8602,7 @@ async function checkExistingSession() {
 function showAuthStatus(elementId, message, type) {
  const el = $(`#${elementId}`);
  if (!el) return;
- el.textContent = message;
+ el.innerHTML = message;
  el.className = `auth-status visible ${type}`;
 }
 
@@ -8649,7 +8728,7 @@ async function handleSignup() {
  const data = await res.json();
  
  if (data.ok) {
- showAuthStatus('signupStatus', '&#x2713; Account created! Check your email to verify.', 'success');
+ showAuthStatus('signupStatus', '\u2713 Account created! Check your email to verify.', 'success');
  
  // Auto-login but mark as unverified
  if (data.token && data.user) {
@@ -8969,7 +9048,7 @@ async function saveAsTemplate() {
  state.user.templates = state.user.templates || [];
  state.user.templates.push(data.template);
  updateLoggedInBar();
- $('#saveTemplateStatus').textContent = '&#x2713; Template saved!';
+ $('#saveTemplateStatus').innerHTML = '&#x2713; Template saved!';
  $('#saveTemplateStatus').style.color = '#10b981';
  setTimeout(() => form.remove(), 1500);
  } else {
@@ -9044,7 +9123,7 @@ function setupAuthListeners() {
  const pw = e.target.value;
  const update = (id, ok) => {
  const el = $(`#${id}`);
- if (el) { el.textContent = (ok ? '&#x2713; ' : '&#x2717; ') + el.textContent.slice(2); el.style.color = ok ? '#10b981' : '#ef4444'; }
+ if (el) { el.innerHTML = (ok ? '&#x2713; ' : '&#x2717; ') + esc(el.textContent.slice(2)); el.style.color = ok ? '#10b981' : '#ef4444'; }
  };
  update('resetReqLength', pw.length >= 8);
  update('resetReqNumber', /\d/.test(pw));
@@ -9169,7 +9248,7 @@ function selectTier(tier) {
  if (tier) { 
  const prices = { single: '$59', pack5: '$249', pack15: '$499', pack50: '$1,249' }; 
  buyBtn.disabled = false; 
- buyBtn.textContent = `Buy Credits &mdash; ${prices[tier]}`;
+ buyBtn.innerHTML = `Buy Credits &mdash; ${esc(prices[tier])}`;
  // ADD THIS: Highlight the button
  buyBtn.className = 'btn btn-accent btn-full';
  } else { 
@@ -9581,16 +9660,4 @@ async function init() {
  
  $('#buyCreditsBtn').addEventListener('click', handleCheckout);
  
- $('#getStartedLink').addEventListener('click', e => {
- e.preventDefault();
- $('#roleSelect').scrollIntoView({ behavior: 'smooth' });
- $('#roleSelect').focus();
- });
- 
- updateMainButton();
-}
-
-document.addEventListener('DOMContentLoaded', init);
-</script>
-</body>
-</html>
+ $('#getStartedLink').a
