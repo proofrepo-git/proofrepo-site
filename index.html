@@ -3380,23 +3380,23 @@
  <div class="pricing-grid">
  <div class="pricing-card" data-tier="single">
  <div class="pricing-card-name">Single</div>
- <div class="pricing-card-price">$69</div>
+ <div class="pricing-card-price">$79</div>
  <div class="pricing-card-desc">1 credit</div>
  </div>
  <div class="pricing-card" data-tier="pack5">
  <div class="pricing-card-name">5-Pack</div>
- <div class="pricing-card-price">$249</div>
- <div class="pricing-card-desc">$50 each</div>
+ <div class="pricing-card-price">$299</div>
+ <div class="pricing-card-desc">$60 each</div>
  </div>
  <div class="pricing-card" data-tier="pack15">
  <div class="pricing-card-name">15-Pack</div>
- <div class="pricing-card-price">$499</div>
- <div class="pricing-card-desc">$33 each</div>
+ <div class="pricing-card-price">$749</div>
+ <div class="pricing-card-desc">$50 each</div>
  </div>
  <div class="pricing-card" data-tier="pack50">
  <div class="pricing-card-name">50-Pack</div>
- <div class="pricing-card-price">$1,499</div>
- <div class="pricing-card-desc">$30 each</div>
+ <div class="pricing-card-price">$1,999</div>
+ <div class="pricing-card-desc">$40 each</div>
  </div>
  </div>
  <button class="btn btn-outline btn-full" id="buyCreditsBtn" disabled>
@@ -9246,7 +9246,7 @@ function selectTier(tier) {
  state.selectedTier = tier;
  const buyBtn = $('#buyCreditsBtn');
  if (tier) { 
- const prices = { single: '$59', pack5: '$249', pack15: '$499', pack50: '$1,249' }; 
+ const prices = { single: '$79', pack5: '$299', pack15: '$749', pack50: '$1,999' }; 
  buyBtn.disabled = false; 
  buyBtn.innerHTML = `Buy Credits &mdash; ${esc(prices[tier])}`;
  // ADD THIS: Highlight the button
