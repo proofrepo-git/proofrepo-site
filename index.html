@@ -6910,7 +6910,7 @@ function getAuditPeriodString() {
  const endDate = auditPeriodEndPicker?.selectedDates[0];
  
  if (startDate && endDate) {
- const opts = { year: 'numeric', month: 'short', day: 'numeric' };
+ const opts = { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' };
  return `${startDate.toLocaleDateString('en-US', opts)} - ${endDate.toLocaleDateString('en-US', opts)}`;
  }
  return null;
@@ -8269,7 +8269,7 @@ function renderTemplatesSection() {
 
 function renderTemplateCard(template) {
  const created = new Date(template.createdAt);
- const createdStr = created.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+ const createdStr = created.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
  
  // Count frameworks enabled
  const fwCount = Object.values(template.composerState || {}).filter(fw => fw.enabled).length;
@@ -8424,8 +8424,8 @@ function renderRequestCard(req, type) {
  const now = new Date();
  
  // Format dates
- const deadlineStr = deadline ? deadline.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'No deadline';
- const createdStr = created.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+ const deadlineStr = deadline ? deadline.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' }) : 'No deadline';
+ const createdStr = created.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
  
  // Check if overdue
  const isOverdue = deadline && deadline < now && req.status === 'pending';
@@ -8442,7 +8442,7 @@ function renderRequestCard(req, type) {
  statusHtml = '<div class="request-status pending"><span class="status-dot"></span> Waiting for upload</div>';
  }
  } else {
- const submittedDate = req.submittedAt ? new Date(req.submittedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+ const submittedDate = req.submittedAt ? new Date(req.submittedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }) : '';
  statusHtml = `<div class="request-status complete"><span class="status-dot"></span> Completed${submittedDate ? ` ${submittedDate}` : ''}</div>`;
  }
  
@@ -8467,7 +8467,7 @@ function renderRequestCard(req, type) {
  }
  } else {
  actionsHtml = `
- <button class="request-action-btn primary" data-action="view-pack" data-token="${esc(req.token)}" data-viewer-url="${esc(req.viewerUrl || '')}">View ProofPack</button>
+ <button class="request-action-btn primary" data-action="view-pack" data-token="${esc(req.token)}">View ProofPack</button>
  <button class="request-action-btn" data-action="copy-link" data-token="${esc(req.token)}">Copy Client Link</button>
  `;
  }
@@ -8504,7 +8504,18 @@ function renderRequestCard(req, type) {
  </div>
  ${req.reminderStatus && type === 'active' ? `
  <div class="request-meta-item reminder-info">
- <span></span> ${esc(req.reminderStatus.label)}${req.reminderStatus.nextAt ? ` (${new Date(req.reminderStatus.nextAt).toLocaleDateString('en-US', {month:'short',day:'numeric'})})` : ''}
+ <span></span> ${(() => {
+   const rs = req.reminderStatus;
+   if (rs.state === 'scheduled' && rs.nextAt) {
+     return 'Auto-reminder scheduled for ' + new Date(rs.nextAt).toLocaleDateString('en-US', {month:'short',day:'numeric', timeZone:'UTC'});
+   } else if (rs.state === 'imminent') {
+     return 'Auto-reminder sent (deadline within 48h)';
+   } else if (rs.state === 'overdue') {
+     return 'Overdue notice sent to client';
+   } else {
+     return esc(rs.label);
+   }
+ })()}
  </div>
  ` : ''}
  </div>
@@ -8572,12 +8583,9 @@ function wireRequestActions() {
  // View pack buttons
  $$('[data-action="view-pack"]').forEach(btn => {
  btn.addEventListener('click', () => {
- const viewerUrl = btn.dataset.viewerUrl;
- if (viewerUrl) {
- window.open(viewerUrl, '_blank');
- } else {
- alert('ProofPack viewer URL is not available yet. The client may not have submitted evidence.');
- }
+ const token = btn.dataset.token;
+ // Use /pack?t=TOKEN which resolves a fresh signed URL each time
+ window.open(`${API}/pack?t=${token}`, '_blank');
  });
  });
  
@@ -8598,7 +8606,7 @@ function wireRequestActions() {
  const data = await res.json();
  
  if (data.ok) {
- alert(`Deadline extended by ${days} days. New deadline: ${new Date(data.deadlineISO).toLocaleDateString()}`);
+ alert(`Deadline extended by ${days} days. New deadline: ${new Date(data.deadlineISO).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}`);
  // Refresh dashboard to show updated deadline
  await fetchAndRenderDashboard();
  } else {
