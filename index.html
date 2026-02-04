@@ -9660,4 +9660,16 @@ async function init() {
  
  $('#buyCreditsBtn').addEventListener('click', handleCheckout);
  
- $('#getStartedLink').a
+ $('#getStartedLink').addEventListener('click', e => {
+ e.preventDefault();
+ $('#roleSelect').scrollIntoView({ behavior: 'smooth' });
+ $('#roleSelect').focus();
+ });
+ 
+ updateMainButton();
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
