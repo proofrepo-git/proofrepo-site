@@ -1428,25 +1428,34 @@
  }
 
  .ei-body {
- margin-top: 10px;
+ margin-top: 8px;
  padding-left: 28px;
- display: grid;
- grid-template-columns: 1fr 1fr;
- gap: 12px;
- }
-
- @media (max-width: 768px) {
- .ei-body {
- grid-template-columns: 1fr;
- }
+ display: block;
  }
 
  .ei-client-zone {
  background: var(--bg-subtle);
  border: 1px solid var(--border);
  border-radius: var(--radius-sm);
- padding: 14px 16px;
+ padding: 12px 14px;
  }
+
+ .ei-client-label {
+ display: inline-flex;
+ align-items: center;
+ gap: 4px;
+ font-size: 0.68rem;
+ font-weight: 700;
+ color: var(--text-muted);
+ text-transform: uppercase;
+ letter-spacing: 0.5px;
+ margin-bottom: 8px;
+ background: var(--bg);
+ padding: 2px 8px;
+ border-radius: 4px;
+ border: 1px solid var(--border);
+ }
+ .ei-client-label svg { opacity: 0.5; }
 
  .ei-zone-header {
  font-size: 0.72rem;
@@ -1466,16 +1475,17 @@
 
  .ei-description-textarea {
  width: 100%;
- padding: 10px 12px;
+ padding: 8px 10px;
  background: var(--bg);
  border: 1px solid var(--border);
  border-radius: 6px;
  color: var(--text);
- font-size: 0.85rem;
+ font-size: 0.83rem;
  font-family: inherit;
- min-height: 60px;
- resize: vertical;
- line-height: 1.5;
+ min-height: 2.4em;
+ resize: none;
+ overflow: hidden;
+ line-height: 1.55;
  }
 
  .ei-description-textarea:focus {
@@ -1487,7 +1497,6 @@
  .ei-description-actions {
  display: flex;
  gap: 8px;
- margin-top: 6px;
  }
 
  .ei-action-btn {
@@ -1513,7 +1522,6 @@
  align-items: center;
  gap: 8px;
  flex-wrap: wrap;
- margin-top: 10px;
  }
 
  .ei-formats-label {
@@ -1543,14 +1551,14 @@
  gap: 4px;
  }
 
- .ei-format-chip .remove-fmt {
+ .ei-format-chip .chip-remove {
  cursor: pointer;
  font-size: 0.65rem;
  opacity: 0.5;
  transition: opacity 0.15s;
  }
 
- .ei-format-chip .remove-fmt:hover {
+ .ei-format-chip .chip-remove:hover {
  opacity: 1;
  color: var(--error);
  }
@@ -1592,90 +1600,142 @@
  color: var(--primary);
  }
 
- /* Instructions */
- .ei-instructions-row {
+ /* Bottom row: formats + actions compact */
+ .ei-bottom-row {
+ display: flex;
+ align-items: center;
+ gap: 10px;
  margin-top: 8px;
+ flex-wrap: wrap;
  }
 
- .ei-instructions-textarea {
- width: 100%;
- padding: 8px 12px;
- background: var(--bg);
- border: 1px solid var(--border);
- border-radius: 6px;
- color: var(--text);
- font-size: 0.82rem;
- font-family: inherit;
- min-height: 40px;
- resize: vertical;
+ .ei-bottom-spacer { flex: 1; }
+
+ /* Inline badges in header row */
+ .ei-badges {
+ display: flex;
+ gap: 5px;
+ flex-shrink: 0;
+ align-items: center;
  }
 
- .ei-instructions-textarea:focus {
- outline: none;
- border-color: var(--primary);
+ .ei-badge-inline {
+ font-size: 0.62rem;
+ font-weight: 700;
+ padding: 2px 7px;
+ border-radius: 4px;
+ white-space: nowrap;
+ text-transform: uppercase;
+ letter-spacing: 0.4px;
  }
 
- /* Guidance zone (tips) */
- .ei-guidance-zone {
- margin-top: 0;
- }
-
- .ei-guidance-toggle {
- margin-bottom: 6px;
- }
-
- .ei-guidance-toggle-btn {
- font-size: 0.75rem;
+ .ei-badge-inline.control {
+ background: var(--primary-light);
  color: var(--primary);
- cursor: pointer;
- font-weight: 500;
- background: none;
- border: none;
- padding: 0;
- font-family: inherit;
+ }
+
+ .ei-badge-inline.period {
+ background: var(--warning-light);
+ color: var(--warning);
+ }
+
+ .ei-badge-inline.point {
+ background: var(--bg-section);
+ color: var(--text-muted);
+ }
+
+ /* Tip tooltip */
+ .ei-tip-tooltip {
+ position: relative;
+ cursor: help;
+ flex-shrink: 0;
+ }
+ .ei-tip-icon {
  display: inline-flex;
  align-items: center;
- gap: 4px;
- }
-
- .ei-guidance-toggle-btn:hover {
- color: var(--primary-hover);
- text-decoration: underline;
- }
-
- .ei-guidance-content {
- background: var(--primary-subtle);
- border: 1px solid rgba(30, 64, 175, 0.1);
- border-radius: 6px;
- padding: 12px 14px;
- }
-
- .ei-guidance-meta {
- display: flex;
- flex-wrap: wrap;
- gap: 6px;
- margin-bottom: 8px;
- }
-
- .ei-guidance-meta span {
- font-size: 0.7rem;
- font-weight: 600;
- padding: 2px 8px;
- border-radius: 8px;
- background: rgba(30, 64, 175, 0.08);
+ justify-content: center;
+ width: 18px;
+ height: 18px;
+ border-radius: 50%;
+ background: var(--primary-light);
  color: var(--primary);
+ font-size: 0.65rem;
+ font-weight: 700;
  }
-
- .ei-tip {
- font-size: 0.8rem;
- color: var(--text-secondary);
+ .ei-tip-popup {
+ display: none;
+ position: absolute;
+ bottom: calc(100% + 8px);
+ right: 0;
+ width: 280px;
+ padding: 10px 12px;
+ background: var(--text);
+ color: #f8fafc;
+ font-size: 0.78rem;
  line-height: 1.5;
+ border-radius: 8px;
+ box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+ z-index: 50;
+ font-weight: 400;
+ cursor: default;
+ }
+ .ei-tip-popup::after {
+ content: '';
+ position: absolute;
+ top: 100%;
+ right: 14px;
+ border: 6px solid transparent;
+ border-top-color: var(--text);
+ }
+ .ei-tip-tooltip:hover .ei-tip-popup { display: block; }
+
+ /* Bulk guidance toolbar */
+ .bulk-guidance-toolbar {
+ display: flex;
+ align-items: center;
+ gap: 8px;
+ padding: 8px 16px;
+ background: var(--bg-subtle);
+ border-bottom: 1px solid var(--border);
+ }
+ .bulk-guidance-label {
+ font-size: 0.72rem;
+ font-weight: 600;
+ color: var(--text-muted);
+ text-transform: uppercase;
+ letter-spacing: 0.3px;
+ margin-right: 2px;
+ }
+ .bulk-guidance-btn {
+ font-size: 0.72rem;
+ padding: 3px 10px;
+ border-radius: 5px;
+ border: 1px solid var(--border);
+ background: var(--bg);
+ color: var(--text-secondary);
+ cursor: pointer;
+ font-family: inherit;
+ font-weight: 500;
+ transition: all 0.15s;
+ }
+ .bulk-guidance-btn:hover {
+ border-color: var(--primary);
+ color: var(--primary);
+ background: var(--primary-subtle);
+ }
+ .bulk-guidance-btn.restore {
+ border-color: #bbf7d0;
+ color: #166534;
+ background: #f0fdf4;
+ }
+ .bulk-guidance-btn.restore:hover {
+ border-color: #86efac;
+ background: #dcfce7;
  }
 
- .ei-tip-label {
- font-weight: 600;
- color: var(--primary);
- font-size: 0.75rem;
+ /* Legacy guidance zone - hidden in new layout, content moved to badges/tooltip */
+ .ei-guidance-zone {
+ display: none;
  }
 
  /* ==================== MORE TOGGLE ==================== */
@@ -4261,7 +4321,7 @@ SOC2: {
           title: 'Penetration Test Remediation',
           common: false,
           hint: 'Evidence pentest findings are remediated',
-          description: 'Provide evidence that penetration test findings have been remediated or have documented risk acceptance. Include tracking from finding to closure.',
+          description: 'Provide evidence that penetration test findings from {{auditPeriod}} have been remediated or have documented risk acceptance. Include tracking from finding to closure.',
           evidenceType: 'period-of-time',
           expectedFormat: 'PDF or Excel',
           controlRef: 'CC7.1',
@@ -4796,7 +4856,7 @@ SOC2: {
           title: 'Data Disposal Evidence',
           common: false,
           hint: 'Evidence of secure data disposal',
-          description: 'Provide evidence of secure data disposal practices including certificates of destruction, media sanitization logs, or disposal procedures.',
+          description: 'Provide evidence of secure data disposal practices during {{auditPeriod}} including certificates of destruction, media sanitization logs, or disposal procedures.',
           evidenceType: 'period-of-time',
           expectedFormat: 'PDF',
           controlRef: 'C1.2',
@@ -5016,7 +5076,7 @@ ISO27001: {
           title: 'Competence Records',
           common: true,
           hint: 'Evidence of security competence for relevant roles',
-          description: 'Provide evidence of competence for personnel in security-related roles. Include training records, certifications, and qualification evidence.',
+          description: 'Provide evidence of competence for personnel in security-related roles during {{auditPeriod}}. Include training records, certifications, and qualification evidence.',
           evidenceType: 'period-of-time',
           expectedFormat: 'PDF or Excel',
           controlRef: 'Clause 7.2',
@@ -6462,7 +6522,7 @@ HIPAA: {
       title: 'Administrative Safeguards',
       description: 'Security management, workforce security, and contingency planning',
       items: [
-        { id: 'hipaa_risk_analysis', title: 'Security Risk Analysis', common: true, hint: 'HIPAA risk assessment', description: 'Provide risk analysis covering ePHI as required by HIPAA. Include identified risks, ratings, and treatment decisions.', evidenceType: 'period-of-time', expectedFormat: 'PDF or Excel', controlRef: '&sect;164.308(a)(1)(ii)(A)', commonIssue: '⏰ Must specifically address ePHI risks. Generic IT assessments are insufficient.', frequency: 'annual' },
+        { id: 'hipaa_risk_analysis', title: 'Security Risk Analysis', common: true, hint: 'HIPAA risk assessment', description: 'Provide risk analysis covering ePHI as required by HIPAA for {{auditPeriod}}. Include identified risks, ratings, and treatment decisions.', evidenceType: 'period-of-time', expectedFormat: 'PDF or Excel', controlRef: '&sect;164.308(a)(1)(ii)(A)', commonIssue: '⏰ Must specifically address ePHI risks. Generic IT assessments are insufficient.', frequency: 'annual' },
         { id: 'hipaa_risk_management', title: 'Risk Management Plan', common: true, hint: 'Managing identified risks', description: 'Provide documentation showing how identified ePHI risks are managed.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: '&sect;164.308(a)(1)(ii)(B)', commonIssue: ' Should show how each risk is addressed.', frequency: 'annual' },
         { id: 'hipaa_sanction_policy', title: 'Sanction Policy', common: true, hint: 'Consequences for violations', description: 'Provide the Sanction Policy defining consequences for security policy violations.', evidenceType: 'point-in-time', expectedFormat: 'PDF', controlRef: '&sect;164.308(a)(1)(ii)(C)', commonIssue: 'Must be documented and communicated.', frequency: 'annual' },
         { id: 'hipaa_activity_review', title: 'Information System Activity Review', common: true, hint: 'Review of audit logs', description: 'Provide evidence of regular system activity review during {{auditPeriod}} for systems containing ePHI.', evidenceType: 'period-of-time', expectedFormat: 'PDF', controlRef: '&sect;164.308(a)(1)(ii)(D)', commonIssue: '⏰ Should show regular, documented review.', frequency: 'quarterly' },
@@ -7094,6 +7154,7 @@ function renderComposer() {
 
 function renderFwBody(fwKey, fw) {
  let html = `<div style="margin-top: 16px; margin-bottom: 8px;"><strong>${esc(fw.label)}</strong>${fw.description ? ` <span style="color: var(--text-muted);">&mdash; ${esc(fw.description)}</span>` : ''}</div>`;
+ html += `<div class="bulk-guidance-toolbar"><span class="bulk-guidance-label">Guidance:</span><button type="button" class="bulk-guidance-btn" data-bulk-clear="${esc(fwKey)}">Clear all guidance</button><button type="button" class="bulk-guidance-btn restore" data-bulk-restore="${esc(fwKey)}">&#x21BA; Restore defaults</button></div>`;
  for (const g of (fw.controlGroups || [])) html += renderGroup(fwKey, g);
  html += `<button type="button" class="btn btn-sm btn-outline" style="width: 100%; margin-top: 8px; border-style: dashed;" data-add-group-btn="${esc(fwKey)}">+ Add control group</button>`;
  return html;
@@ -7117,7 +7178,7 @@ function renderGroup(fwKey, g) {
  html += '</div>';
  html += `<div class="more-toggle" data-fw="${esc(fwKey)}" data-group="${esc(g.id)}">${more ? '&#x2212; Show fewer options' : `+ Show ${extra.length} more options`}</div>`;
  }
- html += `<div class="add-custom-section"><h4>Add custom request to "${esc(g.title)}"</h4><div class="custom-form"><input class="form-input" placeholder="e.g., Network Diagram, Encryption Key Rotation Log" data-custom-name="${esc(fwKey)}-${esc(g.id)}"><textarea class="form-textarea" placeholder="Instructions for client (describe what you need, date ranges, format...)" data-custom-instr="${esc(fwKey)}-${esc(g.id)}" style="min-height: 50px;"></textarea><button type="button" class="btn btn-sm btn-outline" data-add-item="${esc(fwKey)}" data-group="${esc(g.id)}">+ Add request</button></div></div>`;
+ html += `<div class="add-custom-section"><h4>Add custom request to "${esc(g.title)}"</h4><div class="custom-form"><input class="form-input" placeholder="e.g., Network Diagram, Encryption Key Rotation Log" data-custom-name="${esc(fwKey)}-${esc(g.id)}"><textarea class="form-textarea" placeholder="Guidance for client (describe what you need, date ranges, format...)" data-custom-instr="${esc(fwKey)}-${esc(g.id)}" style="min-height: 50px;"></textarea><button type="button" class="btn btn-sm btn-outline" data-add-item="${esc(fwKey)}" data-group="${esc(g.id)}">+ Add request</button></div></div>`;
  }
  html += '</div></div>';
  return html;
@@ -7126,8 +7187,6 @@ function renderGroup(fwKey, g) {
 function renderItem(fwKey, gid, item, gs) {
  const st = gs?.items?.[item.id];
  const inc = st?.included ?? item.common;
- const instr = st?.instructions || '';
- const guidanceCollapsed = st?.guidanceCollapsed ?? false;
  
  // Get current description (edited or default with audit period injected)
  const auditPeriod = getAuditPeriodString();
@@ -7146,21 +7205,21 @@ function renderItem(fwKey, gid, item, gs) {
  currentFormats.forEach((fmt, idx) => {
  formatChipsHtml += `<span class="ei-format-chip" data-format-chip="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}-${idx}"> ${esc(fmt)}<span class="chip-remove" data-remove-format="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}-${idx}">&times;</span></span>`;
  });
- formatChipsHtml += `<span class="ei-add-format" data-add-format="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">+ Add format</span>`;
+ formatChipsHtml += `<span class="ei-add-format" data-add-format="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">+ Add</span>`;
  
- // Build guidance meta tags
- let guidanceMetaHtml = '';
+ // Build inline badges
+ let badgesHtml = '';
  if (item.controlRef) {
- guidanceMetaHtml += `<span class="ei-tag control">${esc(item.controlRef)}</span>`;
+ badgesHtml += `<span class="ei-badge-inline control">${esc(item.controlRef)}</span>`;
  }
  if (item.evidenceType === 'period-of-time') {
- guidanceMetaHtml += '<span class="ei-tag period"> Period-of-time</span>';
+ badgesHtml += '<span class="ei-badge-inline period">Period-of-time</span>';
  } else if (item.evidenceType === 'point-in-time') {
- guidanceMetaHtml += '<span class="ei-tag point"> Point-in-time</span>';
+ badgesHtml += '<span class="ei-badge-inline point">Point-in-time</span>';
  }
  
- // Build common issue tip
- const tipHtml = item.commonIssue ? `<div class="ei-tip"><span class="ei-tip-label"> Tip</span>${esc(item.commonIssue)}</div>` : '';
+ // Build tooltip for common issue tip
+ const tipTooltipHtml = item.commonIssue ? `<div class="ei-tip-tooltip"><span class="ei-tip-icon">?</span><div class="ei-tip-popup"><strong>Tip:</strong> ${esc(item.commonIssue)}</div></div>` : '';
  
  // Check if description was edited (to show reset button)
  const descriptionEdited = st?.editedDescription !== null;
@@ -7170,22 +7229,17 @@ function renderItem(fwKey, gid, item, gs) {
  <div class="ei-header">
  <input type="checkbox" ${inc ? 'checked' : ''} title="Include this item in request">
  <div class="ei-title">${esc(item.title)}</div>
+ <div class="ei-badges">${badgesHtml}</div>
+ ${tipTooltipHtml}
  </div>
  <div class="ei-body">
- <!-- Client-Facing Zone -->
  <div class="ei-client-zone">
- <div class="ei-zone-header client">
- <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
- Client sees
+ <div class="ei-client-label">
+ <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+ Client sees this
  </div>
- 
- <label class="ei-field-label">Guidance for client:</label>
  <textarea class="ei-description-textarea" data-desc-edit="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}" placeholder="Describe what evidence the client should provide...">${esc(currentDescription)}</textarea>
- <div class="ei-description-actions">
- <button type="button" class="ei-action-btn" data-desc-clear="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">Clear</button>
- ${descriptionEdited ? `<button type="button" class="ei-action-btn" data-desc-reset="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">&#x21BA; Reset</button>` : ''}
- </div>
- 
+ <div class="ei-bottom-row">
  <div class="ei-formats-row">
  <span class="ei-formats-label">Format:</span>
  <div class="ei-format-chips" data-formats-container="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">
@@ -7193,24 +7247,11 @@ function renderItem(fwKey, gid, item, gs) {
  </div>
  ${formatsEdited ? `<button type="button" class="ei-formats-reset" data-formats-reset="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">&#x21BA; reset</button>` : ''}
  </div>
- 
- <div class="ei-instructions-row">
- <textarea class="ei-instructions-textarea" data-item-instr="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}" placeholder="+ Add extra instructions for client...">${esc(instr)}</textarea>
+ <div class="ei-bottom-spacer"></div>
+ <div class="ei-description-actions">
+ <button type="button" class="ei-action-btn" data-desc-clear="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">Clear</button>
+ ${descriptionEdited ? `<button type="button" class="ei-action-btn" data-desc-reset="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">&#x21BA; Reset</button>` : ''}
  </div>
- </div>
- 
- <!-- ProofRepo Guidance Zone (sidebar) -->
- <div class="ei-guidance-zone ${guidanceCollapsed ? 'collapsed' : ''}" data-guidance-zone="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">
- <div class="ei-guidance-toggle" data-guidance-toggle="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">
- <div class="ei-zone-header guidance">
- <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
- Your reference
- </div>
- <button type="button" class="ei-guidance-toggle-btn">${guidanceCollapsed ? '&#x25B6;' : '&#x25BC;'}</button>
- </div>
- <div class="ei-guidance-content">
- ${guidanceMetaHtml ? `<div class="ei-guidance-meta">${guidanceMetaHtml}</div>` : ''}
- ${tipHtml}
  </div>
  </div>
  </div>
@@ -7417,29 +7458,72 @@ function wireComposer() {
  });
  });
  
- // Additional instructions textarea
- $$('[data-item-instr]').forEach(ta => {
- ta.addEventListener('input', e => { 
- const parts = ta.dataset.itemInstr.split('-'); 
- const [fw, group] = [parts[0], parts[1]]; 
- const item = parts.slice(2).join('-'); 
- if (composerState[fw]?.groups?.[group]?.items?.[item]) {
- composerState[fw].groups[group].items[item].instructions = e.target.value; 
- saveFormState();
- }
+ // (Instructions field merged into description - handler removed)
+ 
+ // (Guidance zone moved to inline badges + tooltip - toggle handler removed)
+ 
+ // Auto-resize description textareas
+ $$('.ei-description-textarea').forEach(ta => {
+ ta.style.height = 'auto';
+ ta.style.height = ta.scrollHeight + 'px';
+ ta.addEventListener('input', () => {
+ ta.style.height = 'auto';
+ ta.style.height = ta.scrollHeight + 'px';
  });
  });
  
- // Guidance zone toggle
- $$('[data-guidance-toggle]').forEach(toggle => {
- toggle.addEventListener('click', () => {
- const parts = toggle.dataset.guidanceToggle.split('-');
- const [fw, group] = [parts[0], parts[1]];
- const item = parts.slice(2).join('-');
- if (composerState[fw]?.groups?.[group]?.items?.[item]) {
- composerState[fw].groups[group].items[item].guidanceCollapsed = !composerState[fw].groups[group].items[item].guidanceCollapsed;
- renderComposer();
+ // Bulk clear all guidance
+ $$('[data-bulk-clear]').forEach(btn => {
+ btn.addEventListener('click', () => {
+ const fwKey = btn.dataset.bulkClear;
+ const allFwData = getAllFrameworks();
+ const fw = allFwData[fwKey];
+ if (!fw || !composerState[fwKey]) return;
+ const included = [];
+ for (const g of (fw.controlGroups || [])) {
+ const gs = composerState[fwKey].groups?.[g.id];
+ if (gs?.excluded) continue;
+ for (const item of (g.items || [])) {
+ if (gs?.items?.[item.id]?.included) included.push(item.title);
  }
+ }
+ const count = included.length;
+ if (count === 0) { alert('No selected items to clear.'); return; }
+ if (!confirm('Clear all client guidance for the ' + count + ' selected ' + (fw.label || fwKey) + ' items?\\n\\nYou can restore ProofRepo defaults at any time.')) return;
+ for (const g of (fw.controlGroups || [])) {
+ const gs = composerState[fwKey].groups?.[g.id];
+ if (!gs || gs.excluded) continue;
+ for (const item of (g.items || [])) {
+ if (gs.items?.[item.id]?.included) {
+ gs.items[item.id].editedDescription = '';
+ }
+ }
+ }
+ renderComposer();
+ saveFormState();
+ });
+ });
+ 
+ // Bulk restore all guidance
+ $$('[data-bulk-restore]').forEach(btn => {
+ btn.addEventListener('click', () => {
+ const fwKey = btn.dataset.bulkRestore;
+ const allFwData = getAllFrameworks();
+ const fw = allFwData[fwKey];
+ if (!fw || !composerState[fwKey]) return;
+ const total = (fw.controlGroups || []).reduce((sum, g) => sum + (g.items || []).length, 0);
+ if (!confirm('Restore ProofRepo default guidance for all ' + total + ' ' + (fw.label || fwKey) + ' items?\\n\\nAny custom edits will be replaced.')) return;
+ for (const g of (fw.controlGroups || [])) {
+ const gs = composerState[fwKey].groups?.[g.id];
+ if (!gs) continue;
+ for (const item of (g.items || [])) {
+ if (gs.items?.[item.id]) {
+ gs.items[item.id].editedDescription = null;
+ }
+ }
+ }
+ renderComposer();
+ saveFormState();
  });
  });
  
@@ -7449,7 +7533,7 @@ function wireComposer() {
  const fk = btn.dataset.addItem, gid = btn.dataset.group;
  const nameInput = document.querySelector(`[data-custom-name="${fk}-${gid}"]`);
  const instrInput = document.querySelector(`[data-custom-instr="${fk}-${gid}"]`);
- const title = (nameInput?.value || '').trim(), instructions = (instrInput?.value || '').trim();
+ const title = (nameInput?.value || '').trim(), customDesc = (instrInput?.value || '').trim();
  if (!title) { alert('Please enter a request name.'); return; }
  const cid = 'c_' + Math.random().toString(36).slice(2, 8);
  const fw = allFw[fk], grp = fw?.controlGroups?.find(g => g.id === gid);
@@ -7457,8 +7541,8 @@ function wireComposer() {
  grp.items.push({ id: cid, title, common: true, hint: '' }); 
  composerState[fk].groups[gid].items[cid] = { 
  included: true, 
- instructions,
- editedDescription: null,
+ instructions: '',
+ editedDescription: customDesc || null,
  editedFormats: null,
  guidanceCollapsed: false
  }; 
