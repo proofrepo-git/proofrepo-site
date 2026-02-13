@@ -3119,7 +3119,7 @@
  <div id="trialModeSection" class="auth-section" style="display: none;">
  <div class="success-box">
  <span class="success-icon">&#x2713;</span>
- <span>Trial code accepted! 1 free request.</span>
+ <span id="trialSuccessMsg">Trial code accepted! 1 free request.</span>
  </div>
  
  <div class="form-group">
@@ -3152,10 +3152,16 @@
  </div>
  
  <button class="btn btn-accent btn-full" id="startTrialBtn">Continue to Request Builder</button>
+ 
+ <div style="text-align:center; margin-top:16px; padding-top:16px; border-top:1px solid #e2e8f0;">
+ <p style="font-size:13px; color:#64748b; margin:0 0 8px 0;">Want to save your credits, track history, and save templates?</p>
+ <a href="#" id="trialToAccountLink" style="font-size:13px; color:#0f766e; font-weight:600; text-decoration:none;">Create a free account with these credits &rarr;</a>
+ </div>
  </div>
 
  <!-- Account Creation -->
  <div id="accountSection" class="auth-section" style="display: none;">
+ <div id="accountCodeNotice" class="success-box" style="display:none; align-items:center; gap:8px; margin-bottom:12px;"></div>
  <div class="form-group">
  <label class="form-label">Email</label>
  <input type="email" class="form-input" id="signupEmail" placeholder="you@company.com">
@@ -8269,6 +8275,21 @@ function showNewUserSection(type) {
  $('#trialCodeSection').style.display = type === 'trial' ? 'block' : 'none';
  $('#trialModeSection').style.display = 'none';
  $('#accountSection').style.display = type === 'account' ? 'block' : 'none';
+ 
+ // If switching to account after validating a trial code, show the credit notice
+ const notice = $('#accountCodeNotice');
+ if (notice) {
+ if (type === 'account' && state.codeValid && state.codeCredits) {
+ const c = state.codeCredits;
+ notice.innerHTML = '<span class="success-icon">&#x2713;</span> Your trial code will load <strong>' + c + ' credit' + (c !== 1 ? 's' : '') + '</strong> into your new account.';
+ notice.style.display = 'flex';
+ // Pre-fill email if entered in trial flow
+ const trialEmail = ($('#trialUserEmail')?.value || '').trim();
+ if (trialEmail && $('#signupEmail') && !$('#signupEmail').value) $('#signupEmail').value = trialEmail;
+ } else {
+ notice.style.display = 'none';
+ }
+ }
 }
 
 function showLoginSection() {
@@ -9025,6 +9046,12 @@ async function handleApplyTrialCode() {
  
  hideAuthStatus('trialStatus');
  
+ // Update success message with actual credit count
+ const c = state.codeCredits;
+ const creditsText = c >= 9999 ? 'Unlimited requests' : `${c} free request${c !== 1 ? 's' : ''}`;
+ const msg = $('#trialSuccessMsg');
+ if (msg) msg.textContent = `Trial code accepted! ${creditsText}.`;
+ 
  // Show trial mode section
  $('#trialCodeSection').style.display = 'none';
  $('#trialModeSection').style.display = 'block';
@@ -9112,13 +9139,14 @@ async function handleSignup() {
  const res = await fetch(`${API}/auth/signup`, {
  method: 'POST',
  headers: { 'Content-Type': 'application/json' },
- body: JSON.stringify({ email, password })
+ body: JSON.stringify({ email, password, trialCode: state.codeValid ? state.code : undefined })
  });
  
  const data = await res.json();
  
  if (data.ok) {
- showAuthStatus('signupStatus', '\u2713 Account created! Check your email to verify.', 'success');
+ const creditMsg = data.creditsLoaded ? ` ${data.creditsLoaded} credits loaded from your trial code!` : '';
+ showAuthStatus('signupStatus', '\u2713 Account created!' + creditMsg + ' Check your email to verify.', 'success');
  
  // Auto-login but mark as unverified
  if (data.token && data.user) {
@@ -9501,6 +9529,28 @@ function setupAuthListeners() {
  });
  $('#startTrialBtn')?.addEventListener('click', handleStartTrial);
  
+ // Trial → Account bridge
+ $('#trialToAccountLink')?.addEventListener('click', e => {
+ e.preventDefault();
+ // Switch to account creation, preserving the validated code in state
+ $('#trialModeSection').style.display = 'none';
+ $('#trialCodeSection').style.display = 'none';
+ $('#accountSection').style.display = 'block';
+ // Pre-fill email if they already entered it
+ const trialEmail = ($('#trialUserEmail')?.value || '').trim();
+ if (trialEmail && $('#signupEmail')) $('#signupEmail').value = trialEmail;
+ // Show credit notice
+ const notice = $('#accountCodeNotice');
+ if (notice && state.codeValid && state.codeCredits) {
+ const c = state.codeCredits;
+ notice.innerHTML = '<span class="success-icon">&#x2713;</span> Your trial code will load <strong>' + c + ' credit' + (c !== 1 ? 's' : '') + '</strong> into your new account.';
+ notice.style.display = 'flex';
+ }
+ // Switch radio to "account" visually
+ const accountRadio = document.querySelector('input[name="newUserType"][value="account"]');
+ if (accountRadio) accountRadio.checked = true;
+ });
+ 
  // Signup
  $('#signupPassword')?.addEventListener('input', e => validatePassword(e.target.value));
  $('#signupBtn')?.addEventListener('click', handleSignup);
@@ -9705,9 +9755,40 @@ async function handleMainAction() {
  // Trial user - send directly
  await sendRequest();
  } else if (state.isLoggedIn && (!state.user?.credits || state.user.credits === 0)) {
- // Logged in but no credits - show payment
+ // Logged in but no credits - show payment OR validate code if payment already visible
+ if (state.paymentVisible) {
+ // Payment already showing - validate the credit code
+ const code = ($('#auditorCode')?.value || '').trim().toUpperCase();
+ 
+ if (!code) {
+ alert('Please enter your credit code.');
+ $('#auditorCode').focus();
+ return;
+ }
+ 
+ if (!state.codeValid || state.code !== code) {
+ btn.disabled = true;
+ btn.innerHTML = '<span class="spinner"></span> Checking code...';
+ 
+ const result = await validateCode(code);
+ updateCodeUI(result);
+ 
+ if (!result.valid) {
+ btn.disabled = false;
+ btn.textContent = 'Send Evidence Request';
+ alert(result.error || 'Invalid code. Please try again.');
+ return;
+ }
+ 
+ state.code = code;
+ saveFormState();
+ }
+ 
+ await sendRequest();
+ } else {
  showPaymentSection();
  $('#paymentSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
+ }
  } else if (state.isLoggedIn && !state.user?.verified) {
  // Logged in but not verified
  alert('Please verify your email before sending requests. Check your inbox for the verification link.');
