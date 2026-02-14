@@ -3122,6 +3122,37 @@
  <span id="trialSuccessMsg">Trial code accepted! 1 free request.</span>
  </div>
  
+ <!-- Default: Create account (recommended) -->
+ <div id="trialAccountPath">
+ <p style="font-size:13px; color:#475569; margin:12px 0 16px 0; line-height:1.5;">Create a free account to track all your requests on a dashboard, save templates for reuse, and manage your credits.</p>
+ 
+ <div class="form-group">
+ <label class="form-label">Email</label>
+ <input type="email" class="form-input" id="trialSignupEmail" placeholder="you@company.com">
+ </div>
+ <div class="form-group">
+ <label class="form-label">Password</label>
+ <input type="password" class="form-input" id="trialSignupPassword" placeholder="Create a password">
+ <div class="password-reqs">
+ <span class="req" data-req="length">8+ characters</span>
+ <span class="req" data-req="number">1 number</span>
+ <span class="req" data-req="special">1 special character</span>
+ </div>
+ </div>
+ <div class="form-group">
+ <label class="form-label">Confirm Password</label>
+ <input type="password" class="form-input" id="trialSignupPasswordConfirm" placeholder="Confirm password">
+ </div>
+ <button class="btn btn-accent btn-full" id="trialCreateAccountBtn">Create Account &amp; Continue</button>
+ <div id="trialSignupStatus" class="auth-status"></div>
+ 
+ <div style="text-align:center; margin-top:16px; padding-top:16px; border-top:1px solid #e2e8f0;">
+ <a href="#" id="skipAccountLink" style="font-size:13px; color:#64748b; text-decoration:none;">Skip for now — try without an account &rarr;</a>
+ </div>
+ </div>
+ 
+ <!-- Fallback: Quick trial without account (hidden by default) -->
+ <div id="trialQuickPath" style="display:none;">
  <div class="form-group">
  <label class="form-label">Your email</label>
  <input type="email" class="form-input" id="trialUserEmail" placeholder="you@company.com">
@@ -3153,9 +3184,9 @@
  
  <button class="btn btn-accent btn-full" id="startTrialBtn">Continue to Request Builder</button>
  
- <div style="text-align:center; margin-top:16px; padding-top:16px; border-top:1px solid #e2e8f0;">
- <p style="font-size:13px; color:#64748b; margin:0 0 8px 0;">Want to save your credits, track history, and save templates?</p>
- <a href="#" id="trialToAccountLink" style="font-size:13px; color:#0f766e; font-weight:600; text-decoration:none;">Create a free account with these credits &rarr;</a>
+ <div style="text-align:center; margin-top:12px;">
+ <a href="#" id="backToAccountPath" style="font-size:13px; color:#0f766e; font-weight:600; text-decoration:none;">&larr; Create an account instead (recommended)</a>
+ </div>
  </div>
  </div>
 
@@ -3288,7 +3319,19 @@
  <span id="creditAlertDesc">You have <span id="creditAlertCount">0</span> credit(s) remaining.</span>
  </div>
  </div>
+ <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
  <button class="btn btn-sm btn-accent" id="buyCreditsAlertBtn">Buy More Credits</button>
+ <span style="font-size:12px; color:#64748b;">or</span>
+ <a href="#" id="redeemCodeToggle" style="font-size:13px; color:#0f766e; font-weight:600; text-decoration:none;">Redeem a code</a>
+ </div>
+ </div>
+ <div id="redeemCodeSection" style="display:none; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:12px 16px; margin-bottom:16px;">
+ <div style="display:flex; gap:8px; align-items:center;">
+ <input type="text" class="form-input code-style" id="dashboardRedeemCode" placeholder="ENTER CODE" style="flex:1; max-width:240px; margin:0; padding:8px 12px; font-size:0.9rem;">
+ <button class="btn btn-sm btn-accent" id="dashboardRedeemBtn">Redeem</button>
+ <a href="#" id="redeemCodeCancel" style="font-size:12px; color:#64748b; text-decoration:none; margin-left:4px;">cancel</a>
+ </div>
+ <div id="redeemCodeStatus" class="auth-status" style="margin-top:6px;"></div>
  </div>
  
  <!-- Stats Cards -->
@@ -8276,6 +8319,12 @@ function showNewUserSection(type) {
  $('#trialModeSection').style.display = 'none';
  $('#accountSection').style.display = type === 'account' ? 'block' : 'none';
  
+ // Reset trial flow to default (account path showing, quick path hidden)
+ const ap = $('#trialAccountPath');
+ const qp = $('#trialQuickPath');
+ if (ap) ap.style.display = 'block';
+ if (qp) qp.style.display = 'none';
+ 
  // If switching to account after validating a trial code, show the credit notice
  const notice = $('#accountCodeNotice');
  if (notice) {
@@ -8283,8 +8332,7 @@ function showNewUserSection(type) {
  const c = state.codeCredits;
  notice.innerHTML = '<span class="success-icon">&#x2713;</span> Your trial code will load <strong>' + c + ' credit' + (c !== 1 ? 's' : '') + '</strong> into your new account.';
  notice.style.display = 'flex';
- // Pre-fill email if entered in trial flow
- const trialEmail = ($('#trialUserEmail')?.value || '').trim();
+ const trialEmail = ($('#trialSignupEmail')?.value || $('#trialUserEmail')?.value || '').trim();
  if (trialEmail && $('#signupEmail') && !$('#signupEmail').value) $('#signupEmail').value = trialEmail;
  } else {
  notice.style.display = 'none';
@@ -9110,6 +9158,117 @@ function validatePassword(password) {
  return Object.values(reqs).every(Boolean);
 }
 
+async function handleTrialCreateAccount() {
+ const email = ($('#trialSignupEmail')?.value || '').trim().toLowerCase();
+ const password = $('#trialSignupPassword')?.value || '';
+ const confirm = $('#trialSignupPasswordConfirm')?.value || '';
+ const btn = $('#trialCreateAccountBtn');
+ 
+ if (!email || !email.includes('@')) {
+ showAuthStatus('trialSignupStatus', 'Please enter a valid email', 'error');
+ return;
+ }
+ 
+ if (!validatePassword(password)) {
+ showAuthStatus('trialSignupStatus', 'Password does not meet requirements', 'error');
+ return;
+ }
+ 
+ if (password !== confirm) {
+ showAuthStatus('trialSignupStatus', 'Passwords do not match', 'error');
+ return;
+ }
+ 
+ btn.disabled = true;
+ btn.innerHTML = '<span class="spinner"></span> Creating account...';
+ showAuthStatus('trialSignupStatus', 'Creating account and loading credits...', 'loading');
+ 
+ try {
+ const res = await fetch(`${API}/auth/signup`, {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json' },
+ body: JSON.stringify({ email, password, trialCode: state.codeValid ? state.code : undefined })
+ });
+ 
+ const data = await res.json();
+ 
+ if (data.ok) {
+ const creditMsg = data.creditsLoaded ? ` ${data.creditsLoaded} credits loaded!` : '';
+ showAuthStatus('trialSignupStatus', '\u2713 Account created!' + creditMsg, 'success');
+ 
+ // Auto-login
+ if (data.token && data.user) {
+ state.isLoggedIn = true;
+ state.authToken = data.token;
+ state.user = data.user;
+ state.isTrialUser = false; // They're now a full account user
+ localStorage.setItem('proofrepo_token', data.token);
+ 
+ // Go straight to dashboard after brief delay
+ setTimeout(() => showDashboard(), 1200);
+ }
+ } else {
+ showAuthStatus('trialSignupStatus', data.error || 'Error creating account', 'error');
+ }
+ } catch (e) {
+ showAuthStatus('trialSignupStatus', 'Error connecting to server', 'error');
+ }
+ 
+ btn.disabled = false;
+ btn.textContent = 'Create Account & Continue';
+}
+
+async function handleDashboardRedeem() {
+ const code = ($('#dashboardRedeemCode')?.value || '').trim().toUpperCase();
+ const btn = $('#dashboardRedeemBtn');
+ const statusEl = $('#redeemCodeStatus');
+ 
+ if (!code) {
+ if (statusEl) statusEl.innerHTML = '<span style="color:#dc2626; font-size:13px;">Please enter a code</span>';
+ return;
+ }
+ 
+ btn.disabled = true;
+ btn.textContent = 'Redeeming...';
+ if (statusEl) statusEl.innerHTML = '<span style="color:#64748b; font-size:13px;">Validating code...</span>';
+ 
+ try {
+ const res = await fetch(`${API}/auth/redeem-code`, {
+ method: 'POST',
+ headers: {
+ 'Content-Type': 'application/json',
+ 'Authorization': `Bearer ${state.authToken}`
+ },
+ body: JSON.stringify({ code })
+ });
+ 
+ const data = await res.json();
+ 
+ if (data.ok) {
+ // Update local state
+ if (state.user) {
+ state.user.credits = data.newBalance;
+ }
+ updateLoggedInBar();
+ 
+ if (statusEl) statusEl.innerHTML = '<span style="color:#16a34a; font-size:13px; font-weight:600;">\u2713 ' + data.message + '</span>';
+ 
+ // Refresh dashboard after short delay
+ setTimeout(() => {
+ $('#redeemCodeSection').style.display = 'none';
+ fetchAndRenderDashboard();
+ }, 1500);
+ } else {
+ if (statusEl) statusEl.innerHTML = '<span style="color:#dc2626; font-size:13px;">' + (data.error || 'Invalid code') + '</span>';
+ }
+ } catch (e) {
+ if (statusEl) statusEl.innerHTML = '<span style="color:#dc2626; font-size:13px;">Error connecting to server</span>';
+ }
+ 
+ btn.disabled = false;
+ btn.textContent = 'Redeem';
+}
+
 async function handleSignup() {
  const email = ($('#signupEmail')?.value || '').trim().toLowerCase();
  const password = $('#signupPassword')?.value || '';
@@ -9529,26 +9688,46 @@ function setupAuthListeners() {
  });
  $('#startTrialBtn')?.addEventListener('click', handleStartTrial);
  
- // Trial → Account bridge
- $('#trialToAccountLink')?.addEventListener('click', e => {
+ // Trial code flow: skip/back toggle between account creation and quick trial
+ $('#skipAccountLink')?.addEventListener('click', e => {
  e.preventDefault();
- // Switch to account creation, preserving the validated code in state
- $('#trialModeSection').style.display = 'none';
- $('#trialCodeSection').style.display = 'none';
- $('#accountSection').style.display = 'block';
- // Pre-fill email if they already entered it
- const trialEmail = ($('#trialUserEmail')?.value || '').trim();
- if (trialEmail && $('#signupEmail')) $('#signupEmail').value = trialEmail;
- // Show credit notice
- const notice = $('#accountCodeNotice');
- if (notice && state.codeValid && state.codeCredits) {
- const c = state.codeCredits;
- notice.innerHTML = '<span class="success-icon">&#x2713;</span> Your trial code will load <strong>' + c + ' credit' + (c !== 1 ? 's' : '') + '</strong> into your new account.';
- notice.style.display = 'flex';
- }
- // Switch radio to "account" visually
- const accountRadio = document.querySelector('input[name="newUserType"][value="account"]');
- if (accountRadio) accountRadio.checked = true;
+ $('#trialAccountPath').style.display = 'none';
+ $('#trialQuickPath').style.display = 'block';
+ // Pre-fill quick trial email from account email field
+ const email = ($('#trialSignupEmail')?.value || '').trim();
+ if (email && $('#trialUserEmail')) $('#trialUserEmail').value = email;
+ });
+ 
+ $('#backToAccountPath')?.addEventListener('click', e => {
+ e.preventDefault();
+ $('#trialQuickPath').style.display = 'none';
+ $('#trialAccountPath').style.display = 'block';
+ // Pre-fill account email from quick trial email field
+ const email = ($('#trialUserEmail')?.value || '').trim();
+ if (email && $('#trialSignupEmail')) $('#trialSignupEmail').value = email;
+ });
+ 
+ // Trial code flow: Create Account & Continue
+ $('#trialCreateAccountBtn')?.addEventListener('click', handleTrialCreateAccount);
+ $('#trialSignupPasswordConfirm')?.addEventListener('keypress', e => {
+ if (e.key === 'Enter') handleTrialCreateAccount();
+ });
+ $('#trialSignupPassword')?.addEventListener('input', e => validatePassword(e.target.value));
+ 
+ // Dashboard: Redeem code toggle
+ $('#redeemCodeToggle')?.addEventListener('click', e => {
+ e.preventDefault();
+ const sec = $('#redeemCodeSection');
+ sec.style.display = sec.style.display === 'none' ? 'block' : 'none';
+ if (sec.style.display === 'block') $('#dashboardRedeemCode')?.focus();
+ });
+ $('#redeemCodeCancel')?.addEventListener('click', e => {
+ e.preventDefault();
+ $('#redeemCodeSection').style.display = 'none';
+ });
+ $('#dashboardRedeemBtn')?.addEventListener('click', handleDashboardRedeem);
+ $('#dashboardRedeemCode')?.addEventListener('keypress', e => {
+ if (e.key === 'Enter') handleDashboardRedeem();
  });
  
  // Signup
