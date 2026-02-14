@@ -772,6 +772,11 @@
  font-size: 0.78rem;
  color: #a16207;
  }
+ 
+ @keyframes pulse-border {
+ 0%, 100% { box-shadow: 0 0 0 0 rgba(245,158,11,0); }
+ 50% { box-shadow: 0 0 0 6px rgba(245,158,11,0.3); }
+ }
 
  /* ==================== DASHBOARD ==================== */
  .dashboard-header {
@@ -3425,6 +3430,33 @@
  <a href="#" id="backToDashboardLink">&larr; Back to Dashboard</a>
  </div>
  
+ <!-- Composer status banners -->
+ <div id="composerVerifyBanner" style="display:none; background:#fffbeb; border:2px solid #f59e0b; border-radius:10px; padding:16px 20px; margin-bottom:16px;">
+ <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+ <span style="font-size:20px;">📧</span>
+ <div style="flex:1; min-width:200px;">
+ <strong style="color:#92400e;">Verify your email to send requests</strong>
+ <p style="margin:4px 0 0; font-size:0.82rem; color:#a16207;">Check your inbox for the verification link, then refresh this page.</p>
+ </div>
+ <button class="btn btn-sm" id="composerResendVerifyBtn" style="background:#f59e0b; color:#fff; border:none; padding:8px 16px; border-radius:6px; font-weight:600; font-size:0.82rem; cursor:pointer;" onclick="handleResendVerification(); this.textContent='\u2713 Sent!';">Resend email</button>
+ </div>
+ </div>
+ 
+ <div id="composerCreditBanner" style="display:none; background:#f0fdf4; border:2px solid #86efac; border-radius:10px; padding:16px 20px; margin-bottom:16px;">
+ <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+ <span style="font-size:20px;">🔑</span>
+ <div style="flex:1; min-width:200px;">
+ <strong style="color:#166534;">You need credits to send</strong>
+ <p style="margin:4px 0 0; font-size:0.82rem; color:#15803d;">Enter a code below to load credits, or go back to buy a pack.</p>
+ </div>
+ </div>
+ <div style="display:flex; gap:8px; align-items:center; margin-top:12px;">
+ <input type="text" class="form-input code-style" id="composerRedeemCode" placeholder="ENTER CODE" style="flex:1; max-width:220px; margin:0; padding:8px 12px; font-size:0.9rem; text-transform:uppercase;">
+ <button class="btn btn-sm btn-accent" id="composerRedeemBtn" style="padding:8px 20px;">Apply</button>
+ </div>
+ <div id="composerRedeemStatus" style="margin-top:6px; font-size:0.82rem;"></div>
+ </div>
+ 
  <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">
  Define what evidence you need, then we'll email your client a guided upload link.
  </p>
@@ -3516,7 +3548,10 @@
 
  <div class="code-entry">
  <label class="form-label">Credit Code</label>
- <input type="text" class="code-input" id="auditorCode" placeholder="ENTER CODE">
+ <div style="display:flex; gap:8px; align-items:center;">
+ <input type="text" class="code-input" id="auditorCode" placeholder="ENTER CODE" style="flex:1;">
+ <button class="btn btn-sm btn-accent" id="applyCodeBtn" style="padding:8px 20px; white-space:nowrap;">Apply</button>
+ </div>
  <div id="codeStatus" class="code-status"></div>
  </div>
 
@@ -8968,6 +9003,9 @@ function showComposerFromDashboard() {
  setChipEmails('auditorEmailsContainer', [state.user.email]);
  }
  
+ // Show appropriate banner
+ updateComposerBanners();
+ 
  // Scroll to form
  $('#auditorFlow').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
@@ -9029,6 +9067,10 @@ function showAuditorFlow() {
  $('#auditorFlow').style.display = 'block';
  if (Object.keys(composerState).length === 0) initComposerState();
  renderComposer();
+ 
+ // Show banners (verify / credits) if needed
+ updateComposerBanners();
+ updateMainButton();
  
  // Scroll to form
  $('#auditorFlow').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -9769,6 +9811,18 @@ function setupAuthListeners() {
  if (e.key === 'Enter') handleDashboardRedeem();
  });
  
+ // Composer credit banner: redeem code
+ $('#composerRedeemBtn')?.addEventListener('click', handleComposerRedeem);
+ $('#composerRedeemCode')?.addEventListener('keypress', e => {
+ if (e.key === 'Enter') handleComposerRedeem();
+ });
+ 
+ // Payment section: Apply code button
+ $('#applyCodeBtn')?.addEventListener('click', handleApplyPaymentCode);
+ $('#auditorCode')?.addEventListener('keypress', e => {
+ if (e.key === 'Enter') { e.preventDefault(); handleApplyPaymentCode(); }
+ });
+ 
  // Signup
  $('#signupPassword')?.addEventListener('input', e => validatePassword(e.target.value));
  $('#signupBtn')?.addEventListener('click', handleSignup);
@@ -9873,13 +9927,152 @@ function showBuyCreditsFromDashboard() {
  setChipEmails('auditorEmailsContainer', [state.user.email]);
  }
  
- // Show payment section
+ // Show banners and payment section
+ updateComposerBanners();
+ updateMainButton();
  showPaymentSection();
  
  // Scroll to payment
  setTimeout(() => {
  $('#paymentSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
  }, 100);
+}
+
+function updateComposerBanners() {
+ const verifyBanner = $('#composerVerifyBanner');
+ const creditBanner = $('#composerCreditBanner');
+ if (!verifyBanner || !creditBanner) return;
+ 
+ // Hide both by default
+ verifyBanner.style.display = 'none';
+ creditBanner.style.display = 'none';
+ 
+ if (!state.isLoggedIn) return; // Trial users don't see these
+ 
+ // Priority 1: Unverified
+ if (state.user && !state.user.verified) {
+ verifyBanner.style.display = 'block';
+ return;
+ }
+ 
+ // Priority 2: No credits (and no code already validated)
+ const credits = state.user?.credits || 0;
+ if (credits === 0 && !state.codeValid) {
+ creditBanner.style.display = 'block';
+ }
+}
+
+async function handleComposerRedeem() {
+ const code = ($('#composerRedeemCode')?.value || '').trim().toUpperCase();
+ const btn = $('#composerRedeemBtn');
+ const statusEl = $('#composerRedeemStatus');
+ 
+ if (!code) {
+ if (statusEl) statusEl.innerHTML = '<span style="color:#dc2626;">Please enter a code</span>';
+ return;
+ }
+ 
+ btn.disabled = true;
+ btn.textContent = 'Checking...';
+ if (statusEl) statusEl.innerHTML = '<span style="color:#64748b;">Validating...</span>';
+ 
+ try {
+ const res = await fetch(`${API}/auth/redeem-code`, {
+ method: 'POST',
+ headers: {
+ 'Content-Type': 'application/json',
+ 'Authorization': `Bearer ${state.authToken}`
+ },
+ body: JSON.stringify({ code })
+ });
+ 
+ const data = await res.json();
+ 
+ if (data.ok) {
+ if (state.user) state.user.credits = data.newBalance;
+ updateLoggedInBar();
+ updateComposerBanners();
+ updateMainButton();
+ if (statusEl) statusEl.innerHTML = '<span style="color:#16a34a; font-weight:600;">\u2713 ' + data.message + '</span>';
+ // Hide credit banner since they now have credits
+ $('#composerCreditBanner').style.display = 'none';
+ } else {
+ if (statusEl) statusEl.innerHTML = '<span style="color:#dc2626;">' + (data.error || 'Invalid code') + '</span>';
+ }
+ } catch (e) {
+ if (statusEl) statusEl.innerHTML = '<span style="color:#dc2626;">Connection error</span>';
+ }
+ 
+ btn.disabled = false;
+ btn.textContent = 'Apply';
+}
+
+async function handleApplyPaymentCode() {
+ const code = ($('#auditorCode')?.value || '').trim().toUpperCase();
+ const btn = $('#applyCodeBtn');
+ const statusEl = $('#codeStatus');
+ 
+ if (!code) {
+ if (statusEl) statusEl.innerHTML = '<span style="color:#dc2626; font-size:0.85rem;">Please enter a code</span>';
+ return;
+ }
+ 
+ btn.disabled = true;
+ btn.textContent = 'Checking...';
+ 
+ try {
+ if (state.isLoggedIn && state.authToken) {
+ // Logged in: redeem to account
+ const res = await fetch(`${API}/auth/redeem-code`, {
+ method: 'POST',
+ headers: {
+ 'Content-Type': 'application/json',
+ 'Authorization': `Bearer ${state.authToken}`
+ },
+ body: JSON.stringify({ code })
+ });
+ 
+ const data = await res.json();
+ 
+ if (data.ok) {
+ if (state.user) state.user.credits = data.newBalance;
+ updateLoggedInBar();
+ updateComposerBanners();
+ updateMainButton();
+ if (statusEl) statusEl.innerHTML = '<span style="color:#16a34a; font-weight:600;">\u2713 ' + data.message + ' You can now send.</span>';
+ // Hide payment section after successful redeem
+ setTimeout(() => {
+ $('#paymentSection').classList.remove('visible');
+ state.paymentVisible = false;
+ updateMainButton();
+ }, 1500);
+ } else {
+ if (statusEl) statusEl.innerHTML = '<span style="color:#dc2626; font-size:0.85rem;">' + (data.error || 'Invalid code') + '</span>';
+ }
+ } else {
+ // Not logged in: validate as credit code for this request
+ const result = await validateCode(code);
+ updateCodeUI(result);
+ 
+ if (result.valid) {
+ state.code = code;
+ state.codeValid = true;
+ state.codeCredits = result.credits || 1;
+ saveFormState();
+ if (statusEl) {
+ const c = state.codeCredits;
+ statusEl.innerHTML = '<span style="color:#16a34a; font-weight:600;">\u2713 Code accepted! ' + c + ' credit' + (c !== 1 ? 's' : '') + ' available.</span>';
+ }
+ } else {
+ if (statusEl) statusEl.innerHTML = '<span style="color:#dc2626; font-size:0.85rem;">' + (result.error || 'Invalid code') + '</span>';
+ }
+ }
+ } catch (e) {
+ if (statusEl) statusEl.innerHTML = '<span style="color:#dc2626; font-size:0.85rem;">Connection error</span>';
+ }
+ 
+ btn.disabled = false;
+ btn.textContent = 'Apply';
 }
 
 function showPaymentSection() {
@@ -9892,23 +10085,49 @@ function updateMainButton() {
  const btn = $('#mainActionBtn');
  if (!btn) return;
  
- // If logged in with credits or trial user - show Send directly
- if ((state.isLoggedIn && state.user?.credits > 0) || state.isTrialUser) {
+ if (state.isTrialUser) {
+ // Trial user — always ready to send
  btn.textContent = 'Send Evidence Request';
  btn.className = 'btn btn-accent btn-full';
  btn.disabled = false;
  } else if (state.isLoggedIn && !state.user?.verified) {
- btn.textContent = 'Verify Email to Continue';
+ // Logged in but NOT verified — block
+ btn.textContent = 'Verify Email to Send';
  btn.className = 'btn btn-primary btn-full';
+ btn.disabled = true;
+ btn.style.opacity = '0.6';
+ } else if (state.isLoggedIn && state.user?.credits > 0) {
+ // Logged in, verified, has credits — ready
+ btn.textContent = 'Send Evidence Request';
+ btn.className = 'btn btn-accent btn-full';
  btn.disabled = false;
- } else if (!state.paymentVisible) {
+ btn.style.opacity = '';
+ } else if (state.isLoggedIn && (!state.user?.credits || state.user.credits === 0)) {
+ // Logged in, verified, but no credits
+ if (!state.paymentVisible) {
  btn.textContent = 'Continue';
  btn.className = 'btn btn-primary btn-full';
  btn.disabled = false;
+ btn.style.opacity = '';
  } else {
  btn.textContent = 'Send Evidence Request';
  btn.className = 'btn btn-accent btn-full';
  btn.disabled = false;
+ btn.style.opacity = '';
+ }
+ } else {
+ // Not logged in (shouldn't happen in normal flow but fallback)
+ if (!state.paymentVisible) {
+ btn.textContent = 'Continue';
+ btn.className = 'btn btn-primary btn-full';
+ btn.disabled = false;
+ btn.style.opacity = '';
+ } else {
+ btn.textContent = 'Send Evidence Request';
+ btn.className = 'btn btn-accent btn-full';
+ btn.disabled = false;
+ btn.style.opacity = '';
+ }
  }
 }
 
@@ -9961,89 +10180,67 @@ async function handleMainAction() {
  
  saveFormState();
  
- // Check if user can send (logged in with credits, or trial user, or needs payment)
+ // ---- PRIORITY 1: Verification gate (logged-in users only) ----
+ if (state.isLoggedIn && state.user && !state.user.verified) {
+ // Scroll to the verification banner
+ const banner = $('#composerVerifyBanner');
+ if (banner && banner.style.display !== 'none') {
+ banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+ banner.style.animation = 'none';
+ banner.offsetHeight; // trigger reflow
+ banner.style.animation = 'pulse-border 0.6s ease 2';
+ }
+ return;
+ }
+ 
+ // ---- PRIORITY 2: Trial user with valid code — send directly ----
+ if (state.isTrialUser && state.codeValid) {
+ await sendRequest();
+ return;
+ }
+ 
+ // ---- PRIORITY 3: Logged in with account credits — send directly ----
  if (state.isLoggedIn && state.user?.credits > 0) {
- // Logged in with credits - hide payment if visible and send directly
  if (state.paymentVisible) {
  $('#paymentSection').classList.remove('visible');
  state.paymentVisible = false;
  }
  await sendRequest();
- } else if (state.isTrialUser && state.codeValid) {
- // Trial user - send directly
- await sendRequest();
- } else if (state.isLoggedIn && (!state.user?.credits || state.user.credits === 0)) {
- // Logged in but no credits - show payment OR validate code if payment already visible
- if (state.paymentVisible) {
- // Payment already showing - validate the credit code
- const code = ($('#auditorCode')?.value || '').trim().toUpperCase();
- 
- if (!code) {
- alert('Please enter your credit code.');
- $('#auditorCode').focus();
  return;
  }
  
- if (!state.codeValid || state.code !== code) {
- btn.disabled = true;
- btn.innerHTML = '<span class="spinner"></span> Checking code...';
- 
- const result = await validateCode(code);
- updateCodeUI(result);
- 
- if (!result.valid) {
- btn.disabled = false;
- btn.textContent = 'Send Evidence Request';
- alert(result.error || 'Invalid code. Please try again.');
- return;
- }
- 
- state.code = code;
- saveFormState();
- }
- 
- await sendRequest();
- } else {
+ // ---- PRIORITY 4: Logged in, 0 credits — need payment/code ----
+ if (state.isLoggedIn && (!state.user?.credits || state.user.credits === 0)) {
+ if (!state.paymentVisible) {
  showPaymentSection();
  $('#paymentSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
+ return;
  }
- } else if (state.isLoggedIn && !state.user?.verified) {
- // Logged in but not verified
- alert('Please verify your email before sending requests. Check your inbox for the verification link.');
- } else if (!state.paymentVisible) {
- // Not logged in, not trial - show payment section
+ // Payment visible — they should use the Apply button first
+ // But if they somehow have a validated code in state, allow send
+ if (state.codeValid && state.code) {
+ await sendRequest();
+ return;
+ }
+ alert('Please enter a credit code and click Apply, or purchase credits above.');
+ $('#auditorCode')?.focus();
+ return;
+ }
+ 
+ // ---- PRIORITY 5: Not logged in, not trial — show payment ----
+ if (!state.paymentVisible) {
  showPaymentSection();
  $('#paymentSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
- } else {
- // Payment visible, validate code and send
- const code = ($('#auditorCode')?.value || '').trim().toUpperCase();
- 
- if (!code) {
- alert('Please enter your credit code.');
- $('#auditorCode').focus();
  return;
  }
  
- if (!state.codeValid || state.code !== code) {
- btn.disabled = true;
- btn.innerHTML = '<span class="spinner"></span> Checking code...';
- 
- const result = await validateCode(code);
- updateCodeUI(result);
- 
- if (!result.valid) {
- btn.disabled = false;
- btn.textContent = 'Send Evidence Request';
- alert(result.error || 'Invalid code. Please try again.');
- return;
- }
- 
- state.code = code;
- saveFormState();
- }
- 
+ // Payment visible — need code applied first
+ if (state.codeValid && state.code) {
  await sendRequest();
+ return;
  }
+ alert('Please enter a credit code and click Apply, or purchase credits above.');
+ $('#auditorCode')?.focus();
 }
 
 async function handleCheckout() {
