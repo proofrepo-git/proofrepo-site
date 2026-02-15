@@ -2516,6 +2516,35 @@
  }
 
  /* ==================== TRUST SECTION ==================== */
+ /* Pricing Landing Section */
+ .pricing-landing-section { background: #f8fafc; padding: 80px 24px; }
+ .pricing-landing-section .section-inner { max-width: 900px; margin: 0 auto; }
+ .pricing-landing-section .section-header { text-align: center; margin-bottom: 40px; }
+ .pricing-landing-section .section-header h2 { font-size: 1.8rem; color: #0f172a; margin: 0 0 8px; }
+ .pricing-landing-grid {
+ display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+ }
+ .pricing-landing-card {
+ background: #fff; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 28px 20px; text-align: center;
+ transition: border-color 0.15s, box-shadow 0.15s; position: relative;
+ }
+ .pricing-landing-card:hover { border-color: #2563eb; box-shadow: 0 4px 16px rgba(37,99,235,0.08); }
+ .pricing-landing-card.popular { border-color: #2563eb; box-shadow: 0 4px 16px rgba(37,99,235,0.10); }
+ .pricing-landing-badge {
+ position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
+ background: #2563eb; color: #fff; font-size: 0.7rem; font-weight: 700; padding: 3px 12px;
+ border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px;
+ }
+ .pricing-landing-name { font-size: 0.85rem; font-weight: 600; color: #64748b; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+ .pricing-landing-price { font-size: 2rem; font-weight: 800; color: #0f172a; margin-bottom: 4px; }
+ .pricing-landing-per { font-size: 0.85rem; color: #2563eb; font-weight: 600; margin-bottom: 8px; }
+ .pricing-landing-desc { font-size: 0.82rem; color: #94a3b8; }
+ .pricing-landing-note { text-align: center; margin-top: 28px; font-size: 0.9rem; color: #64748b; }
+ .pricing-landing-note a { color: #2563eb; font-weight: 600; text-decoration: none; }
+ @media (max-width: 700px) {
+ .pricing-landing-grid { grid-template-columns: repeat(2, 1fr); }
+ }
+
  .trust-section {
  padding: 64px 24px;
  background: var(--bg-subtle);
@@ -3024,6 +3053,7 @@
  </a>
  <nav class="header-links">
  <a href="#how-it-works">How it works</a>
+ <a href="#pricing">Pricing</a>
  <a href="#trust">Security</a>
  <a id="getStartedLink">Get Started</a>
  </nav>
@@ -3661,6 +3691,45 @@
  <p>See it in action &mdash; 2 min demo</p>
  </div>
  </div> -->
+ </section>
+
+
+ <!-- PRICING SECTION -->
+ <section class="pricing-landing-section" id="pricing">
+ <div class="section-inner">
+ <div class="section-header">
+ <h2>Simple, transparent pricing</h2>
+ <p class="section-subtitle">One credit per request. No subscriptions, no per-seat fees, no annual contracts.</p>
+ </div>
+ <div class="pricing-landing-grid">
+ <div class="pricing-landing-card">
+ <div class="pricing-landing-name">Single</div>
+ <div class="pricing-landing-price">$79</div>
+ <div class="pricing-landing-per">1 credit</div>
+ <div class="pricing-landing-desc">Perfect for trying it out</div>
+ </div>
+ <div class="pricing-landing-card popular">
+ <div class="pricing-landing-badge">Most Popular</div>
+ <div class="pricing-landing-name">5-Pack</div>
+ <div class="pricing-landing-price">$299</div>
+ <div class="pricing-landing-per">$60 per request</div>
+ <div class="pricing-landing-desc">Great for small firms</div>
+ </div>
+ <div class="pricing-landing-card">
+ <div class="pricing-landing-name">15-Pack</div>
+ <div class="pricing-landing-price">$749</div>
+ <div class="pricing-landing-per">$50 per request</div>
+ <div class="pricing-landing-desc">For growing practices</div>
+ </div>
+ <div class="pricing-landing-card">
+ <div class="pricing-landing-name">50-Pack</div>
+ <div class="pricing-landing-price">$1,999</div>
+ <div class="pricing-landing-per">$40 per request</div>
+ <div class="pricing-landing-desc">Best value for firms at scale</div>
+ </div>
+ </div>
+ <p class="pricing-landing-note">Have a trial code? <a href="#" onclick="event.preventDefault(); document.getElementById('roleSelect').scrollIntoView({behavior:'smooth'});">Start here</a> &mdash; your first request is on us.</p>
+ </div>
  </section>
 
 
@@ -8277,8 +8346,6 @@ async function checkCheckoutReturn() {
  const res = await fetch(`${API}/checkout/session?session_id=${sessionId}`);
  const data = await res.json();
  
- console.log(`Attempt ${attempt + 1}:`, data);
- 
  // v6: Account-based credit return
  if (data.ok && data.accountCredit) {
  accountCredited = true;
@@ -10557,6 +10624,36 @@ async function init() {
  // ALWAYS set up all event listeners
  setupAutoSave();
  setupModals();
+ 
+ // Auto-refresh verification status when user returns to tab
+ document.addEventListener('visibilitychange', async () => {
+ if (document.visibilityState === 'visible' && state.isLoggedIn && state.user && !state.user.verified) {
+ try {
+ const res = await fetch(`${API}/auth/me`, {
+ headers: { 'Authorization': `Bearer ${state.authToken}` }
+ });
+ if (res.ok) {
+ const data = await res.json();
+ if (data.ok && data.user && data.user.verified) {
+ state.user.verified = true;
+ state.user.credits = data.user.credits;
+ // Hide verification notices
+ const notice = $('#verificationNotice');
+ if (notice) notice.style.display = 'none';
+ const vBanner = $('#composerVerifyBanner');
+ if (vBanner) vBanner.style.display = 'none';
+ // Update button and dashboard
+ updateMainButton();
+ updateLoggedInBar();
+ // If on dashboard, refresh it
+ if ($('#dashboardView')?.style.display !== 'none') {
+ showDashboard();
+ }
+ }
+ }
+ } catch (e) { /* silent */ }
+ }
+ });
  
  // Check for URL prefill (resend links from deadline-missed emails)
  const isResendPrefill = handleUrlPrefill();
