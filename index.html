@@ -9014,6 +9014,22 @@ function resetComposerForm() {
  // Clear saved form state so old client data doesn't bleed
  clearFormState();
  
+ // Reset send button
+ const btn = $('#mainActionBtn');
+ if (btn) {
+ btn.disabled = false;
+ btn.textContent = 'Send Evidence Request';
+ btn.style.opacity = '';
+ }
+ 
+ // Hide payment section
+ if ($('#paymentSection')) {
+ $('#paymentSection').classList.remove('visible');
+ }
+ state.paymentVisible = false;
+ state.codeValid = false;
+ state.code = '';
+ 
  // Clear client info
  const clientCompany = $('#clientCompany');
  if (clientCompany) clientCompany.value = '';
