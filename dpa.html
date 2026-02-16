@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Data Processing Agreement — ProofRepo</title>
+ <meta name="description" content="ProofRepo Data Processing Agreement (DPA) — how we handle and protect data processed through our platform." />
+ <link rel="preconnect" href="https://fonts.googleapis.com" />
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+ <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+ <style>
+ :root {
+ --bg: #FFFFFF;
+ --bg-subtle: #F8FAFC;
+ --border: #E2E8F0;
+ --text: #0F172A;
+ --text-secondary: #334155;
+ --text-muted: #64748B;
+ --primary: #1E40AF;
+ --primary-hover: #1E3A8A;
+ --accent: #0D9488;
+ }
+
+ * { margin: 0; padding: 0; box-sizing: border-box; }
+
+ body {
+ font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+ color: var(--text);
+ background: var(--bg);
+ line-height: 1.7;
+ }
+
+ .header {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ padding: 16px 32px;
+ border-bottom: 1px solid var(--border);
+ background: var(--bg);
+ position: sticky;
+ top: 0;
+ z-index: 100;
+ }
+
+ .logo {
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ font-family: 'Outfit', sans-serif;
+ font-weight: 700;
+ font-size: 1.25rem;
+ color: var(--text);
+ text-decoration: none;
+ }
+
+ .header-links { display: flex; gap: 8px; align-items: center; }
+ .header-links a {
+ color: var(--text-muted); font-size: 0.9rem; font-weight: 500;
+ padding: 8px 16px; border-radius: 6px; text-decoration: none;
+ transition: color 0.15s, background 0.15s;
+ }
+ .header-links a:hover { color: var(--text); background: var(--bg-subtle); }
+
+ .content {
+ max-width: 740px;
+ margin: 0 auto;
+ padding: 48px 24px 80px;
+ }
+
+ .content h1 {
+ font-family: 'Outfit', sans-serif;
+ font-size: 2rem;
+ font-weight: 800;
+ margin-bottom: 8px;
+ color: var(--text);
+ }
+
+ .last-updated {
+ font-size: 0.85rem;
+ color: var(--text-muted);
+ margin-bottom: 36px;
+ }
+
+ .content h2 {
+ font-family: 'Outfit', sans-serif;
+ font-size: 1.2rem;
+ font-weight: 700;
+ margin: 32px 0 12px;
+ color: var(--text);
+ }
+
+ .content p {
+ margin-bottom: 16px;
+ color: var(--text-secondary);
+ font-size: 0.95rem;
+ }
+
+ .content ul {
+ margin: 0 0 16px 20px;
+ color: var(--text-secondary);
+ font-size: 0.95rem;
+ }
+
+ .content li { margin-bottom: 6px; }
+
+ .content strong { color: var(--text); font-weight: 600; }
+
+ .content a { color: var(--primary); text-decoration: none; }
+ .content a:hover { text-decoration: underline; }
+
+ table {
+ width: 100%;
+ border-collapse: collapse;
+ margin: 16px 0 24px;
+ font-size: 0.9rem;
+ }
+
+ th, td {
+ text-align: left;
+ padding: 10px 14px;
+ border: 1px solid var(--border);
+ color: var(--text-secondary);
+ }
+
+ th {
+ background: var(--bg-subtle);
+ font-weight: 600;
+ color: var(--text);
+ }
+
+ .footer {
+ text-align: center;
+ padding: 32px 24px;
+ border-top: 1px solid var(--border);
+ color: var(--text-muted);
+ font-size: 0.85rem;
+ }
+
+ .footer-links { display: flex; justify-content: center; gap: 24px; margin-bottom: 16px; flex-wrap: wrap; }
+ .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; font-weight: 500; }
+ .footer-links a:hover { color: var(--text); }
+
+ @media (max-width: 768px) {
+ .header { padding: 12px 16px; }
+ .header-links a { padding: 6px 10px; font-size: 0.82rem; }
+ .content { padding: 32px 16px 60px; }
+ .content h1 { font-size: 1.6rem; }
+ }
+ </style>
+</head>
+<body>
+
+ <header class="header">
+ <a href="/" class="logo">
+ <svg width="34" height="34" viewBox="0 0 40 40" fill="none" style="flex-shrink:0;">
+ <rect width="40" height="40" rx="9" fill="#1E40AF"/>
+ <path d="M11 7V33" stroke="white" stroke-width="4.8" stroke-linecap="square"/>
+ <path d="M13.2 7H19.5C24.2 7 27.5 10.3 27.5 15C27.5 19.7 24.2 23 19.5 23H13.2" stroke="white" stroke-width="4.8" fill="none" stroke-linecap="square"/>
+ <path d="M17.5 23L20 14.5L22 18L27.5 7.5" stroke="#93C5FD" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+ </svg>
+ ProofRepo
+ </a>
+ <nav class="header-links">
+ <a href="/">Home</a>
+ <a href="/security.html">Security</a>
+ <a href="/privacy.html">Privacy</a>
+ <a href="/terms.html">Terms</a>
+ </nav>
+ </header>
+
+ <div class="content">
+ <h1>Data Processing Agreement</h1>
+ <p class="last-updated">Last updated: February 15, 2026</p>
+
+ <p>This Data Processing Agreement ("<strong>DPA</strong>") forms part of the Terms of Service between ProofRepo ("<strong>Processor</strong>") and the entity or individual using the ProofRepo platform ("<strong>Controller</strong>") and governs the processing of personal data by Processor on behalf of Controller.</p>
+
+ <h2>1. Definitions</h2>
+ <p>"<strong>Personal Data</strong>" means any information relating to an identified or identifiable natural person that is processed by ProofRepo in connection with the services.</p>
+ <p>"<strong>Processing</strong>" means any operation performed on Personal Data, including collection, storage, retrieval, transmission, and deletion.</p>
+ <p>"<strong>Services</strong>" means the ProofRepo evidence collection platform as described in the Terms of Service.</p>
+
+ <h2>2. Scope and Purpose of Processing</h2>
+ <p>The Controller uses ProofRepo to collect compliance evidence from the Controller's clients. In providing the Services, the Processor may process the following categories of Personal Data:</p>
+
+ <table>
+ <tr><th>Data Category</th><th>Examples</th></tr>
+ <tr><td>Contact information</td><td>Names, email addresses of auditors and their clients</td></tr>
+ <tr><td>Business information</td><td>Company names, engagement details, framework selections</td></tr>
+ <tr><td>Uploaded evidence files</td><td>Documents, screenshots, policies, configurations uploaded by clients</td></tr>
+ <tr><td>Usage data</td><td>Request timestamps, upload timestamps, delivery confirmations</td></tr>
+ </table>
+
+ <p>Processing is performed solely for the purpose of providing the Services — specifically, delivering evidence request emails, receiving and storing uploaded files, organizing evidence into ProofPacks, and sending automated reminders and notifications.</p>
+
+ <h2>3. Controller Obligations</h2>
+ <p>The Controller is responsible for:</p>
+ <ul>
+ <li>Ensuring a lawful basis exists for the processing of Personal Data through the Services</li>
+ <li>Informing their clients that evidence will be collected and stored via ProofRepo</li>
+ <li>Ensuring that any Personal Data provided to ProofRepo is accurate and current</li>
+ <li>Not uploading data subject to heightened regulatory restrictions (e.g., protected health information under HIPAA) unless the Controller has independently ensured compliance with applicable laws</li>
+ </ul>
+
+ <h2>4. Processor Obligations</h2>
+ <p>The Processor shall:</p>
+ <ul>
+ <li>Process Personal Data only on documented instructions from the Controller (i.e., through normal use of the platform)</li>
+ <li>Ensure that persons authorized to process Personal Data have committed to confidentiality</li>
+ <li>Implement appropriate technical and organizational measures to protect Personal Data (see <a href="/security.html">Security</a>)</li>
+ <li>Not engage sub-processors without prior notification to the Controller (see Section 6)</li>
+ <li>Assist the Controller in responding to data subject requests where technically feasible</li>
+ <li>Delete or return all Personal Data upon termination of the Services, at the Controller's election</li>
+ <li>Make available to the Controller information necessary to demonstrate compliance with this DPA</li>
+ </ul>
+
+ <h2>5. Security Measures</h2>
+ <p>ProofRepo implements the following technical and organizational measures:</p>
+ <ul>
+ <li><strong>Encryption in transit:</strong> All data transmitted via TLS 1.2+</li>
+ <li><strong>Encryption at rest:</strong> Files stored in Cloudflare R2 with server-side encryption</li>
+ <li><strong>Access controls:</strong> Token-based authentication; magic links for client access scoped to individual requests</li>
+ <li><strong>Data isolation:</strong> Each evidence request is stored with unique tokens; no cross-request data access</li>
+ <li><strong>Infrastructure:</strong> Hosted on Cloudflare Workers (edge computing) with no persistent server access</li>
+ <li><strong>Retention:</strong> Evidence files retained for the duration of the engagement plus 90 days, then automatically deleted unless the Controller requests earlier deletion</li>
+ </ul>
+
+ <h2>6. Sub-processors</h2>
+ <p>The Processor currently uses the following sub-processors:</p>
+
+ <table>
+ <tr><th>Sub-processor</th><th>Purpose</th><th>Location</th></tr>
+ <tr><td>Cloudflare, Inc.</td><td>Infrastructure (Workers, R2 storage, KV database)</td><td>United States (global edge network)</td></tr>
+ <tr><td>Resend, Inc.</td><td>Transactional email delivery</td><td>United States</td></tr>
+ <tr><td>Stripe, Inc.</td><td>Payment processing</td><td>United States</td></tr>
+ </table>
+
+ <p>The Processor will notify the Controller of any intended changes to sub-processors by updating this page. The Controller may object to a new sub-processor by contacting the Processor within 30 days of notification.</p>
+
+ <h2>7. Data Transfers</h2>
+ <p>Personal Data may be processed in locations where Cloudflare operates edge infrastructure. To the extent that processing involves transfers outside the Controller's jurisdiction, the Processor relies on Cloudflare's data processing agreements and standard contractual clauses.</p>
+
+ <h2>8. Data Subject Rights</h2>
+ <p>If the Processor receives a request from a data subject regarding their Personal Data, the Processor will promptly notify the Controller. The Processor will assist the Controller in fulfilling data subject requests (access, rectification, erasure, portability) to the extent technically feasible within the platform.</p>
+
+ <h2>9. Data Breach Notification</h2>
+ <p>The Processor shall notify the Controller without undue delay (and in any event within 72 hours) after becoming aware of a Personal Data breach. Notification will include the nature of the breach, the categories of data affected, the likely consequences, and the measures taken to address the breach.</p>
+
+ <h2>10. Term and Termination</h2>
+ <p>This DPA remains in effect for as long as the Processor processes Personal Data on behalf of the Controller. Upon termination of the Services, the Processor will delete all Personal Data within 90 days unless legally required to retain it, or the Controller requests earlier deletion.</p>
+
+ <h2>11. Governing Law</h2>
+ <p>This DPA is governed by the same governing law as the <a href="/terms.html">Terms of Service</a>.</p>
+
+ <h2>12. Contact</h2>
+ <p>For questions about this DPA or to exercise any rights under it, contact: <a href="mailto:support@proofrepo.com">support@proofrepo.com</a></p>
+ </div>
+
+ <footer class="footer">
+ <div class="footer-links">
+ <a href="/security.html">Security</a>
+ <a href="/privacy.html">Privacy Policy</a>
+ <a href="/terms.html">Terms of Service</a>
+ <a href="/dpa.html">DPA</a>
+ </div>
+ <p>&copy; <span id="year"></span> ProofRepo. All rights reserved.</p>
+ </footer>
+
+ <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
