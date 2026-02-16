@@ -133,13 +133,13 @@
  background: var(--bg-subtle);
  }
 
- .header-links a:last-child {
+ .header-links a.nav-cta {
  color: white;
  background: var(--primary);
  font-weight: 600;
  }
 
- .header-links a:last-child:hover {
+ .header-links a.nav-cta:hover {
  background: var(--primary-hover);
  color: white;
  }
@@ -3052,10 +3052,11 @@
  ProofRepo
  </a>
  <nav class="header-links">
- <a href="#how-it-works">How it works</a>
- <a href="#pricing">Pricing</a>
- <a href="#trust">Security</a>
- <a id="getStartedLink">Get Started</a>
+ <a href="#how-it-works" class="nav-landing-link">How it works</a>
+ <a href="#pricing" class="nav-landing-link">Pricing</a>
+ <a href="#trust" class="nav-landing-link">Security</a>
+ <a id="getStartedLink" class="nav-landing-link nav-cta">Get Started</a>
+ <a href="#" id="navSignOutLink" class="nav-cta" style="display:none;">Sign Out</a>
  </nav>
  </header>
 
@@ -3351,9 +3352,6 @@
  <span class="user-email" id="currentUserEmail"></span>
  <span class="credits-badge" id="creditsDisplay">0 credits</span>
  <button class="btn btn-xs btn-outline" id="buyCreditsHeaderBtn">Buy Credits</button>
- </div>
- <div class="user-actions">
- <button class="btn btn-sm btn-outline" id="logoutBtn">Sign Out</button>
  </div>
  </div>
 
@@ -3706,26 +3704,21 @@
  <div class="pricing-landing-name">Single</div>
  <div class="pricing-landing-price">$79</div>
  <div class="pricing-landing-per">1 credit</div>
- <div class="pricing-landing-desc">Perfect for trying it out</div>
  </div>
- <div class="pricing-landing-card popular">
- <div class="pricing-landing-badge">Most Popular</div>
+ <div class="pricing-landing-card">
  <div class="pricing-landing-name">5-Pack</div>
  <div class="pricing-landing-price">$299</div>
- <div class="pricing-landing-per">$60 per request</div>
- <div class="pricing-landing-desc">Great for small firms</div>
+ <div class="pricing-landing-per">5 credits</div>
  </div>
  <div class="pricing-landing-card">
  <div class="pricing-landing-name">15-Pack</div>
  <div class="pricing-landing-price">$749</div>
- <div class="pricing-landing-per">$50 per request</div>
- <div class="pricing-landing-desc">For growing practices</div>
+ <div class="pricing-landing-per">15 credits</div>
  </div>
  <div class="pricing-landing-card">
  <div class="pricing-landing-name">50-Pack</div>
  <div class="pricing-landing-price">$1,999</div>
- <div class="pricing-landing-per">$40 per request</div>
- <div class="pricing-landing-desc">Best value for firms at scale</div>
+ <div class="pricing-landing-per">50 credits</div>
  </div>
  </div>
  <p class="pricing-landing-note">Have a trial code? <a href="#" onclick="event.preventDefault(); document.getElementById('roleSelect').value='new'; handleRoleChange('new'); document.getElementById('roleSelectSection').scrollIntoView({behavior:'smooth'});">Start here</a> &mdash; your first request is on us.</p>
@@ -3777,7 +3770,7 @@
 
  <div class="trust-footer">
  <div class="trust-links">
- <a href="#trust" class="trust-link" onclick="event.preventDefault(); document.getElementById('trust').scrollIntoView({behavior:'smooth'});">
+ <a href="/security.html" class="trust-link">
  <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
  Security
  </a>
@@ -3801,7 +3794,7 @@
  </div>
  <div class="footer-links">
  <a href="#how-it-works">How it Works</a>
- <a href="#trust">Security</a>
+ <a href="/security.html">Security</a>
  <a href="/privacy.html">Privacy Policy</a>
  <a href="/terms.html">Terms of Service</a>
  </div>
@@ -8523,6 +8516,11 @@ async function showDashboard() {
  $('#loggedInBar').style.display = 'flex';
  updateLoggedInBar();
  
+ // Swap nav: hide landing links, show Sign Out
+ $$('.nav-landing-link').forEach(el => el.style.display = 'none');
+ const navSignOut = $('#navSignOutLink');
+ if (navSignOut) navSignOut.style.display = '';
+ 
  showVerificationNotice();
  
  // Show dashboard
@@ -9677,6 +9675,11 @@ function handleLogout() {
  $('#roleSelectSection').style.display = 'block';
  $('#roleSelect').value = '';
  
+ // Restore nav: show landing links, hide Sign Out
+ $$('.nav-landing-link').forEach(el => el.style.display = '');
+ const navSignOut = $('#navSignOutLink');
+ if (navSignOut) navSignOut.style.display = 'none';
+ 
  // Restore hero section
  const heroEl = document.querySelector('.hero');
  if (heroEl) heroEl.style.display = '';
@@ -9984,6 +9987,7 @@ function setupAuthListeners() {
  
  // Logout
  $('#logoutBtn')?.addEventListener('click', handleLogout);
+ $('#navSignOutLink')?.addEventListener('click', e => { e.preventDefault(); handleLogout(); });
  
  // Resend verification
  $('#resendVerifyLink')?.addEventListener('click', e => {
