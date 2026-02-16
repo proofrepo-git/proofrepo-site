@@ -3067,7 +3067,7 @@
  <h1>Stop chasing clients for evidence</h1>
  <p>Send a guided upload link. Get organized, control-mapped evidence back &mdash; ready for your workpapers and reports. No more email chains. No more wrong files.</p>
  <div class="hero-cta">
- <a href="#" onclick="event.preventDefault(); document.getElementById('roleSelect').scrollIntoView({behavior:'smooth'}); document.getElementById('roleSelect').focus();" class="btn btn-primary btn-hero">Start Free Trial</a>
+ <a href="#" onclick="event.preventDefault(); document.getElementById('roleSelect').value='new'; handleRoleChange('new'); document.getElementById('roleSelectSection').scrollIntoView({behavior:'smooth'});" class="btn btn-primary btn-hero">Start Free Trial</a>
  <a href="#how-it-works" class="btn btn-outline btn-hero">See How It Works &rarr;</a>
  </div>
  <div class="hero-features">
@@ -3728,7 +3728,7 @@
  <div class="pricing-landing-desc">Best value for firms at scale</div>
  </div>
  </div>
- <p class="pricing-landing-note">Have a trial code? <a href="#" onclick="event.preventDefault(); document.getElementById('roleSelect').scrollIntoView({behavior:'smooth'});">Start here</a> &mdash; your first request is on us.</p>
+ <p class="pricing-landing-note">Have a trial code? <a href="#" onclick="event.preventDefault(); document.getElementById('roleSelect').value='new'; handleRoleChange('new'); document.getElementById('roleSelectSection').scrollIntoView({behavior:'smooth'});">Start here</a> &mdash; your first request is on us.</p>
  </div>
  </section>
 
@@ -3777,7 +3777,7 @@
 
  <div class="trust-footer">
  <div class="trust-links">
- <a href="/security.html" class="trust-link">
+ <a href="#trust" class="trust-link" onclick="event.preventDefault(); document.getElementById('trust').scrollIntoView({behavior:'smooth'});">
  <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
  Security
  </a>
@@ -3801,7 +3801,7 @@
  </div>
  <div class="footer-links">
  <a href="#how-it-works">How it Works</a>
- <a href="/security.html">Security</a>
+ <a href="#trust">Security</a>
  <a href="/privacy.html">Privacy Policy</a>
  <a href="/terms.html">Terms of Service</a>
  </div>
@@ -8507,6 +8507,17 @@ async function showDashboard() {
  if (sideRef) sideRef.style.display = 'none';
  const workflowSection = document.querySelector('.workflow-section');
  if (workflowSection) workflowSection.style.display = 'none';
+ const howSection = document.querySelector('.how-section');
+ if (howSection) howSection.style.display = 'none';
+ const pricingSection = document.querySelector('.pricing-landing-section');
+ if (pricingSection) pricingSection.style.display = 'none';
+ const trustSection = document.querySelector('.trust-section');
+ if (trustSection) trustSection.style.display = 'none';
+ const marquee = document.querySelector('.marquee-fixed');
+ if (marquee) marquee.style.display = 'none';
+ document.body.style.paddingBottom = '0';
+ const footer = document.querySelector('.footer');
+ if (footer) footer.style.display = 'none';
  
  // Show logged in bar
  $('#loggedInBar').style.display = 'flex';
@@ -9121,6 +9132,18 @@ function resetComposerForm() {
  // Hide template loaded notice
  const notice = $('#templateLoadedNotice');
  if (notice) notice.style.display = 'none';
+ 
+ // Clear global instructions
+ const gi = $('#globalInstructions');
+ if (gi) gi.value = '';
+ 
+ // Clear audit period pickers
+ if (typeof auditPeriodStartPicker !== 'undefined' && auditPeriodStartPicker) auditPeriodStartPicker.clear();
+ if (typeof auditPeriodEndPicker !== 'undefined' && auditPeriodEndPicker) auditPeriodEndPicker.clear();
+ 
+ // Clear engagement reference
+ const engRef = $('#engagementRef');
+ if (engRef) engRef.value = '';
 }
 
 function backToDashboard() {
@@ -9317,9 +9340,11 @@ function validatePassword(password) {
  special: /[!@#$%^&*(),.?":{}|<>_\-+=\[\]\\\/`~;']/.test(password)
  };
  
+ // Update ALL matching indicators (there are 2 password-reqs sections)
  Object.entries(reqs).forEach(([key, valid]) => {
- const el = $(`.password-reqs .req[data-req="${key}"]`);
- if (el) el.classList.toggle('valid', valid);
+ $$(`.password-reqs .req[data-req="${key}"]`).forEach(el => {
+ el.classList.toggle('valid', valid);
+ });
  });
  
  return Object.values(reqs).every(Boolean);
@@ -9661,6 +9686,17 @@ function handleLogout() {
  if (sideRef) sideRef.style.display = '';
  const workflowSection = document.querySelector('.workflow-section');
  if (workflowSection) workflowSection.style.display = '';
+ const howSection = document.querySelector('.how-section');
+ if (howSection) howSection.style.display = '';
+ const pricingSection = document.querySelector('.pricing-landing-section');
+ if (pricingSection) pricingSection.style.display = '';
+ const trustSection = document.querySelector('.trust-section');
+ if (trustSection) trustSection.style.display = '';
+ const marquee = document.querySelector('.marquee-fixed');
+ if (marquee) marquee.style.display = '';
+ document.body.style.paddingBottom = '';
+ const footer = document.querySelector('.footer');
+ if (footer) footer.style.display = '';
 }
 
 async function handleResendVerification() {
@@ -10177,17 +10213,19 @@ function updateMainButton() {
  btn.className = 'btn btn-accent btn-full';
  btn.disabled = false;
  } else if (state.isLoggedIn && !state.user?.verified) {
- // Logged in but NOT verified — block
+ // Logged in but NOT verified — show warning but keep clickable for pulse animation
  btn.textContent = 'Verify Email to Send';
  btn.className = 'btn btn-primary btn-full';
- btn.disabled = true;
+ btn.disabled = false;
  btn.style.opacity = '0.6';
+ btn.style.cursor = 'default';
  } else if (state.isLoggedIn && state.user?.credits > 0) {
  // Logged in, verified, has credits — ready
  btn.textContent = 'Send Evidence Request';
  btn.className = 'btn btn-accent btn-full';
  btn.disabled = false;
  btn.style.opacity = '';
+ btn.style.cursor = '';
  } else if (state.isLoggedIn && (!state.user?.credits || state.user.credits === 0)) {
  // Logged in, verified, but no credits
  if (!state.paymentVisible) {
@@ -10679,8 +10717,9 @@ async function init() {
  
  $('#getStartedLink').addEventListener('click', e => {
  e.preventDefault();
- $('#roleSelect').scrollIntoView({ behavior: 'smooth' });
- $('#roleSelect').focus();
+ $('#roleSelect').value = 'new';
+ handleRoleChange('new');
+ $('#roleSelectSection').scrollIntoView({ behavior: 'smooth' });
  });
  
  updateMainButton();
