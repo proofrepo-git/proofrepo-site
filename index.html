@@ -2754,6 +2754,27 @@
  100% { transform: translateX(-50%); }
  }
 
+ /* ==================== TOAST NOTIFICATIONS ==================== */
+ .toast-container {
+ position: fixed; top: 20px; right: 20px; z-index: 10000;
+ display: flex; flex-direction: column; gap: 8px; pointer-events: none;
+ }
+ .toast {
+ pointer-events: auto; padding: 14px 20px; border-radius: 10px;
+ font-size: 0.88rem; font-weight: 500; max-width: 420px;
+ box-shadow: 0 8px 24px rgba(0,0,0,0.12); animation: toast-in 0.3s ease;
+ display: flex; align-items: center; gap: 10px; line-height: 1.4;
+ }
+ .toast.success { background: #f0fdf4; border: 1px solid #86efac; color: #15803d; }
+ .toast.error { background: #fef2f2; border: 1px solid #fca5a5; color: #b91c1c; }
+ .toast .toast-icon { font-size: 1.1rem; flex-shrink: 0; }
+ .toast .toast-close {
+ margin-left: auto; cursor: pointer; opacity: 0.5; font-size: 1.1rem; padding: 0 0 0 12px;
+ }
+ .toast .toast-close:hover { opacity: 1; }
+ @keyframes toast-in { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
+ @keyframes toast-out { from { opacity: 1; } to { opacity: 0; transform: translateY(-10px); } }
+
  /* ==================== MODALS ==================== */
  .modal-overlay {
  position: fixed;
@@ -3112,18 +3133,15 @@
 
  <!-- SIDE REFERENCE PANEL -->
  <div class="side-ref" id="sideRef">
- <div class="side-ref-label">What auditors are saying</div>
+ <div class="side-ref-label">Built for compliance professionals</div>
  <div class="side-ref-quote">
- <p>&ldquo;Cut my evidence collection time in half. Clients actually send the right files now.&rdquo;</p>
- <span>GRC Consultant, Southeast US</span>
+ <p>Send a guided upload link with exactly what you need — mapped to controls, with format hints and instructions.</p>
  </div>
  <div class="side-ref-quote">
- <p>&ldquo;The guided checklists mean less time explaining what I need.&rdquo;</p>
- <span>IT Auditor, Mid-size Firm</span>
+ <p>Clients upload on their own time. Auto-reminders handle follow-up. You review the organized ProofPack.</p>
  </div>
  <div class="side-ref-quote">
- <p>&ldquo;Replaced our SharePoint folder system overnight.&rdquo;</p>
- <span>Compliance Lead, Consulting Practice</span>
+ <p>One dashboard for every engagement. Track deadlines, status, and evidence across all your clients.</p>
  </div>
  </div>
 
@@ -3782,6 +3800,10 @@
  <svg viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
  Terms
  </a>
+ <a href="/dpa.html" class="trust-link">
+ <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+ DPA
+ </a>
  </div>
  </div>
  </div>
@@ -3793,13 +3815,15 @@
  <p class="footer-origin">Questions? <a href="/cdn-cgi/l/email-protection#0f7c7a7f7f607d7b4f7f7d6060697d6a7f60216c6062"><span class="__cf_email__" data-cfemail="52212722223d20261222203d3d342037223d7c313d3f">[email&#160;protected]</span></a></p>
  </div>
  <div class="footer-links">
- <a href="#how-it-works">How it Works</a>
  <a href="/security.html">Security</a>
  <a href="/privacy.html">Privacy Policy</a>
  <a href="/terms.html">Terms of Service</a>
+ <a href="/dpa.html">DPA</a>
  </div>
  <p>&copy; <span id="year"></span> ProofRepo. All rights reserved.</p>
  </footer>
+
+ <div id="toastContainer" class="toast-container"></div>
 
  <div class="marquee-fixed">
  <div class="marquee">
@@ -6869,6 +6893,19 @@ const esc = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').re
 
 // ==================== CHIP INPUT FUNCTIONS ====================
 
+function showToast(message, type = 'success', duration = 5000) {
+ const container = $('#toastContainer');
+ if (!container) return;
+ const toast = document.createElement('div');
+ toast.className = `toast ${type}`;
+ toast.innerHTML = `<span class="toast-icon">${type === 'success' ? '✓' : '✕'}</span><span>${message}</span><span class="toast-close" onclick="this.parentElement.remove()">×</span>`;
+ container.appendChild(toast);
+ setTimeout(() => {
+ toast.style.animation = 'toast-out 0.3s ease forwards';
+ setTimeout(() => toast.remove(), 300);
+ }, duration);
+}
+
 function initChipInput(containerId) {
  const container = document.getElementById(containerId);
  if (!container) return;
@@ -8509,8 +8546,6 @@ async function showDashboard() {
  const marquee = document.querySelector('.marquee-fixed');
  if (marquee) marquee.style.display = 'none';
  document.body.style.paddingBottom = '0';
- const footer = document.querySelector('.footer');
- if (footer) footer.style.display = 'none';
  
  // Show logged in bar
  $('#loggedInBar').style.display = 'flex';
@@ -8609,7 +8644,17 @@ function renderDashboard(requests, stats) {
  // Render active requests
  const activeList = $('#activeRequestsList');
  $('#activeCount').textContent = `(${active.length})`;
- if (active.length === 0) {
+ if (active.length === 0 && completed.length === 0) {
+ // Brand new user — show welcome card
+ activeList.innerHTML = `
+ <div style="background: linear-gradient(135deg, #eff6ff 0%, #f0fdfa 100%); border: 1px solid #bfdbfe; border-radius: 12px; padding: 32px 28px; text-align: center;">
+ <div style="font-size: 2rem; margin-bottom: 12px;">👋</div>
+ <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin: 0 0 8px;">Welcome to ProofRepo</h3>
+ <p style="color: #475569; font-size: 0.9rem; line-height: 1.6; margin: 0 0 20px; max-width: 400px; margin-left: auto; margin-right: auto;">Send your first evidence request — pick a framework, add your client's email, and ProofRepo handles collection and follow-up.</p>
+ <button class="btn btn-accent" onclick="showComposerFromDashboard()" style="padding: 12px 28px; font-size: 0.95rem;">Send Your First Request</button>
+ </div>
+ `;
+ } else if (active.length === 0) {
  activeList.innerHTML = `
  <div class="empty-state">
  <div class="empty-state-icon">📋</div>
@@ -9698,8 +9743,6 @@ function handleLogout() {
  const marquee = document.querySelector('.marquee-fixed');
  if (marquee) marquee.style.display = '';
  document.body.style.paddingBottom = '';
- const footer = document.querySelector('.footer');
- if (footer) footer.style.display = '';
 }
 
 async function handleResendVerification() {
@@ -10402,12 +10445,12 @@ async function handleCheckout() {
  if (data.ok && data.url) {
  window.location.href = data.url;
  } else {
- alert('Error starting checkout: ' + (data.error || 'Unknown error'));
+ showToast(data.error || 'Could not start checkout. Please try again.', 'error', 8000);
  buyBtn.disabled = false;
  buyBtn.textContent = 'Buy Credits';
  }
  } catch (e) {
- alert('Error: ' + e.message);
+ showToast('Could not reach the server. Please check your connection and try again.', 'error', 8000);
  buyBtn.disabled = false;
  buyBtn.textContent = 'Buy Credits';
  }
@@ -10439,11 +10482,7 @@ async function sendRequest() {
  headers['Authorization'] = `Bearer ${state.authToken}`;
  }
  
- try {
- const res = await fetch(`${API}/request`, {
- method: 'POST',
- headers,
- body: JSON.stringify({
+ const payload = JSON.stringify({
  auditorEmail: auditorEmails[0] || '',
  auditorEmails: auditorEmails,
  clientEmail: clientEmails[0] || '',
@@ -10454,24 +10493,29 @@ async function sendRequest() {
  auditorCode: state.code || '',
  globalInstructions: $('#globalInstructions')?.value || '',
  requestedEvidence: requestedEvidence,
- // Audit period for period-of-time evidence
  auditPeriodStart: auditPeriodStart,
  auditPeriodEnd: auditPeriodEnd,
- // Trial flags
  isTrialRequest: state.isTrialUser,
  trialMode: state.trialMode
- })
  });
  
+ // Retry logic: try up to 2 times on network failure
+ let lastError = null;
+ for (let attempt = 0; attempt < 2; attempt++) {
+ try {
+ if (attempt > 0) {
+ btn.innerHTML = '<span class="spinner"></span> Retrying...';
+ await new Promise(r => setTimeout(r, 1500));
+ }
+ 
+ const res = await fetch(`${API}/request`, { method: 'POST', headers, body: payload });
  const data = await res.json();
  
  if (data.ok) {
  clearFormState();
  
- // Update local credits if logged in
  if (state.isLoggedIn && state.user) {
  state.user.credits = Math.max(0, (state.user.credits || 0) - 1);
- // Add token to local requests list
  if (data.token) {
  state.user.requests = state.user.requests || [];
  state.user.requests.unshift(data.token);
@@ -10482,27 +10526,32 @@ async function sendRequest() {
  const clientList = clientEmails.join(', ');
  
  if (state.isTrialUser) {
- // Special message for trial users
- alert(`Success! ${state.trialMode === 'test' ? 'Test request' : 'Evidence request'} sent to ${clientList}.\n\nCheck your email for next steps!`);
- window.location.reload();
+ showToast(`Evidence request sent to ${clientList}. Check your email for next steps!`, 'success', 6000);
+ setTimeout(() => window.location.reload(), 2000);
  } else if (state.isLoggedIn) {
- // Show success and go to dashboard
- alert('Success! Evidence request sent to ' + clientList);
+ showToast(`Evidence request sent to ${clientList}`, 'success');
  backToDashboard();
  } else {
- alert('Success! Evidence request sent to ' + clientList + '\n\nClient link: ' + (data.magicLink || ''));
- window.location.reload();
+ showToast(`Evidence request sent to ${clientList}`, 'success', 6000);
+ setTimeout(() => window.location.reload(), 2000);
  }
+ return; // success — exit
  } else {
- alert('Error: ' + (data.error || 'Unknown error'));
+ // API returned an error (not a network issue — don't retry)
+ showToast(data.error || 'Something went wrong sending your request. Please try again.', 'error', 8000);
  btn.disabled = false;
  btn.textContent = 'Send Evidence Request';
+ return;
  }
  } catch (e) {
- alert('Error: ' + e.message);
+ lastError = e;
+ }
+ }
+ 
+ // Both attempts failed (network issue)
+ showToast('Could not reach the server. Please check your connection and try again.', 'error', 8000);
  btn.disabled = false;
  btn.textContent = 'Send Evidence Request';
- }
 }
 
 // ==================== MODALS ====================
