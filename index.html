@@ -856,6 +856,36 @@
  font-weight: 500;
  }
 
+ /* Wide layout when composer is active */
+ .main-container.composer-active {
+ max-width: 1100px;
+ }
+
+ /* 2-column control groups in wide composer */
+ .main-container.composer-active .control-groups-grid {
+ display: grid;
+ grid-template-columns: 1fr 1fr;
+ gap: 10px 16px;
+ }
+
+ .main-container.composer-active .control-groups-grid .control-group {
+ margin-bottom: 0;
+ }
+
+ /* Expanded control group spans full width */
+ .main-container.composer-active .control-groups-grid .control-group.expanded {
+ grid-column: 1 / -1;
+ }
+
+ @media (max-width: 900px) {
+ .main-container.composer-active {
+ max-width: 900px;
+ }
+ .main-container.composer-active .control-groups-grid {
+ grid-template-columns: 1fr;
+ }
+ }
+
  /* Two-column layout for Active + Completed side by side */
  .requests-columns {
  display: grid;
@@ -7414,7 +7444,9 @@ function renderComposer() {
 function renderFwBody(fwKey, fw) {
  let html = `<div style="margin-top: 16px; margin-bottom: 8px;"><strong>${esc(fw.label)}</strong>${fw.description ? ` <span style="color: var(--text-muted);">&mdash; ${esc(fw.description)}</span>` : ''}</div>`;
  html += `<div class="bulk-guidance-toolbar"><span class="bulk-guidance-label">Guidance:</span><button type="button" class="bulk-guidance-btn" data-bulk-clear="${esc(fwKey)}">Clear all guidance</button><button type="button" class="bulk-guidance-btn restore" data-bulk-restore="${esc(fwKey)}">&#x21BA; Restore defaults</button></div>`;
+ html += `<div class="control-groups-grid">`;
  for (const g of (fw.controlGroups || [])) html += renderGroup(fwKey, g);
+ html += `</div>`;
  html += `<button type="button" class="btn btn-sm btn-outline" style="width: 100%; margin-top: 8px; border-style: dashed;" data-add-group-btn="${esc(fwKey)}">+ Add control group</button>`;
  return html;
 }
@@ -7425,7 +7457,7 @@ function renderGroup(fwKey, g) {
  const common = (g.items || []).filter(i => i.common), extra = (g.items || []).filter(i => !i.common);
  const includedCount = (g.items || []).filter(i => gs?.items?.[i.id]?.included && !excluded).length;
  const totalCount = (g.items || []).length;
- let html = `<div class="control-group ${excluded ? 'excluded' : ''}" data-fw="${esc(fwKey)}" data-group="${esc(g.id)}"><div class="cg-header"><span class="cg-title">${esc(g.title)}</span><div class="cg-status">${excluded ? `<span style="color: var(--text-muted); font-size: 0.8rem;">Excluded</span><button type="button" class="cg-include" data-include-group="${esc(fwKey)}-${esc(g.id)}" title="Include">+</button>` : `<span class="cg-count">${includedCount}/${totalCount}</span><button type="button" class="cg-exclude" data-exclude-group="${esc(fwKey)}-${esc(g.id)}" title="Exclude">&times;</button>`}<span class="cg-toggle">${exp ? '&#x25BC;' : '&#x25B6;'}</span></div></div><div class="cg-body ${exp ? 'open' : ''}">`;
+ let html = `<div class="control-group ${excluded ? 'excluded' : ''} ${exp ? 'expanded' : ''}" data-fw="${esc(fwKey)}" data-group="${esc(g.id)}"><div class="cg-header"><span class="cg-title">${esc(g.title)}</span><div class="cg-status">${excluded ? `<span style="color: var(--text-muted); font-size: 0.8rem;">Excluded</span><button type="button" class="cg-include" data-include-group="${esc(fwKey)}-${esc(g.id)}" title="Include">+</button>` : `<span class="cg-count">${includedCount}/${totalCount}</span><button type="button" class="cg-exclude" data-exclude-group="${esc(fwKey)}-${esc(g.id)}" title="Exclude">&times;</button>`}<span class="cg-toggle">${exp ? '&#x25BC;' : '&#x25B6;'}</span></div></div><div class="cg-body ${exp ? 'open' : ''}">`;
  if (excluded) {
  html += `<p style="color: var(--text-muted); text-align: center; padding: 12px;">This control group is excluded from the request.</p>`;
  } else {
@@ -9150,6 +9182,7 @@ function showComposerFromDashboard() {
  // Hide dashboard
  $('#dashboardView').style.display = 'none';
  document.querySelector('.main-container').classList.remove('dashboard-active');
+ document.querySelector('.main-container').classList.add('composer-active');
  
  // Show back link
  $('#backToDashboard').style.display = 'block';
@@ -9236,6 +9269,7 @@ function backToDashboard() {
  // Hide composer
  $('#auditorFlow').style.display = 'none';
  $('#backToDashboard').style.display = 'none';
+ document.querySelector('.main-container').classList.remove('composer-active');
  
  // Show dashboard
  showDashboard();
@@ -9260,6 +9294,7 @@ function showAuditorFlow() {
  
  // Show auditor flow
  $('#auditorFlow').style.display = 'block';
+ document.querySelector('.main-container').classList.add('composer-active');
  if (Object.keys(composerState).length === 0) initComposerState();
  renderComposer();
  
@@ -9760,6 +9795,7 @@ function handleLogout() {
  $('#auditorFlow').style.display = 'none';
  $('#dashboardView').style.display = 'none';
  document.querySelector('.main-container').classList.remove('dashboard-active');
+ document.querySelector('.main-container').classList.remove('composer-active');
  $('#verificationNotice').style.display = 'none';
  $('#roleSelectSection').style.display = 'block';
  $('#roleSelect').value = '';
