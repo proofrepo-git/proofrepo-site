@@ -809,6 +809,11 @@
  margin: 2px 0 0;
  }
 
+ /* Wide layout when dashboard is active */
+ .main-container.dashboard-active {
+ max-width: 1200px;
+ }
+
  .stats-grid {
  display: grid;
  grid-template-columns: repeat(4, 1fr);
@@ -849,6 +854,23 @@
  text-transform: uppercase;
  letter-spacing: 0.5px;
  font-weight: 500;
+ }
+
+ /* Two-column layout for Active + Completed side by side */
+ .requests-columns {
+ display: grid;
+ grid-template-columns: 1fr 1fr;
+ gap: 24px;
+ margin-bottom: 28px;
+ }
+
+ @media (max-width: 900px) {
+ .requests-columns {
+ grid-template-columns: 1fr;
+ }
+ .main-container.dashboard-active {
+ max-width: 900px;
+ }
  }
 
  /* ==================== REQUEST CARDS ==================== */
@@ -3448,6 +3470,16 @@
  </div>
  </div>
  
+ <!-- Welcome card for brand new users (shown full-width above columns) -->
+ <div id="welcomeCard" style="display:none; background: linear-gradient(135deg, #eff6ff 0%, #f0fdfa 100%); border: 1px solid #bfdbfe; border-radius: 12px; padding: 32px 28px; text-align: center; margin-bottom: 24px;">
+ <div style="font-size: 2rem; margin-bottom: 12px;">👋</div>
+ <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin: 0 0 8px;">Welcome to ProofRepo</h3>
+ <p style="color: #475569; font-size: 0.9rem; line-height: 1.6; margin: 0 0 20px; max-width: 500px; margin-left: auto; margin-right: auto;">Send your first evidence request — pick a framework, add your client's email, and ProofRepo handles collection and follow-up.</p>
+ <button class="btn btn-accent" onclick="showComposerFromDashboard()" style="padding: 12px 28px; font-size: 0.95rem;">Send Your First Request</button>
+ </div>
+
+ <!-- Active + Completed side by side -->
+ <div class="requests-columns" id="requestsColumns">
  <!-- Active Requests Section -->
  <div class="request-section">
  <h3 class="section-title">Active Requests <span class="section-count" id="activeCount">(0)</span></h3>
@@ -3461,6 +3493,7 @@
  <h3 class="section-title">Completed <span class="section-count" id="completedCount">(0)</span></h3>
  <div id="completedRequestsList" class="requests-list">
  <div class="loading-placeholder">Loading requests...</div>
+ </div>
  </div>
  </div>
  
@@ -8566,6 +8599,7 @@ async function showDashboard() {
  
  // Show dashboard
  $('#dashboardView').style.display = 'block';
+ document.querySelector('.main-container').classList.add('dashboard-active');
  
  // Fetch and render dashboard data
  await fetchAndRenderDashboard();
@@ -8650,17 +8684,18 @@ function renderDashboard(requests, stats) {
  // Render active requests
  const activeList = $('#activeRequestsList');
  $('#activeCount').textContent = `(${active.length})`;
+ const welcomeCard = $('#welcomeCard');
+ const requestsColumns = $('#requestsColumns');
+ 
  if (active.length === 0 && completed.length === 0) {
- // Brand new user — show welcome card
- activeList.innerHTML = `
- <div style="background: linear-gradient(135deg, #eff6ff 0%, #f0fdfa 100%); border: 1px solid #bfdbfe; border-radius: 12px; padding: 32px 28px; text-align: center;">
- <div style="font-size: 2rem; margin-bottom: 12px;">👋</div>
- <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin: 0 0 8px;">Welcome to ProofRepo</h3>
- <p style="color: #475569; font-size: 0.9rem; line-height: 1.6; margin: 0 0 20px; max-width: 400px; margin-left: auto; margin-right: auto;">Send your first evidence request — pick a framework, add your client's email, and ProofRepo handles collection and follow-up.</p>
- <button class="btn btn-accent" onclick="showComposerFromDashboard()" style="padding: 12px 28px; font-size: 0.95rem;">Send Your First Request</button>
- </div>
- `;
- } else if (active.length === 0) {
+ // Brand new user — show full-width welcome card, hide columns
+ welcomeCard.style.display = 'block';
+ requestsColumns.style.display = 'none';
+ } else {
+ welcomeCard.style.display = 'none';
+ requestsColumns.style.display = '';
+ 
+ if (active.length === 0) {
  activeList.innerHTML = `
  <div class="empty-state">
  <div class="empty-state-icon">📋</div>
@@ -8684,6 +8719,7 @@ function renderDashboard(requests, stats) {
  } else {
  completedList.innerHTML = completed.map(r => renderRequestCard(r, 'completed')).join('');
  }
+ } // end else (not brand new user)
  
  // Render templates
  renderTemplatesSection();
@@ -9113,6 +9149,7 @@ function renderDashboardError(message) {
 function showComposerFromDashboard() {
  // Hide dashboard
  $('#dashboardView').style.display = 'none';
+ document.querySelector('.main-container').classList.remove('dashboard-active');
  
  // Show back link
  $('#backToDashboard').style.display = 'block';
@@ -9722,6 +9759,7 @@ function handleLogout() {
  $('#loggedInBar').style.display = 'none';
  $('#auditorFlow').style.display = 'none';
  $('#dashboardView').style.display = 'none';
+ document.querySelector('.main-container').classList.remove('dashboard-active');
  $('#verificationNotice').style.display = 'none';
  $('#roleSelectSection').style.display = 'block';
  $('#roleSelect').value = '';
