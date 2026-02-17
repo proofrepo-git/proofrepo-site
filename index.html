@@ -10813,26 +10813,40 @@ function applyFollowup(draft) {
  const labelToKey = {};
  for (const [key, fw] of Object.entries(allFw)) {
  labelToKey[fw.label] = key;
- labelToKey[key] = key; // also map key to itself
+ labelToKey[key] = key;
+ // Also handle no-space versions (e.g., "SOC2" vs "SOC 2")
+ labelToKey[fw.label.replace(/\s+/g, '')] = key;
  }
 
- // Collect all follow-up item IDs and their notes
+ // Collect all follow-up item IDs (only actionable ones)
  const followupItemIds = new Set();
- const itemNotes = {};
+ const itemInstructions = {};
+ const permanentItemIds = new Set();
+
  for (const item of (draft.missingItems || [])) {
+ if (item.includeInFollowup !== false) {
  followupItemIds.add(item.id);
+ if (item.followupInstruction) {
+ itemInstructions[item.id] = item.followupInstruction;
+ }
+ }
  }
  for (const item of (draft.notedItems || [])) {
+ if (item.includeInFollowup === false) {
+ permanentItemIds.add(item.id);
+ } else {
  followupItemIds.add(item.id);
- if (item.clientNote) {
- itemNotes[item.id] = item.clientNote;
+ if (item.followupInstruction) {
+ itemInstructions[item.id] = item.followupInstruction;
+ }
  }
  }
 
  // Determine which frameworks to enable
  const fwToEnable = new Set();
  for (const item of [...(draft.missingItems || []), ...(draft.notedItems || [])]) {
- const fwKey = labelToKey[item.framework] || labelToKey[item.framework?.replace(/\s+/g, '')] || null;
+ if (permanentItemIds.has(item.id)) continue;
+ const fwKey = labelToKey[item.framework] || labelToKey[(item.framework || '').replace(/\s+/g, '')] || null;
  if (fwKey) fwToEnable.add(fwKey);
  }
 
@@ -10844,7 +10858,7 @@ function applyFollowup(draft) {
  composerState[fwKey].enabled = fwToEnable.has(fwKey);
  }
 
- // For each enabled framework, uncheck everything then re-check only follow-up items
+ // For each enabled framework, check only follow-up items
  for (const fwKey of fwToEnable) {
  if (!composerState[fwKey]) continue;
  const fw = allFw[fwKey];
@@ -10859,9 +10873,9 @@ function applyFollowup(draft) {
  const isFollowup = followupItemIds.has(item.id);
  gs.items[item.id].included = isFollowup;
 
- // For noted items, prepend client's note to instructions
- if (isFollowup && itemNotes[item.id]) {
- gs.items[item.id].instructions = 'Client previously noted: "' + itemNotes[item.id] + '" — Please provide the actual evidence file.';
+ // Set smart per-item instructions
+ if (isFollowup && itemInstructions[item.id]) {
+ gs.items[item.id].instructions = itemInstructions[item.id];
  }
 
  if (isFollowup) hasFollowupItem = true;
@@ -10898,34 +10912,66 @@ function applyFollowup(draft) {
  auditPeriodEndPicker.setDate(new Date(draft.auditPeriodEnd), true);
  }
 
- // Set global instructions with follow-up context
- const totalMissing = (draft.missingItems || []).length;
- const totalNoted = (draft.notedItems || []).length;
- const originalDate = draft.originalRequestDate ? new Date(draft.originalRequestDate).toLocaleDateString() : 'previous request';
- const followupInstructions = 'FOLLOW-UP REQUEST: ' + (totalMissing + totalNoted) + ' items outstanding from ' + originalDate + ' (' + totalMissing + ' missing, ' + totalNoted + ' with notes).' + (draft.globalInstructions ? '\n\n' + draft.globalInstructions : '');
+ // Smart deadline: use suggested days from backend
+ const deadlineDays = draft.suggestedDeadlineDays || 7;
+ const suggestedDeadline = new Date();
+ suggestedDeadline.setDate(suggestedDeadline.getDate() + deadlineDays);
+ suggestedDeadline.setHours(17, 0, 0, 0); // 5 PM
+ if (deadlinePicker) {
+ deadlinePicker.setDate(suggestedDeadline, true);
+ }
 
- // Render composer first, then set values (render rebuilds textareas)
+ // Smart global instructions
+ const totalMissing = (draft.missingItems || []).filter(i => i.includeInFollowup !== false).length;
+ const totalNoted = (draft.notedItems || []).filter(i => i.includeInFollowup !== false).length;
+ const totalPermanent = (draft.permanentNotedCount || 0);
+ const originalDate = draft.originalRequestDate ? new Date(draft.originalRequestDate).toLocaleDateString() : 'a previous request';
+
+ let followupInstructions = 'FOLLOW-UP REQUEST: ' + (totalMissing + totalNoted) + ' items outstanding from ' + originalDate + '.';
+ if (totalMissing > 0 && totalNoted > 0) {
+ followupInstructions += ' (' + totalMissing + ' not yet provided, ' + totalNoted + ' previously noted as in progress)';
+ }
+ if (totalPermanent > 0) {
+ followupInstructions += '\n\nNote: ' + totalPermanent + ' item' + (totalPermanent !== 1 ? 's were' : ' was') + ' marked as not applicable and ' + (totalPermanent !== 1 ? 'have' : 'has') + ' been excluded from this follow-up.';
+ }
+ followupInstructions += '\n\nPlease upload the requested items at your earliest convenience.';
+
+ // Render composer first, then set values
  renderComposer();
 
  const gi = $('#globalInstructions');
  if (gi) gi.value = followupInstructions;
 
- // Show follow-up banner in composer
+ // Show follow-up banner
  const auditorFlow = $('#auditorFlow');
  if (auditorFlow) {
+ // Remove existing banner if any
+ const existing = $('#followupBanner');
+ if (existing) existing.remove();
+
  const banner = document.createElement('div');
  banner.id = 'followupBanner';
  banner.style.cssText = 'background:#eff6ff; border:2px solid #93c5fd; border-radius:10px; padding:16px 20px; margin-bottom:16px;';
+
+ let bannerDetail = totalMissing + ' missing';
+ if (totalNoted > 0) bannerDetail += ', ' + totalNoted + ' previously noted';
+ if (totalPermanent > 0) bannerDetail += ', ' + totalPermanent + ' excluded (not applicable)';
+
  banner.innerHTML = '<div style="display:flex;align-items:center;gap:12px;">' +
  '<span style="font-size:20px;">&#128260;</span>' +
- '<div>' +
+ '<div style="flex:1">' +
  '<strong style="color:#1e40af;">Follow-up request for ' + (draft.company || 'client') + '</strong>' +
  '<p style="margin:4px 0 0; font-size:0.85rem; color:#3b82f6;">' +
- totalMissing + ' missing item' + (totalMissing !== 1 ? 's' : '') +
- (totalNoted > 0 ? ' + ' + totalNoted + ' noted item' + (totalNoted !== 1 ? 's' : '') : '') +
- ' from previous submission. Review and send when ready.' +
+ bannerDetail + ' from previous submission. Deadline set to ' + deadlineDays + ' days. Review and send when ready.' +
  '</p></div></div>';
+ 
+ // Insert after back-to-dashboard link
+ const backLink = $('#backToDashboard');
+ if (backLink && backLink.nextSibling) {
+ auditorFlow.insertBefore(banner, backLink.nextSibling);
+ } else {
  auditorFlow.insertBefore(banner, auditorFlow.firstChild);
+ }
  }
 }
 
