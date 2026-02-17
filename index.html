@@ -8593,6 +8593,20 @@ function showForgotPassword() {
 // ==================== DASHBOARD FUNCTIONS ====================
 
 async function showDashboard() {
+ // Check for pending follow-up request — redirect to composer instead of dashboard
+ if (state.pendingFollowup && state.isLoggedIn) {
+ const draft = state.pendingFollowup;
+ state.pendingFollowup = null;
+ // Show dashboard briefly to set up the UI state, then switch to composer
+ await showDashboardInternal();
+ showComposerFromDashboard();
+ applyFollowup(draft);
+ return;
+ }
+ await showDashboardInternal();
+}
+
+async function showDashboardInternal() {
  // Hide auth flows and role selector
  $('#newUserFlow').style.display = 'none';
  $('#returningUserFlow').style.display = 'none';
@@ -10762,6 +10776,159 @@ function handleUrlPrefill() {
 
 // ==================== INIT ====================
 
+// ==================== FOLLOW-UP REQUEST PRE-POPULATION ====================
+
+async function checkFollowup() {
+ const params = new URLSearchParams(window.location.search);
+ const followupKey = params.get('followup');
+ if (!followupKey) return false;
+
+ // Clean URL
+ const cleanUrl = window.location.pathname;
+ window.history.replaceState({}, '', cleanUrl);
+
+ try {
+ const res = await fetch(`${API}/followup-draft?key=${encodeURIComponent(followupKey)}`);
+ const data = await res.json();
+ if (!data.ok || !data.draft) return false;
+
+ const draft = data.draft;
+ const allMissing = [...(draft.missingItems || []), ...(draft.notedItems || [])];
+ if (allMissing.length === 0) return false;
+
+ // Store follow-up state for after login/session check
+ state.pendingFollowup = draft;
+ return true;
+ } catch (e) {
+ console.error('Follow-up load error:', e);
+ return false;
+ }
+}
+
+function applyFollowup(draft) {
+ if (!draft) return;
+
+ // Map framework labels to keys
+ const allFw = getAllFrameworks();
+ const labelToKey = {};
+ for (const [key, fw] of Object.entries(allFw)) {
+ labelToKey[fw.label] = key;
+ labelToKey[key] = key; // also map key to itself
+ }
+
+ // Collect all follow-up item IDs and their notes
+ const followupItemIds = new Set();
+ const itemNotes = {};
+ for (const item of (draft.missingItems || [])) {
+ followupItemIds.add(item.id);
+ }
+ for (const item of (draft.notedItems || [])) {
+ followupItemIds.add(item.id);
+ if (item.clientNote) {
+ itemNotes[item.id] = item.clientNote;
+ }
+ }
+
+ // Determine which frameworks to enable
+ const fwToEnable = new Set();
+ for (const item of [...(draft.missingItems || []), ...(draft.notedItems || [])]) {
+ const fwKey = labelToKey[item.framework] || labelToKey[item.framework?.replace(/\s+/g, '')] || null;
+ if (fwKey) fwToEnable.add(fwKey);
+ }
+
+ // Reset composer state
+ initComposerState();
+
+ // Enable only relevant frameworks, disable all others
+ for (const fwKey of Object.keys(composerState)) {
+ composerState[fwKey].enabled = fwToEnable.has(fwKey);
+ }
+
+ // For each enabled framework, uncheck everything then re-check only follow-up items
+ for (const fwKey of fwToEnable) {
+ if (!composerState[fwKey]) continue;
+ const fw = allFw[fwKey];
+ if (!fw) continue;
+
+ for (const g of (fw.controlGroups || [])) {
+ const gs = composerState[fwKey].groups[g.id];
+ if (!gs) continue;
+
+ let hasFollowupItem = false;
+ for (const item of (g.items || [])) {
+ const isFollowup = followupItemIds.has(item.id);
+ gs.items[item.id].included = isFollowup;
+
+ // For noted items, prepend client's note to instructions
+ if (isFollowup && itemNotes[item.id]) {
+ gs.items[item.id].instructions = 'Client previously noted: "' + itemNotes[item.id] + '" — Please provide the actual evidence file.';
+ }
+
+ if (isFollowup) hasFollowupItem = true;
+ }
+
+ // Exclude groups with no follow-up items
+ if (!hasFollowupItem) {
+ gs.excluded = true;
+ }
+ }
+ }
+
+ // Pre-fill form fields
+ if (draft.company) {
+ const companyEl = $('#clientCompany');
+ if (companyEl) companyEl.value = draft.company;
+ }
+
+ // Pre-fill client emails
+ if (draft.clientEmails && draft.clientEmails.length > 0) {
+ const container = $('#clientEmailsContainer');
+ if (container) {
+ for (const email of draft.clientEmails) {
+ addChip(container, email);
+ }
+ }
+ }
+
+ // Pre-fill audit period
+ if (draft.auditPeriodStart && auditPeriodStartPicker) {
+ auditPeriodStartPicker.setDate(new Date(draft.auditPeriodStart), true);
+ }
+ if (draft.auditPeriodEnd && auditPeriodEndPicker) {
+ auditPeriodEndPicker.setDate(new Date(draft.auditPeriodEnd), true);
+ }
+
+ // Set global instructions with follow-up context
+ const totalMissing = (draft.missingItems || []).length;
+ const totalNoted = (draft.notedItems || []).length;
+ const originalDate = draft.originalRequestDate ? new Date(draft.originalRequestDate).toLocaleDateString() : 'previous request';
+ const followupInstructions = 'FOLLOW-UP REQUEST: ' + (totalMissing + totalNoted) + ' items outstanding from ' + originalDate + ' (' + totalMissing + ' missing, ' + totalNoted + ' with notes).' + (draft.globalInstructions ? '\n\n' + draft.globalInstructions : '');
+
+ // Render composer first, then set values (render rebuilds textareas)
+ renderComposer();
+
+ const gi = $('#globalInstructions');
+ if (gi) gi.value = followupInstructions;
+
+ // Show follow-up banner in composer
+ const auditorFlow = $('#auditorFlow');
+ if (auditorFlow) {
+ const banner = document.createElement('div');
+ banner.id = 'followupBanner';
+ banner.style.cssText = 'background:#eff6ff; border:2px solid #93c5fd; border-radius:10px; padding:16px 20px; margin-bottom:16px;';
+ banner.innerHTML = '<div style="display:flex;align-items:center;gap:12px;">' +
+ '<span style="font-size:20px;">&#128260;</span>' +
+ '<div>' +
+ '<strong style="color:#1e40af;">Follow-up request for ' + (draft.company || 'client') + '</strong>' +
+ '<p style="margin:4px 0 0; font-size:0.85rem; color:#3b82f6;">' +
+ totalMissing + ' missing item' + (totalMissing !== 1 ? 's' : '') +
+ (totalNoted > 0 ? ' + ' + totalNoted + ' noted item' + (totalNoted !== 1 ? 's' : '') : '') +
+ ' from previous submission. Review and send when ready.' +
+ '</p></div></div>';
+ auditorFlow.insertBefore(banner, auditorFlow.firstChild);
+ }
+}
+
 async function init() {
  $('#year').textContent = new Date().getFullYear();
  
@@ -10789,6 +10956,20 @@ async function init() {
  hasSession = await checkExistingSession();
  if (hasSession) {
  showDashboard();
+ }
+ }
+
+ // Check for follow-up request from pack viewer
+ const isFollowup = !isResetFlow && !isCheckoutReturn && await checkFollowup();
+ if (isFollowup && state.pendingFollowup) {
+ if (hasSession && state.isLoggedIn) {
+ // Logged in — go straight to composer with follow-up data
+ showComposerFromDashboard();
+ applyFollowup(state.pendingFollowup);
+ state.pendingFollowup = null;
+ } else {
+ // Not logged in — they'll need to log in first, followup will be applied after
+ // Store it and it will be checked after login
  }
  }
  
