@@ -1740,6 +1740,33 @@
  color: var(--text-muted);
  }
 
+ /* Follow-up status badges */
+ .ei-badge-inline.followup-missing {
+ background: #FEE2E2;
+ color: #DC2626;
+ }
+ .ei-badge-inline.followup-noted {
+ background: #FEF3C7;
+ color: #92400E;
+ }
+
+ /* Follow-up client note callout */
+ .ei-followup-note {
+ margin: 6px 0 4px;
+ padding: 8px 10px;
+ background: #FFFBEB;
+ border: 1px solid #FDE68A;
+ border-left: 3px solid #F59E0B;
+ border-radius: 6px;
+ font-size: 0.82rem;
+ color: #92400E;
+ line-height: 1.4;
+ }
+ .ei-followup-note strong {
+ font-weight: 600;
+ color: #78350F;
+ }
+
  /* Tip tooltip */
  .ei-tip-tooltip {
  position: relative;
@@ -7520,10 +7547,11 @@ function renderItem(fwKey, gid, item, gs) {
  <div class="ei-header">
  <input type="checkbox" ${inc ? 'checked' : ''} title="Include this item in request">
  <div class="ei-title">${esc(item.title)}</div>
- <div class="ei-badges">${badgesHtml}</div>
+ <div class="ei-badges">${badgesHtml}${st?.followupStatus === 'missing' ? '<span class="ei-badge-inline followup-missing">Missing</span>' : ''}${st?.followupStatus === 'noted' ? '<span class="ei-badge-inline followup-noted">Client Noted</span>' : ''}</div>
  ${tipTooltipHtml}
  </div>
  <div class="ei-body">
+ ${st?.followupNote ? `<div class="ei-followup-note"><strong>Client's note from previous request:</strong> "${esc(st.followupNote)}"</div>` : ''}
  <div class="ei-client-zone">
  <div class="ei-client-label">
  <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
@@ -10821,6 +10849,7 @@ function applyFollowup(draft) {
  // Collect all follow-up item IDs (only actionable ones)
  const followupItemIds = new Set();
  const itemInstructions = {};
+ const itemNotes = {};
  const permanentItemIds = new Set();
 
  for (const item of (draft.missingItems || [])) {
@@ -10838,6 +10867,9 @@ function applyFollowup(draft) {
  followupItemIds.add(item.id);
  if (item.followupInstruction) {
  itemInstructions[item.id] = item.followupInstruction;
+ }
+ if (item.clientNote) {
+ itemNotes[item.id] = item.clientNote;
  }
  }
  }
@@ -10878,7 +10910,13 @@ function applyFollowup(draft) {
  gs.items[item.id].instructions = itemInstructions[item.id];
  }
 
- if (isFollowup) hasFollowupItem = true;
+ // Store followup context for visual display in composer
+ if (isFollowup) {
+ const noteForItem = itemNotes[item.id];
+ gs.items[item.id].followupStatus = noteForItem ? 'noted' : 'missing';
+ gs.items[item.id].followupNote = noteForItem || null;
+ hasFollowupItem = true;
+ }
  }
 
  // Exclude groups with no follow-up items
