@@ -7509,8 +7509,12 @@ function renderItem(fwKey, gid, item, gs) {
  // Get current description (edited or default with audit period injected)
  const auditPeriod = getAuditPeriodString();
  let defaultDescription = item.description || item.hint || '';
- if (auditPeriod && item.evidenceType === 'period-of-time' && defaultDescription.includes('{{auditPeriod}}')) {
+ if (defaultDescription.includes('{{auditPeriod}}')) {
+ if (auditPeriod) {
  defaultDescription = defaultDescription.replace(/\{\{auditPeriod\}\}/g, auditPeriod);
+ } else {
+ defaultDescription = defaultDescription.replace(/\{\{auditPeriod\}\}/g, 'the audit period');
+ }
  }
  const currentDescription = st?.editedDescription !== null ? st.editedDescription : defaultDescription;
  
@@ -8263,8 +8267,12 @@ function getPayload() {
  } else {
  // Use default with audit period injection for period-of-time items
  description = item.description || item.hint || '';
- if (auditPeriod && item.evidenceType === 'period-of-time' && description.includes('{{auditPeriod}}')) {
+ if (description.includes('{{auditPeriod}}')) {
+ if (auditPeriod) {
  description = description.replace(/\{\{auditPeriod\}\}/g, auditPeriod);
+ } else {
+ description = description.replace(/\{\{auditPeriod\}\}/g, 'the audit period');
+ }
  }
  }
  
