@@ -7382,18 +7382,44 @@ function initComposerState() {
  composerState = {};
  const allFw = getAllFrameworks();
  for (const [fwKey, fw] of Object.entries(allFw)) {
- composerState[fwKey] = { enabled: fw.defaultOn || false, groups: {} };
+ composerState[fwKey] = { enabled: fw.defaultOn || false, groups: {}, templateLevel: 'standard' };
  for (const g of (fw.controlGroups || [])) {
  composerState[fwKey].groups[g.id] = { expanded: false, showMore: false, excluded: false, items: {} };
  for (const item of (g.items || [])) {
  composerState[fwKey].groups[g.id].items[item.id] = { 
- included: item.common, 
+ included: false, 
  instructions: '',
- // New editable fields - null means use default from library
  editedDescription: null,
  editedFormats: null,
  guidanceCollapsed: false
  };
+ }
+ }
+ }
+ 
+ // Apply standard template to all enabled frameworks so counts match labels
+ for (const fwKey of Object.keys(composerState)) {
+ if (composerState[fwKey].enabled) {
+ const templateItems = DEFAULT_TEMPLATES[fwKey]?.standard || [];
+ const fw = allFw[fwKey];
+ if (templateItems.length > 0) {
+ const templateSet = new Set(templateItems);
+ for (const g of (fw.controlGroups || [])) {
+ for (const item of (g.items || [])) {
+ if (composerState[fwKey].groups[g.id]?.items?.[item.id]) {
+ composerState[fwKey].groups[g.id].items[item.id].included = templateSet.has(item.id);
+ }
+ }
+ }
+ } else {
+ // Custom frameworks without templates: fall back to item.common flag
+ for (const g of (fw.controlGroups || [])) {
+ for (const item of (g.items || [])) {
+ if (composerState[fwKey].groups[g.id]?.items?.[item.id]) {
+ composerState[fwKey].groups[g.id].items[item.id].included = item.common || false;
+ }
+ }
+ }
  }
  }
  }
