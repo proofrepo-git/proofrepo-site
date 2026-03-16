@@ -1722,6 +1722,9 @@
  }
 
  .ei-bottom-spacer { flex: 1; }
+ .ei-filemode-toggle { display:inline-flex; align-items:center; gap:4px; cursor:pointer; font-size:.72rem; color:#64748b; padding:2px 0; }
+ .ei-filemode-toggle input { width:14px; height:14px; cursor:pointer; accent-color:#2563eb; }
+ .ei-filemode-label { white-space:nowrap; }
 
  /* Inline badges in header row */
  .ei-badges {
@@ -7459,6 +7462,22 @@ function getAllFrameworks() {
  return all;
 }
 
+// Smart default for multi-file: items that naturally need multiple files
+function getDefaultFileMode(item) {
+ const t = (item.title || '').toLowerCase();
+ const d = (item.description || '').toLowerCase();
+ // Period-of-time evidence with quarterly frequency almost always needs multiple files
+ if (item.frequency === 'quarterly') return 'multi';
+ // Titles that imply collections
+ if (/\b(reviews?|logs?|samples?|records|screenshots?|tickets?|completion|report samples)\b/.test(t)) return 'multi';
+ // Descriptions mentioning multiple periods or samples
+ if (/\b(each quarter|quarterly|per system|per application|for each|all systems|multiple|samples? from)\b/.test(d)) return 'multi';
+ // Period-of-time items often need samples across the period
+ if (item.evidenceType === 'period-of-time' && /\b(review|log|sample|monitor|scan|alert|test)\b/.test(t)) return 'multi';
+ // Everything else is single by default
+ return 'single';
+}
+
 function initComposerState() {
  composerState = {};
  const allFw = getAllFrameworks();
@@ -7472,7 +7491,8 @@ function initComposerState() {
  instructions: '',
  editedDescription: null,
  editedFormats: null,
- guidanceCollapsed: false
+ guidanceCollapsed: false,
+ fileMode: getDefaultFileMode(item)
  };
  }
  }
@@ -7653,6 +7673,8 @@ function renderItem(fwKey, gid, item, gs) {
  // Check if description was edited (to show reset button)
  const descriptionEdited = st?.editedDescription !== null;
  const formatsEdited = st?.editedFormats !== null;
+ const fileMode = st?.fileMode || getDefaultFileMode(item);
+ const fileModeToggle = `<label class="ei-filemode-toggle" title="${fileMode === 'multi' ? 'Client can attach multiple files to this item' : 'Client attaches one file to this item'}"><input type="checkbox" ${fileMode === 'multi' ? 'checked' : ''} data-filemode="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}"><span class="ei-filemode-label">${fileMode === 'multi' ? '&#128206; Multi-file' : '&#128196; Single file'}</span></label>`;
  
  return `<div class="evidence-item ${inc ? 'included' : ''}" data-fw="${esc(fwKey)}" data-group="${esc(gid)}" data-item="${esc(item.id)}">
  <div class="ei-header">
@@ -7677,6 +7699,7 @@ function renderItem(fwKey, gid, item, gs) {
  </div>
  ${formatsEdited ? `<button type="button" class="ei-formats-reset" data-formats-reset="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">&#x21BA; reset</button>` : ''}
  </div>
+ ${fileModeToggle}
  <div class="ei-bottom-spacer"></div>
  <div class="ei-description-actions">
  <button type="button" class="ei-action-btn" data-desc-clear="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">Clear</button>
@@ -7889,6 +7912,20 @@ function wireComposer() {
  });
  
  // (Instructions field merged into description - handler removed)
+ 
+ // File mode toggle (single/multi)
+ $$('[data-filemode]').forEach(cb => {
+ cb.addEventListener('change', () => {
+ const parts = cb.dataset.filemode.split('-');
+ const [fw, group] = [parts[0], parts[1]];
+ const item = parts.slice(2).join('-');
+ if (composerState[fw]?.groups?.[group]?.items?.[item]) {
+ composerState[fw].groups[group].items[item].fileMode = cb.checked ? 'multi' : 'single';
+ renderComposer();
+ saveFormState();
+ }
+ });
+ });
  
  // (Guidance zone moved to inline badges + tooltip - toggle handler removed)
  
@@ -8397,10 +8434,9 @@ function getPayload() {
  group: g.title, 
  title: item.title, 
  instructions: is.instructions || '',
- // Client-facing fields (edited or defaults)
  description: description,
- expectedFormats: expectedFormats, // Now an array
- // Auditor-only fields (for reference, not shown to client)
+ expectedFormats: expectedFormats,
+ fileMode: is.fileMode || getDefaultFileMode(item),
  evidenceType: item.evidenceType || 'point-in-time',
  controlRef: item.controlRef || null,
  commonIssue: item.commonIssue || null
