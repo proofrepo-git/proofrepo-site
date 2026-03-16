@@ -1768,6 +1768,10 @@
  background: #FEF3C7;
  color: #92400E;
  }
+ .ei-badge-inline.followup-partial {
+ background: #EDE9FE;
+ color: #6D28D9;
+ }
 
  /* Follow-up client note callout */
  .ei-followup-note {
@@ -3809,6 +3813,9 @@
  <div class="action-button-row" style="margin-top: 24px;">
  <button class="btn btn-preview" id="previewClientBtn" style="flex: 0 0 auto; padding: 12px 20px;">
  Preview Client View
+ </button>
+ <button class="btn btn-outline" id="exportRequestPdfBtn" style="flex: 0 0 auto; padding: 12px 20px;" onclick="exportRequestPDF()">
+ &#128196; Export PDF
  </button>
  <button class="btn btn-primary" id="mainActionBtn" style="flex: 1;">
  Continue
@@ -7680,7 +7687,7 @@ function renderItem(fwKey, gid, item, gs) {
  <div class="ei-header">
  <input type="checkbox" ${inc ? 'checked' : ''} title="Include this item in request">
  <div class="ei-title">${esc(item.title)}</div>
- <div class="ei-badges">${badgesHtml}${st?.followupStatus === 'missing' ? '<span class="ei-badge-inline followup-missing">Missing</span>' : ''}${st?.followupStatus === 'noted' ? '<span class="ei-badge-inline followup-noted">Client Noted</span>' : ''}</div>
+ <div class="ei-badges">${badgesHtml}${st?.followupStatus === 'missing' ? '<span class="ei-badge-inline followup-missing">Missing</span>' : ''}${st?.followupStatus === 'noted' ? '<span class="ei-badge-inline followup-noted">Client Noted</span>' : ''}${st?.followupStatus === 'partial' ? '<span class="ei-badge-inline followup-partial">Partial</span>' : ''}</div>
  ${tipTooltipHtml}
  </div>
  <div class="ei-body">
@@ -8516,6 +8523,109 @@ function showClientPreview() {
 function closePreviewModal() {
  const modal = $('#previewModal');
  if (modal) modal.classList.add('hidden');
+}
+
+function exportRequestPDF() {
+ const evidence = getPayload();
+ if (evidence.length === 0) {
+ alert('No evidence items selected. Add items to your request first.');
+ return;
+ }
+ 
+ const company = $('#clientCompany')?.value || 'Client';
+ const frameworks = Object.entries(composerState).filter(([k,v]) => v.enabled).map(([k]) => {
+ const allFw = getAllFrameworks();
+ return allFw[k]?.label || k;
+ });
+ 
+ // Group by control domain
+ const grouped = {};
+ for (const item of evidence) {
+ const g = item.group || 'General';
+ if (!grouped[g]) grouped[g] = [];
+ grouped[g].push(item);
+ }
+ 
+ // Build print document
+ var iframe = document.createElement('iframe');
+ iframe.style.cssText = 'position:fixed;left:-9999px;width:0;height:0;border:none';
+ document.body.appendChild(iframe);
+ var pw = iframe.contentWindow.document;
+ pw.open();
+ pw.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>Evidence Request</title><style>');
+ pw.write('body{margin:0;padding:28px 36px;font-family:system-ui,-apple-system,sans-serif;color:#1e293b;font-size:13px;line-height:1.5}');
+ pw.write('.cover{text-align:center;padding:24px 0 20px;border-bottom:3px solid #1e3a5f;margin-bottom:24px}');
+ pw.write('.cover h1{font-size:1.5rem;color:#1e3a5f;margin:8px 0 4px}');
+ pw.write('.cover-meta{font-size:.85rem;color:#64748b}');
+ pw.write('.summary{display:flex;gap:16px;margin-bottom:24px}');
+ pw.write('.summary-item{flex:1;text-align:center;padding:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px}');
+ pw.write('.summary-num{font-size:1.3rem;font-weight:700;color:#1e40af}');
+ pw.write('.summary-label{font-size:.7rem;color:#64748b;margin-top:2px}');
+ pw.write('.group{margin-bottom:20px;page-break-inside:avoid}');
+ pw.write('.group-title{font-size:.9rem;font-weight:700;padding:8px 14px;border:2px solid #1e3a5f;border-left:4px solid #2563eb;border-radius:6px;margin-bottom:8px;color:#1e3a5f}');
+ pw.write('.item{padding:10px 12px;border:1px solid #e2e8f0;border-left:3px solid #cbd5e1;border-radius:5px;margin-bottom:5px;page-break-inside:avoid}');
+ pw.write('.item-title{font-size:.85rem;font-weight:600;color:#1e293b;margin-bottom:3px}');
+ pw.write('.item-desc{font-size:.75rem;color:#64748b;line-height:1.5;margin-bottom:4px}');
+ pw.write('.badge{display:inline-block;font-size:.6rem;font-weight:700;padding:1px 6px;border-radius:3px;margin-right:4px;text-transform:uppercase}');
+ pw.write('.badge-fmt{border:1px solid #2563eb;color:#1d4ed8}');
+ pw.write('.badge-ctrl{border:1px solid #16a34a;color:#15803d}');
+ pw.write('.badge-type{border:1px solid #d97706;color:#92400e}');
+ pw.write('.badge-multi{border:1px solid #8b5cf6;color:#6d28d9}');
+ pw.write('.footer{margin-top:30px;padding-top:12px;border-top:2px solid #1e3a5f;text-align:center;font-size:.75rem;color:#64748b}');
+ pw.write('@media print{@page{margin:0.5in}}');
+ pw.write('</style></head><body>');
+ 
+ // Cover
+ pw.write('<div class="cover">');
+ pw.write('<h1>Evidence Request Summary</h1>');
+ pw.write('<div class="cover-meta">' + esc(company) + ' &bull; ' + esc(frameworks.join(', ')) + ' &bull; ' + new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'}) + '</div>');
+ pw.write('</div>');
+ 
+ // Summary
+ pw.write('<div class="summary">');
+ pw.write('<div class="summary-item"><div class="summary-num">' + evidence.length + '</div><div class="summary-label">Items Requested</div></div>');
+ pw.write('<div class="summary-item"><div class="summary-num">' + Object.keys(grouped).length + '</div><div class="summary-label">Control Domains</div></div>');
+ pw.write('<div class="summary-item"><div class="summary-num">' + esc(frameworks.join(', ')) + '</div><div class="summary-label">Frameworks</div></div>');
+ pw.write('</div>');
+ 
+ // Items by group
+ var groupNames = Object.keys(grouped);
+ for (var g = 0; g < groupNames.length; g++) {
+ var groupName = groupNames[g];
+ var items = grouped[groupName];
+ pw.write('<div class="group">');
+ pw.write('<div class="group-title">' + esc(groupName) + ' (' + items.length + ')</div>');
+ for (var j = 0; j < items.length; j++) {
+ var itm = items[j];
+ pw.write('<div class="item">');
+ pw.write('<div class="item-title">' + esc(itm.title) + '</div>');
+ if (itm.description) pw.write('<div class="item-desc">' + esc(itm.description) + '</div>');
+ // Badges
+ if (itm.expectedFormats && itm.expectedFormats.length > 0) {
+ for (var f = 0; f < itm.expectedFormats.length; f++) {
+ pw.write('<span class="badge badge-fmt">' + esc(itm.expectedFormats[f]) + '</span>');
+ }
+ }
+ if (itm.controlRef) pw.write('<span class="badge badge-ctrl">' + esc(itm.controlRef) + '</span>');
+ if (itm.evidenceType) {
+ pw.write('<span class="badge badge-type">' + (itm.evidenceType === 'period-of-time' ? 'Period' : 'Point-in-time') + '</span>');
+ }
+ if (itm.fileMode === 'multi') pw.write('<span class="badge badge-multi">Multi-file</span>');
+ pw.write('</div>');
+ }
+ pw.write('</div>');
+ }
+ 
+ // Footer
+ pw.write('<div class="footer">Generated by ProofRepo &bull; proofrepo.com</div>');
+ pw.write('</body></html>');
+ pw.close();
+ 
+ setTimeout(function() {
+ iframe.contentWindow.focus();
+ iframe.contentWindow.print();
+ setTimeout(function() { document.body.removeChild(iframe); }, 2000);
+ }, 300);
 }
 
 // ==================== CODE VALIDATION ====================
@@ -10972,7 +11082,7 @@ async function checkFollowup() {
  if (!data.ok || !data.draft) return false;
 
  const draft = data.draft;
- const allMissing = [...(draft.missingItems || []), ...(draft.notedItems || [])];
+ const allMissing = [...(draft.missingItems || []), ...(draft.notedItems || []), ...(draft.partialItems || [])];
  if (allMissing.length === 0) return false;
 
  // Store follow-up state for after login/session check
@@ -10999,6 +11109,7 @@ function applyFollowup(draft) {
 
  // Collect all follow-up item IDs (only actionable ones)
  const followupItemIds = new Set();
+ const partialItemIds = new Set();
  const itemInstructions = {};
  const itemNotes = {};
  const permanentItemIds = new Set();
@@ -11024,10 +11135,20 @@ function applyFollowup(draft) {
  }
  }
  }
+ // Partial items: matched but need more files (quarterly items with < 4 files)
+ for (const item of (draft.partialItems || [])) {
+ if (item.includeInFollowup !== false) {
+ followupItemIds.add(item.id);
+ partialItemIds.add(item.id);
+ if (item.followupInstruction) {
+ itemInstructions[item.id] = item.followupInstruction;
+ }
+ }
+ }
 
  // Determine which frameworks to enable
  const fwToEnable = new Set();
- for (const item of [...(draft.missingItems || []), ...(draft.notedItems || [])]) {
+ for (const item of [...(draft.missingItems || []), ...(draft.notedItems || []), ...(draft.partialItems || [])]) {
  if (permanentItemIds.has(item.id)) continue;
  const fwKey = labelToKey[item.framework] || labelToKey[(item.framework || '').replace(/\s+/g, '')] || null;
  if (fwKey) fwToEnable.add(fwKey);
@@ -11064,7 +11185,11 @@ function applyFollowup(draft) {
  // Store followup context for visual display in composer
  if (isFollowup) {
  const noteForItem = itemNotes[item.id];
+ if (partialItemIds.has(item.id)) {
+ gs.items[item.id].followupStatus = 'partial';
+ } else {
  gs.items[item.id].followupStatus = noteForItem ? 'noted' : 'missing';
+ }
  gs.items[item.id].followupNote = noteForItem || null;
  hasFollowupItem = true;
  }
