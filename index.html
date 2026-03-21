@@ -3534,6 +3534,56 @@
 /* Mobile responsive additions */
 @media(max-width:600px){.dh-links{grid-template-columns:1fr}.dh-header{flex-direction:column;align-items:flex-start}}
 
+
+/* ==================== ROLE SELECTOR BUTTONS ==================== */
+.role-btn-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 8px 0 4px;
+}
+.role-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 16px 18px;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s, transform 0.1s;
+  width: 100%;
+}
+.role-btn:hover {
+  border-color: var(--primary);
+  background: var(--primary-subtle);
+  transform: translateY(-1px);
+}
+.role-btn.active {
+  border-color: var(--primary);
+  background: var(--primary-subtle);
+}
+.role-btn-icon {
+  font-size: 1.3rem;
+  margin-bottom: 4px;
+}
+.role-btn-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+}
+.role-btn-sub {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+@media (max-width: 480px) {
+  .role-btn-row { grid-template-columns: 1fr; }
+}
+
 /* ==================== TOAST NOTIFICATIONS ==================== */
  .toast-container {
  position: fixed; top: 20px; right: 20px; z-index: 10000;
@@ -3925,16 +3975,28 @@
  <div id="mainFormCard" class="card">
  <div class="card-header">
  <h2>Build your evidence request</h2>
- <p>Select frameworks, customize what evidence you need, and send your client a guided upload link. ProofRepo handles collection and follow-up.</p>
+ <p style="color:var(--text-muted); font-size:0.9rem;">Select frameworks, customize evidence items, and send your client a guided upload link.</p>
  </div>
 
  <div id="roleSelectSection" class="role-selector">
- <label class="form-label">Getting started</label>
- <select id="roleSelect">
- <option value="">Select...</option>
- <option value="new">I'm new to ProofRepo</option>
- <option value="returning">I'm a returning customer</option>
- </select>
+  <!-- Hidden select keeps JS logic intact -->
+  <select id="roleSelect" style="display:none;" aria-hidden="true">
+   <option value="">Select...</option>
+   <option value="new">New to ProofRepo</option>
+   <option value="returning">Returning customer</option>
+  </select>
+  <div class="role-btn-row">
+   <button type="button" class="role-btn" id="roleNewBtn" onclick="$('#roleSelect').value='new'; handleRoleChange('new'); saveFormState();">
+    <span class="role-btn-icon">&#x2728;</span>
+    <span class="role-btn-label">New to ProofRepo</span>
+    <span class="role-btn-sub">Start free trial or create account</span>
+   </button>
+   <button type="button" class="role-btn" id="roleReturningBtn" onclick="$('#roleSelect').value='returning'; handleRoleChange('returning'); saveFormState();">
+    <span class="role-btn-icon">&#x1F511;</span>
+    <span class="role-btn-label">Returning customer</span>
+    <span class="role-btn-sub">Sign in to your account</span>
+   </button>
+  </div>
  </div>
 
  <!-- Auth Flow: New User -->
@@ -9686,6 +9748,11 @@ async function checkCheckoutReturn() {
 function handleRoleChange(role) {
  state.role = role;
  
+ // Update role button active states
+ const btnNew = $('#roleNewBtn'), btnRet = $('#roleReturningBtn');
+ if (btnNew) btnNew.classList.toggle('active', role === 'new');
+ if (btnRet) btnRet.classList.toggle('active', role === 'returning');
+
  // Hide all flows first
  $('#newUserFlow').style.display = 'none';
  $('#returningUserFlow').style.display = 'none';
@@ -12143,6 +12210,7 @@ function applyFollowup(draft) {
 }
 
 async function init() {
+  $('#successBanner')?.classList.remove('visible'); // Always clear on fresh load
  $('#year').textContent = new Date().getFullYear();
  
  // Initialize chip inputs FIRST (before any state restore)
