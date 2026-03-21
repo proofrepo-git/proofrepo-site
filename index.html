@@ -9042,13 +9042,26 @@ function showClientPreview() {
  previewHtml += '</div>';
  }
  
- // Show modal
- const modal = $('#previewModal');
- const content = $('#previewModalContent');
- if (modal && content) {
- content.innerHTML = previewHtml;
- modal.classList.remove('hidden');
- }
+ // Open in new tab — leaves composer fully interactive
+  var company_preview = esc($('#clientCompany')?.value || 'Client');
+  var fullHtml = '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Client Preview</title>'
+    + '<style>body{margin:0;padding:24px;background:#f3f4f6;font-family:system-ui,sans-serif;color:#1e293b}.card{max-width:680px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.08);overflow:hidden}.banner{background:#1e40af;padding:20px 24px;text-align:center}.banner p{margin:0;font-size:.78rem;color:#93c5fd}.body{padding:28px}.upload-btn{display:block;width:100%;padding:14px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;text-align:center;margin-top:24px;opacity:.5;cursor:default}.note{text-align:center;font-size:.72rem;color:#94a3b8;margin-top:6px}</style>'
+    + '</head><body><div class="card"><div class="banner"><p>&#128065; CLIENT UPLOAD PAGE PREVIEW &mdash; This is how your client will see the request</p></div>'
+    + '<div class="body">' + previewHtml
+    + '<div class="upload-btn">Upload Evidence</div><p class="note">Upload button inactive in preview mode</p>'
+    + '</div></div></body></html>';
+
+  var win = window.open('', '_blank');
+  if (!win) {
+    // Fallback to modal if pop-ups blocked
+    const modal = $('#previewModal');
+    const content = $('#previewModalContent');
+    if (modal && content) { content.innerHTML = previewHtml; modal.classList.remove('hidden'); }
+    return;
+  }
+  win.document.write(fullHtml);
+  win.document.close();
+  win.focus();
 }
 
 function closePreviewModal() {
@@ -9057,107 +9070,105 @@ function closePreviewModal() {
 }
 
 function exportRequestPDF() {
- const evidence = getPayload();
- if (evidence.length === 0) {
- alert('No evidence items selected. Add items to your request first.');
- return;
- }
- 
- const company = $('#clientCompany')?.value || 'Client';
- const frameworks = Object.entries(composerState).filter(([k,v]) => v.enabled).map(([k]) => {
- const allFw = getAllFrameworks();
- return allFw[k]?.label || k;
- });
- 
- // Group by control domain
- const grouped = {};
- for (const item of evidence) {
- const g = item.group || 'General';
- if (!grouped[g]) grouped[g] = [];
- grouped[g].push(item);
- }
- 
- // Build print document
- var iframe = document.createElement('iframe');
- iframe.style.cssText = 'position:fixed;left:-9999px;width:0;height:0;border:none';
- document.body.appendChild(iframe);
- var pw = iframe.contentWindow.document;
- pw.open();
- pw.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>Evidence Request</title><style>');
- pw.write('body{margin:0;padding:28px 36px;font-family:system-ui,-apple-system,sans-serif;color:#1e293b;font-size:13px;line-height:1.5}');
- pw.write('.cover{text-align:center;padding:24px 0 20px;border-bottom:3px solid #1e3a5f;margin-bottom:24px}');
- pw.write('.cover h1{font-size:1.5rem;color:#1e3a5f;margin:8px 0 4px}');
- pw.write('.cover-meta{font-size:.85rem;color:#64748b}');
- pw.write('.summary{display:flex;gap:16px;margin-bottom:24px}');
- pw.write('.summary-item{flex:1;text-align:center;padding:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px}');
- pw.write('.summary-num{font-size:1.3rem;font-weight:700;color:#1e40af}');
- pw.write('.summary-label{font-size:.7rem;color:#64748b;margin-top:2px}');
- pw.write('.group{margin-bottom:20px;page-break-inside:avoid}');
- pw.write('.group-title{font-size:.9rem;font-weight:700;padding:8px 14px;border:2px solid #1e3a5f;border-left:4px solid #2563eb;border-radius:6px;margin-bottom:8px;color:#1e3a5f}');
- pw.write('.item{padding:10px 12px;border:1px solid #e2e8f0;border-left:3px solid #cbd5e1;border-radius:5px;margin-bottom:5px;page-break-inside:avoid}');
- pw.write('.item-title{font-size:.85rem;font-weight:600;color:#1e293b;margin-bottom:3px}');
- pw.write('.item-desc{font-size:.75rem;color:#64748b;line-height:1.5;margin-bottom:4px}');
- pw.write('.badge{display:inline-block;font-size:.6rem;font-weight:700;padding:1px 6px;border-radius:3px;margin-right:4px;text-transform:uppercase}');
- pw.write('.badge-fmt{border:1px solid #2563eb;color:#1d4ed8}');
- pw.write('.badge-ctrl{border:1px solid #16a34a;color:#15803d}');
- pw.write('.badge-type{border:1px solid #d97706;color:#92400e}');
- pw.write('.badge-multi{border:1px solid #8b5cf6;color:#6d28d9}');
- pw.write('.footer{margin-top:30px;padding-top:12px;border-top:2px solid #1e3a5f;text-align:center;font-size:.75rem;color:#64748b}');
- pw.write('@media print{@page{margin:0.5in}}');
- pw.write('</style></head><body>');
- 
- // Cover
- pw.write('<div class="cover">');
- pw.write('<h1>Evidence Request Summary</h1>');
- pw.write('<div class="cover-meta">' + esc(company) + ' &bull; ' + esc(frameworks.join(', ')) + ' &bull; ' + new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'}) + '</div>');
- pw.write('</div>');
- 
- // Summary
- pw.write('<div class="summary">');
- pw.write('<div class="summary-item"><div class="summary-num">' + evidence.length + '</div><div class="summary-label">Items Requested</div></div>');
- pw.write('<div class="summary-item"><div class="summary-num">' + Object.keys(grouped).length + '</div><div class="summary-label">Control Domains</div></div>');
- pw.write('<div class="summary-item"><div class="summary-num">' + esc(frameworks.join(', ')) + '</div><div class="summary-label">Frameworks</div></div>');
- pw.write('</div>');
- 
- // Items by group
- var groupNames = Object.keys(grouped);
- for (var g = 0; g < groupNames.length; g++) {
- var groupName = groupNames[g];
- var items = grouped[groupName];
- pw.write('<div class="group">');
- pw.write('<div class="group-title">' + esc(groupName) + ' (' + items.length + ')</div>');
- for (var j = 0; j < items.length; j++) {
- var itm = items[j];
- pw.write('<div class="item">');
- pw.write('<div class="item-title">' + esc(itm.title) + '</div>');
- if (itm.description) pw.write('<div class="item-desc">' + esc(itm.description) + '</div>');
- // Badges
- if (itm.expectedFormats && itm.expectedFormats.length > 0) {
- for (var f = 0; f < itm.expectedFormats.length; f++) {
- pw.write('<span class="badge badge-fmt">' + esc(itm.expectedFormats[f]) + '</span>');
- }
- }
- if (itm.controlRef) pw.write('<span class="badge badge-ctrl">' + esc(itm.controlRef) + '</span>');
- if (itm.evidenceType) {
- pw.write('<span class="badge badge-type">' + (itm.evidenceType === 'period-of-time' ? 'Period' : 'Point-in-time') + '</span>');
- }
- if (itm.fileMode === 'multi') pw.write('<span class="badge badge-multi">Multi-file</span>');
- pw.write('</div>');
- }
- pw.write('</div>');
- }
- 
- // Footer
- pw.write('<div class="footer">Generated by ProofRepo &bull; proofrepo.com</div>');
- pw.write('</body></html>');
- pw.close();
- 
- setTimeout(function() {
- iframe.contentWindow.focus();
- iframe.contentWindow.print();
- setTimeout(function() { document.body.removeChild(iframe); }, 2000);
- }, 300);
+  const evidence = getPayload();
+  if (evidence.length === 0) {
+    showToast('No evidence items selected. Add items to your request first.', 'error');
+    return;
+  }
+
+  const company = $('#clientCompany')?.value || 'Client';
+  const dateStr = new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
+  const frameworks = Object.entries(composerState)
+    .filter(([k,v]) => v.enabled)
+    .map(([k]) => getAllFrameworks()[k]?.label || k);
+
+  const grouped = {};
+  for (const item of evidence) {
+    const g = item.group || 'General';
+    if (!grouped[g]) grouped[g] = [];
+    grouped[g].push(item);
+  }
+
+  const LOGO = 'https://proofrepo.com/logo.png';
+  var lines = [];
+  lines.push('<!DOCTYPE html><html><head><meta charset="utf-8"><title>Evidence Request \u2014 ' + esc(company) + '</title><style>');
+  lines.push('body{margin:0;padding:28px 36px;font-family:system-ui,-apple-system,sans-serif;color:#1e293b;font-size:13px;line-height:1.5}');
+  lines.push('.cover{text-align:center;padding:24px 0 20px;border-bottom:3px solid #1e3a5f;margin-bottom:24px}');
+  lines.push('.cover-logo{width:44px;height:44px;border-radius:10px;margin-bottom:8px}');
+  lines.push('.cover-brand{font-size:.8rem;font-weight:700;color:#1e40af;letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px}');
+  lines.push('.cover h1{font-size:1.5rem;color:#1e3a5f;margin:6px 0 4px;font-weight:700}');
+  lines.push('.cover-meta{font-size:.82rem;color:#64748b}');
+  lines.push('.summary{display:flex;gap:14px;margin-bottom:22px}');
+  lines.push('.summary-item{flex:1;text-align:center;padding:10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px}');
+  lines.push('.summary-num{font-size:1.25rem;font-weight:700;color:#1e40af}');
+  lines.push('.summary-label{font-size:.68rem;color:#64748b;margin-top:2px;text-transform:uppercase;letter-spacing:.4px}');
+  lines.push('.group{margin-bottom:18px;page-break-inside:avoid}');
+  lines.push('.group-title{font-size:.88rem;font-weight:700;padding:7px 12px;background:#f1f5f9;border-left:4px solid #2563eb;border-radius:0 5px 5px 0;margin-bottom:7px;color:#1e3a5f;display:flex;justify-content:space-between;align-items:center}');
+  lines.push('.item{padding:9px 12px;border:1px solid #e2e8f0;border-left:3px solid #cbd5e1;border-radius:5px;margin-bottom:5px;page-break-inside:avoid}');
+  lines.push('.item-title{font-size:.85rem;font-weight:600;color:#1e293b;margin-bottom:3px}');
+  lines.push('.item-desc{font-size:.75rem;color:#64748b;line-height:1.5;margin:3px 0 5px}');
+  lines.push('.badge{display:inline-block;font-size:.6rem;font-weight:700;padding:1px 6px;border-radius:3px;margin-right:4px;text-transform:uppercase}');
+  lines.push('.badge-fmt{border:1px solid #2563eb;color:#1d4ed8}.badge-ctrl{border:1px solid #16a34a;color:#15803d}.badge-type{border:1px solid #d97706;color:#92400e}.badge-multi{border:1px solid #8b5cf6;color:#6d28d9}');
+  lines.push('.footer{margin-top:28px;padding-top:10px;border-top:2px solid #1e3a5f;display:flex;align-items:center;justify-content:space-between}');
+  lines.push('.footer-brand{display:flex;align-items:center;gap:6px;font-size:.8rem;font-weight:700;color:#1e3a5f}');
+  lines.push('.footer-brand img{width:20px;height:20px;border-radius:5px}');
+  lines.push('.footer-meta{font-size:.72rem;color:#94a3b8}');
+  lines.push('@media print{@page{margin:0.5in}}');
+  lines.push('</style></head><body>');
+
+  lines.push('<div class="cover">');
+  lines.push('<img src="' + LOGO + '" alt="ProofRepo" class="cover-logo">');
+  lines.push('<div class="cover-brand">ProofRepo</div>');
+  lines.push('<h1>Evidence Request Summary</h1>');
+  lines.push('<div class="cover-meta">' + esc(company) + (frameworks.length ? ' &bull; ' + esc(frameworks.join(', ')) : '') + ' &bull; ' + dateStr + '</div>');
+  lines.push('</div>');
+
+  lines.push('<div class="summary">');
+  lines.push('<div class="summary-item"><div class="summary-num">' + evidence.length + '</div><div class="summary-label">Items Requested</div></div>');
+  lines.push('<div class="summary-item"><div class="summary-num">' + Object.keys(grouped).length + '</div><div class="summary-label">Control Domains</div></div>');
+  lines.push('<div class="summary-item"><div class="summary-num" style="font-size:1rem;color:#2563eb">' + esc(frameworks.join(', ') || '\u2014') + '</div><div class="summary-label">Framework</div></div>');
+  lines.push('</div>');
+
+  var groupNames = Object.keys(grouped);
+  var counter = 0;
+  for (var g = 0; g < groupNames.length; g++) {
+    var gName = groupNames[g];
+    var items = grouped[gName];
+    lines.push('<div class="group">');
+    lines.push('<div class="group-title">' + esc(gName) + '<span style="font-size:.7rem;font-weight:400;color:#64748b">' + items.length + ' item' + (items.length !== 1 ? 's' : '') + '</span></div>');
+    for (var j = 0; j < items.length; j++) {
+      counter++;
+      var itm = items[j];
+      lines.push('<div class="item">');
+      lines.push('<div class="item-title">' + counter + '. ' + esc(itm.title) + '</div>');
+      if (itm.description) lines.push('<div class="item-desc">' + esc(itm.description) + '</div>');
+      var badges = '';
+      if (itm.expectedFormats && itm.expectedFormats.length) {
+        for (var f = 0; f < itm.expectedFormats.length; f++) badges += '<span class="badge badge-fmt">' + esc(itm.expectedFormats[f]) + '</span>';
+      }
+      if (itm.controlRef) badges += '<span class="badge badge-ctrl">' + esc(itm.controlRef) + '</span>';
+      if (itm.evidenceType) badges += '<span class="badge badge-type">' + (itm.evidenceType === 'period-of-time' ? 'Period' : 'Point-in-time') + '</span>';
+      if (itm.fileMode === 'multi') badges += '<span class="badge badge-multi">Multi-file</span>';
+      if (badges) lines.push(badges);
+      lines.push('</div>');
+    }
+    lines.push('</div>');
+  }
+
+  lines.push('<div class="footer"><div class="footer-brand"><img src="' + LOGO + '" alt="P"><span>ProofRepo</span></div><div class="footer-meta">proofrepo.com &bull; Generated ' + dateStr + '</div></div>');
+  lines.push('</body></html>');
+
+  // Open in new tab — composer stays fully interactive, zero lag
+  var win = window.open('', '_blank');
+  if (!win) {
+    showToast('Pop-ups are blocked. Please allow pop-ups for proofrepo.com and try again.', 'error', 8000);
+    return;
+  }
+  win.document.write(lines.join(''));
+  win.document.close();
+  setTimeout(function() { win.focus(); win.print(); }, 350);
 }
+
 
 // ==================== CODE VALIDATION ====================
 
