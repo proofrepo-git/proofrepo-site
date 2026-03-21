@@ -2982,7 +2982,173 @@
  100% { transform: translateX(-50%); }
  }
 
- /* ==================== TOAST NOTIFICATIONS ==================== */
+ 
+/* ==================== COMPOSER STEP UX ==================== */
+
+/* 3-step progress strip */
+.composer-steps {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: 0 0 24px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.cstep {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  border-right: 1px solid var(--border);
+  transition: background 0.2s;
+}
+.cstep:last-child { border-right: none; }
+.cstep-num {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--border);
+  color: var(--text-muted);
+  font-size: 0.75rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.2s, color 0.2s;
+}
+.cstep-label {
+  font-size: 0.82rem; font-weight: 600;
+  color: var(--text-muted);
+  transition: color 0.2s;
+}
+.cstep-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 1px;
+  display: block;
+}
+.cstep.active {
+  background: var(--primary-subtle);
+}
+.cstep.active .cstep-num {
+  background: var(--primary);
+  color: #fff;
+}
+.cstep.active .cstep-label { color: var(--primary); }
+.cstep.done .cstep-num {
+  background: #10b981;
+  color: #fff;
+}
+.cstep.done .cstep-num::after { content: '✓'; }
+.cstep.done .cstep-num span { display: none; }
+.cstep.done .cstep-label { color: #065f46; }
+.cstep.done { background: #f0fdf4; }
+
+/* Collapsible "Who" section */
+.composer-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.composer-section-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+.composer-section-edit {
+  font-size: 0.78rem;
+  color: var(--primary);
+  font-weight: 600;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 8px;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+.composer-section-edit:hover { background: var(--primary-subtle); }
+
+/* Summary chip row (shown when Step 1 is collapsed) */
+.who-summary {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 14px 16px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+.who-summary.visible { display: flex; }
+.who-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text);
+}
+.who-chip svg { color: #10b981; flex-shrink: 0; }
+.who-fields { transition: all 0.2s; }
+.who-fields.collapsed { display: none; }
+
+/* Sticky action bar */
+.action-button-row {
+  position: sticky;
+  bottom: 0;
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-top: 1px solid var(--border);
+  padding: 12px 0 16px;
+  margin: 0 -24px;
+  padding-left: 24px;
+  padding-right: 24px;
+  z-index: 50;
+  box-shadow: 0 -4px 16px rgba(0,0,0,0.06);
+}
+
+/* Readiness indicator above Send button */
+.send-readiness {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 10px 0 12px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+}
+.readiness-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+.readiness-item.ok { color: #10b981; }
+.readiness-item.missing { color: var(--text-muted); }
+.readiness-dot {
+  width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+}
+.readiness-item.ok .readiness-dot { background: #10b981; }
+.readiness-item.missing .readiness-dot { background: var(--border-strong); }
+
+@media (max-width: 600px) {
+  .composer-steps { flex-direction: column; }
+  .cstep { border-right: none; border-bottom: 1px solid var(--border); }
+  .cstep:last-child { border-bottom: none; }
+  .send-readiness { gap: 8px; }
+}
+
+/* ==================== TOAST NOTIFICATIONS ==================== */
  .toast-container {
  position: fixed; top: 20px; right: 20px; z-index: 10000;
  display: flex; flex-direction: column; gap: 8px; pointer-events: none;
@@ -3707,7 +3873,32 @@
  <div id="backToDashboard" class="back-link" style="display: none;">
  <a href="#" id="backToDashboardLink">&larr; Back to Dashboard</a>
  </div>
- 
+
+ <!-- 3-step progress strip -->
+ <div class="composer-steps" id="composerSteps">
+  <div class="cstep active" id="cstep1">
+   <div class="cstep-num"><span>1</span></div>
+   <div>
+    <div class="cstep-label">Who</div>
+    <span class="cstep-sub">Client &amp; deadline</span>
+   </div>
+  </div>
+  <div class="cstep" id="cstep2">
+   <div class="cstep-num"><span>2</span></div>
+   <div>
+    <div class="cstep-label">What</div>
+    <span class="cstep-sub">Evidence items</span>
+   </div>
+  </div>
+  <div class="cstep" id="cstep3">
+   <div class="cstep-num"><span>3</span></div>
+   <div>
+    <div class="cstep-label">Send</div>
+    <span class="cstep-sub">Review &amp; deliver</span>
+   </div>
+  </div>
+ </div>
+
  <!-- Composer status banners -->
  <div id="composerVerifyBanner" style="display:none; background:#fffbeb; border:2px solid #f59e0b; border-radius:10px; padding:16px 20px; margin-bottom:16px;">
  <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
@@ -3735,9 +3926,20 @@
  <div id="composerRedeemStatus" style="margin-top:6px; font-size:0.82rem;"></div>
  </div>
  
- <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">
- Define what evidence you need, then we'll email your client a guided upload link.
- </p>
+ <!-- Step 1: Who summary (shown when collapsed) -->
+ <div class="who-summary" id="whoSummary">
+  <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+  <span class="who-chip" id="whoChipCompany"></span>
+  <span class="who-chip" id="whoChipClient"></span>
+  <span class="who-chip" id="whoChipDeadline"></span>
+  <button type="button" class="composer-section-edit" onclick="expandWhoSection()">Edit</button>
+ </div>
+
+ <!-- Step 1: Who fields (collapsible) -->
+ <div class="who-fields" id="whoFields">
+ <div class="composer-section-header">
+  <span class="composer-section-title">Step 1 &mdash; Client &amp; Deadline</span>
+ </div>
 
  <div class="form-group">
  <label class="form-label">Your team's email(s)</label>
@@ -3785,6 +3987,13 @@
  </div>
  </div>
  <small id="auditPeriodHint" style="margin-top:6px;display:block;color:var(--text-muted);font-size:12px;"></small>
+ </div>
+
+ </div><!-- /who-fields -->
+
+ <!-- Step 2: What section header -->
+ <div class="composer-section-header" style="margin-bottom:8px;">
+  <span class="composer-section-title">Step 2 &mdash; Evidence Items</span>
  </div>
 
  <div class="form-group">
@@ -3862,6 +4071,19 @@
  Select a plan to purchase
  </button>
  </div>
+ </div>
+
+ <!-- Readiness indicator -->
+ <div class="send-readiness" id="sendReadiness">
+  <div class="readiness-item missing" id="readyClient">
+   <span class="readiness-dot"></span>Client
+  </div>
+  <div class="readiness-item missing" id="readyDeadline">
+   <span class="readiness-dot"></span>Deadline
+  </div>
+  <div class="readiness-item missing" id="readyEvidence">
+   <span class="readiness-dot"></span>Evidence items
+  </div>
  </div>
 
  <!-- Action Buttons Row -->
@@ -11453,6 +11675,109 @@ async function init() {
  
  updateMainButton();
 }
+
+
+// ==================== COMPOSER STEP UX ====================
+
+function updateComposerSteps() {
+  // Gather current values
+  const company = ($('#clientCompany')?.value || '').trim();
+  const clientEmails = getChipEmails('clientEmailsContainer');
+  const deadline = deadlinePicker?.selectedDates?.[0];
+  const evidence = typeof getPayload === 'function' ? getPayload() : [];
+
+  // Update readiness dots
+  const hasClient = clientEmails.length > 0 && company;
+  const hasDeadline = !!deadline;
+  const hasEvidence = evidence.length > 0;
+
+  const rClient = $('#readyClient');
+  const rDeadline = $('#readyDeadline');
+  const rEvidence = $('#readyEvidence');
+
+  if (rClient) {
+    rClient.className = 'readiness-item ' + (hasClient ? 'ok' : 'missing');
+    rClient.innerHTML = '<span class="readiness-dot"></span>' +
+      (hasClient ? '✓ ' + company : 'Client needed');
+  }
+  if (rDeadline) {
+    rDeadline.className = 'readiness-item ' + (hasDeadline ? 'ok' : 'missing');
+    rDeadline.innerHTML = '<span class="readiness-dot"></span>' +
+      (hasDeadline ? '✓ Deadline set' : 'Deadline needed');
+  }
+  if (rEvidence) {
+    rEvidence.className = 'readiness-item ' + (hasEvidence ? 'ok' : 'missing');
+    rEvidence.innerHTML = '<span class="readiness-dot"></span>' +
+      (hasEvidence ? '✓ ' + evidence.length + ' items' : 'Select evidence items');
+  }
+
+  // Update step states
+  const step1 = $('#cstep1'), step2 = $('#cstep2'), step3 = $('#cstep3');
+  const step1done = hasClient && hasDeadline;
+  const step2done = hasEvidence;
+
+  if (step1) step1.className = 'cstep ' + (step1done ? 'done' : 'active');
+  if (step2) step2.className = 'cstep ' + (step2done ? 'done' : step1done ? 'active' : '');
+  if (step3) step3.className = 'cstep ' + (step1done && step2done ? 'active' : '');
+
+  // Auto-collapse Step 1 when complete
+  if (step1done) {
+    const whoFields = $('#whoFields');
+    const whoSummary = $('#whoSummary');
+    if (whoFields && !whoFields.classList.contains('collapsed')) {
+      whoFields.classList.add('collapsed');
+      if (whoSummary) {
+        const chip1 = $('#whoChipCompany');
+        const chip2 = $('#whoChipClient');
+        const chip3 = $('#whoChipDeadline');
+        if (chip1) chip1.textContent = company;
+        if (chip2) chip2.textContent = clientEmails[0] + (clientEmails.length > 1 ? ' +' + (clientEmails.length-1) : '');
+        if (chip3) chip3.textContent = deadline.toLocaleDateString('en-US', {month:'short', day:'numeric'});
+        whoSummary.classList.add('visible');
+      }
+    }
+  }
+}
+
+function expandWhoSection() {
+  const whoFields = $('#whoFields');
+  const whoSummary = $('#whoSummary');
+  if (whoFields) whoFields.classList.remove('collapsed');
+  if (whoSummary) whoSummary.classList.remove('visible');
+  // Scroll to top of who section
+  if (whoFields) whoFields.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Hook into existing events to update steps
+(function wireComposerSteps() {
+  // Run after DOM is ready
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+      // Watch client company input
+      const cc = $('#clientCompany');
+      if (cc) cc.addEventListener('input', updateComposerSteps);
+
+      // Watch deadline picker changes (flatpickr fires onChange which calls saveFormState)
+      // We hook into saveFormState side-effect by observing periodically while composer is active
+      const stepInterval = setInterval(function() {
+        if ($('#auditorFlow')?.style.display !== 'none') {
+          updateComposerSteps();
+        }
+      }, 800);
+
+      // Also fire on chip changes
+      const clientContainer = $('#clientEmailsContainer');
+      if (clientContainer) {
+        clientContainer.addEventListener('click', function() {
+          setTimeout(updateComposerSteps, 100);
+        });
+        clientContainer.addEventListener('keydown', function() {
+          setTimeout(updateComposerSteps, 100);
+        });
+      }
+    }, 500);
+  });
+})();
 
 document.addEventListener('DOMContentLoaded', init);
 </script>
