@@ -6,17 +6,10 @@
  <title>ProofRepo — Audit Evidence Collection, Simplified</title>
  <meta name="description" content="Stop chasing clients for compliance evidence. Send a guided upload link, get organized ProofPacks back — mapped to controls, ready for workpapers. SOC 2, ISO 27001, HIPAA, GDPR, and more." />
  <link rel="icon" type="image/png" href="/logo.png" />
- <link rel="apple-touch-icon" href="/logo.png" />
- <link rel="canonical" href="https://proofrepo.com" />
- <meta name="theme-color" content="#1e40af" />
  <meta property="og:title" content="ProofRepo — Audit Evidence Collection, Simplified" />
  <meta property="og:description" content="Send a guided upload link. Get organized, control-mapped evidence back. No more email chains." />
  <meta property="og:type" content="website" />
  <meta property="og:url" content="https://proofrepo.com" />
- <meta name="twitter:card" content="summary_large_image" />
- <meta name="twitter:title" content="ProofRepo — Audit Evidence Collection, Simplified" />
- <meta name="twitter:description" content="Send a guided upload link. Get organized, control-mapped evidence back. No more email chains." />
- <meta name="twitter:image" content="https://proofrepo.com/logo.png" />
  <meta property="og:image" content="https://proofrepo.com/logo.png" />
  
  <!-- MAGIC LINK REDIRECT - Must be in head, executes immediately -->
@@ -99,15 +92,69 @@
  a:hover { color: var(--primary-hover); }
 
  /* ==================== HEADER ==================== */
- /* ==================== HERO ====================
-   Redesigned: Syne display font, dark hero with grid texture,
-   refined professional B2B aesthetic
-*/
+ .header {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ padding: 14px 32px;
+ border-bottom: 1px solid var(--border);
+ background: rgba(255, 255, 255, 0.92);
+ backdrop-filter: blur(12px);
+ -webkit-backdrop-filter: blur(12px);
+ position: sticky;
+ top: 0;
+ z-index: 100;
+ }
 
-/* Google Fonts: Syne (display) */
+ .logo {
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ font-family: 'Outfit', sans-serif;
+ font-weight: 700;
+ font-size: 1.3rem;
+ color: var(--text);
+ text-decoration: none;
+ letter-spacing: -0.02em;
+ }
+
+ .header-links {
+ display: flex;
+ gap: 8px;
+ align-items: center;
+ }
+
+ .header-links a {
+ color: var(--text-muted);
+ font-size: 0.9rem;
+ font-weight: 500;
+ padding: 8px 16px;
+ border-radius: var(--radius-sm);
+ transition: all 0.2s;
+ text-decoration: none;
+ }
+
+ .header-links a:hover {
+ color: var(--text);
+ background: var(--bg-subtle);
+ }
+
+ .header-links a.nav-cta {
+ color: white;
+ background: var(--primary);
+ font-weight: 600;
+ }
+
+ .header-links a.nav-cta:hover {
+ background: var(--primary-hover);
+ color: white;
+ }
+
+ /* ==================== HERO ====================
+   Dark hero redesign: Syne font, dot-grid texture, gradient headline
+*/
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&display=swap');
 
-/* ── Header ────────────────────────────────────────────────── */
 .header {
   position: sticky;
   top: 0;
@@ -117,10 +164,10 @@
   justify-content: space-between;
   padding: 0 32px;
   height: 60px;
-  background: rgba(255,255,255,0.92);
+  background: rgba(255,255,255,0.95);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(0,0,0,0.06);
+  border-bottom: 1px solid var(--border);
   box-shadow: 0 1px 0 rgba(0,0,0,0.04);
 }
 
@@ -136,13 +183,7 @@
   letter-spacing: -0.02em;
 }
 
-.header-links {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.nav-landing-link {
+.header-links a {
   padding: 6px 14px;
   font-size: 0.875rem;
   font-weight: 500;
@@ -151,22 +192,19 @@
   border-radius: 8px;
   transition: color 0.15s, background 0.15s;
 }
-.nav-landing-link:hover { color: #1e40af; background: #eff6ff; }
+.header-links a:hover { color: var(--primary); background: var(--primary-subtle); }
 
 .header-links a.nav-cta {
   margin-left: 8px;
   padding: 7px 18px;
-  background: #1e40af;
-  color: #fff;
-  font-size: 0.875rem;
+  background: var(--primary);
+  color: #fff !important;
   font-weight: 600;
   border-radius: 8px;
-  text-decoration: none;
   transition: background 0.15s, transform 0.1s;
 }
-.header-links a.nav-cta:hover { background: #1d4ed8; transform: translateY(-1px); }
+.header-links a.nav-cta:hover { background: var(--primary-hover); transform: translateY(-1px); }
 
-/* ── Hero ──────────────────────────────────────────────────── */
 .hero {
   position: relative;
   padding: 88px 24px 72px;
@@ -174,18 +212,14 @@
   background: #020817;
   overflow: hidden;
 }
-
-/* Dot-grid texture */
 .hero::before {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(circle, rgba(148,163,184,0.14) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(148,163,184,0.12) 1px, transparent 1px);
   background-size: 28px 28px;
   pointer-events: none;
 }
-
-/* Blue radial glow */
 .hero::after {
   content: '';
   position: absolute;
@@ -194,631 +228,102 @@
   transform: translateX(-50%);
   width: 900px;
   height: 600px;
-  background: radial-gradient(ellipse at center, rgba(37,99,235,0.22) 0%, transparent 70%);
+  background: radial-gradient(ellipse, rgba(37,99,235,0.2) 0%, transparent 70%);
   pointer-events: none;
 }
-
 .hero-badge {
-  position: relative;
-  z-index: 1;
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
+  position: relative; z-index: 1;
+  display: inline-flex; align-items: center; gap: 7px;
   padding: 6px 16px;
   background: rgba(37,99,235,0.12);
-  border: 1px solid rgba(37,99,235,0.3);
+  border: 1px solid rgba(37,99,235,0.28);
   border-radius: 24px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: #93c5fd;
-  margin-bottom: 28px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font-size: 0.78rem; font-weight: 600; color: #93c5fd;
+  margin-bottom: 28px; letter-spacing: 0.04em; text-transform: uppercase;
 }
-
 .hero h1 {
-  position: relative;
-  z-index: 1;
+  position: relative; z-index: 1;
   font-family: 'Syne', sans-serif;
-  font-size: clamp(2.5rem, 6vw, 4rem);
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.04em;
-  color: #f8fafc;
-  max-width: 800px;
-  margin: 0 auto 20px;
+  font-size: clamp(2.4rem, 6vw, 3.8rem);
+  font-weight: 800; line-height: 1.1; letter-spacing: -0.04em;
+  color: #f8fafc; max-width: 800px; margin: 0 auto 20px;
 }
-
 .hero h1 em {
   font-style: normal;
   background: linear-gradient(135deg, #60a5fa 0%, #818cf8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   background-clip: text;
 }
-
 .hero > p {
-  position: relative;
-  z-index: 1;
-  font-size: 1.1rem;
-  color: #94a3b8;
-  max-width: 560px;
-  margin: 0 auto 12px;
-  line-height: 1.75;
+  position: relative; z-index: 1;
+  font-size: 1.1rem; color: #94a3b8;
+  max-width: 560px; margin: 0 auto 12px; line-height: 1.75;
 }
-
 .hero-cta {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  margin-top: 36px;
-  margin-bottom: 44px;
-  flex-wrap: wrap;
+  position: relative; z-index: 1;
+  display: flex; gap: 12px; justify-content: center;
+  margin-top: 36px; margin-bottom: 44px; flex-wrap: wrap;
 }
-
 .hero-cta .btn-hero {
-  padding: 14px 28px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  border-radius: 10px;
-  transition: transform 0.15s, box-shadow 0.15s;
+  padding: 14px 28px; font-size: 0.95rem; font-weight: 600;
+  border-radius: 10px; transition: transform 0.15s, box-shadow 0.15s;
 }
-
 .hero-cta .btn-primary {
-  background: #2563eb;
-  color: #fff;
-  border: none;
+  background: #2563eb; color: #fff; border: none;
   box-shadow: 0 0 0 1px rgba(37,99,235,0.5), 0 8px 24px rgba(37,99,235,0.35);
 }
 .hero-cta .btn-primary:hover {
-  background: #1d4ed8;
-  transform: translateY(-2px);
+  background: #1d4ed8; transform: translateY(-2px);
   box-shadow: 0 0 0 1px rgba(37,99,235,0.5), 0 12px 32px rgba(37,99,235,0.45);
 }
-
 .hero-cta .btn-outline {
-  background: rgba(255,255,255,0.06);
-  color: #cbd5e1;
+  background: rgba(255,255,255,0.06); color: #cbd5e1;
   border: 1px solid rgba(255,255,255,0.15);
 }
-.hero-cta .btn-outline:hover {
-  background: rgba(255,255,255,0.1);
-  color: #fff;
-  transform: translateY(-1px);
-}
-
+.hero-cta .btn-outline:hover { background: rgba(255,255,255,0.1); color: #fff; transform: translateY(-1px); }
 .hero-features {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  gap: 24px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-bottom: 32px;
+  position: relative; z-index: 1;
+  display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px;
 }
-
 .hero-feature {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 0.84rem;
-  font-weight: 500;
-  color: #64748b;
+  display: flex; align-items: center; gap: 7px;
+  font-size: 0.84rem; font-weight: 500; color: #64748b;
 }
-
 .hero-feature svg { color: #4ade80; flex-shrink: 0; }
-
 .hero-frameworks {
-  position: relative;
-  z-index: 1;
-  font-size: 0.8rem;
-  color: #334155;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  padding-top: 24px;
+  position: relative; z-index: 1;
+  font-size: 0.8rem; color: #334155; font-weight: 500;
+  letter-spacing: 0.02em; padding-top: 24px;
   border-top: 1px solid rgba(255,255,255,0.06);
-  max-width: 600px;
-  margin: 0 auto;
+  max-width: 600px; margin: 0 auto;
 }
 
-/* ── Stats strip ────────────────────────────────────────────── */
-.proof-bar {
-  background: #fff;
-  border-bottom: 1px solid #e2e8f0;
-  padding: 0;
-}
-
+/* Stats strip */
+.proof-bar { background: #fff; border-bottom: 1px solid var(--border); }
 .proof-bar-inner {
-  max-width: 900px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  max-width: 900px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(3, 1fr);
 }
-
 .proof-item {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 24px 32px;
-  border-right: 1px solid #e2e8f0;
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 24px 32px; border-right: 1px solid var(--border);
 }
 .proof-item:last-child { border-right: none; }
-
 .proof-number {
-  font-family: 'Syne', sans-serif;
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: #1e40af;
-  letter-spacing: -0.02em;
+  font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 700;
+  color: var(--primary); letter-spacing: -0.02em;
 }
-
-.proof-label {
-  font-size: 0.8rem;
-  color: #64748b;
-  line-height: 1.4;
-}
-
+.proof-label { font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; }
 .proof-divider { display: none; }
-
-/* ── Side ref (hidden in new design) ───────────────────────── */
 .side-ref { display: none; }
 
-/* ── How it works ───────────────────────────────────────────── */
-.how-section {
-  padding: 88px 24px;
-  background: #f8fafc;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.how-section h2 {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-  font-weight: 800;
-  text-align: center;
-  color: #0f172a;
-  letter-spacing: -0.03em;
-  margin-bottom: 56px;
-}
-
-.how-grid {
-  max-width: 900px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2px;
-  background: #e2e8f0;
-  border-radius: 16px;
-  overflow: hidden;
-  border: 1px solid #e2e8f0;
-}
-
-.how-card {
-  background: #fff;
-  padding: 36px 28px;
-  position: relative;
-}
-
-.how-card:first-child { border-radius: 14px 0 0 14px; }
-.how-card:last-child  { border-radius: 0 14px 14px 0; }
-
-.step-number {
-  width: 36px;
-  height: 36px;
-  background: #1e40af;
-  color: #fff;
-  border-radius: 10px;
-  font-family: 'Syne', sans-serif;
-  font-weight: 700;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 18px;
-  flex-shrink: 0;
-}
-
-.how-card h3 {
-  font-size: 1rem;
-  font-weight: 700;
-  color: #1e293b;
-  margin-bottom: 10px;
-  letter-spacing: -0.01em;
-}
-
-.how-card p {
-  font-size: 0.875rem;
-  color: #64748b;
-  line-height: 1.65;
-}
-
-/* ── Workflow (features) ────────────────────────────────────── */
-.workflow-section {
-  padding: 88px 24px;
-  background: #fff;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.workflow-section > h2 {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(1.5rem, 3vw, 2.2rem);
-  font-weight: 800;
-  text-align: center;
-  color: #0f172a;
-  letter-spacing: -0.03em;
-  margin-bottom: 12px;
-  max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.workflow-subtitle {
-  text-align: center;
-  color: #64748b;
-  font-size: 1rem;
-  margin: 0 auto 56px;
-  max-width: 540px;
-  line-height: 1.65;
-}
-
-.workflow-grid {
-  max-width: 960px;
-  margin: 0 auto 64px;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-}
-
-.workflow-card {
-  padding: 28px;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
-}
-.workflow-card:hover {
-  border-color: #bfdbfe;
-  box-shadow: 0 4px 20px rgba(37,99,235,0.08);
-  transform: translateY(-2px);
-}
-
-.workflow-icon {
-  width: 44px;
-  height: 44px;
-  background: #eff6ff;
-  border: 1px solid #bfdbfe;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #2563eb;
-  margin-bottom: 16px;
-}
-
-.workflow-card h3 {
-  font-size: 0.975rem;
-  font-weight: 700;
-  color: #1e293b;
-  margin-bottom: 8px;
-  letter-spacing: -0.01em;
-}
-
-.workflow-card p {
-  font-size: 0.875rem;
-  color: #64748b;
-  line-height: 1.65;
-}
-
-/* ── Demo video ─────────────────────────────────────────────── */
-.demo-video-section {
-  max-width: 800px;
-  margin: 0 auto;
-  text-align: center;
-  padding-top: 16px;
-}
-
-.demo-video-section h3 {
-  font-family: 'Syne', sans-serif;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #0f172a;
-  margin-bottom: 8px;
-  letter-spacing: -0.02em;
-}
-
-.demo-subtitle {
-  color: #64748b;
-  font-size: 0.9rem;
-  margin-bottom: 24px;
-}
-
-.demo-video-wrap {
-  border-radius: 16px;
-  overflow: hidden;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.1);
-  margin-bottom: 28px;
-}
-
-.demo-cta {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-
-.btn-demo-cta {
-  padding: 12px 28px;
-  font-size: 0.95rem;
-  font-weight: 600;
-}
-
-.demo-cta-hint {
-  font-size: 0.82rem;
-  color: #94a3b8;
-}
-
-/* ── Pricing ────────────────────────────────────────────────── */
-.pricing-landing-section {
-  padding: 88px 24px;
-  background: #f8fafc;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.section-inner { max-width: 960px; margin: 0 auto; }
-
-.section-header {
-  text-align: center;
-  margin-bottom: 52px;
-}
-
-.section-header h2 {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(1.5rem, 3vw, 2.2rem);
-  font-weight: 800;
-  color: #0f172a;
-  letter-spacing: -0.03em;
-  margin-bottom: 10px;
-}
-
-.section-subtitle {
-  color: #64748b;
-  font-size: 0.975rem;
-  max-width: 480px;
-  margin: 0 auto;
-  line-height: 1.65;
-}
-
-.pricing-landing-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin-bottom: 24px;
-}
-
-.pricing-landing-card {
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  padding: 28px 20px;
-  text-align: center;
-  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
-  position: relative;
-}
-.pricing-landing-card:hover {
-  border-color: #bfdbfe;
-  box-shadow: 0 4px 20px rgba(37,99,235,0.1);
-  transform: translateY(-2px);
-}
-
-/* Highlight 5-pack */
-.pricing-landing-card:nth-child(2) {
-  border-color: #2563eb;
-  border-width: 2px;
-  box-shadow: 0 4px 24px rgba(37,99,235,0.14);
-}
-.pricing-landing-card:nth-child(2)::before {
-  content: "Most Popular";
-  position: absolute;
-  top: -12px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #2563eb;
-  color: #fff;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  padding: 3px 12px;
-  border-radius: 20px;
-  white-space: nowrap;
-}
-
-.pricing-landing-name {
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: #64748b;
-  margin-bottom: 12px;
-}
-
-.pricing-landing-price {
-  font-family: 'Syne', sans-serif;
-  font-size: 2.25rem;
-  font-weight: 800;
-  color: #0f172a;
-  letter-spacing: -0.04em;
-  line-height: 1;
-  margin-bottom: 6px;
-}
-
-.pricing-landing-per {
-  font-size: 0.82rem;
-  color: #94a3b8;
-  font-weight: 500;
-}
-
-.pricing-landing-note {
-  text-align: center;
-  font-size: 0.875rem;
-  color: #64748b;
-  margin-top: 20px;
-}
-.pricing-landing-note a { color: #2563eb; font-weight: 600; }
-
-/* ── Trust / Security ───────────────────────────────────────── */
-.trust-section {
-  padding: 88px 24px;
-  background: #fff;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.trust-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin-bottom: 40px;
-}
-
-.trust-card {
-  padding: 24px;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-}
-
-.trust-card-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-
-.trust-card-header svg { color: #2563eb; flex-shrink: 0; }
-.trust-card-header h3 { font-size: 0.9rem; font-weight: 700; color: #1e293b; margin: 0; }
-.trust-card p { font-size: 0.82rem; color: #64748b; line-height: 1.6; margin: 0; }
-
-.trust-footer { text-align: center; }
-.trust-links {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.trust-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 16px;
-  font-size: 0.82rem;
-  font-weight: 500;
-  color: #475569;
-  text-decoration: none;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  background: #fff;
-  transition: border-color 0.15s, color 0.15s, background 0.15s;
-}
-.trust-link:hover { border-color: #2563eb; color: #1e40af; background: #eff6ff; }
-.trust-link svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; }
-
-/* ── Footer ─────────────────────────────────────────────────── */
-.footer {
-  padding: 48px 32px 32px;
-  background: #020817;
-  color: #94a3b8;
-}
-
-.footer-about {
-  max-width: 480px;
-  margin: 0 auto 24px;
-  text-align: center;
-}
-
-.footer-about p {
-  font-size: 0.8rem;
-  line-height: 1.7;
-  color: #475569;
-  margin: 0 0 8px;
-}
-.footer-origin a { color: #60a5fa; text-decoration: none; }
-.footer-origin a:hover { text-decoration: underline; }
-
-.footer-links {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
-}
-
-.footer-links a {
-  font-size: 0.8rem;
-  color: #334155;
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.15s;
-}
-.footer-links a:hover { color: #60a5fa; }
-
-.footer > p:last-child {
-  text-align: center;
-  font-size: 0.75rem;
-  color: #1e293b;
-  margin: 0;
-}
-
-/* ── Marquee ────────────────────────────────────────────────── */
-.marquee-fixed {
-  height: 36px;
-  background: #1e40af;
-  z-index: 99;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-}
-
-.marquee {
-  display: flex;
-  animation: marquee-scroll 30s linear infinite;
-  white-space: nowrap;
-}
-
-.marquee div {
-  color: rgba(255,255,255,0.85);
-  font-size: 0.78rem;
-  font-weight: 500;
-  letter-spacing: 0.3px;
-}
-
-@keyframes marquee-scroll {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-/* ── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .header { padding: 0 16px; }
-  .header-links .nav-landing-link { display: none; }
-  .header-links .nav-landing-link:last-child, 
-  .header-links a.nav-cta { display: inline-flex; }
+  .hero { padding: 64px 16px 48px; }
+  .hero h1 { font-size: 2rem; }
+  .hero-cta { flex-direction: column; align-items: center; }
   .proof-bar-inner { grid-template-columns: 1fr; }
-  .proof-item { border-right: none; border-bottom: 1px solid #e2e8f0; padding: 16px 20px; }
+  .proof-item { border-right: none; border-bottom: 1px solid var(--border); padding: 16px 20px; }
   .proof-item:last-child { border-bottom: none; }
-  .how-grid { grid-template-columns: 1fr; background: transparent; gap: 8px; }
-  .how-card { border-radius: 12px !important; border: 1px solid #e2e8f0; }
-  .workflow-grid { grid-template-columns: 1fr; }
-  .pricing-landing-grid { grid-template-columns: repeat(2, 1fr); }
-  .trust-grid { grid-template-columns: repeat(2, 1fr); }
-  .hero { padding: 64px 20px 48px; }
-}
-
-@media (max-width: 480px) {
-  .pricing-landing-grid { grid-template-columns: 1fr; }
-  .trust-grid { grid-template-columns: 1fr; }
 }
 
 /* ==================== MAIN CONTAINER ==================== */
@@ -3477,114 +2982,7 @@
  100% { transform: translateX(-50%); }
  }
 
- 
-
-/* ==================== COMPOSER QUICK NAVIGATION ==================== */
-.composer-nav{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px 14px;margin-bottom:14px;display:none}
-.composer-nav-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.composer-nav-title{font-size:.78rem;font-weight:600;color:#374151;text-transform:uppercase;letter-spacing:.4px}
-.composer-nav-subtitle{font-size:.73rem;color:#94a3b8}
-.composer-nav-pills{display:flex;flex-wrap:wrap;gap:6px}
-.cn-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:.75rem;font-weight:500;cursor:pointer;border:1px solid #e2e8f0;background:#fff;color:#475569;transition:all .15s;white-space:nowrap;user-select:none}
-.cn-pill:hover{border-color:#2563eb;color:#1d4ed8;background:#eff6ff}
-.cn-pill.complete{background:#ecfdf3;border-color:#86efac;color:#15803d}
-.cn-pill.partial{background:#fffbeb;border-color:#fcd34d;color:#92400e}
-.cn-pill.excluded{background:#f1f5f9;border-color:#e2e8f0;color:#94a3b8;text-decoration:line-through;cursor:default}
-.cn-pill .cn-count{font-size:.68rem;font-weight:700;background:rgba(0,0,0,.06);padding:1px 5px;border-radius:8px}
-.cn-pill.complete .cn-count{background:rgba(22,163,74,.12)}
-.cn-pill.partial .cn-count{background:rgba(202,138,4,.12)}
-
-/* Dashboard loading skeletons */
-.dash-skeleton{display:flex;flex-direction:column;gap:10px;padding:4px 0}
-.skel-card{height:72px;background:linear-gradient(90deg,#f1f5f9 25%,#e2e8f0 50%,#f1f5f9 75%);background-size:200% 100%;border-radius:8px;animation:skel-shimmer 1.4s infinite}
-.skel-card.skel-short{height:52px}
-@keyframes skel-shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-
-/* Dashboard help & resources section */
-.dashboard-help-section{margin-top:28px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:22px 24px}
-.dh-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
-.dh-title{font-size:.9rem;font-weight:700;color:#374151;text-transform:uppercase;letter-spacing:.4px}
-.dh-loom-link{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;font-weight:600;color:#2563eb;text-decoration:none;background:#eff6ff;border:1px solid #bfdbfe;border-radius:20px;padding:5px 12px;transition:background .15s}
-.dh-loom-link:hover{background:#dbeafe}
-.dh-steps{display:flex;flex-direction:column;gap:12px;margin-bottom:18px}
-.dh-step{display:flex;align-items:flex-start;gap:12px}
-.dh-step-num{width:24px;height:24px;border-radius:50%;background:#2563eb;color:#fff;font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-.dh-step-body{font-size:.85rem;color:#475569;line-height:1.5}
-.dh-step-body strong{color:#1e293b;display:block;margin-bottom:2px}
-.dh-step-body a{color:#2563eb;text-decoration:none;font-weight:500}
-.dh-step-body a:hover{text-decoration:underline}
-.dh-links{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.dh-link-card{display:flex;align-items:center;gap:10px;padding:12px 14px;background:#fff;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;color:#1e293b;transition:border-color .15s,box-shadow .15s}
-.dh-link-card:hover{border-color:#2563eb;box-shadow:0 1px 4px rgba(37,99,235,.1)}
-.dh-link-icon{font-size:1.2rem;flex-shrink:0;color:#2563eb}
-.dh-link-label{display:block;font-size:.82rem;font-weight:600;color:#1e293b}
-.dh-link-sub{display:block;font-size:.73rem;color:#94a3b8;margin-top:1px}
-
-/* Attachment chips */
-.ei-attachments-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px;padding-top:2px}
-.ei-att-chip{display:inline-flex;align-items:center;gap:4px;background:#f0f9ff;border:1px solid #bae6fd;border-radius:6px;padding:3px 8px;font-size:.75rem;max-width:280px}
-.ei-att-icon{flex-shrink:0}
-.ei-att-name{color:#0369a1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ei-att-size{color:#94a3b8;flex-shrink:0;margin-left:2px}
-.ei-att-remove{color:#94a3b8;cursor:pointer;font-size:1rem;line-height:1;padding:0 2px;flex-shrink:0}
-.ei-att-remove:hover{color:#ef4444}
-.ei-attach-label{display:inline-flex;align-items:center;gap:4px;cursor:pointer;font-size:.78rem;color:#64748b;border:1px dashed #cbd5e1;border-radius:6px;padding:3px 10px;transition:border-color .15s,color .15s,background .15s;white-space:nowrap}
-.ei-attach-label:hover{border-color:#2563eb;color:#2563eb;background:#eff6ff}
-
-/* Mobile responsive additions */
-@media(max-width:600px){.dh-links{grid-template-columns:1fr}.dh-header{flex-direction:column;align-items:flex-start}}
-
-
-/* ==================== ROLE SELECTOR BUTTONS ==================== */
-.role-btn-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin: 8px 0 4px;
-}
-.role-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
-  padding: 16px 18px;
-  background: var(--surface);
-  border: 2px solid var(--border);
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  text-align: left;
-  transition: border-color 0.15s, background 0.15s, transform 0.1s;
-  width: 100%;
-}
-.role-btn:hover {
-  border-color: var(--primary);
-  background: var(--primary-subtle);
-  transform: translateY(-1px);
-}
-.role-btn.active {
-  border-color: var(--primary);
-  background: var(--primary-subtle);
-}
-.role-btn-icon {
-  font-size: 1.3rem;
-  margin-bottom: 4px;
-}
-.role-btn-label {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: var(--text);
-  line-height: 1.2;
-}
-.role-btn-sub {
-  font-size: 0.78rem;
-  color: var(--text-muted);
-  font-weight: 400;
-}
-@media (max-width: 480px) {
-  .role-btn-row { grid-template-columns: 1fr; }
-}
-
-/* ==================== TOAST NOTIFICATIONS ==================== */
+ /* ==================== TOAST NOTIFICATIONS ==================== */
  .toast-container {
  position: fixed; top: 20px; right: 20px; z-index: 10000;
  display: flex; flex-direction: column; gap: 8px; pointer-events: none;
@@ -3908,7 +3306,7 @@
    <a href="#pricing" class="nav-landing-link">Pricing</a>
    <a href="#trust" class="nav-landing-link">Security</a>
    <a href="#" id="signInLink" class="nav-landing-link" onclick="event.preventDefault(); document.getElementById('roleSelect').value='returning'; handleRoleChange('returning'); document.getElementById('roleSelectSection').scrollIntoView({behavior:'smooth'});">Sign In</a>
-   <a id="getStartedLink" class="nav-cta" href="#">Get Started</a>
+   <a id="getStartedLink" class="nav-landing-link nav-cta" href="#">Get Started</a>
    <a href="#" id="navSignOutLink" class="nav-cta" style="display:none;">Sign Out</a>
   </nav>
  </header>
@@ -3943,7 +3341,6 @@
   </div>
  </section>
 
- <!-- STATS STRIP -->
  <div class="proof-bar">
   <div class="proof-bar-inner">
    <div class="proof-item">
@@ -3975,28 +3372,16 @@
  <div id="mainFormCard" class="card">
  <div class="card-header">
  <h2>Build your evidence request</h2>
- <p style="color:var(--text-muted); font-size:0.9rem;">Select frameworks, customize evidence items, and send your client a guided upload link.</p>
+ <p>Select frameworks, customize what evidence you need, and send your client a guided upload link. ProofRepo handles collection and follow-up.</p>
  </div>
 
  <div id="roleSelectSection" class="role-selector">
-  <!-- Hidden select keeps JS logic intact -->
-  <select id="roleSelect" style="display:none;" aria-hidden="true">
-   <option value="">Select...</option>
-   <option value="new">New to ProofRepo</option>
-   <option value="returning">Returning customer</option>
-  </select>
-  <div class="role-btn-row">
-   <button type="button" class="role-btn" id="roleNewBtn" onclick="$('#roleSelect').value='new'; handleRoleChange('new'); saveFormState();">
-    <span class="role-btn-icon">&#x2728;</span>
-    <span class="role-btn-label">New to ProofRepo</span>
-    <span class="role-btn-sub">Start free trial or create account</span>
-   </button>
-   <button type="button" class="role-btn" id="roleReturningBtn" onclick="$('#roleSelect').value='returning'; handleRoleChange('returning'); saveFormState();">
-    <span class="role-btn-icon">&#x1F511;</span>
-    <span class="role-btn-label">Returning customer</span>
-    <span class="role-btn-sub">Sign in to your account</span>
-   </button>
-  </div>
+ <label class="form-label">Getting started</label>
+ <select id="roleSelect">
+ <option value="">Select...</option>
+ <option value="new">I'm new to ProofRepo</option>
+ <option value="returning">I'm a returning customer</option>
+ </select>
  </div>
 
  <!-- Auth Flow: New User -->
@@ -4029,7 +3414,7 @@
  <div id="trialCodeSection" class="auth-section">
  <div class="form-group">
  <label class="form-label">Trial Code</label>
- <input type="text" class="form-input code-style" id="trialCodeInput" placeholder="ENTER TRIAL CODE" maxlength="20">
+ <input type="text" class="form-input code-style" id="trialCodeInput" placeholder="ENTER TRIAL CODE">
  </div>
  <button class="btn btn-primary btn-full" id="applyTrialBtn">Apply Code</button>
  <div id="trialStatus" class="auth-status"></div>
@@ -4251,7 +3636,7 @@
  </div>
  <div id="redeemCodeSection" style="display:none; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:12px 16px; margin-bottom:16px;">
  <div style="display:flex; gap:8px; align-items:center;">
- <input type="text" class="form-input code-style" id="dashboardRedeemCode" placeholder="ENTER CODE" maxlength="20" style="flex:1; max-width:240px; margin:0; padding:8px 12px; font-size:0.9rem;">
+ <input type="text" class="form-input code-style" id="dashboardRedeemCode" placeholder="ENTER CODE" style="flex:1; max-width:240px; margin:0; padding:8px 12px; font-size:0.9rem;">
  <button class="btn btn-sm btn-accent" id="dashboardRedeemBtn">Redeem</button>
  <a href="#" id="redeemCodeCancel" style="font-size:12px; color:#64748b; text-decoration:none; margin-left:4px;">cancel</a>
  </div>
@@ -4292,7 +3677,7 @@
  <div class="request-section">
  <h3 class="section-title">Active Requests <span class="section-count" id="activeCount">(0)</span></h3>
  <div id="activeRequestsList" class="requests-list">
- <div class="dash-skeleton"><div class="skel-card"></div><div class="skel-card"></div></div>
+ <div class="loading-placeholder">Loading requests...</div>
  </div>
  </div>
  
@@ -4300,7 +3685,7 @@
  <div class="request-section">
  <h3 class="section-title">Completed <span class="section-count" id="completedCount">(0)</span></h3>
  <div id="completedRequestsList" class="requests-list">
- <div class="dash-skeleton"><div class="skel-card"></div><div class="skel-card"></div></div>
+ <div class="loading-placeholder">Loading requests...</div>
  </div>
  </div>
  </div>
@@ -4312,55 +3697,9 @@
  <span class="section-count" id="templateCount">(0)</span>
  </h3>
  <div id="templatesList" class="templates-list">
- <div class="dash-skeleton"><div class="skel-card skel-short"></div><div class="skel-card skel-short"></div></div>
+ <div class="loading-placeholder">Loading templates...</div>
  </div>
  </div>
-
-  <!-- Help & Resources Section -->
-  <div class="dashboard-help-section">
-    <div class="dh-header">
-      <span class="dh-title">How ProofRepo works</span>
-      <a href="https://www.loom.com/share/d7a3709ad77247c48871eb7a7573d835" target="_blank" class="dh-loom-link">&#9654; Watch the 2-min walkthrough</a>
-    </div>
-    <div class="dh-steps">
-      <div class="dh-step">
-        <div class="dh-step-num">1</div>
-        <div class="dh-step-body">
-          <strong>Build your request</strong>
-          <span>Pick a framework, choose a depth level, customize evidence items. <a href="#" onclick="event.preventDefault(); showComposerFromDashboard()">Start a request &rarr;</a></span>
-        </div>
-      </div>
-      <div class="dh-step">
-        <div class="dh-step-num">2</div>
-        <div class="dh-step-body">
-          <strong>Send to your client</strong>
-          <span>Your client gets a branded upload link &mdash; no login required. Files are auto-matched to control items.</span>
-        </div>
-      </div>
-      <div class="dh-step">
-        <div class="dh-step-num">3</div>
-        <div class="dh-step-body">
-          <strong>Review &amp; export</strong>
-          <span>View submissions in the ProofPack viewer, filter by control domain, and export a PDF workpaper summary in one click.</span>
-        </div>
-      </div>
-    </div>
-    <div class="dh-links">
-      <a href="https://www.loom.com/share/d7a3709ad77247c48871eb7a7573d835" target="_blank" class="dh-link-card">
-        <span class="dh-link-icon">&#9654;</span>
-        <div><span class="dh-link-label">Demo walkthrough</span><span class="dh-link-sub">See the full workflow</span></div>
-      </a>
-      <a href="mailto:support@proofrepo.com" class="dh-link-card">
-        <span class="dh-link-icon">&#9993;</span>
-        <div><span class="dh-link-label">Contact support</span><span class="dh-link-sub">support@proofrepo.com</span></div>
-      </a>
-      <a href="#" onclick="event.preventDefault(); showComposerFromDashboard()" class="dh-link-card">
-        <span class="dh-link-icon">&#43;</span>
-        <div><span class="dh-link-label">New request</span><span class="dh-link-sub">7 frameworks, 519 items</span></div>
-      </a>
-    </div>
-  </div>
-
  </div>
 
  <div id="auditorFlow" style="display: none;">
@@ -4390,7 +3729,7 @@
  </div>
  </div>
  <div style="display:flex; gap:8px; align-items:center; margin-top:12px;">
- <input type="text" class="form-input code-style" id="composerRedeemCode" placeholder="ENTER CODE" maxlength="20" style="flex:1; max-width:220px; margin:0; padding:8px 12px; font-size:0.9rem; text-transform:uppercase;">
+ <input type="text" class="form-input code-style" id="composerRedeemCode" placeholder="ENTER CODE" style="flex:1; max-width:220px; margin:0; padding:8px 12px; font-size:0.9rem; text-transform:uppercase;">
  <button class="btn btn-sm btn-accent" id="composerRedeemBtn" style="padding:8px 20px;">Apply</button>
  </div>
  <div id="composerRedeemStatus" style="margin-top:6px; font-size:0.82rem;"></div>
@@ -4403,7 +3742,7 @@
  <div class="form-group">
  <label class="form-label">Your team's email(s)</label>
  <div class="chip-input-container" id="auditorEmailsContainer" data-placeholder="you@yourcompany.com">
- <input type="text" class="chip-text-input" placeholder="you@yourcompany.com" maxlength="254">
+ <input type="text" class="chip-text-input" placeholder="you@yourcompany.com">
  </div>
  <div class="chip-input-hint">Press Enter or comma to add multiple team members</div>
  </div>
@@ -4411,12 +3750,12 @@
  <div class="form-row">
  <div class="form-group">
  <label class="form-label">Client company</label>
- <input type="text" class="form-input" id="clientCompany" placeholder="Acme Corp" maxlength="120">
+ <input type="text" class="form-input" id="clientCompany" placeholder="Acme Corp">
  </div>
  <div class="form-group">
  <label class="form-label">Client email(s)</label>
  <div class="chip-input-container" id="clientEmailsContainer" data-placeholder="client@company.com">
- <input type="text" class="chip-text-input" placeholder="client@company.com" maxlength="254">
+ <input type="text" class="chip-text-input" placeholder="client@company.com">
  </div>
  <div class="chip-input-hint">Add multiple contacts if needed</div>
  </div>
@@ -4449,12 +3788,6 @@
  </div>
 
  <div class="form-group">
- <label class="form-label">Engagement Reference <span style="font-weight:normal;color:var(--text-muted);">(optional)</span></label>
- <input type="text" class="form-input" id="engagementRef" placeholder="e.g., ENG-2025-001, Smith & Co Audit" maxlength="80">
- <small class="form-hint">Internal reference shown in confirmation emails and your workpaper block.</small>
- </div>
-
- <div class="form-group">
  <label class="form-label">Evidence Request</label>
  
  <!-- Template Loader (shown when logged in with templates) -->
@@ -4481,8 +3814,7 @@
  <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
  Check frameworks, then customize what evidence you need. Items with &#x2713; are included by default.
  </p>
- <div id="composerNav" class="composer-nav"></div>
-  <div id="composer"></div>
+ <div id="composer"></div>
  </div>
 
  <!-- Payment Section -->
@@ -4549,186 +3881,189 @@
  </main>
 
  <section id="how-it-works" class="how-section">
-  <h2>How it works</h2>
-  <div class="how-grid">
-   <div class="how-card">
-    <div class="step-number">1</div>
-    <h3>Build your request</h3>
-    <p>Select from 7 frameworks, choose a depth level, customize evidence items, add instructions. Takes 5 minutes — not 45.</p>
-   </div>
-   <div class="how-card">
-    <div class="step-number">2</div>
-    <h3>Client uploads with guidance</h3>
-    <p>Your client gets a professional upload link with clear descriptions, expected formats, and helpful tips. No back-and-forth.</p>
-   </div>
-   <div class="how-card">
-    <div class="step-number">3</div>
-    <h3>Get your ProofPack</h3>
-    <p>Evidence arrives organized by control area, mapped to specific controls — ready to drop into your workpapers.</p>
-   </div>
-  </div>
+ <h2>How it works</h2>
+ <div class="how-grid">
+ <div class="how-card">
+ <div class="step-number">1</div>
+ <h3>Build your request</h3>
+ <p>Select from 7 compliance frameworks and 519 curated evidence items. Customize descriptions, set deadlines, and save templates for recurring audits.</p>
+ </div>
+ <div class="how-card">
+ <div class="step-number">2</div>
+ <h3>Client uploads with guidance</h3>
+ <p>Your client gets a professional upload link with clear descriptions, expected file formats, and helpful tips &mdash; no more back-and-forth about what you need.</p>
+ </div>
+ <div class="how-card">
+ <div class="step-number">3</div>
+ <h3>Get your ProofPack</h3>
+ <p>Evidence arrives organized by control area with a complete manifest &mdash; mapped to specific controls, ready to drop into your workpapers, reports, or compliance documentation.</p>
+ </div>
+ </div>
  </section>
 
+ <!-- WORKFLOW SECTION -->
  <section class="workflow-section">
-  <h2>Everything you need to collect evidence efficiently</h2>
-  <p class="workflow-subtitle">Guided enough to eliminate back-and-forth. Flexible enough to fit how your firm actually works.</p>
-  <div class="workflow-grid">
-   <div class="workflow-card">
-    <div class="workflow-icon">
-     <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
-    </div>
-    <h3>Curated evidence library</h3>
-    <p>519 items across SOC 2, ISO 27001, SOC 1, HIPAA, NIST CSF, CMMC, and GDPR. Each with descriptions, expected formats, control references, and tips that reduce re-requests.</p>
-   </div>
-   <div class="workflow-card">
-    <div class="workflow-icon">
-     <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-    </div>
-    <h3>Customize per engagement</h3>
-    <p>Edit descriptions, add custom items, remove what doesn&rsquo;t apply, set per-framework depth levels. Every request reflects your standards, not a generic checklist.</p>
-   </div>
-   <div class="workflow-card">
-    <div class="workflow-icon">
-     <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg>
-    </div>
-    <h3>Save templates, stay consistent</h3>
-    <p>Save any request as a reusable template. Next engagement, load it in one click and adjust. Build consistency across your practice without rebuilding from scratch.</p>
-   </div>
-   <div class="workflow-card">
-    <div class="workflow-icon">
-     <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm0 8a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zm10 0a1 1 0 011-1h4a1 1 0 011 1v6a1 1 0 01-1 1h-4a1 1 0 01-1-1v-6z"/></svg>
-    </div>
-    <h3>Dashboard and auto follow-ups</h3>
-    <p>Track every request in one place &mdash; who&rsquo;s submitted, who&rsquo;s overdue, what&rsquo;s coming due. Automated reminders go out before deadlines so you focus on review, not chasing.</p>
-   </div>
-  </div>
-
-  <div class="demo-video-section" id="demo">
-   <h3>See ProofRepo in action</h3>
-   <p class="demo-subtitle">Watch the full workflow &mdash; from building a request to one-click follow-up.</p>
-   <div class="demo-video-wrap">
-    <div style="position:relative;padding-bottom:53.75%;height:0;">
-     <iframe src="https://www.loom.com/embed/d7a3709ad77247c48871eb7a7573d835" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;"></iframe>
-    </div>
-   </div>
-   <div class="demo-cta">
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfCXvVXnvuWqKysjEkO8BK60D3cOB54wD0TYAoURPBNMdy9sw/viewform?usp=sf_link" target="_blank" rel="noopener" class="btn btn-primary btn-demo-cta">Request Free Access</a>
-    <span class="demo-cta-hint">We&rsquo;ll set you up with a free credit to try it out.</span>
-   </div>
-  </div>
+ <h2>Everything you need to collect evidence efficiently</h2>
+ <p class="workflow-subtitle">Guided enough to eliminate back-and-forth. Flexible enough to fit how your firm actually works.</p>
+ <div class="workflow-grid">
+ <div class="workflow-card">
+ <div class="workflow-icon">
+ <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+ </div>
+ <h3>Curated evidence library</h3>
+ <p>519 items across SOC 2, ISO 27001, SOC 1, HIPAA, NIST CSF, CMMC, and GDPR. Each with descriptions, expected formats, control references, and tips that reduce re-requests.</p>
+ </div>
+ <div class="workflow-card">
+ <div class="workflow-icon">
+ <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+ </div>
+ <h3>Customize per engagement</h3>
+ <p>Edit descriptions, add custom items, remove what doesn't apply, set per-framework template levels. Every request reflects your standards, not a generic checklist.</p>
+ </div>
+ <div class="workflow-card">
+ <div class="workflow-icon">
+ <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg>
+ </div>
+ <h3>Save templates, stay consistent</h3>
+ <p>Save any request as a reusable template. Next engagement, load it in one click and adjust. Build consistency across your practice without rebuilding from scratch.</p>
+ </div>
+ <div class="workflow-card">
+ <div class="workflow-icon">
+ <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm0 8a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zm10 0a1 1 0 011-1h4a1 1 0 011 1v6a1 1 0 01-1 1h-4a1 1 0 01-1-1v-6z"/></svg>
+ </div>
+ <h3>Dashboard and auto follow-ups</h3>
+ <p>Track every request in one place &mdash; who's submitted, who's overdue, what's coming due. Automated reminders go out before deadlines so you focus on review, not chasing.</p>
+ </div>
+ </div>
+ <!-- DEMO VIDEO SECTION -->
+ <div class="demo-video-section" id="demo">
+ <h3>See ProofRepo in action</h3>
+ <p class="demo-subtitle">Watch the full workflow — from building a request to one-click follow-up.</p>
+ <div class="demo-video-wrap">
+ <div style="position:relative;padding-bottom:53.75%;height:0;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.10);">
+ <iframe src="https://www.loom.com/embed/d7a3709ad77247c48871eb7a7573d835" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;"></iframe>
+ </div>
+ </div>
+ <div class="demo-cta">
+ <a href="https://docs.google.com/forms/d/e/1FAIpQLSfCXvVXnvuWqKysjEkO8BK60D3cOB54wD0TYAoURPBNMdy9sw/viewform?usp=sf_link" target="_blank" rel="noopener" class="btn btn-primary btn-demo-cta">Request Free Access</a>
+ <span class="demo-cta-hint">We'll set you up with a free credit to try it out.</span>
+ </div>
+ </div>
  </section>
 
+
+ <!-- PRICING SECTION -->
  <section class="pricing-landing-section" id="pricing">
-  <div class="section-inner">
-   <div class="section-header">
-    <h2>Simple, transparent pricing</h2>
-    <p class="section-subtitle">One credit per request. No subscriptions, no per-seat fees, no annual contracts.</p>
-   </div>
-   <div class="pricing-landing-grid">
-    <div class="pricing-landing-card">
-     <div class="pricing-landing-name">Single</div>
-     <div class="pricing-landing-price">$79</div>
-     <div class="pricing-landing-per">1 credit</div>
-    </div>
-    <div class="pricing-landing-card">
-     <div class="pricing-landing-name">5-Pack</div>
-     <div class="pricing-landing-price">$299</div>
-     <div class="pricing-landing-per">5 credits &mdash; $59.80 each</div>
-    </div>
-    <div class="pricing-landing-card">
-     <div class="pricing-landing-name">15-Pack</div>
-     <div class="pricing-landing-price">$749</div>
-     <div class="pricing-landing-per">15 credits &mdash; $49.93 each</div>
-    </div>
-    <div class="pricing-landing-card">
-     <div class="pricing-landing-name">50-Pack</div>
-     <div class="pricing-landing-price">$1,999</div>
-     <div class="pricing-landing-per">50 credits &mdash; $39.98 each</div>
-    </div>
-   </div>
-   <p class="pricing-landing-note">Have a trial code? <a href="#" onclick="event.preventDefault(); document.getElementById('roleSelect').value='new'; handleRoleChange('new'); document.getElementById('roleSelectSection').scrollIntoView({behavior:'smooth'});">Start here</a> &mdash; your first request is on us.</p>
-  </div>
+ <div class="section-inner">
+ <div class="section-header">
+ <h2>Simple, transparent pricing</h2>
+ <p class="section-subtitle">One credit per request. No subscriptions, no per-seat fees, no annual contracts.</p>
+ </div>
+ <div class="pricing-landing-grid">
+ <div class="pricing-landing-card">
+ <div class="pricing-landing-name">Single</div>
+ <div class="pricing-landing-price">$79</div>
+ <div class="pricing-landing-per">1 credit</div>
+ </div>
+ <div class="pricing-landing-card">
+ <div class="pricing-landing-name">5-Pack</div>
+ <div class="pricing-landing-price">$299</div>
+ <div class="pricing-landing-per">5 credits</div>
+ </div>
+ <div class="pricing-landing-card">
+ <div class="pricing-landing-name">15-Pack</div>
+ <div class="pricing-landing-price">$749</div>
+ <div class="pricing-landing-per">15 credits</div>
+ </div>
+ <div class="pricing-landing-card">
+ <div class="pricing-landing-name">50-Pack</div>
+ <div class="pricing-landing-price">$1,999</div>
+ <div class="pricing-landing-per">50 credits</div>
+ </div>
+ </div>
+ <p class="pricing-landing-note">Have a trial code? <a href="#" onclick="event.preventDefault(); document.getElementById('roleSelect').value='new'; handleRoleChange('new'); document.getElementById('roleSelectSection').scrollIntoView({behavior:'smooth'});">Start here</a> &mdash; your first request is on us.</p>
+ </div>
  </section>
 
+
+ <!-- TRUST SECTION -->
  <section class="trust-section" id="trust">
-  <div class="section-inner">
-   <div class="section-header">
-    <h2>Built for Sensitive Data</h2>
-    <p class="section-subtitle">Your clients trust you with their evidence. Here&rsquo;s how we protect it.</p>
-   </div>
-   <div class="trust-grid">
-    <div class="trust-card">
-     <div class="trust-card-header">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-      <h3>AES-256 at Rest</h3>
-     </div>
-     <p>Files encrypted in Cloudflare R2 using the same standard as banks and government systems.</p>
-    </div>
-    <div class="trust-card">
-     <div class="trust-card-header">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-      <h3>TLS 1.2+ in Transit</h3>
-     </div>
-     <p>Every connection is HTTPS-only. Data is encrypted between your browser and our servers.</p>
-    </div>
-    <div class="trust-card">
-     <div class="trust-card-header">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-      <h3>90-Day Auto-Delete</h3>
-     </div>
-     <p>Uploaded files are automatically purged via R2 lifecycle rules. No manual cleanup needed.</p>
-    </div>
-    <div class="trust-card">
-     <div class="trust-card-header">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-      <h3>Cloudflare SOC 2</h3>
-     </div>
-     <p>Runs on Cloudflare Workers, R2, and KV &mdash; all SOC 2 Type II and ISO 27001 certified.</p>
-    </div>
-   </div>
-   <div class="trust-footer">
-    <div class="trust-links">
-     <a href="/security.html" class="trust-link">
-      <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-      Security
-     </a>
-     <a href="/privacy.html" class="trust-link">
-      <svg viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-      Privacy
-     </a>
-     <a href="/terms.html" class="trust-link">
-      <svg viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-      Terms
-     </a>
-     <a href="/dpa.html" class="trust-link">
-      <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
-      DPA
-     </a>
-    </div>
-   </div>
-  </div>
+ <div class="section-inner">
+ <div class="section-header">
+ <h2>Built for Sensitive Data</h2>
+ <p class="section-subtitle">Your clients trust you with their evidence. Here's how we protect it.</p>
+ </div>
+
+ <div class="trust-grid">
+ <div class="trust-card">
+ <div class="trust-card-header">
+ <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+ <h3>AES-256 at Rest</h3>
+ </div>
+ <p>Files encrypted in Cloudflare R2 using the same standard as banks and government systems.</p>
+ </div>
+
+ <div class="trust-card">
+ <div class="trust-card-header">
+ <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+ <h3>TLS 1.2+ in Transit</h3>
+ </div>
+ <p>Every connection is HTTPS-only. Data is encrypted between your browser and our servers.</p>
+ </div>
+
+ <div class="trust-card">
+ <div class="trust-card-header">
+ <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+ <h3>90-Day Auto-Delete</h3>
+ </div>
+ <p>Uploaded files are automatically purged via R2 lifecycle rules. No manual cleanup needed.</p>
+ </div>
+
+ <div class="trust-card">
+ <div class="trust-card-header">
+ <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+ <h3>Cloudflare SOC 2</h3>
+ </div>
+ <p>Runs on Cloudflare Workers, R2, and KV &mdash; all SOC 2 Type II and ISO 27001 certified.</p>
+ </div>
+ </div>
+
+ <div class="trust-footer">
+ <div class="trust-links">
+ <a href="/security.html" class="trust-link">
+ <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+ Security
+ </a>
+ <a href="/privacy.html" class="trust-link">
+ <svg viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+ Privacy
+ </a>
+ <a href="/terms.html" class="trust-link">
+ <svg viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+ Terms
+ </a>
+ <a href="/dpa.html" class="trust-link">
+ <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+ DPA
+ </a>
+ </div>
+ </div>
+ </div>
  </section>
 
  <footer class="footer">
-  <div class="footer-about">
-   <p>ProofRepo was built by a professional who got tired of chasing documents through email chains and shared drives. Founded in 2025. Independent and self-funded. Based in Jacksonville, FL.</p>
-   <p class="footer-origin">Questions? <a href="mailto:support@proofrepo.com">support@proofrepo.com</a></p>
-  </div>
-  <div class="footer-links">
-   <a href="/security.html">Security</a>
-   <a href="/privacy.html">Privacy Policy</a>
-   <a href="/terms.html">Terms of Service</a>
-   <a href="/dpa.html">DPA</a>
-  </div>
-  <p>&copy; <span id="year"></span> ProofRepo. All rights reserved.</p>
- </footer>
-
- <div class="marquee-fixed">
-  <div class="marquee">
-   <div>&nbsp;Evidence collection, simplified &bull; 7 frameworks &bull; 519 evidence items &bull; Automated follow-ups &bull; SOC 2, ISO 27001, HIPAA, GDPR &amp; more &bull; Start your free trial today &bull;&nbsp;&nbsp;&nbsp;&nbsp;Evidence collection, simplified &bull; 7 frameworks &bull; 519 evidence items &bull; Automated follow-ups &bull; SOC 2, ISO 27001, HIPAA, GDPR &amp; more &bull; Start your free trial today &bull;</div>
-  </div>
+ <div class="footer-about">
+ <p>ProofRepo was built by a professional who got tired of chasing documents through email chains and shared drives. Founded in 2025. Independent and self-funded. Based in Jacksonville, FL.</p>
+ <p class="footer-origin">Questions? <a href="/cdn-cgi/l/email-protection#0f7c7a7f7f607d7b4f7f7d6060697d6a7f60216c6062"><span class="__cf_email__" data-cfemail="52212722223d20261222203d3d342037223d7c313d3f">[email&#160;protected]</span></a></p>
  </div>
-
+ <div class="footer-links">
+ <a href="/security.html">Security</a>
+ <a href="/privacy.html">Privacy Policy</a>
+ <a href="/terms.html">Terms of Service</a>
+ <a href="/dpa.html">DPA</a>
+ </div>
+ <p>&copy; <span id="year"></span> ProofRepo. All rights reserved.</p>
+ </footer>
 
  <div id="toastContainer" class="toast-container"></div>
 
@@ -4801,21 +4136,6 @@ const STORAGE_KEY = 'proofrepo_form_state';
 
 
 // ENHANCED FRAMEWORK LIBRARY v2.0
-
-// Fetch with timeout — prevents requests hanging indefinitely
-async function fetchWithTimeout(url, options = {}, ms = 15000) {
-  const controller = new AbortController();
-  const tid = setTimeout(() => controller.abort(), ms);
-  try {
-    const res = await fetch(url, { ...options, signal: controller.signal });
-    clearTimeout(tid);
-    return res;
-  } catch (e) {
-    clearTimeout(tid);
-    if (e.name === 'AbortError') throw new Error('Request timed out. Please check your connection and try again.');
-    throw e;
-  }
-}
 // Includes 7 frameworks with enhanced fields:
 // - description: Detailed professional description
 // - evidenceType: 'point-in-time' or 'period-of-time'
@@ -7934,7 +7254,6 @@ function saveFormState() {
  clientEmails: getChipEmails('clientEmailsContainer'),
  deadlineISO: deadlinePicker?.selectedDates[0]?.toISOString() || null,
  globalInstructions: $('#globalInstructions')?.value || '',
- engagementRef: ($('#engagementRef')?.value || '').trim(),
  appliedCode: state.code || '',
  composerState: composerState,
  customFrameworks: customFrameworks,
@@ -7959,10 +7278,7 @@ function loadFormState() {
 
 function restoreFormState(data) {
  if (!data) return false;
- if (data.role && (data.role === 'new' || data.role === 'returning')) {
-   $('#roleSelect').value = data.role;
-   handleRoleChange(data.role);
- }
+ if (data.role) $('#roleSelect').value = data.role;
  if (data.auditorEmails && data.auditorEmails.length) {
  setChipEmails('auditorEmailsContainer', data.auditorEmails);
  } else if (data.auditorEmail) {
@@ -7983,7 +7299,6 @@ function restoreFormState(data) {
  }
  if (data.composerState && Object.keys(data.composerState).length) composerState = data.composerState;
  if (data.customFrameworks && data.customFrameworks.length) customFrameworks = data.customFrameworks;
- if (data.engagementRef) { const er = $('#engagementRef'); if (er) er.value = data.engagementRef; }
  return true;
 }
 
@@ -8239,8 +7554,7 @@ function initComposerState() {
  editedDescription: null,
  editedFormats: null,
  guidanceCollapsed: false,
- fileMode: getDefaultFileMode(item),
- attachments: []
+ fileMode: getDefaultFileMode(item)
  };
  }
  }
@@ -8312,7 +7626,7 @@ function renderComposer() {
  html += renderFwBody(fwKey, fw);
  }
  const savedGlobalInstr = $('#globalInstructions')?.value || '';
- html += `<div class="global-instructions"><label class="form-label">Overall instructions for client</label><textarea class="form-textarea" id="globalInstructions" maxlength="1000" placeholder="Example: Please provide evidence covering Jan&mdash;Dec 2025. Screenshots acceptable. Redact any secrets or credentials.">${esc(savedGlobalInstr)}</textarea><p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">Shown prominently to your client above the checklist.</p></div>`;
+ html += `<div class="global-instructions"><label class="form-label">Overall instructions for client</label><textarea class="form-textarea" id="globalInstructions" placeholder="Example: Please provide evidence covering Jan&mdash;Dec 2025. Screenshots acceptable. Redact any secrets or credentials.">${esc(savedGlobalInstr)}</textarea><p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">Shown prominently to your client above the checklist.</p></div>`;
  
  // Save template bar (only show when logged in or trial user who might want to save)
  html += `<div class="save-template-bar" id="saveTemplateBar">
@@ -8324,7 +7638,6 @@ function renderComposer() {
  wireComposer();
  const gi = $('#globalInstructions');
  if (gi) gi.addEventListener('input', saveFormState);
-  renderComposerNav();
  
  // Wire save template button
  const saveBtn = $('#saveTemplateBtn');
@@ -8372,18 +7685,10 @@ function renderGroup(fwKey, g) {
  html += '</div>';
  html += `<div class="more-toggle" data-fw="${esc(fwKey)}" data-group="${esc(g.id)}">${more ? '&#x2212; Show fewer options' : `+ Show ${extra.length} more options`}</div>`;
  }
- html += `<div class="add-custom-section"><h4>Add custom request to "${esc(g.title)}"</h4><div class="custom-form"><input class="form-input" placeholder="e.g., Network Diagram, Encryption Key Rotation Log" data-custom-name="${esc(fwKey)}-${esc(g.id)}" maxlength="80"><textarea class="form-textarea" placeholder="Guidance for client (describe what you need, date ranges, format...)" data-custom-instr="${esc(fwKey)}-${esc(g.id)}" style="min-height: 50px;"></textarea><button type="button" class="btn btn-sm btn-outline" data-add-item="${esc(fwKey)}" data-group="${esc(g.id)}">+ Add request</button></div></div>`;
+ html += `<div class="add-custom-section"><h4>Add custom request to "${esc(g.title)}"</h4><div class="custom-form"><input class="form-input" placeholder="e.g., Network Diagram, Encryption Key Rotation Log" data-custom-name="${esc(fwKey)}-${esc(g.id)}"><textarea class="form-textarea" placeholder="Guidance for client (describe what you need, date ranges, format...)" data-custom-instr="${esc(fwKey)}-${esc(g.id)}" style="min-height: 50px;"></textarea><button type="button" class="btn btn-sm btn-outline" data-add-item="${esc(fwKey)}" data-group="${esc(g.id)}">+ Add request</button></div></div>`;
  }
  html += '</div></div>';
  return html;
-}
-
-
-function formatBytes(b) {
-  if (!b) return '';
-  if (b < 1024) return b + ' B';
-  if (b < 1048576) return (b / 1024).toFixed(1) + ' KB';
-  return (b / 1048576).toFixed(1) + ' MB';
 }
 
 function renderItem(fwKey, gid, item, gs) {
@@ -8432,16 +7737,6 @@ function renderItem(fwKey, gid, item, gs) {
  const formatsEdited = st?.editedFormats !== null;
  const fileMode = st?.fileMode || getDefaultFileMode(item);
  const fileModeToggle = `<label class="ei-filemode-toggle" title="${fileMode === 'multi' ? 'Client can attach multiple files to this item' : 'Client attaches one file to this item'}"><input type="checkbox" ${fileMode === 'multi' ? 'checked' : ''} data-filemode="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}"><span class="ei-filemode-label">${fileMode === 'multi' ? '&#128206; Multi-file' : '&#128196; Single file'}</span></label>`;
-  
-  // Auditor attachment chips - shown in composer per evidence item
-  const attachments = st?.attachments || [];
-  let attachHtml = '<div class="ei-attachments-row">';
-  attachments.forEach((att, attIdx) => {
-    const shortName = att.name.length > 26 ? att.name.substring(0, 24) + '...' : att.name;
-    attachHtml += '<div class="ei-att-chip"><span class="ei-att-icon">&#128206;</span><span class="ei-att-name" title="' + esc(att.name) + '">' + esc(shortName) + '</span><span class="ei-att-size">' + formatBytes(att.size) + '</span><span class="ei-att-remove" data-remove-att="' + esc(fwKey) + '-' + esc(gid) + '-' + esc(item.id) + '-' + attIdx + '">&times;</span></div>';
-  });
-  attachHtml += '<label class="ei-attach-label" title="Attach a reference file clients can download (template, example, screenshot guide)">&#128206; Attach reference file<input type="file" class="ei-attach-input" data-attach-item="' + esc(fwKey) + '-' + esc(gid) + '-' + esc(item.id) + '" style="display:none" accept=".pdf,.xlsx,.xls,.docx,.doc,.png,.jpg,.jpeg,.csv,.txt,.zip"></label></div>';
-
  
  return `<div class="evidence-item ${inc ? 'included' : ''}" data-fw="${esc(fwKey)}" data-group="${esc(gid)}" data-item="${esc(item.id)}">
  <div class="ei-header">
@@ -8467,7 +7762,6 @@ function renderItem(fwKey, gid, item, gs) {
  ${formatsEdited ? `<button type="button" class="ei-formats-reset" data-formats-reset="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">&#x21BA; reset</button>` : ''}
  </div>
  ${fileModeToggle}
-      ${attachHtml}
  <div class="ei-bottom-spacer"></div>
  <div class="ei-description-actions">
  <button type="button" class="ei-action-btn" data-desc-clear="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">Clear</button>
@@ -8477,116 +7771,6 @@ function renderItem(fwKey, gid, item, gs) {
  </div>
  </div>
  </div>`;
-}
-
-
-
-function renderComposerNav() {
-  const navEl = document.getElementById('composerNav');
-  if (!navEl) return;
-
-  const allFw = getAllFrameworks();
-  const pills = [];
-
-  // Collect all control groups across enabled frameworks
-  for (const [fwKey, fs] of Object.entries(composerState)) {
-    if (!fs.enabled) continue;
-    const fw = allFw[fwKey];
-    if (!fw) continue;
-    for (const g of (fw.controlGroups || [])) {
-      const gs = fs.groups?.[g.id];
-      if (!gs) continue;
-      const excluded = gs.excluded;
-      const included = excluded ? 0 : (g.items || []).filter(i => gs.items?.[i.id]?.included).length;
-      const total = (g.items || []).length;
-      pills.push({ fwKey, gid: g.id, title: g.title, included, total, excluded });
-    }
-  }
-
-  // Hide nav if no enabled frameworks
-  if (pills.length === 0) {
-    navEl.style.display = 'none';
-    return;
-  }
-
-  const totalItems = pills.reduce((s, p) => s + p.included, 0);
-  const totalGroups = pills.filter(p => !p.excluded).length;
-
-  let html = '<div class="composer-nav-header">';
-  html += '<span class="composer-nav-title">Quick Navigation</span>';
-  html += '<span class="composer-nav-subtitle">' + totalItems + ' item' + (totalItems !== 1 ? 's' : '') + ' selected across ' + totalGroups + ' group' + (totalGroups !== 1 ? 's' : '') + ' — click to jump</span>';
-  html += '</div><div class="composer-nav-pills">';
-
-  for (var pi = 0; pi < pills.length; pi++) {
-    var p = pills[pi];
-    var cls = 'cn-pill';
-    if (p.excluded) {
-      cls += ' excluded';
-    } else if (p.included === p.total && p.total > 0) {
-      cls += ' complete';
-    } else if (p.included > 0) {
-      cls += ' partial';
-    }
-    var label = p.title.length > 22 ? p.title.substring(0, 20) + '…' : p.title;
-    html += '<span class="' + cls + '" data-nav-fw="' + esc(p.fwKey) + '" data-nav-gid="' + esc(p.gid) + '" title="' + esc(p.title) + ': ' + p.included + '/' + p.total + ' items selected">';
-    html += esc(label);
-    if (!p.excluded) html += '<span class="cn-count">' + p.included + '/' + p.total + '</span>';
-    html += '</span>';
-  }
-
-  html += '</div>';
-  navEl.innerHTML = html;
-  navEl.style.display = 'block';
-
-  // Wire click handlers — scroll to group + expand it
-  navEl.querySelectorAll('[data-nav-fw]').forEach(function(pill) {
-    if (pill.classList.contains('excluded')) return;
-    pill.addEventListener('click', function() {
-      var fwKey = pill.dataset.navFw;
-      var gid = pill.dataset.navGid;
-      // Expand the group if collapsed
-      if (composerState[fwKey]?.groups?.[gid]) {
-        composerState[fwKey].groups[gid].expanded = true;
-      }
-      renderComposer(); // re-render so group is open
-      // Scroll to it after render
-      setTimeout(function() {
-        var target = document.querySelector('[data-fw="' + fwKey + '"][data-group="' + gid + '"]');
-        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 80);
-    });
-  });
-}
-
-async function handleAttachmentUpload(fwKey, gid, itemId, file) {
-  if (!state.isLoggedIn) {
-    showToast('Please sign in to attach reference files to evidence items.', 'error');
-    return;
-  }
-  const formData = new FormData();
-  formData.append('file', file);
-  const inputEl = document.querySelector('[data-attach-item="' + fwKey + '-' + gid + '-' + itemId + '"]');
-  const labelEl = inputEl ? inputEl.closest('.ei-attach-label') : null;
-  if (labelEl) labelEl.style.opacity = '0.5';
-  try {
-    const res = await fetchWithTimeout(API + '/upload/auditor-attachment', {
-      method: 'POST',
-      headers: { 'Authorization': 'Bearer ' + state.authToken },
-      body: formData
-    });
-    const data = await res.json();
-    if (!data.ok) { showToast(data.error || 'Upload failed', 'error'); return; }
-    if (!composerState[fwKey]?.groups?.[gid]?.items?.[itemId]) return;
-    const atts = composerState[fwKey].groups[gid].items[itemId].attachments || [];
-    atts.push({ name: data.name, r2Key: data.r2Key, size: data.size, type: data.type });
-    composerState[fwKey].groups[gid].items[itemId].attachments = atts;
-    renderComposer();
-    saveFormState();
-  } catch (e) {
-    showToast('Upload error: ' + e.message, 'error');
-  } finally {
-    if (labelEl) labelEl.style.opacity = '';
-  }
 }
 
 function wireComposer() {
@@ -8655,9 +7839,7 @@ function wireComposer() {
  cb.addEventListener('change', e => { 
  const el = e.target.closest('.evidence-item'); 
  const { fw, group, item } = el.dataset; 
- composerState[fw].groups[group].items[item].included = e.target.checked;
- // Update nav chip counts immediately on every check/uncheck
- renderComposerNav();
+ composerState[fw].groups[group].items[item].included = e.target.checked; 
  renderComposer(); 
  saveFormState(); 
  });
@@ -8807,41 +7989,6 @@ function wireComposer() {
  });
  });
  
-
-  // ── Auditor attachment: upload ──────────────────────────────────────────
-  $$('.ei-attach-input').forEach(input => {
-    input.addEventListener('change', async (e) => {
-      const rawKey = e.target.dataset.attachItem || '';
-      const parts = rawKey.split('-');
-      const fw = parts[0];
-      const gid = parts[1];
-      const itemId = parts.slice(2).join('-');
-      const file = e.target.files[0];
-      if (!file) return;
-      if (file.size > 10 * 1024 * 1024) { showToast('Attachment must be under 10MB.', 'error'); return; }
-      await handleAttachmentUpload(fw, gid, itemId, file);
-      e.target.value = '';
-    });
-  });
-
-  // ── Auditor attachment: remove ───────────────────────────────────────────
-  $$('[data-remove-att]').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const parts = (btn.dataset.removeAtt || '').split('-');
-      const attIdx = parseInt(parts[parts.length - 1]);
-      const fw = parts[0];
-      const gid = parts[1];
-      const itemId = parts.slice(2, parts.length - 1).join('-');
-      const itemState = composerState[fw]?.groups?.[gid]?.items?.[itemId];
-      if (itemState?.attachments) {
-        itemState.attachments.splice(attIdx, 1);
-        renderComposer();
-        saveFormState();
-      }
-    });
-  });
-
  // (Guidance zone moved to inline badges + tooltip - toggle handler removed)
  
  // Auto-resize description textareas
@@ -8870,8 +8017,8 @@ function wireComposer() {
  }
  }
  const count = included.length;
- if (count === 0) { showToast('No items selected to clear.', 'error'); return; }
- // Proceed — user can restore defaults any time via the Restore button
+ if (count === 0) { alert('No selected items to clear.'); return; }
+ if (!confirm('Clear all client guidance for the ' + count + ' selected ' + (fw.label || fwKey) + ' items?\\n\\nYou can restore ProofRepo defaults at any time.')) return;
  for (const g of (fw.controlGroups || [])) {
  const gs = composerState[fwKey].groups?.[g.id];
  if (!gs || gs.excluded) continue;
@@ -8894,7 +8041,7 @@ function wireComposer() {
  const fw = allFwData[fwKey];
  if (!fw || !composerState[fwKey]) return;
  const total = (fw.controlGroups || []).reduce((sum, g) => sum + (g.items || []).length, 0);
- // Proceed — restore is always recoverable by re-editing
+ if (!confirm('Restore ProofRepo default guidance for all ' + total + ' ' + (fw.label || fwKey) + ' items?\\n\\nAny custom edits will be replaced.')) return;
  for (const g of (fw.controlGroups || [])) {
  const gs = composerState[fwKey].groups?.[g.id];
  if (!gs) continue;
@@ -8916,7 +8063,7 @@ function wireComposer() {
  const nameInput = document.querySelector(`[data-custom-name="${fk}-${gid}"]`);
  const instrInput = document.querySelector(`[data-custom-instr="${fk}-${gid}"]`);
  const title = (nameInput?.value || '').trim(), customDesc = (instrInput?.value || '').trim();
- if (!title) { showToast('Please enter a name for this template.', 'error'); return; }
+ if (!title) { alert('Please enter a request name.'); return; }
  const cid = 'c_' + Math.random().toString(36).slice(2, 8);
  const fw = allFw[fk], grp = fw?.controlGroups?.find(g => g.id === gid);
  if (grp) { 
@@ -9352,7 +8499,6 @@ function getPayload() {
  description: description,
  expectedFormats: expectedFormats,
  fileMode: is.fileMode || getDefaultFileMode(item),
-              attachments: is.attachments || [],
  evidenceType: item.evidenceType || 'point-in-time',
  controlRef: item.controlRef || null,
  commonIssue: item.commonIssue || null
@@ -9370,7 +8516,7 @@ function showClientPreview() {
  const globalInstr = $('#globalInstructions')?.value || '';
  
  if (payload.length === 0) {
- showToast('Please select at least one evidence item before previewing.', 'error');
+ alert('No evidence items selected. Please select at least one item to preview.');
  return;
  }
  
@@ -9435,123 +8581,106 @@ function closePreviewModal() {
 }
 
 function exportRequestPDF() {
-  const evidence = getPayload();
-  if (evidence.length === 0) {
-    showToast('No evidence items selected. Add items to your request first.', 'error');
-    return;
-  }
-
-  const company = $('#clientCompany')?.value || 'Client';
-  const frameworks = Object.entries(composerState).filter(([k,v]) => v.enabled).map(([k]) => {
-    const allFw = getAllFrameworks();
-    return allFw[k]?.label || k;
-  });
-
-  // Group by control domain — always reflects current state at time of export
-  const grouped = {};
-  for (const item of evidence) {
-    const g = item.group || 'General';
-    if (!grouped[g]) grouped[g] = [];
-    grouped[g].push(item);
-  }
-
-  const LOGO = 'https://proofrepo.com/logo.png';
-  const dateStr = new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
-
-  // Build full HTML string then open in new tab — composer remains fully interactive
-  var lines = [];
-  lines.push('<!DOCTYPE html><html><head><meta charset="utf-8"><title>Evidence Request — ' + esc(company) + '</title><style>');
-  lines.push('body{margin:0;padding:28px 36px;font-family:system-ui,-apple-system,sans-serif;color:#1e293b;font-size:13px;line-height:1.5}');
-  lines.push('.cover{text-align:center;padding:20px 0 18px;border-bottom:3px solid #1e3a5f;margin-bottom:22px}');
-  lines.push('.cover-logo{width:44px;height:44px;border-radius:10px;margin-bottom:8px}');
-  lines.push('.cover-brand{font-size:.82rem;font-weight:700;color:#1e40af;letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px}');
-  lines.push('.cover h1{font-size:1.4rem;color:#1e3a5f;margin:6px 0 4px;font-weight:700}');
-  lines.push('.cover-meta{font-size:.82rem;color:#64748b;margin-top:4px}');
-  lines.push('.cover-meta .sep{margin:0 6px;color:#cbd5e1}');
-  lines.push('.summary{display:flex;gap:14px;margin-bottom:22px}');
-  lines.push('.summary-item{flex:1;text-align:center;padding:10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px}');
-  lines.push('.summary-num{font-size:1.25rem;font-weight:700;color:#1e40af}');
-  lines.push('.summary-label{font-size:.68rem;color:#64748b;margin-top:2px;text-transform:uppercase;letter-spacing:.4px}');
-  lines.push('.group{margin-bottom:18px;page-break-inside:avoid}');
-  lines.push('.group-title{font-size:.88rem;font-weight:700;padding:7px 12px;background:#f1f5f9;border-left:4px solid #2563eb;border-radius:0 5px 5px 0;margin-bottom:7px;color:#1e3a5f;display:flex;justify-content:space-between;align-items:center}');
-  lines.push('.group-count{font-size:.7rem;color:#64748b;font-weight:400}');
-  lines.push('.item{padding:9px 12px;border:1px solid #e2e8f0;border-left:3px solid #cbd5e1;border-radius:5px;margin-bottom:5px;page-break-inside:avoid}');
-  lines.push('.item-header{display:flex;align-items:flex-start;gap:8px;margin-bottom:3px}');
-  lines.push('.item-num{background:#e2e8f0;color:#475569;font-size:.68rem;font-weight:700;padding:1px 5px;border-radius:3px;flex-shrink:0;margin-top:1px}');
-  lines.push('.item-title{font-size:.85rem;font-weight:600;color:#1e293b}');
-  lines.push('.item-desc{font-size:.75rem;color:#64748b;line-height:1.5;margin:3px 0 5px 0}');
-  lines.push('.badge{display:inline-block;font-size:.6rem;font-weight:700;padding:1px 6px;border-radius:3px;margin-right:4px;text-transform:uppercase}');
-  lines.push('.badge-fmt{border:1px solid #2563eb;color:#1d4ed8}');
-  lines.push('.badge-ctrl{border:1px solid #16a34a;color:#15803d}');
-  lines.push('.badge-type{border:1px solid #d97706;color:#92400e}');
-  lines.push('.badge-multi{border:1px solid #8b5cf6;color:#6d28d9}');
-  lines.push('.footer{margin-top:28px;padding-top:10px;border-top:2px solid #1e3a5f;display:flex;align-items:center;justify-content:space-between}');
-  lines.push('.footer-brand{display:flex;align-items:center;gap:6px;font-size:.8rem;font-weight:700;color:#1e3a5f}');
-  lines.push('.footer-brand img{width:20px;height:20px;border-radius:5px}');
-  lines.push('.footer-meta{font-size:.72rem;color:#94a3b8}');
-  lines.push('@media print{@page{margin:0.5in}}');
-  lines.push('</style></head><body>');
-
-  // Cover
-  lines.push('<div class="cover">');
-  lines.push('<img src="' + LOGO + '" alt="ProofRepo" class="cover-logo">');
-  lines.push('<div class="cover-brand">ProofRepo</div>');
-  lines.push('<h1>Evidence Request Summary</h1>');
-  lines.push('<div class="cover-meta">' + esc(company));
-  if (frameworks.length) lines.push('<span class="sep">|</span>' + esc(frameworks.join(', ')));
-  lines.push('<span class="sep">|</span>' + dateStr + '</div>');
-  lines.push('</div>');
-
-  // Summary bar
-  lines.push('<div class="summary">');
-  lines.push('<div class="summary-item"><div class="summary-num">' + evidence.length + '</div><div class="summary-label">Items Requested</div></div>');
-  lines.push('<div class="summary-item"><div class="summary-num">' + Object.keys(grouped).length + '</div><div class="summary-label">Control Domains</div></div>');
-  lines.push('<div class="summary-item"><div class="summary-num" style="font-size:1rem;color:#2563eb">' + esc(frameworks.join(', ') || '—') + '</div><div class="summary-label">Framework</div></div>');
-  lines.push('</div>');
-
-  // Items by group
-  var groupNames = Object.keys(grouped);
-  var itemCounter = 0;
-  for (var g = 0; g < groupNames.length; g++) {
-    var groupName = groupNames[g];
-    var items = grouped[groupName];
-    lines.push('<div class="group">');
-    lines.push('<div class="group-title">' + esc(groupName) + '<span class="group-count">' + items.length + ' item' + (items.length !== 1 ? 's' : '') + '</span></div>');
-    for (var j = 0; j < items.length; j++) {
-      itemCounter++;
-      var itm = items[j];
-      lines.push('<div class="item">');
-      lines.push('<div class="item-header"><span class="item-num">' + itemCounter + '</span><span class="item-title">' + esc(itm.title) + '</span></div>');
-      if (itm.description) lines.push('<div class="item-desc">' + esc(itm.description) + '</div>');
-      var badges = '';
-      if (itm.expectedFormats && itm.expectedFormats.length) {
-        for (var f = 0; f < itm.expectedFormats.length; f++) badges += '<span class="badge badge-fmt">' + esc(itm.expectedFormats[f]) + '</span>';
-      }
-      if (itm.controlRef) badges += '<span class="badge badge-ctrl">' + esc(itm.controlRef) + '</span>';
-      if (itm.evidenceType) badges += '<span class="badge badge-type">' + (itm.evidenceType === 'period-of-time' ? 'Period' : 'Point-in-time') + '</span>';
-      if (itm.fileMode === 'multi') badges += '<span class="badge badge-multi">Multi-file</span>';
-      if (badges) lines.push(badges);
-      lines.push('</div>');
-    }
-    lines.push('</div>');
-  }
-
-  // Footer with logo
-  lines.push('<div class="footer">');
-  lines.push('<div class="footer-brand"><img src="' + LOGO + '" alt="P"><span>ProofRepo</span></div>');
-  lines.push('<div class="footer-meta">proofrepo.com &bull; Generated ' + dateStr + '</div>');
-  lines.push('</div>');
-  lines.push('</body></html>');
-
-  // Open in new tab — leaves composer fully interactive
-  var win = window.open('', '_blank');
-  if (!win) {
-    showToast('Pop-ups are blocked. Please allow pop-ups for proofrepo.com in your browser settings and try again.', 'error', 8000);
-    return;
-  }
-  win.document.write(lines.join(''));
-  win.document.close();
-  setTimeout(function() { win.focus(); win.print(); }, 350);
+ const evidence = getPayload();
+ if (evidence.length === 0) {
+ alert('No evidence items selected. Add items to your request first.');
+ return;
+ }
+ 
+ const company = $('#clientCompany')?.value || 'Client';
+ const frameworks = Object.entries(composerState).filter(([k,v]) => v.enabled).map(([k]) => {
+ const allFw = getAllFrameworks();
+ return allFw[k]?.label || k;
+ });
+ 
+ // Group by control domain
+ const grouped = {};
+ for (const item of evidence) {
+ const g = item.group || 'General';
+ if (!grouped[g]) grouped[g] = [];
+ grouped[g].push(item);
+ }
+ 
+ // Build print document
+ var iframe = document.createElement('iframe');
+ iframe.style.cssText = 'position:fixed;left:-9999px;width:0;height:0;border:none';
+ document.body.appendChild(iframe);
+ var pw = iframe.contentWindow.document;
+ pw.open();
+ pw.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>Evidence Request</title><style>');
+ pw.write('body{margin:0;padding:28px 36px;font-family:system-ui,-apple-system,sans-serif;color:#1e293b;font-size:13px;line-height:1.5}');
+ pw.write('.cover{text-align:center;padding:24px 0 20px;border-bottom:3px solid #1e3a5f;margin-bottom:24px}');
+ pw.write('.cover h1{font-size:1.5rem;color:#1e3a5f;margin:8px 0 4px}');
+ pw.write('.cover-meta{font-size:.85rem;color:#64748b}');
+ pw.write('.summary{display:flex;gap:16px;margin-bottom:24px}');
+ pw.write('.summary-item{flex:1;text-align:center;padding:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px}');
+ pw.write('.summary-num{font-size:1.3rem;font-weight:700;color:#1e40af}');
+ pw.write('.summary-label{font-size:.7rem;color:#64748b;margin-top:2px}');
+ pw.write('.group{margin-bottom:20px;page-break-inside:avoid}');
+ pw.write('.group-title{font-size:.9rem;font-weight:700;padding:8px 14px;border:2px solid #1e3a5f;border-left:4px solid #2563eb;border-radius:6px;margin-bottom:8px;color:#1e3a5f}');
+ pw.write('.item{padding:10px 12px;border:1px solid #e2e8f0;border-left:3px solid #cbd5e1;border-radius:5px;margin-bottom:5px;page-break-inside:avoid}');
+ pw.write('.item-title{font-size:.85rem;font-weight:600;color:#1e293b;margin-bottom:3px}');
+ pw.write('.item-desc{font-size:.75rem;color:#64748b;line-height:1.5;margin-bottom:4px}');
+ pw.write('.badge{display:inline-block;font-size:.6rem;font-weight:700;padding:1px 6px;border-radius:3px;margin-right:4px;text-transform:uppercase}');
+ pw.write('.badge-fmt{border:1px solid #2563eb;color:#1d4ed8}');
+ pw.write('.badge-ctrl{border:1px solid #16a34a;color:#15803d}');
+ pw.write('.badge-type{border:1px solid #d97706;color:#92400e}');
+ pw.write('.badge-multi{border:1px solid #8b5cf6;color:#6d28d9}');
+ pw.write('.footer{margin-top:30px;padding-top:12px;border-top:2px solid #1e3a5f;text-align:center;font-size:.75rem;color:#64748b}');
+ pw.write('@media print{@page{margin:0.5in}}');
+ pw.write('</style></head><body>');
+ 
+ // Cover
+ pw.write('<div class="cover">');
+ pw.write('<h1>Evidence Request Summary</h1>');
+ pw.write('<div class="cover-meta">' + esc(company) + ' &bull; ' + esc(frameworks.join(', ')) + ' &bull; ' + new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'}) + '</div>');
+ pw.write('</div>');
+ 
+ // Summary
+ pw.write('<div class="summary">');
+ pw.write('<div class="summary-item"><div class="summary-num">' + evidence.length + '</div><div class="summary-label">Items Requested</div></div>');
+ pw.write('<div class="summary-item"><div class="summary-num">' + Object.keys(grouped).length + '</div><div class="summary-label">Control Domains</div></div>');
+ pw.write('<div class="summary-item"><div class="summary-num">' + esc(frameworks.join(', ')) + '</div><div class="summary-label">Frameworks</div></div>');
+ pw.write('</div>');
+ 
+ // Items by group
+ var groupNames = Object.keys(grouped);
+ for (var g = 0; g < groupNames.length; g++) {
+ var groupName = groupNames[g];
+ var items = grouped[groupName];
+ pw.write('<div class="group">');
+ pw.write('<div class="group-title">' + esc(groupName) + ' (' + items.length + ')</div>');
+ for (var j = 0; j < items.length; j++) {
+ var itm = items[j];
+ pw.write('<div class="item">');
+ pw.write('<div class="item-title">' + esc(itm.title) + '</div>');
+ if (itm.description) pw.write('<div class="item-desc">' + esc(itm.description) + '</div>');
+ // Badges
+ if (itm.expectedFormats && itm.expectedFormats.length > 0) {
+ for (var f = 0; f < itm.expectedFormats.length; f++) {
+ pw.write('<span class="badge badge-fmt">' + esc(itm.expectedFormats[f]) + '</span>');
+ }
+ }
+ if (itm.controlRef) pw.write('<span class="badge badge-ctrl">' + esc(itm.controlRef) + '</span>');
+ if (itm.evidenceType) {
+ pw.write('<span class="badge badge-type">' + (itm.evidenceType === 'period-of-time' ? 'Period' : 'Point-in-time') + '</span>');
+ }
+ if (itm.fileMode === 'multi') pw.write('<span class="badge badge-multi">Multi-file</span>');
+ pw.write('</div>');
+ }
+ pw.write('</div>');
+ }
+ 
+ // Footer
+ pw.write('<div class="footer">Generated by ProofRepo &bull; proofrepo.com</div>');
+ pw.write('</body></html>');
+ pw.close();
+ 
+ setTimeout(function() {
+ iframe.contentWindow.focus();
+ iframe.contentWindow.print();
+ setTimeout(function() { document.body.removeChild(iframe); }, 2000);
+ }, 300);
 }
 
 // ==================== CODE VALIDATION ====================
@@ -9560,7 +8689,7 @@ async function validateCode(code) {
  if (!code) return { valid: false, error: 'No code entered' };
  
  try {
- const res = await fetchWithTimeout(`${API}/check-code?code=${encodeURIComponent(code)}`, {}, 8000);
+ const res = await fetch(`${API}/check-code?code=${encodeURIComponent(code)}`);
  const data = await res.json();
  
  if (data.ok && data.remaining > 0) {
@@ -9633,9 +8762,12 @@ async function checkCheckoutReturn() {
  showDashboard();
  } else {
  // Legacy: not logged in, show code-based flow
- // After checkout return, show new user flow
- $('#roleSelect').value = 'new';
- handleRoleChange('new');
+ if (savedState?.role === 'auditor') {
+ handleRoleChange('auditor');
+ } else {
+ $('#roleSelect').value = 'auditor';
+ handleRoleChange('auditor');
+ }
  showPaymentSection();
  $('#purchaseSection').classList.add('hidden');
  }
@@ -9656,7 +8788,7 @@ async function checkCheckoutReturn() {
  
  for (let attempt = 0; attempt < 90; attempt++) {
  try {
- const res = await fetchWithTimeout(`${API}/checkout/session?session_id=${sessionId}`);
+ const res = await fetch(`${API}/checkout/session?session_id=${sessionId}`);
  const data = await res.json();
  
  // v6: Account-based credit return
@@ -9748,11 +8880,6 @@ async function checkCheckoutReturn() {
 function handleRoleChange(role) {
  state.role = role;
  
- // Update role button active states
- const btnNew = $('#roleNewBtn'), btnRet = $('#roleReturningBtn');
- if (btnNew) btnNew.classList.toggle('active', role === 'new');
- if (btnRet) btnRet.classList.toggle('active', role === 'returning');
-
  // Hide all flows first
  $('#newUserFlow').style.display = 'none';
  $('#returningUserFlow').style.display = 'none';
@@ -9847,8 +8974,6 @@ async function showDashboardInternal() {
  if (trustSection) trustSection.style.display = 'none';
  const marquee = document.querySelector('.marquee-fixed');
  if (marquee) marquee.style.display = 'none';
- const footerEl = document.querySelector('.footer');
- if (footerEl) footerEl.style.display = 'none';
  document.body.style.paddingBottom = '0';
  
  // Show logged in bar
@@ -9880,22 +9005,16 @@ async function fetchAndRenderDashboard() {
  }
  
  // Show loading state
- const skelHtml = '<div class="dash-skeleton"><div class="skel-card"></div><div class="skel-card"></div></div>';
- $('#activeRequestsList').innerHTML = skelHtml;
- $('#completedRequestsList').innerHTML = skelHtml;
+ $('#activeRequestsList').innerHTML = '<div class="loading-placeholder">Loading requests...</div>';
+ $('#completedRequestsList').innerHTML = '<div class="loading-placeholder">Loading...</div>';
  
  let retries = 2;
  while (retries >= 0) {
  try {
- const res = await fetchWithTimeout(`${API}/auth/requests`, {
+ const res = await fetch(`${API}/auth/requests`, {
  headers: { 'Authorization': `Bearer ${state.authToken}` }
- }, 12000);
+ });
  
- if (res.status === 401) {
-      showToast('Your session has expired. Please sign in again.', 'error', 6000);
-      handleLogout();
-      return;
-    }
  if (!res.ok) {
  throw new Error(`HTTP ${res.status}`);
  }
@@ -10110,11 +9229,11 @@ async function duplicateTemplate(templateId) {
  const template = state.user?.templates?.find(t => t.id === templateId);
  if (!template) return;
  
- const newName = (template.name + ' (Copy)').slice(0, 80);
+ const newName = prompt('Enter name for duplicated template:', template.name + ' (Copy)');
  if (!newName || !newName.trim()) return;
  
  try {
- const res = await fetchWithTimeout(`${API}/auth/templates`, {
+ const res = await fetch(`${API}/auth/templates`, {
  method: 'POST',
  headers: {
  'Content-Type': 'application/json',
@@ -10136,10 +9255,10 @@ async function duplicateTemplate(templateId) {
  renderTemplatesSection();
  wireTemplateActions();
  } else {
- showToast(data.error || 'Error duplicating template.', 'error');
+ alert(data.error || 'Error duplicating template');
  }
  } catch (e) {
- showToast('Error duplicating template.', 'error');
+ alert('Error duplicating template');
  }
 }
 
@@ -10147,10 +9266,10 @@ async function deleteTemplateFromDashboard(templateId) {
  const template = state.user?.templates?.find(t => t.id === templateId);
  if (!template) return;
  
- if (!confirm(`Delete "${template.name}"?\nThis cannot be undone.`)) return;
+ if (!confirm(`Delete template "${template.name}"? This cannot be undone.`)) return;
  
  try {
- const res = await fetchWithTimeout(`${API}/auth/templates?id=${templateId}`, {
+ const res = await fetch(`${API}/auth/templates?id=${templateId}`, {
  method: 'DELETE',
  headers: { 'Authorization': `Bearer ${state.authToken}` }
  });
@@ -10163,10 +9282,10 @@ async function deleteTemplateFromDashboard(templateId) {
  wireTemplateActions();
  updateLoggedInBar(); // Update template dropdown in composer if visible
  } else {
- showToast(data.error || 'Error deleting template.', 'error');
+ alert(data.error || 'Error deleting template');
  }
  } catch (e) {
- showToast('Error deleting template.', 'error');
+ alert('Error deleting template');
  }
 }
 
@@ -10208,8 +9327,8 @@ function renderRequestCard(req, type) {
  let actionsHtml = '';
  if (type === 'active') {
  actionsHtml = `
- <button class="request-action-btn" data-action="copy-link" data-token="${esc(req.token)}" title="Copy the client upload link to share manually">Copy Client Link</button>
- <button class="request-action-btn" data-action="resend" data-token="${esc(req.token)}" title="Re-send the upload link email to your client">&#9993; Resend to Client</button>
+ <button class="request-action-btn" data-action="copy-link" data-token="${esc(req.token)}">Copy Client Link</button>
+ <button class="request-action-btn" data-action="resend" data-token="${esc(req.token)}">Resend Email</button>
  `;
  // Add extend deadline for requests with a deadline
  if (req.extendToken && req.deadlineISO) {
@@ -10291,25 +9410,22 @@ function wireRequestActions() {
  btn.textContent = 'Copied!';
  setTimeout(() => btn.textContent = originalText, 2000);
  } catch (e) {
-      const ta = document.createElement('textarea');
-      ta.value = link; ta.style.cssText = 'position:fixed;opacity:0';
-      document.body.appendChild(ta); ta.select();
-      try { document.execCommand('copy'); showToast('Link copied!', 'success'); }
-      catch (_) { showToast('Copy failed — link: ' + link, 'error', 10000); }
-      document.body.removeChild(ta);
-    }});
+ alert('Link: ' + link);
+ }
+ });
+ });
  
 // Resend email buttons
  $$('[data-action="resend"]').forEach(btn => {
  btn.addEventListener('click', async () => {
  const token = btn.dataset.token;
- // Proceed directly — resend is non-destructive, no confirm needed
+ if (!confirm('Resend the evidence request email to the client?')) return;
 
  btn.disabled = true;
  btn.textContent = 'Sending...';
 
  try {
- const res = await fetchWithTimeout(`${API}/request/resend`, {
+ const res = await fetch(`${API}/request/resend`, {
  method: 'POST',
  headers: {
  'Content-Type': 'application/json',
@@ -10323,13 +9439,13 @@ function wireRequestActions() {
  btn.textContent = 'Sent!';
  setTimeout(() => { btn.textContent = 'Resend Email'; btn.disabled = false; }, 2500);
  } else {
- showToast('Error resending: ' + (data.error || 'Unknown error'), 'error');
+ alert('Error resending: ' + (data.error || 'Unknown error'));
  btn.textContent = 'Resend Email';
  btn.disabled = false;
  }
  } catch (e) {
- showToast('Error resending email: ' + e.message, 'error');
- btn.textContent = '&#9993; Resend to Client';
+ alert('Error resending email: ' + e.message);
+ btn.textContent = 'Resend Email';
  btn.disabled = false;
  }
  });
@@ -10346,13 +9462,34 @@ function wireRequestActions() {
  
  // Extend deadline buttons
  $$('[data-action="extend"]').forEach(btn => {
- btn.addEventListener('click', () => {
+ btn.addEventListener('click', async () => {
  const extendToken = btn.dataset.extendToken;
- // Open the full extend page — proper date picker, mobile-friendly, sends client email automatically
- window.open(API + '/extend?t=' + extendToken, '_blank');
- showToast('Opening deadline extension…', 'success', 2000);
- // Refresh dashboard after delay to pick up any changes
- setTimeout(() => fetchAndRenderDashboard(), 5000);
+ const company = btn.dataset.company || 'this request';
+ 
+ const days = prompt(`Extend deadline for "${company}" by how many days?`, '7');
+ if (!days || isNaN(parseInt(days))) return;
+ 
+ btn.disabled = true;
+ btn.textContent = 'Extending...';
+ 
+ try {
+ const res = await fetch(`${API}/extend?t=${extendToken}&days=${parseInt(days)}`);
+ const data = await res.json();
+ 
+ if (data.ok) {
+ alert(`Deadline extended by ${days} days. New deadline: ${new Date(data.deadlineISO).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}`);
+ // Refresh dashboard to show updated deadline
+ await fetchAndRenderDashboard();
+ } else {
+ alert('Error extending deadline: ' + (data.error || 'Unknown error'));
+ btn.disabled = false;
+ btn.textContent = 'Extend Deadline';
+ }
+ } catch (e) {
+ alert('Error extending deadline: ' + e.message);
+ btn.disabled = false;
+ btn.textContent = 'Extend Deadline';
+ }
  });
  });
  
@@ -10368,7 +9505,7 @@ function wireRequestActions() {
  btn.textContent = 'Cancelling...';
  
  try {
- const res = await fetchWithTimeout(`${API}/request/cancel`, {
+ const res = await fetch(`${API}/request/cancel`, {
  method: 'POST',
  headers: {
  'Content-Type': 'application/json',
@@ -10381,12 +9518,12 @@ function wireRequestActions() {
  if (data.ok) {
  await fetchAndRenderDashboard();
  } else {
- showToast('Error cancelling: ' + (data.error || 'Unknown error'), 'error');
+ alert('Error cancelling: ' + (data.error || 'Unknown error'));
  btn.disabled = false;
  btn.textContent = 'Cancel Request';
  }
  } catch (e) {
- showToast('Error cancelling: ' + e.message, 'error');
+ alert('Error cancelling: ' + e.message);
  btn.disabled = false;
  btn.textContent = 'Cancel Request';
  }
@@ -10568,7 +9705,7 @@ async function checkExistingSession() {
  if (!token) return false;
  
  try {
- const res = await fetchWithTimeout(`${API}/auth/me`, {
+ const res = await fetch(`${API}/auth/me`, {
  headers: { 'Authorization': `Bearer ${token}` }
  });
  
@@ -10616,7 +9753,7 @@ async function handleApplyTrialCode() {
  showAuthStatus('trialStatus', 'Validating code...', 'loading');
  
  try {
- const res = await fetchWithTimeout(`${API}/auth/validate-trial?code=${encodeURIComponent(code)}`);
+ const res = await fetch(`${API}/auth/validate-trial?code=${encodeURIComponent(code)}`);
  const data = await res.json();
  
  if (data.ok && data.valid) {
@@ -10656,7 +9793,7 @@ async function handleStartTrial() {
  const email = ($('#trialUserEmail')?.value || '').trim().toLowerCase();
  
  if (!email || !email.includes('@') || !email.includes('.')) {
- showToast('Please enter a valid email address.', 'error');
+ alert('Please enter a valid email address');
  return;
  }
  
@@ -10718,7 +9855,7 @@ async function handleTrialCreateAccount() {
  showAuthStatus('trialSignupStatus', 'Creating account and loading credits...', 'loading');
  
  try {
- const res = await fetchWithTimeout(`${API}/auth/signup`, {
+ const res = await fetch(`${API}/auth/signup`, {
  method: 'POST',
  headers: { 'Content-Type': 'application/json' },
  body: JSON.stringify({ email, password, trialCode: state.codeValid ? state.code : undefined })
@@ -10767,7 +9904,7 @@ async function handleDashboardRedeem() {
  if (statusEl) statusEl.innerHTML = '<span style="color:#64748b; font-size:13px;">Validating code...</span>';
  
  try {
- const res = await fetchWithTimeout(`${API}/auth/redeem-code`, {
+ const res = await fetch(`${API}/auth/redeem-code`, {
  method: 'POST',
  headers: {
  'Content-Type': 'application/json',
@@ -10829,7 +9966,7 @@ async function handleSignup() {
  showAuthStatus('signupStatus', 'Creating account...', 'loading');
  
  try {
- const res = await fetchWithTimeout(`${API}/auth/signup`, {
+ const res = await fetch(`${API}/auth/signup`, {
  method: 'POST',
  headers: { 'Content-Type': 'application/json' },
  body: JSON.stringify({ email, password, trialCode: state.codeValid ? state.code : undefined })
@@ -10877,7 +10014,7 @@ async function handleLogin() {
  showAuthStatus('loginStatus', 'Signing in...', 'loading');
  
  try {
- const res = await fetchWithTimeout(`${API}/auth/login`, {
+ const res = await fetch(`${API}/auth/login`, {
  method: 'POST',
  headers: { 'Content-Type': 'application/json' },
  body: JSON.stringify({ email, password, remember })
@@ -10918,7 +10055,7 @@ async function handleForgotPassword() {
  btn.innerHTML = '<span class="spinner"></span> Sending...';
  
  try {
- await fetchWithTimeout(`${API}/auth/forgot-password`, {
+ await fetch(`${API}/auth/forgot-password`, {
  method: 'POST',
  headers: { 'Content-Type': 'application/json' },
  body: JSON.stringify({ email })
@@ -10959,7 +10096,7 @@ async function handleResetPassword() {
  btn.innerHTML = '<span class="spinner"></span> Resetting...';
  
  try {
- const res = await fetchWithTimeout(`${API}/auth/reset-password`, {
+ const res = await fetch(`${API}/auth/reset-password`, {
  method: 'POST',
  headers: { 'Content-Type': 'application/json' },
  body: JSON.stringify({ token: resetToken, password: pw })
@@ -11033,8 +10170,6 @@ function handleLogout() {
  if (proofBar) proofBar.style.display = '';
  const sideRef = document.querySelector('.side-ref');
  if (sideRef) sideRef.style.display = '';
- const footerRestore = document.querySelector('.footer');
- if (footerRestore) footerRestore.style.display = '';
  const workflowSection = document.querySelector('.workflow-section');
  if (workflowSection) workflowSection.style.display = '';
  const howSection = document.querySelector('.how-section');
@@ -11052,15 +10187,15 @@ async function handleResendVerification() {
  if (!state.authToken) return;
  
  try {
- const res = await fetchWithTimeout(`${API}/auth/resend-verification`, {
+ const res = await fetch(`${API}/auth/resend-verification`, {
  method: 'POST',
  headers: { 'Authorization': `Bearer ${state.authToken}` }
  });
  
  const data = await res.json();
- showToast(data.ok ? 'Verification email sent!' : (data.error || 'Error sending email'), data.ok ? 'success' : 'error');
+ alert(data.ok ? 'Verification email sent!' : (data.error || 'Error sending email'));
  } catch (e) {
- showToast('Error sending verification email.', 'error');
+ alert('Error sending verification email');
  }
 }
 
@@ -11120,7 +10255,7 @@ async function loadTemplate(templateId) {
 
 async function saveAsTemplate() {
  if (!state.isLoggedIn) {
- showToast('Please sign in to save templates.', 'error');
+ alert('Please sign in to save templates');
  return;
  }
  
@@ -11172,7 +10307,7 @@ async function saveAsTemplate() {
  btn.innerHTML = '<span class="spinner"></span>';
  
  try {
- const res = await fetchWithTimeout(`${API}/auth/templates`, {
+ const res = await fetch(`${API}/auth/templates`, {
  method: 'POST',
  headers: {
  'Content-Type': 'application/json',
@@ -11449,7 +10584,7 @@ async function handleComposerRedeem() {
  if (statusEl) statusEl.innerHTML = '<span style="color:#64748b;">Validating...</span>';
  
  try {
- const res = await fetchWithTimeout(`${API}/auth/redeem-code`, {
+ const res = await fetch(`${API}/auth/redeem-code`, {
  method: 'POST',
  headers: {
  'Content-Type': 'application/json',
@@ -11495,7 +10630,7 @@ async function handleApplyPaymentCode() {
  try {
  if (state.isLoggedIn && state.authToken) {
  // Logged in: redeem to account
- const res = await fetchWithTimeout(`${API}/auth/redeem-code`, {
+ const res = await fetch(`${API}/auth/redeem-code`, {
  method: 'POST',
  headers: {
  'Content-Type': 'application/json',
@@ -11634,21 +10769,21 @@ async function handleMainAction() {
  const company = ($('#clientCompany')?.value || '').trim();
  
  if (auditorEmails.length === 0) {
- showToast('Please enter at least one team email address.', 'error'); 
+ alert('Please enter at least one team email address.');
  return;
  }
  if (!company) {
- showToast('Please enter the client company name.', 'error'); 
+ alert('Please enter the client company name.');
  return;
  }
  if (clientEmails.length === 0) {
- showToast('Please enter at least one client email address.', 'error'); 
+ alert('Please enter at least one client email address.');
  return;
  }
  
  const evidence = getPayload();
  if (evidence.length === 0) {
- showToast('Please select at least one evidence item to request.', 'error'); 
+ alert('Please select at least one evidence item to request.');
  return;
  }
  
@@ -11696,7 +10831,7 @@ async function handleMainAction() {
  await sendRequest();
  return;
  }
- showToast('Please enter a credit code and click Apply, or purchase credits above.', 'error');
+ alert('Please enter a credit code and click Apply, or purchase credits above.');
  $('#auditorCode')?.focus();
  return;
  }
@@ -11713,7 +10848,7 @@ async function handleMainAction() {
  await sendRequest();
  return;
  }
- showToast('Please enter a credit code and click Apply, or purchase credits above.', 'error');
+ alert('Please enter a credit code and click Apply, or purchase credits above.');
  $('#auditorCode')?.focus();
 }
 
@@ -11732,7 +10867,7 @@ async function handleCheckout() {
  if (state.authToken) {
  checkoutHeaders['Authorization'] = `Bearer ${state.authToken}`;
  }
- const res = await fetchWithTimeout(`${API}/checkout`, {
+ const res = await fetch(`${API}/checkout`, {
  method: 'POST',
  headers: checkoutHeaders,
  body: JSON.stringify({
@@ -11795,7 +10930,6 @@ async function sendRequest() {
  deadlineISO: deadline.toISOString(),
  auditorCode: state.code || '',
  globalInstructions: $('#globalInstructions')?.value || '',
- engagementRef: ($('#engagementRef')?.value || '').trim(),
  requestedEvidence: requestedEvidence,
  auditPeriodStart: auditPeriodStart,
  auditPeriodEnd: auditPeriodEnd,
@@ -11812,7 +10946,7 @@ async function sendRequest() {
  await new Promise(r => setTimeout(r, 1500));
  }
  
- const res = await fetchWithTimeout(`${API}/request`, { method: 'POST', headers, body: payload }, 20000);
+ const res = await fetch(`${API}/request`, { method: 'POST', headers, body: payload });
  const data = await res.json();
  
  if (data.ok) {
@@ -11930,8 +11064,9 @@ function handleUrlPrefill() {
  // Set role to auditor
  const roleSelect = $('#roleSelect');
  if (roleSelect) {
- roleSelect.value = 'new';
-    handleRoleChange('new');
+ roleSelect.value = 'auditor';
+ handleRoleChange('auditor');
+ }
  
  // Prefill company
  const companyInput = $('#clientCompany');
@@ -11997,7 +11132,7 @@ async function checkFollowup() {
  window.history.replaceState({}, '', cleanUrl);
 
  try {
- const res = await fetchWithTimeout(`${API}/followup-draft?key=${encodeURIComponent(followupKey)}`);
+ const res = await fetch(`${API}/followup-draft?key=${encodeURIComponent(followupKey)}`);
  const data = await res.json();
  if (!data.ok || !data.draft) return false;
 
@@ -12210,7 +11345,6 @@ function applyFollowup(draft) {
 }
 
 async function init() {
-  $('#successBanner')?.classList.remove('visible'); // Always clear on fresh load
  $('#year').textContent = new Date().getFullYear();
  
  // Initialize chip inputs FIRST (before any state restore)
@@ -12262,7 +11396,7 @@ async function init() {
  document.addEventListener('visibilitychange', async () => {
  if (document.visibilityState === 'visible' && state.isLoggedIn && state.user && !state.user.verified) {
  try {
- const res = await fetchWithTimeout(`${API}/auth/me`, {
+ const res = await fetch(`${API}/auth/me`, {
  headers: { 'Authorization': `Bearer ${state.authToken}` }
  });
  if (res.ok) {
@@ -12321,18 +11455,6 @@ async function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
-
-// Global error handlers — log silently, never alert
-window.addEventListener('unhandledrejection', function(e) {
-  if (!e.reason) return;
-  const msg = (e.reason.message || String(e.reason)).toLowerCase();
-  if (msg.includes('aborted') || msg.includes('cancel') || msg.includes('network')) return;
-  console.error('ProofRepo unhandled rejection:', e.reason);
-});
-window.onerror = function(msg, src, line) {
-  console.error('ProofRepo error:', msg, src + ':' + line);
-  return false;
-};
 </script>
 </body>
 </html>
