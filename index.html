@@ -6,10 +6,17 @@
  <title>ProofRepo — Audit Evidence Collection, Simplified</title>
  <meta name="description" content="Stop chasing clients for compliance evidence. Send a guided upload link, get organized ProofPacks back — mapped to controls, ready for workpapers. SOC 2, ISO 27001, HIPAA, GDPR, and more." />
  <link rel="icon" type="image/png" href="/logo.png" />
+ <link rel="apple-touch-icon" href="/logo.png" />
+ <link rel="canonical" href="https://proofrepo.com" />
+ <meta name="theme-color" content="#1e40af" />
  <meta property="og:title" content="ProofRepo — Audit Evidence Collection, Simplified" />
  <meta property="og:description" content="Send a guided upload link. Get organized, control-mapped evidence back. No more email chains." />
  <meta property="og:type" content="website" />
  <meta property="og:url" content="https://proofrepo.com" />
+ <meta name="twitter:card" content="summary_large_image" />
+ <meta name="twitter:title" content="ProofRepo — Audit Evidence Collection, Simplified" />
+ <meta name="twitter:description" content="Send a guided upload link. Get organized, control-mapped evidence back. No more email chains." />
+ <meta name="twitter:image" content="https://proofrepo.com/logo.png" />
  <meta property="og:image" content="https://proofrepo.com/logo.png" />
  
  <!-- MAGIC LINK REDIRECT - Must be in head, executes immediately -->
@@ -893,7 +900,22 @@
  grid-column: 1 / -1;
  }
 
- @media (max-width: 900px) {
+ /* Mobile composer responsive fixes */
+@media (max-width: 600px) {
+  .control-groups-grid { grid-template-columns: 1fr !important; }
+  .evidence-item { padding: 10px !important; }
+  .ei-bottom-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .ei-attachments-row { margin-top: 8px; }
+  .framework-selector { flex-wrap: wrap; gap: 6px; }
+  .action-button-row { flex-direction: column; }
+  .action-button-row .btn { width: 100%; text-align: center; }
+  .composer-nav-pills { gap: 4px; }
+  .cn-pill { font-size: .7rem; padding: 3px 8px; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .requests-columns { flex-direction: column; }
+  .dh-links { grid-template-columns: 1fr; }
+}
+@media (max-width: 900px) {
  .main-container.composer-active {
  max-width: 900px;
  }
@@ -2011,6 +2033,11 @@
 .ei-att-remove:hover { color: #ef4444; }
 .ei-attach-label { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; font-size: 0.78rem; color: #64748b; border: 1px dashed #cbd5e1; border-radius: 6px; padding: 3px 10px; transition: border-color 0.15s, color 0.15s, background 0.15s; white-space: nowrap; }
 .ei-attach-label:hover { border-color: #2563eb; color: #2563eb; background: #eff6ff; }
+/* Dashboard loading skeletons */
+.dash-skeleton { display: flex; flex-direction: column; gap: 10px; padding: 4px 0; }
+.skel-card { height: 72px; background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%); background-size: 200% 100%; border-radius: 8px; animation: skel-shimmer 1.4s infinite; }
+.skel-card.skel-short { height: 52px; }
+@keyframes skel-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 /* Dashboard help & resources section */
 .dashboard-help-section{margin-top:28px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:22px 24px}
 .dh-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
@@ -3402,7 +3429,7 @@
  <div id="trialCodeSection" class="auth-section">
  <div class="form-group">
  <label class="form-label">Trial Code</label>
- <input type="text" class="form-input code-style" id="trialCodeInput" placeholder="ENTER TRIAL CODE">
+ <input type="text" class="form-input code-style" id="trialCodeInput" placeholder="ENTER TRIAL CODE" maxlength="20">
  </div>
  <button class="btn btn-primary btn-full" id="applyTrialBtn">Apply Code</button>
  <div id="trialStatus" class="auth-status"></div>
@@ -3624,7 +3651,7 @@
  </div>
  <div id="redeemCodeSection" style="display:none; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:12px 16px; margin-bottom:16px;">
  <div style="display:flex; gap:8px; align-items:center;">
- <input type="text" class="form-input code-style" id="dashboardRedeemCode" placeholder="ENTER CODE" style="flex:1; max-width:240px; margin:0; padding:8px 12px; font-size:0.9rem;">
+ <input type="text" class="form-input code-style" id="dashboardRedeemCode" placeholder="ENTER CODE" maxlength="20" style="flex:1; max-width:240px; margin:0; padding:8px 12px; font-size:0.9rem;">
  <button class="btn btn-sm btn-accent" id="dashboardRedeemBtn">Redeem</button>
  <a href="#" id="redeemCodeCancel" style="font-size:12px; color:#64748b; text-decoration:none; margin-left:4px;">cancel</a>
  </div>
@@ -3665,7 +3692,7 @@
  <div class="request-section">
  <h3 class="section-title">Active Requests <span class="section-count" id="activeCount">(0)</span></h3>
  <div id="activeRequestsList" class="requests-list">
- <div class="loading-placeholder">Loading requests...</div>
+ <div class="dash-skeleton"><div class="skel-card"></div><div class="skel-card"></div></div>
  </div>
  </div>
  
@@ -3673,7 +3700,7 @@
  <div class="request-section">
  <h3 class="section-title">Completed <span class="section-count" id="completedCount">(0)</span></h3>
  <div id="completedRequestsList" class="requests-list">
- <div class="loading-placeholder">Loading requests...</div>
+ <div class="dash-skeleton"><div class="skel-card"></div><div class="skel-card"></div></div>
  </div>
  </div>
  </div>
@@ -3685,7 +3712,7 @@
  <span class="section-count" id="templateCount">(0)</span>
  </h3>
  <div id="templatesList" class="templates-list">
- <div class="loading-placeholder">Loading templates...</div>
+ <div class="dash-skeleton"><div class="skel-card skel-short"></div><div class="skel-card skel-short"></div></div>
  </div>
  </div>
 
@@ -3763,7 +3790,7 @@
  </div>
  </div>
  <div style="display:flex; gap:8px; align-items:center; margin-top:12px;">
- <input type="text" class="form-input code-style" id="composerRedeemCode" placeholder="ENTER CODE" style="flex:1; max-width:220px; margin:0; padding:8px 12px; font-size:0.9rem; text-transform:uppercase;">
+ <input type="text" class="form-input code-style" id="composerRedeemCode" placeholder="ENTER CODE" maxlength="20" style="flex:1; max-width:220px; margin:0; padding:8px 12px; font-size:0.9rem; text-transform:uppercase;">
  <button class="btn btn-sm btn-accent" id="composerRedeemBtn" style="padding:8px 20px;">Apply</button>
  </div>
  <div id="composerRedeemStatus" style="margin-top:6px; font-size:0.82rem;"></div>
@@ -3776,7 +3803,7 @@
  <div class="form-group">
  <label class="form-label">Your team's email(s)</label>
  <div class="chip-input-container" id="auditorEmailsContainer" data-placeholder="you@yourcompany.com">
- <input type="text" class="chip-text-input" placeholder="you@yourcompany.com">
+ <input type="text" class="chip-text-input" placeholder="you@yourcompany.com" maxlength="254">
  </div>
  <div class="chip-input-hint">Press Enter or comma to add multiple team members</div>
  </div>
@@ -3784,12 +3811,12 @@
  <div class="form-row">
  <div class="form-group">
  <label class="form-label">Client company</label>
- <input type="text" class="form-input" id="clientCompany" placeholder="Acme Corp">
+ <input type="text" class="form-input" id="clientCompany" placeholder="Acme Corp" maxlength="120">
  </div>
  <div class="form-group">
  <label class="form-label">Client email(s)</label>
  <div class="chip-input-container" id="clientEmailsContainer" data-placeholder="client@company.com">
- <input type="text" class="chip-text-input" placeholder="client@company.com">
+ <input type="text" class="chip-text-input" placeholder="client@company.com" maxlength="254">
  </div>
  <div class="chip-input-hint">Add multiple contacts if needed</div>
  </div>
@@ -3819,6 +3846,12 @@
  </div>
  </div>
  <small id="auditPeriodHint" style="margin-top:6px;display:block;color:var(--text-muted);font-size:12px;"></small>
+ </div>
+
+ <div class="form-group">
+ <label class="form-label">Engagement Reference <span style="font-weight:normal;color:var(--text-muted);">(optional)</span></label>
+ <input type="text" class="form-input" id="engagementRef" placeholder="e.g., ENG-2025-001, Smith & Co Audit" maxlength="80">
+ <small class="form-hint">Internal reference shown in confirmation emails and your workpaper block.</small>
  </div>
 
  <div class="form-group">
@@ -4171,6 +4204,21 @@ const STORAGE_KEY = 'proofrepo_form_state';
 
 
 // ENHANCED FRAMEWORK LIBRARY v2.0
+
+// Fetch with timeout — prevents requests hanging indefinitely
+async function fetchWithTimeout(url, options = {}, ms = 15000) {
+  const controller = new AbortController();
+  const tid = setTimeout(() => controller.abort(), ms);
+  try {
+    const res = await fetch(url, { ...options, signal: controller.signal });
+    clearTimeout(tid);
+    return res;
+  } catch (e) {
+    clearTimeout(tid);
+    if (e.name === 'AbortError') throw new Error('Request timed out. Please check your connection and try again.');
+    throw e;
+  }
+}
 // Includes 7 frameworks with enhanced fields:
 // - description: Detailed professional description
 // - evidenceType: 'point-in-time' or 'period-of-time'
@@ -7289,6 +7337,7 @@ function saveFormState() {
  clientEmails: getChipEmails('clientEmailsContainer'),
  deadlineISO: deadlinePicker?.selectedDates[0]?.toISOString() || null,
  globalInstructions: $('#globalInstructions')?.value || '',
+ engagementRef: ($('#engagementRef')?.value || '').trim(),
  appliedCode: state.code || '',
  composerState: composerState,
  customFrameworks: customFrameworks,
@@ -7334,6 +7383,7 @@ function restoreFormState(data) {
  }
  if (data.composerState && Object.keys(data.composerState).length) composerState = data.composerState;
  if (data.customFrameworks && data.customFrameworks.length) customFrameworks = data.customFrameworks;
+ if (data.engagementRef) { const er = $('#engagementRef'); if (er) er.value = data.engagementRef; }
  return true;
 }
 
@@ -7662,7 +7712,7 @@ function renderComposer() {
  html += renderFwBody(fwKey, fw);
  }
  const savedGlobalInstr = $('#globalInstructions')?.value || '';
- html += `<div class="global-instructions"><label class="form-label">Overall instructions for client</label><textarea class="form-textarea" id="globalInstructions" placeholder="Example: Please provide evidence covering Jan&mdash;Dec 2025. Screenshots acceptable. Redact any secrets or credentials.">${esc(savedGlobalInstr)}</textarea><p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">Shown prominently to your client above the checklist.</p></div>`;
+ html += `<div class="global-instructions"><label class="form-label">Overall instructions for client</label><textarea class="form-textarea" id="globalInstructions" maxlength="1000" placeholder="Example: Please provide evidence covering Jan&mdash;Dec 2025. Screenshots acceptable. Redact any secrets or credentials.">${esc(savedGlobalInstr)}</textarea><p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">Shown prominently to your client above the checklist.</p></div>`;
  
  // Save template bar (only show when logged in or trial user who might want to save)
  html += `<div class="save-template-bar" id="saveTemplateBar">
@@ -7722,7 +7772,7 @@ function renderGroup(fwKey, g) {
  html += '</div>';
  html += `<div class="more-toggle" data-fw="${esc(fwKey)}" data-group="${esc(g.id)}">${more ? '&#x2212; Show fewer options' : `+ Show ${extra.length} more options`}</div>`;
  }
- html += `<div class="add-custom-section"><h4>Add custom request to "${esc(g.title)}"</h4><div class="custom-form"><input class="form-input" placeholder="e.g., Network Diagram, Encryption Key Rotation Log" data-custom-name="${esc(fwKey)}-${esc(g.id)}"><textarea class="form-textarea" placeholder="Guidance for client (describe what you need, date ranges, format...)" data-custom-instr="${esc(fwKey)}-${esc(g.id)}" style="min-height: 50px;"></textarea><button type="button" class="btn btn-sm btn-outline" data-add-item="${esc(fwKey)}" data-group="${esc(g.id)}">+ Add request</button></div></div>`;
+ html += `<div class="add-custom-section"><h4>Add custom request to "${esc(g.title)}"</h4><div class="custom-form"><input class="form-input" placeholder="e.g., Network Diagram, Encryption Key Rotation Log" data-custom-name="${esc(fwKey)}-${esc(g.id)}" maxlength="80"><textarea class="form-textarea" placeholder="Guidance for client (describe what you need, date ranges, format...)" data-custom-instr="${esc(fwKey)}-${esc(g.id)}" style="min-height: 50px;"></textarea><button type="button" class="btn btn-sm btn-outline" data-add-item="${esc(fwKey)}" data-group="${esc(g.id)}">+ Add request</button></div></div>`;
  }
  html += '</div></div>';
  return html;
@@ -7910,7 +7960,7 @@ function renderComposerNav() {
 
 async function handleAttachmentUpload(fwKey, gid, itemId, file) {
   if (!state.isLoggedIn) {
-    alert('Please sign in to attach reference files to evidence items');
+    showToast('Please sign in to attach reference files to evidence items.', 'error');
     return;
   }
   const formData = new FormData();
@@ -7919,13 +7969,13 @@ async function handleAttachmentUpload(fwKey, gid, itemId, file) {
   const labelEl = inputEl ? inputEl.closest('.ei-attach-label') : null;
   if (labelEl) labelEl.style.opacity = '0.5';
   try {
-    const res = await fetch(API + '/upload/auditor-attachment', {
+    const res = await fetchWithTimeout(API + '/upload/auditor-attachment', {
       method: 'POST',
       headers: { 'Authorization': 'Bearer ' + state.authToken },
       body: formData
     });
     const data = await res.json();
-    if (!data.ok) { alert(data.error || 'Upload failed'); return; }
+    if (!data.ok) { showToast(data.error || 'Upload failed', 'error'); return; }
     if (!composerState[fwKey]?.groups?.[gid]?.items?.[itemId]) return;
     const atts = composerState[fwKey].groups[gid].items[itemId].attachments || [];
     atts.push({ name: data.name, r2Key: data.r2Key, size: data.size, type: data.type });
@@ -7933,7 +7983,7 @@ async function handleAttachmentUpload(fwKey, gid, itemId, file) {
     renderComposer();
     saveFormState();
   } catch (e) {
-    alert('Upload error: ' + e.message);
+    showToast('Upload error: ' + e.message, 'error');
   } finally {
     if (labelEl) labelEl.style.opacity = '';
   }
@@ -8168,7 +8218,7 @@ function wireComposer() {
       const itemId = parts.slice(2).join('-');
       const file = e.target.files[0];
       if (!file) return;
-      if (file.size > 10 * 1024 * 1024) { alert('Attachment must be under 10MB'); return; }
+      if (file.size > 10 * 1024 * 1024) { showToast('Attachment must be under 10MB.', 'error'); return; }
       await handleAttachmentUpload(fw, gid, itemId, file);
       e.target.value = '';
     });
@@ -8220,8 +8270,8 @@ function wireComposer() {
  }
  }
  const count = included.length;
- if (count === 0) { alert('No selected items to clear.'); return; }
- if (!confirm('Clear all client guidance for the ' + count + ' selected ' + (fw.label || fwKey) + ' items?\\n\\nYou can restore ProofRepo defaults at any time.')) return;
+ if (count === 0) { showToast('No items selected to clear.', 'error'); return; }
+ // Proceed — user can restore defaults any time via the Restore button
  for (const g of (fw.controlGroups || [])) {
  const gs = composerState[fwKey].groups?.[g.id];
  if (!gs || gs.excluded) continue;
@@ -8244,7 +8294,7 @@ function wireComposer() {
  const fw = allFwData[fwKey];
  if (!fw || !composerState[fwKey]) return;
  const total = (fw.controlGroups || []).reduce((sum, g) => sum + (g.items || []).length, 0);
- if (!confirm('Restore ProofRepo default guidance for all ' + total + ' ' + (fw.label || fwKey) + ' items?\\n\\nAny custom edits will be replaced.')) return;
+ // Proceed — restore is always recoverable by re-editing
  for (const g of (fw.controlGroups || [])) {
  const gs = composerState[fwKey].groups?.[g.id];
  if (!gs) continue;
@@ -8266,7 +8316,7 @@ function wireComposer() {
  const nameInput = document.querySelector(`[data-custom-name="${fk}-${gid}"]`);
  const instrInput = document.querySelector(`[data-custom-instr="${fk}-${gid}"]`);
  const title = (nameInput?.value || '').trim(), customDesc = (instrInput?.value || '').trim();
- if (!title) { alert('Please enter a request name.'); return; }
+ if (!title) { showToast('Please enter a name for this template.', 'error'); return; }
  const cid = 'c_' + Math.random().toString(36).slice(2, 8);
  const fw = allFw[fk], grp = fw?.controlGroups?.find(g => g.id === gid);
  if (grp) { 
@@ -8720,7 +8770,7 @@ function showClientPreview() {
  const globalInstr = $('#globalInstructions')?.value || '';
  
  if (payload.length === 0) {
- alert('No evidence items selected. Please select at least one item to preview.');
+ showToast('Please select at least one evidence item before previewing.', 'error');
  return;
  }
  
@@ -8787,7 +8837,7 @@ function closePreviewModal() {
 function exportRequestPDF() {
   const evidence = getPayload();
   if (evidence.length === 0) {
-    alert('No evidence items selected. Add items to your request first.');
+    showToast('No evidence items selected. Add items to your request first.', 'error');
     return;
   }
 
@@ -8896,7 +8946,7 @@ function exportRequestPDF() {
   // Open in new tab — leaves composer fully interactive
   var win = window.open('', '_blank');
   if (!win) {
-    alert('Please allow pop-ups for this page to export the PDF, then try again.');
+    showToast('Pop-ups are blocked. Please allow pop-ups for proofrepo.com in your browser settings and try again.', 'error', 8000);
     return;
   }
   win.document.write(lines.join(''));
@@ -8910,7 +8960,7 @@ async function validateCode(code) {
  if (!code) return { valid: false, error: 'No code entered' };
  
  try {
- const res = await fetch(`${API}/check-code?code=${encodeURIComponent(code)}`);
+ const res = await fetchWithTimeout(`${API}/check-code?code=${encodeURIComponent(code)}`, {}, 8000);
  const data = await res.json();
  
  if (data.ok && data.remaining > 0) {
@@ -9009,7 +9059,7 @@ async function checkCheckoutReturn() {
  
  for (let attempt = 0; attempt < 90; attempt++) {
  try {
- const res = await fetch(`${API}/checkout/session?session_id=${sessionId}`);
+ const res = await fetchWithTimeout(`${API}/checkout/session?session_id=${sessionId}`);
  const data = await res.json();
  
  // v6: Account-based credit return
@@ -9226,16 +9276,22 @@ async function fetchAndRenderDashboard() {
  }
  
  // Show loading state
- $('#activeRequestsList').innerHTML = '<div class="loading-placeholder">Loading requests...</div>';
- $('#completedRequestsList').innerHTML = '<div class="loading-placeholder">Loading...</div>';
+ const skelHtml = '<div class="dash-skeleton"><div class="skel-card"></div><div class="skel-card"></div></div>';
+ $('#activeRequestsList').innerHTML = skelHtml;
+ $('#completedRequestsList').innerHTML = skelHtml;
  
  let retries = 2;
  while (retries >= 0) {
  try {
- const res = await fetch(`${API}/auth/requests`, {
+ const res = await fetchWithTimeout(`${API}/auth/requests`, {
  headers: { 'Authorization': `Bearer ${state.authToken}` }
- });
+ }, 12000);
  
+ if (res.status === 401) {
+      showToast('Your session has expired. Please sign in again.', 'error', 6000);
+      handleLogout();
+      return;
+    }
  if (!res.ok) {
  throw new Error(`HTTP ${res.status}`);
  }
@@ -9450,11 +9506,11 @@ async function duplicateTemplate(templateId) {
  const template = state.user?.templates?.find(t => t.id === templateId);
  if (!template) return;
  
- const newName = prompt('Enter name for duplicated template:', template.name + ' (Copy)');
+ const newName = (template.name + ' (Copy)').slice(0, 80);
  if (!newName || !newName.trim()) return;
  
  try {
- const res = await fetch(`${API}/auth/templates`, {
+ const res = await fetchWithTimeout(`${API}/auth/templates`, {
  method: 'POST',
  headers: {
  'Content-Type': 'application/json',
@@ -9476,10 +9532,10 @@ async function duplicateTemplate(templateId) {
  renderTemplatesSection();
  wireTemplateActions();
  } else {
- alert(data.error || 'Error duplicating template');
+ showToast(data.error || 'Error duplicating template.', 'error');
  }
  } catch (e) {
- alert('Error duplicating template');
+ showToast('Error duplicating template.', 'error');
  }
 }
 
@@ -9487,10 +9543,10 @@ async function deleteTemplateFromDashboard(templateId) {
  const template = state.user?.templates?.find(t => t.id === templateId);
  if (!template) return;
  
- if (!confirm(`Delete template "${template.name}"? This cannot be undone.`)) return;
+ if (!confirm(`Delete "${template.name}"?\nThis cannot be undone.`)) return;
  
  try {
- const res = await fetch(`${API}/auth/templates?id=${templateId}`, {
+ const res = await fetchWithTimeout(`${API}/auth/templates?id=${templateId}`, {
  method: 'DELETE',
  headers: { 'Authorization': `Bearer ${state.authToken}` }
  });
@@ -9503,10 +9559,10 @@ async function deleteTemplateFromDashboard(templateId) {
  wireTemplateActions();
  updateLoggedInBar(); // Update template dropdown in composer if visible
  } else {
- alert(data.error || 'Error deleting template');
+ showToast(data.error || 'Error deleting template.', 'error');
  }
  } catch (e) {
- alert('Error deleting template');
+ showToast('Error deleting template.', 'error');
  }
 }
 
@@ -9548,8 +9604,8 @@ function renderRequestCard(req, type) {
  let actionsHtml = '';
  if (type === 'active') {
  actionsHtml = `
- <button class="request-action-btn" data-action="copy-link" data-token="${esc(req.token)}">Copy Client Link</button>
- <button class="request-action-btn" data-action="resend" data-token="${esc(req.token)}">Resend Email</button>
+ <button class="request-action-btn" data-action="copy-link" data-token="${esc(req.token)}" title="Copy the client upload link to share manually">Copy Client Link</button>
+ <button class="request-action-btn" data-action="resend" data-token="${esc(req.token)}" title="Re-send the upload link email to your client">&#9993; Resend to Client</button>
  `;
  // Add extend deadline for requests with a deadline
  if (req.extendToken && req.deadlineISO) {
@@ -9631,22 +9687,25 @@ function wireRequestActions() {
  btn.textContent = 'Copied!';
  setTimeout(() => btn.textContent = originalText, 2000);
  } catch (e) {
- alert('Link: ' + link);
- }
- });
- });
+      const ta = document.createElement('textarea');
+      ta.value = link; ta.style.cssText = 'position:fixed;opacity:0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); showToast('Link copied!', 'success'); }
+      catch (_) { showToast('Copy failed — link: ' + link, 'error', 10000); }
+      document.body.removeChild(ta);
+    }});
  
 // Resend email buttons
  $$('[data-action="resend"]').forEach(btn => {
  btn.addEventListener('click', async () => {
  const token = btn.dataset.token;
- if (!confirm('Resend the evidence request email to the client?')) return;
+ // Proceed directly — resend is non-destructive, no confirm needed
 
  btn.disabled = true;
  btn.textContent = 'Sending...';
 
  try {
- const res = await fetch(`${API}/request/resend`, {
+ const res = await fetchWithTimeout(`${API}/request/resend`, {
  method: 'POST',
  headers: {
  'Content-Type': 'application/json',
@@ -9660,13 +9719,13 @@ function wireRequestActions() {
  btn.textContent = 'Sent!';
  setTimeout(() => { btn.textContent = 'Resend Email'; btn.disabled = false; }, 2500);
  } else {
- alert('Error resending: ' + (data.error || 'Unknown error'));
+ showToast('Error resending: ' + (data.error || 'Unknown error'), 'error');
  btn.textContent = 'Resend Email';
  btn.disabled = false;
  }
  } catch (e) {
- alert('Error resending email: ' + e.message);
- btn.textContent = 'Resend Email';
+ showToast('Error resending email: ' + e.message, 'error');
+ btn.textContent = '&#9993; Resend to Client';
  btn.disabled = false;
  }
  });
@@ -9683,34 +9742,13 @@ function wireRequestActions() {
  
  // Extend deadline buttons
  $$('[data-action="extend"]').forEach(btn => {
- btn.addEventListener('click', async () => {
+ btn.addEventListener('click', () => {
  const extendToken = btn.dataset.extendToken;
- const company = btn.dataset.company || 'this request';
- 
- const days = prompt(`Extend deadline for "${company}" by how many days?`, '7');
- if (!days || isNaN(parseInt(days))) return;
- 
- btn.disabled = true;
- btn.textContent = 'Extending...';
- 
- try {
- const res = await fetch(`${API}/extend?t=${extendToken}&days=${parseInt(days)}`);
- const data = await res.json();
- 
- if (data.ok) {
- alert(`Deadline extended by ${days} days. New deadline: ${new Date(data.deadlineISO).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}`);
- // Refresh dashboard to show updated deadline
- await fetchAndRenderDashboard();
- } else {
- alert('Error extending deadline: ' + (data.error || 'Unknown error'));
- btn.disabled = false;
- btn.textContent = 'Extend Deadline';
- }
- } catch (e) {
- alert('Error extending deadline: ' + e.message);
- btn.disabled = false;
- btn.textContent = 'Extend Deadline';
- }
+ // Open the full extend page — proper date picker, mobile-friendly, sends client email automatically
+ window.open(API + '/extend?t=' + extendToken, '_blank');
+ showToast('Opening deadline extension…', 'success', 2000);
+ // Refresh dashboard after delay to pick up any changes
+ setTimeout(() => fetchAndRenderDashboard(), 5000);
  });
  });
  
@@ -9726,7 +9764,7 @@ function wireRequestActions() {
  btn.textContent = 'Cancelling...';
  
  try {
- const res = await fetch(`${API}/request/cancel`, {
+ const res = await fetchWithTimeout(`${API}/request/cancel`, {
  method: 'POST',
  headers: {
  'Content-Type': 'application/json',
@@ -9739,12 +9777,12 @@ function wireRequestActions() {
  if (data.ok) {
  await fetchAndRenderDashboard();
  } else {
- alert('Error cancelling: ' + (data.error || 'Unknown error'));
+ showToast('Error cancelling: ' + (data.error || 'Unknown error'), 'error');
  btn.disabled = false;
  btn.textContent = 'Cancel Request';
  }
  } catch (e) {
- alert('Error cancelling: ' + e.message);
+ showToast('Error cancelling: ' + e.message, 'error');
  btn.disabled = false;
  btn.textContent = 'Cancel Request';
  }
@@ -9926,7 +9964,7 @@ async function checkExistingSession() {
  if (!token) return false;
  
  try {
- const res = await fetch(`${API}/auth/me`, {
+ const res = await fetchWithTimeout(`${API}/auth/me`, {
  headers: { 'Authorization': `Bearer ${token}` }
  });
  
@@ -9974,7 +10012,7 @@ async function handleApplyTrialCode() {
  showAuthStatus('trialStatus', 'Validating code...', 'loading');
  
  try {
- const res = await fetch(`${API}/auth/validate-trial?code=${encodeURIComponent(code)}`);
+ const res = await fetchWithTimeout(`${API}/auth/validate-trial?code=${encodeURIComponent(code)}`);
  const data = await res.json();
  
  if (data.ok && data.valid) {
@@ -10014,7 +10052,7 @@ async function handleStartTrial() {
  const email = ($('#trialUserEmail')?.value || '').trim().toLowerCase();
  
  if (!email || !email.includes('@') || !email.includes('.')) {
- alert('Please enter a valid email address');
+ showToast('Please enter a valid email address.', 'error');
  return;
  }
  
@@ -10076,7 +10114,7 @@ async function handleTrialCreateAccount() {
  showAuthStatus('trialSignupStatus', 'Creating account and loading credits...', 'loading');
  
  try {
- const res = await fetch(`${API}/auth/signup`, {
+ const res = await fetchWithTimeout(`${API}/auth/signup`, {
  method: 'POST',
  headers: { 'Content-Type': 'application/json' },
  body: JSON.stringify({ email, password, trialCode: state.codeValid ? state.code : undefined })
@@ -10125,7 +10163,7 @@ async function handleDashboardRedeem() {
  if (statusEl) statusEl.innerHTML = '<span style="color:#64748b; font-size:13px;">Validating code...</span>';
  
  try {
- const res = await fetch(`${API}/auth/redeem-code`, {
+ const res = await fetchWithTimeout(`${API}/auth/redeem-code`, {
  method: 'POST',
  headers: {
  'Content-Type': 'application/json',
@@ -10187,7 +10225,7 @@ async function handleSignup() {
  showAuthStatus('signupStatus', 'Creating account...', 'loading');
  
  try {
- const res = await fetch(`${API}/auth/signup`, {
+ const res = await fetchWithTimeout(`${API}/auth/signup`, {
  method: 'POST',
  headers: { 'Content-Type': 'application/json' },
  body: JSON.stringify({ email, password, trialCode: state.codeValid ? state.code : undefined })
@@ -10235,7 +10273,7 @@ async function handleLogin() {
  showAuthStatus('loginStatus', 'Signing in...', 'loading');
  
  try {
- const res = await fetch(`${API}/auth/login`, {
+ const res = await fetchWithTimeout(`${API}/auth/login`, {
  method: 'POST',
  headers: { 'Content-Type': 'application/json' },
  body: JSON.stringify({ email, password, remember })
@@ -10276,7 +10314,7 @@ async function handleForgotPassword() {
  btn.innerHTML = '<span class="spinner"></span> Sending...';
  
  try {
- await fetch(`${API}/auth/forgot-password`, {
+ await fetchWithTimeout(`${API}/auth/forgot-password`, {
  method: 'POST',
  headers: { 'Content-Type': 'application/json' },
  body: JSON.stringify({ email })
@@ -10317,7 +10355,7 @@ async function handleResetPassword() {
  btn.innerHTML = '<span class="spinner"></span> Resetting...';
  
  try {
- const res = await fetch(`${API}/auth/reset-password`, {
+ const res = await fetchWithTimeout(`${API}/auth/reset-password`, {
  method: 'POST',
  headers: { 'Content-Type': 'application/json' },
  body: JSON.stringify({ token: resetToken, password: pw })
@@ -10408,15 +10446,15 @@ async function handleResendVerification() {
  if (!state.authToken) return;
  
  try {
- const res = await fetch(`${API}/auth/resend-verification`, {
+ const res = await fetchWithTimeout(`${API}/auth/resend-verification`, {
  method: 'POST',
  headers: { 'Authorization': `Bearer ${state.authToken}` }
  });
  
  const data = await res.json();
- alert(data.ok ? 'Verification email sent!' : (data.error || 'Error sending email'));
+ showToast(data.ok ? 'Verification email sent!' : (data.error || 'Error sending email'), data.ok ? 'success' : 'error');
  } catch (e) {
- alert('Error sending verification email');
+ showToast('Error sending verification email.', 'error');
  }
 }
 
@@ -10476,7 +10514,7 @@ async function loadTemplate(templateId) {
 
 async function saveAsTemplate() {
  if (!state.isLoggedIn) {
- alert('Please sign in to save templates');
+ showToast('Please sign in to save templates.', 'error');
  return;
  }
  
@@ -10528,7 +10566,7 @@ async function saveAsTemplate() {
  btn.innerHTML = '<span class="spinner"></span>';
  
  try {
- const res = await fetch(`${API}/auth/templates`, {
+ const res = await fetchWithTimeout(`${API}/auth/templates`, {
  method: 'POST',
  headers: {
  'Content-Type': 'application/json',
@@ -10805,7 +10843,7 @@ async function handleComposerRedeem() {
  if (statusEl) statusEl.innerHTML = '<span style="color:#64748b;">Validating...</span>';
  
  try {
- const res = await fetch(`${API}/auth/redeem-code`, {
+ const res = await fetchWithTimeout(`${API}/auth/redeem-code`, {
  method: 'POST',
  headers: {
  'Content-Type': 'application/json',
@@ -10851,7 +10889,7 @@ async function handleApplyPaymentCode() {
  try {
  if (state.isLoggedIn && state.authToken) {
  // Logged in: redeem to account
- const res = await fetch(`${API}/auth/redeem-code`, {
+ const res = await fetchWithTimeout(`${API}/auth/redeem-code`, {
  method: 'POST',
  headers: {
  'Content-Type': 'application/json',
@@ -10990,21 +11028,21 @@ async function handleMainAction() {
  const company = ($('#clientCompany')?.value || '').trim();
  
  if (auditorEmails.length === 0) {
- alert('Please enter at least one team email address.');
+ showToast('Please enter at least one team email address.', 'error'); 
  return;
  }
  if (!company) {
- alert('Please enter the client company name.');
+ showToast('Please enter the client company name.', 'error'); 
  return;
  }
  if (clientEmails.length === 0) {
- alert('Please enter at least one client email address.');
+ showToast('Please enter at least one client email address.', 'error'); 
  return;
  }
  
  const evidence = getPayload();
  if (evidence.length === 0) {
- alert('Please select at least one evidence item to request.');
+ showToast('Please select at least one evidence item to request.', 'error'); 
  return;
  }
  
@@ -11052,7 +11090,7 @@ async function handleMainAction() {
  await sendRequest();
  return;
  }
- alert('Please enter a credit code and click Apply, or purchase credits above.');
+ showToast('Please enter a credit code and click Apply, or purchase credits above.', 'error');
  $('#auditorCode')?.focus();
  return;
  }
@@ -11069,7 +11107,7 @@ async function handleMainAction() {
  await sendRequest();
  return;
  }
- alert('Please enter a credit code and click Apply, or purchase credits above.');
+ showToast('Please enter a credit code and click Apply, or purchase credits above.', 'error');
  $('#auditorCode')?.focus();
 }
 
@@ -11088,7 +11126,7 @@ async function handleCheckout() {
  if (state.authToken) {
  checkoutHeaders['Authorization'] = `Bearer ${state.authToken}`;
  }
- const res = await fetch(`${API}/checkout`, {
+ const res = await fetchWithTimeout(`${API}/checkout`, {
  method: 'POST',
  headers: checkoutHeaders,
  body: JSON.stringify({
@@ -11151,6 +11189,7 @@ async function sendRequest() {
  deadlineISO: deadline.toISOString(),
  auditorCode: state.code || '',
  globalInstructions: $('#globalInstructions')?.value || '',
+ engagementRef: ($('#engagementRef')?.value || '').trim(),
  requestedEvidence: requestedEvidence,
  auditPeriodStart: auditPeriodStart,
  auditPeriodEnd: auditPeriodEnd,
@@ -11167,7 +11206,7 @@ async function sendRequest() {
  await new Promise(r => setTimeout(r, 1500));
  }
  
- const res = await fetch(`${API}/request`, { method: 'POST', headers, body: payload });
+ const res = await fetchWithTimeout(`${API}/request`, { method: 'POST', headers, body: payload }, 20000);
  const data = await res.json();
  
  if (data.ok) {
@@ -11353,7 +11392,7 @@ async function checkFollowup() {
  window.history.replaceState({}, '', cleanUrl);
 
  try {
- const res = await fetch(`${API}/followup-draft?key=${encodeURIComponent(followupKey)}`);
+ const res = await fetchWithTimeout(`${API}/followup-draft?key=${encodeURIComponent(followupKey)}`);
  const data = await res.json();
  if (!data.ok || !data.draft) return false;
 
@@ -11617,7 +11656,7 @@ async function init() {
  document.addEventListener('visibilitychange', async () => {
  if (document.visibilityState === 'visible' && state.isLoggedIn && state.user && !state.user.verified) {
  try {
- const res = await fetch(`${API}/auth/me`, {
+ const res = await fetchWithTimeout(`${API}/auth/me`, {
  headers: { 'Authorization': `Bearer ${state.authToken}` }
  });
  if (res.ok) {
@@ -11676,6 +11715,18 @@ async function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
+
+// Global error handlers — log silently, never alert
+window.addEventListener('unhandledrejection', function(e) {
+  if (!e.reason) return;
+  const msg = (e.reason.message || String(e.reason)).toLowerCase();
+  if (msg.includes('aborted') || msg.includes('cancel') || msg.includes('network')) return;
+  console.error('ProofRepo unhandled rejection:', e.reason);
+});
+window.onerror = function(msg, src, line) {
+  console.error('ProofRepo error:', msg, src + ':' + line);
+  return false;
+};
 </script>
 </body>
 </html>
