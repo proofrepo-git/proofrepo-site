@@ -2002,7 +2002,16 @@
  }
 
  /* ==================== SAVE TEMPLATE BAR ==================== */
- .save-template-bar {
+ .ei-attachments-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 6px; padding-top: 2px; }
+.ei-att-chip { display: inline-flex; align-items: center; gap: 4px; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 6px; padding: 3px 8px; font-size: 0.75rem; max-width: 280px; }
+.ei-att-icon { flex-shrink: 0; }
+.ei-att-name { color: #0369a1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ei-att-size { color: #94a3b8; flex-shrink: 0; margin-left: 2px; }
+.ei-att-remove { color: #94a3b8; cursor: pointer; font-size: 1rem; line-height: 1; padding: 0 2px; flex-shrink: 0; }
+.ei-att-remove:hover { color: #ef4444; }
+.ei-attach-label { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; font-size: 0.78rem; color: #64748b; border: 1px dashed #cbd5e1; border-radius: 6px; padding: 3px 10px; transition: border-color 0.15s, color 0.15s, background 0.15s; white-space: nowrap; }
+.ei-attach-label:hover { border-color: #2563eb; color: #2563eb; background: #eff6ff; }
+.save-template-bar {
  background: var(--bg-subtle);
  border: 1px solid var(--border);
  border-radius: var(--radius-md);
@@ -7499,7 +7508,8 @@ function initComposerState() {
  editedDescription: null,
  editedFormats: null,
  guidanceCollapsed: false,
- fileMode: getDefaultFileMode(item)
+ fileMode: getDefaultFileMode(item),
+ attachments: []
  };
  }
  }
@@ -7636,6 +7646,14 @@ function renderGroup(fwKey, g) {
  return html;
 }
 
+
+function formatBytes(b) {
+  if (!b) return '';
+  if (b < 1024) return b + ' B';
+  if (b < 1048576) return (b / 1024).toFixed(1) + ' KB';
+  return (b / 1048576).toFixed(1) + ' MB';
+}
+
 function renderItem(fwKey, gid, item, gs) {
  const st = gs?.items?.[item.id];
  const inc = st?.included ?? item.common;
@@ -7682,6 +7700,16 @@ function renderItem(fwKey, gid, item, gs) {
  const formatsEdited = st?.editedFormats !== null;
  const fileMode = st?.fileMode || getDefaultFileMode(item);
  const fileModeToggle = `<label class="ei-filemode-toggle" title="${fileMode === 'multi' ? 'Client can attach multiple files to this item' : 'Client attaches one file to this item'}"><input type="checkbox" ${fileMode === 'multi' ? 'checked' : ''} data-filemode="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}"><span class="ei-filemode-label">${fileMode === 'multi' ? '&#128206; Multi-file' : '&#128196; Single file'}</span></label>`;
+  
+  // Auditor attachment chips - shown in composer per evidence item
+  const attachments = st?.attachments || [];
+  let attachHtml = '<div class="ei-attachments-row">';
+  attachments.forEach((att, attIdx) => {
+    const shortName = att.name.length > 26 ? att.name.substring(0, 24) + '...' : att.name;
+    attachHtml += '<div class="ei-att-chip"><span class="ei-att-icon">&#128206;</span><span class="ei-att-name" title="' + esc(att.name) + '">' + esc(shortName) + '</span><span class="ei-att-size">' + formatBytes(att.size) + '</span><span class="ei-att-remove" data-remove-att="' + esc(fwKey) + '-' + esc(gid) + '-' + esc(item.id) + '-' + attIdx + '">&times;</span></div>';
+  });
+  attachHtml += '<label class="ei-attach-label" title="Attach a reference file clients can download (template, example, screenshot guide)">&#128206; Attach reference file<input type="file" class="ei-attach-input" data-attach-item="' + esc(fwKey) + '-' + esc(gid) + '-' + esc(item.id) + '" style="display:none" accept=".pdf,.xlsx,.xls,.docx,.doc,.png,.jpg,.jpeg,.csv,.txt,.zip"></label></div>';
+
  
  return `<div class="evidence-item ${inc ? 'included' : ''}" data-fw="${esc(fwKey)}" data-group="${esc(gid)}" data-item="${esc(item.id)}">
  <div class="ei-header">
@@ -7707,6 +7735,7 @@ function renderItem(fwKey, gid, item, gs) {
  ${formatsEdited ? `<button type="button" class="ei-formats-reset" data-formats-reset="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">&#x21BA; reset</button>` : ''}
  </div>
  ${fileModeToggle}
+      ${attachHtml}
  <div class="ei-bottom-spacer"></div>
  <div class="ei-description-actions">
  <button type="button" class="ei-action-btn" data-desc-clear="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">Clear</button>
@@ -7716,6 +7745,38 @@ function renderItem(fwKey, gid, item, gs) {
  </div>
  </div>
  </div>`;
+}
+
+
+async function handleAttachmentUpload(fwKey, gid, itemId, file) {
+  if (!state.isLoggedIn) {
+    alert('Please sign in to attach reference files to evidence items');
+    return;
+  }
+  const formData = new FormData();
+  formData.append('file', file);
+  const inputEl = document.querySelector('[data-attach-item="' + fwKey + '-' + gid + '-' + itemId + '"]');
+  const labelEl = inputEl ? inputEl.closest('.ei-attach-label') : null;
+  if (labelEl) labelEl.style.opacity = '0.5';
+  try {
+    const res = await fetch(API + '/upload/auditor-attachment', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + state.authToken },
+      body: formData
+    });
+    const data = await res.json();
+    if (!data.ok) { alert(data.error || 'Upload failed'); return; }
+    if (!composerState[fwKey]?.groups?.[gid]?.items?.[itemId]) return;
+    const atts = composerState[fwKey].groups[gid].items[itemId].attachments || [];
+    atts.push({ name: data.name, r2Key: data.r2Key, size: data.size, type: data.type });
+    composerState[fwKey].groups[gid].items[itemId].attachments = atts;
+    renderComposer();
+    saveFormState();
+  } catch (e) {
+    alert('Upload error: ' + e.message);
+  } finally {
+    if (labelEl) labelEl.style.opacity = '';
+  }
 }
 
 function wireComposer() {
@@ -7934,6 +7995,41 @@ function wireComposer() {
  });
  });
  
+
+  // ── Auditor attachment: upload ──────────────────────────────────────────
+  $$('.ei-attach-input').forEach(input => {
+    input.addEventListener('change', async (e) => {
+      const rawKey = e.target.dataset.attachItem || '';
+      const parts = rawKey.split('-');
+      const fw = parts[0];
+      const gid = parts[1];
+      const itemId = parts.slice(2).join('-');
+      const file = e.target.files[0];
+      if (!file) return;
+      if (file.size > 10 * 1024 * 1024) { alert('Attachment must be under 10MB'); return; }
+      await handleAttachmentUpload(fw, gid, itemId, file);
+      e.target.value = '';
+    });
+  });
+
+  // ── Auditor attachment: remove ───────────────────────────────────────────
+  $$('[data-remove-att]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const parts = (btn.dataset.removeAtt || '').split('-');
+      const attIdx = parseInt(parts[parts.length - 1]);
+      const fw = parts[0];
+      const gid = parts[1];
+      const itemId = parts.slice(2, parts.length - 1).join('-');
+      const itemState = composerState[fw]?.groups?.[gid]?.items?.[itemId];
+      if (itemState?.attachments) {
+        itemState.attachments.splice(attIdx, 1);
+        renderComposer();
+        saveFormState();
+      }
+    });
+  });
+
  // (Guidance zone moved to inline badges + tooltip - toggle handler removed)
  
  // Auto-resize description textareas
@@ -8444,6 +8540,7 @@ function getPayload() {
  description: description,
  expectedFormats: expectedFormats,
  fileMode: is.fileMode || getDefaultFileMode(item),
+              attachments: is.attachments || [],
  evidenceType: item.evidenceType || 'point-in-time',
  controlRef: item.controlRef || null,
  commonIssue: item.commonIssue || null
