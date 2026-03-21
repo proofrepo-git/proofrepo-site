@@ -3148,6 +3148,63 @@
   .send-readiness { gap: 8px; }
 }
 
+
+/* ==================== COMPOSER QUICK NAVIGATION ==================== */
+.composer-nav{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px 14px;margin-bottom:14px;display:none}
+.composer-nav-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.composer-nav-title{font-size:.78rem;font-weight:600;color:#374151;text-transform:uppercase;letter-spacing:.4px}
+.composer-nav-subtitle{font-size:.73rem;color:#94a3b8}
+.composer-nav-pills{display:flex;flex-wrap:wrap;gap:6px}
+.cn-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:.75rem;font-weight:500;cursor:pointer;border:1px solid #e2e8f0;background:#fff;color:#475569;transition:all .15s;white-space:nowrap;user-select:none}
+.cn-pill:hover{border-color:#2563eb;color:#1d4ed8;background:#eff6ff}
+.cn-pill.complete{background:#ecfdf3;border-color:#86efac;color:#15803d}
+.cn-pill.partial{background:#fffbeb;border-color:#fcd34d;color:#92400e}
+.cn-pill.excluded{background:#f1f5f9;border-color:#e2e8f0;color:#94a3b8;text-decoration:line-through;cursor:default}
+.cn-pill .cn-count{font-size:.68rem;font-weight:700;background:rgba(0,0,0,.06);padding:1px 5px;border-radius:8px}
+.cn-pill.complete .cn-count{background:rgba(22,163,74,.12)}
+.cn-pill.partial .cn-count{background:rgba(202,138,4,.12)}
+
+
+/* Attachment chips */
+.ei-attachments-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 6px; padding-top: 2px; }
+.ei-att-chip { display: inline-flex; align-items: center; gap: 4px; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 6px; padding: 3px 8px; font-size: .75rem; max-width: 280px; }
+.ei-att-icon { flex-shrink: 0; }
+.ei-att-name { color: #0369a1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ei-att-size { color: #94a3b8; flex-shrink: 0; margin-left: 2px; }
+.ei-att-remove { color: #94a3b8; cursor: pointer; font-size: 1rem; line-height: 1; padding: 0 2px; flex-shrink: 0; }
+.ei-att-remove:hover { color: #ef4444; }
+.ei-attach-label { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; font-size: .78rem; color: #64748b; border: 1px dashed #cbd5e1; border-radius: 6px; padding: 3px 10px; transition: border-color .15s, color .15s, background .15s; white-space: nowrap; }
+.ei-attach-label:hover { border-color: #2563eb; color: #2563eb; background: #eff6ff; }
+
+
+/* ==================== DASHBOARD HELP SECTION ==================== */
+.dashboard-help-section{margin-top:28px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:22px 24px}
+.dh-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
+.dh-title{font-size:.9rem;font-weight:700;color:#374151;text-transform:uppercase;letter-spacing:.4px}
+.dh-loom-link{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;font-weight:600;color:#2563eb;text-decoration:none;background:#eff6ff;border:1px solid #bfdbfe;border-radius:20px;padding:5px 12px;transition:background .15s}
+.dh-loom-link:hover{background:#dbeafe}
+.dh-steps{display:flex;flex-direction:column;gap:12px;margin-bottom:18px}
+.dh-step{display:flex;align-items:flex-start;gap:12px}
+.dh-step-num{width:24px;height:24px;border-radius:50%;background:#2563eb;color:#fff;font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.dh-step-body{font-size:.85rem;color:#475569;line-height:1.5}
+.dh-step-body strong{color:#1e293b;display:block;margin-bottom:2px}
+.dh-step-body a{color:#2563eb;text-decoration:none;font-weight:500}
+.dh-step-body a:hover{text-decoration:underline}
+.dh-links{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.dh-link-card{display:flex;align-items:center;gap:10px;padding:12px 14px;background:#fff;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;color:#1e293b;transition:border-color .15s,box-shadow .15s}
+.dh-link-card:hover{border-color:#2563eb;box-shadow:0 1px 4px rgba(37,99,235,.1)}
+.dh-link-icon{font-size:1.2rem;flex-shrink:0;color:#2563eb}
+.dh-link-label{display:block;font-size:.82rem;font-weight:600;color:#1e293b}
+.dh-link-sub{display:block;font-size:.73rem;color:#94a3b8;margin-top:1px}
+
+/* Dashboard loading skeletons */
+.dash-skeleton{display:flex;flex-direction:column;gap:10px;padding:4px 0}
+.skel-card{height:72px;background:linear-gradient(90deg,#f1f5f9 25%,#e2e8f0 50%,#f1f5f9 75%);background-size:200% 100%;border-radius:8px;animation:skel-shimmer 1.4s infinite}
+.skel-card.skel-short{height:52px}
+@keyframes skel-shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+@media(max-width:600px){.dh-links{grid-template-columns:1fr}.dh-header{flex-direction:column;align-items:flex-start}}
+
 /* ==================== TOAST NOTIFICATIONS ==================== */
  .toast-container {
  position: fixed; top: 20px; right: 20px; z-index: 10000;
@@ -3843,7 +3900,7 @@
  <div class="request-section">
  <h3 class="section-title">Active Requests <span class="section-count" id="activeCount">(0)</span></h3>
  <div id="activeRequestsList" class="requests-list">
- <div class="loading-placeholder">Loading requests...</div>
+ <div class="dash-skeleton"><div class="skel-card"></div><div class="skel-card"></div></div>
  </div>
  </div>
  
@@ -3851,7 +3908,7 @@
  <div class="request-section">
  <h3 class="section-title">Completed <span class="section-count" id="completedCount">(0)</span></h3>
  <div id="completedRequestsList" class="requests-list">
- <div class="loading-placeholder">Loading requests...</div>
+ <div class="dash-skeleton"><div class="skel-card"></div><div class="skel-card"></div></div>
  </div>
  </div>
  </div>
@@ -3863,8 +3920,54 @@
  <span class="section-count" id="templateCount">(0)</span>
  </h3>
  <div id="templatesList" class="templates-list">
- <div class="loading-placeholder">Loading templates...</div>
+ <div class="dash-skeleton"><div class="skel-card skel-short"></div><div class="skel-card skel-short"></div></div>
  </div>
+
+  <!-- How ProofRepo Works — always visible when logged in -->
+  <div class="dashboard-help-section">
+   <div class="dh-header">
+    <span class="dh-title">How ProofRepo works</span>
+    <a href="https://www.loom.com/share/d7a3709ad77247c48871eb7a7573d835" target="_blank" class="dh-loom-link">&#9654; Watch the 2-min walkthrough</a>
+   </div>
+   <div class="dh-steps">
+    <div class="dh-step">
+     <div class="dh-step-num">1</div>
+     <div class="dh-step-body">
+      <strong>Build your request</strong>
+      <span>Pick a framework, choose depth, customize evidence items. <a href="#" onclick="event.preventDefault(); showComposerFromDashboard()">Start a request &rarr;</a></span>
+     </div>
+    </div>
+    <div class="dh-step">
+     <div class="dh-step-num">2</div>
+     <div class="dh-step-body">
+      <strong>Send to your client</strong>
+      <span>Your client gets a branded upload link &mdash; no login required. Files are auto-matched to control items.</span>
+     </div>
+    </div>
+    <div class="dh-step">
+     <div class="dh-step-num">3</div>
+     <div class="dh-step-body">
+      <strong>Review &amp; export</strong>
+      <span>View submissions in the ProofPack viewer, filter by control domain, and export a PDF workpaper summary in one click.</span>
+     </div>
+    </div>
+   </div>
+   <div class="dh-links">
+    <a href="https://www.loom.com/share/d7a3709ad77247c48871eb7a7573d835" target="_blank" class="dh-link-card">
+     <span class="dh-link-icon">&#9654;</span>
+     <div><span class="dh-link-label">Demo walkthrough</span><span class="dh-link-sub">See the full workflow</span></div>
+    </a>
+    <a href="mailto:support@proofrepo.com" class="dh-link-card">
+     <span class="dh-link-icon">&#9993;</span>
+     <div><span class="dh-link-label">Contact support</span><span class="dh-link-sub">support@proofrepo.com</span></div>
+    </a>
+    <a href="#" onclick="event.preventDefault(); showComposerFromDashboard()" class="dh-link-card">
+     <span class="dh-link-icon">&#43;</span>
+     <div><span class="dh-link-label">New request</span><span class="dh-link-sub">7 frameworks, 519 items</span></div>
+    </a>
+   </div>
+  </div>
+
  </div>
  </div>
 
@@ -4023,6 +4126,7 @@
  <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
  Check frameworks, then customize what evidence you need. Items with &#x2713; are included by default.
  </p>
+ <div id="composerNav" class="composer-nav"></div>
  <div id="composer"></div>
  </div>
 
@@ -7776,7 +7880,8 @@ function initComposerState() {
  editedDescription: null,
  editedFormats: null,
  guidanceCollapsed: false,
- fileMode: getDefaultFileMode(item)
+ fileMode: getDefaultFileMode(item),
+ attachments: []
  };
  }
  }
@@ -7824,6 +7929,66 @@ const TEMPLATE_LEVELS = {
 
 // ==================== COMPOSER RENDERING ====================
 
+function renderComposerNav() {
+  const navEl = document.getElementById('composerNav');
+  if (!navEl) return;
+  const allFw = getAllFrameworks();
+  const groups = [];
+  for (const [fwKey, fw] of Object.entries(allFw)) {
+    if (!composerState[fwKey]?.enabled) continue;
+    for (const g of (fw.controlGroups || [])) {
+      const gs = composerState[fwKey]?.groups?.[g.id];
+      if (!gs) continue;
+      const excluded = gs.excluded;
+      const total = (g.items || []).length;
+      const included = excluded ? 0 : (g.items || []).filter(i => gs.items?.[i.id]?.included).length;
+      groups.push({ fwKey, gid: g.id, title: g.title, included, total, excluded });
+    }
+  }
+  if (groups.length === 0) { navEl.style.display = 'none'; return; }
+
+  const totalItems = groups.reduce((s, g) => s + g.included, 0);
+  const totalGroups = groups.filter(p => !p.excluded).length;
+
+  let html = '<div class="composer-nav-header">';
+  html += '<span class="composer-nav-title">Quick Navigation</span>';
+  html += '<span class="composer-nav-subtitle">' + totalItems + ' item' + (totalItems !== 1 ? 's' : '') + ' selected across ' + totalGroups + ' group' + (totalGroups !== 1 ? 's' : '') + ' — click to jump</span>';
+  html += '</div><div class="composer-nav-pills">';
+
+  for (var pi = 0; pi < groups.length; pi++) {
+    var p = groups[pi];
+    var cls = 'cn-pill';
+    if (p.excluded) cls += ' excluded';
+    else if (p.included === p.total && p.total > 0) cls += ' complete';
+    else if (p.included > 0) cls += ' partial';
+    var label = p.title.length > 22 ? p.title.substring(0, 20) + '…' : p.title;
+    html += '<span class="' + cls + '" data-nav-fw="' + esc(p.fwKey) + '" data-nav-gid="' + esc(p.gid) + '" title="' + esc(p.title) + ': ' + p.included + '/' + p.total + ' items">';
+    html += esc(label);
+    if (!p.excluded) html += '<span class="cn-count">' + p.included + '/' + p.total + '</span>';
+    html += '</span>';
+  }
+
+  html += '</div>';
+  navEl.innerHTML = html;
+  navEl.style.display = 'block';
+
+  navEl.querySelectorAll('[data-nav-fw]').forEach(function(pill) {
+    if (pill.classList.contains('excluded')) return;
+    pill.addEventListener('click', function() {
+      var fwKey = pill.dataset.navFw;
+      var gid = pill.dataset.navGid;
+      if (composerState[fwKey]?.groups?.[gid]) {
+        composerState[fwKey].groups[gid].expanded = true;
+      }
+      renderComposer();
+      setTimeout(function() {
+        var target = document.querySelector('[data-fw="' + fwKey + '"][data-group="' + gid + '"]');
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 80);
+    });
+  });
+}
+
 function renderComposer() {
  const c = $('#composer');
  if (!c) return;
@@ -7860,6 +8025,7 @@ function renderComposer() {
  wireComposer();
  const gi = $('#globalInstructions');
  if (gi) gi.addEventListener('input', saveFormState);
+ renderComposerNav();
  
  // Wire save template button
  const saveBtn = $('#saveTemplateBtn');
@@ -7913,6 +8079,14 @@ function renderGroup(fwKey, g) {
  return html;
 }
 
+
+function formatBytes(b) {
+  if (!b) return '';
+  if (b < 1024) return b + ' B';
+  if (b < 1048576) return (b / 1024).toFixed(1) + ' KB';
+  return (b / 1048576).toFixed(1) + ' MB';
+}
+
 function renderItem(fwKey, gid, item, gs) {
  const st = gs?.items?.[item.id];
  const inc = st?.included ?? item.common;
@@ -7959,6 +8133,16 @@ function renderItem(fwKey, gid, item, gs) {
  const formatsEdited = st?.editedFormats !== null;
  const fileMode = st?.fileMode || getDefaultFileMode(item);
  const fileModeToggle = `<label class="ei-filemode-toggle" title="${fileMode === 'multi' ? 'Client can attach multiple files to this item' : 'Client attaches one file to this item'}"><input type="checkbox" ${fileMode === 'multi' ? 'checked' : ''} data-filemode="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}"><span class="ei-filemode-label">${fileMode === 'multi' ? '&#128206; Multi-file' : '&#128196; Single file'}</span></label>`;
+  
+  // Auditor attachment chips
+  const attachments = st?.attachments || [];
+  let attachHtml = '<div class="ei-attachments-row">';
+  attachments.forEach((att, attIdx) => {
+    const shortName = att.name.length > 26 ? att.name.substring(0, 24) + '...' : att.name;
+    attachHtml += '<div class="ei-att-chip"><span class="ei-att-icon">&#128206;</span><span class="ei-att-name" title="' + esc(att.name) + '">' + esc(shortName) + '</span><span class="ei-att-size">' + formatBytes(att.size) + '</span><span class="ei-att-remove" data-remove-att="' + esc(fwKey) + '-' + esc(gid) + '-' + esc(item.id) + '-' + attIdx + '">&times;</span></div>';
+  });
+  attachHtml += '<label class="ei-attach-label" title="Attach a reference file clients can download">&#128206; Attach reference file<input type="file" class="ei-attach-input" data-attach-item="' + esc(fwKey) + '-' + esc(gid) + '-' + esc(item.id) + '" style="display:none" accept=".pdf,.xlsx,.xls,.docx,.doc,.png,.jpg,.jpeg,.csv,.txt,.zip"></label></div>';
+
  
  return `<div class="evidence-item ${inc ? 'included' : ''}" data-fw="${esc(fwKey)}" data-group="${esc(gid)}" data-item="${esc(item.id)}">
  <div class="ei-header">
@@ -7984,6 +8168,7 @@ function renderItem(fwKey, gid, item, gs) {
  ${formatsEdited ? `<button type="button" class="ei-formats-reset" data-formats-reset="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">&#x21BA; reset</button>` : ''}
  </div>
  ${fileModeToggle}
+      ${attachHtml}
  <div class="ei-bottom-spacer"></div>
  <div class="ei-description-actions">
  <button type="button" class="ei-action-btn" data-desc-clear="${esc(fwKey)}-${esc(gid)}-${esc(item.id)}">Clear</button>
@@ -7993,6 +8178,38 @@ function renderItem(fwKey, gid, item, gs) {
  </div>
  </div>
  </div>`;
+}
+
+
+async function handleAttachmentUpload(fwKey, gid, itemId, file) {
+  if (!state.isLoggedIn) {
+    showToast('Please sign in to attach reference files.', 'error');
+    return;
+  }
+  const formData = new FormData();
+  formData.append('file', file);
+  const inputEl = document.querySelector('[data-attach-item="' + fwKey + '-' + gid + '-' + itemId + '"]');
+  const labelEl = inputEl ? inputEl.closest('.ei-attach-label') : null;
+  if (labelEl) labelEl.style.opacity = '0.5';
+  try {
+    const res = await fetchWithTimeout(API + '/upload/auditor-attachment', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + state.authToken },
+      body: formData
+    }, 30000);
+    const data = await res.json();
+    if (!data.ok) { showToast(data.error || 'Upload failed', 'error'); return; }
+    if (!composerState[fwKey]?.groups?.[gid]?.items?.[itemId]) return;
+    const atts = composerState[fwKey].groups[gid].items[itemId].attachments || [];
+    atts.push({ name: data.name, r2Key: data.r2Key, size: data.size, type: data.type });
+    composerState[fwKey].groups[gid].items[itemId].attachments = atts;
+    renderComposer();
+    saveFormState();
+  } catch (e) {
+    showToast('Upload error: ' + e.message, 'error');
+  } finally {
+    if (labelEl) labelEl.style.opacity = '';
+  }
 }
 
 function wireComposer() {
@@ -8061,7 +8278,8 @@ function wireComposer() {
  cb.addEventListener('change', e => { 
  const el = e.target.closest('.evidence-item'); 
  const { fw, group, item } = el.dataset; 
- composerState[fw].groups[group].items[item].included = e.target.checked; 
+ composerState[fw].groups[group].items[item].included = e.target.checked;
+ renderComposerNav();
  renderComposer(); 
  saveFormState(); 
  });
@@ -8211,6 +8429,41 @@ function wireComposer() {
  });
  });
  
+
+  // Auditor attachment: upload
+  $$('.ei-attach-input').forEach(input => {
+    input.addEventListener('change', async (e) => {
+      const rawKey = e.target.dataset.attachItem || '';
+      const parts = rawKey.split('-');
+      const fw = parts[0];
+      const gid = parts[1];
+      const itemId = parts.slice(2).join('-');
+      const file = e.target.files[0];
+      if (!file) return;
+      if (file.size > 10 * 1024 * 1024) { showToast('Attachment must be under 10MB.', 'error'); return; }
+      await handleAttachmentUpload(fw, gid, itemId, file);
+      e.target.value = '';
+    });
+  });
+
+  // Auditor attachment: remove
+  $$('[data-remove-att]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const parts = (btn.dataset.removeAtt || '').split('-');
+      const attIdx = parseInt(parts[parts.length - 1]);
+      const fw = parts[0];
+      const gid = parts[1];
+      const itemId = parts.slice(2, parts.length - 1).join('-');
+      const itemState = composerState[fw]?.groups?.[gid]?.items?.[itemId];
+      if (itemState?.attachments) {
+        itemState.attachments.splice(attIdx, 1);
+        renderComposer();
+        saveFormState();
+      }
+    });
+  });
+
  // (Guidance zone moved to inline badges + tooltip - toggle handler removed)
  
  // Auto-resize description textareas
@@ -8721,6 +8974,7 @@ function getPayload() {
  description: description,
  expectedFormats: expectedFormats,
  fileMode: is.fileMode || getDefaultFileMode(item),
+              attachments: is.attachments || [],
  evidenceType: item.evidenceType || 'point-in-time',
  controlRef: item.controlRef || null,
  commonIssue: item.commonIssue || null
@@ -9227,7 +9481,7 @@ async function fetchAndRenderDashboard() {
  }
  
  // Show loading state
- $('#activeRequestsList').innerHTML = '<div class="loading-placeholder">Loading requests...</div>';
+ $('#activeRequestsList').innerHTML = '<div class="dash-skeleton"><div class="skel-card"></div><div class="skel-card"></div></div>';
  $('#completedRequestsList').innerHTML = '<div class="loading-placeholder">Loading...</div>';
  
  let retries = 2;
@@ -9550,7 +9804,7 @@ function renderRequestCard(req, type) {
  if (type === 'active') {
  actionsHtml = `
  <button class="request-action-btn" data-action="copy-link" data-token="${esc(req.token)}">Copy Client Link</button>
- <button class="request-action-btn" data-action="resend" data-token="${esc(req.token)}">Resend Email</button>
+ <button class="request-action-btn" data-action="resend" data-token="${esc(req.token)}">&#9993; Resend to Client</button>
  `;
  // Add extend deadline for requests with a deadline
  if (req.extendToken && req.deadlineISO) {
