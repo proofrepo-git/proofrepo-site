@@ -7572,84 +7572,6 @@ const TEMPLATE_LEVELS = {
 
 // ==================== COMPOSER RENDERING ====================
 
-function renderComposerNav() {
-  const navEl = document.getElementById('composerNav');
-  if (!navEl) return;
-  const allFw = getAllFrameworks();
-
-  // Collect all groups across all enabled frameworks
-  const groups = [];
-  for (const [fwKey, fw] of Object.entries(allFw)) {
-    if (!composerState[fwKey]?.enabled) continue;
-    for (const g of (fw.controlGroups || [])) {
-      const gs = composerState[fwKey]?.groups?.[g.id];
-      if (!gs) continue;
-      const excluded = gs.excluded;
-      const total = (g.items || []).length;
-      const included = excluded ? 0 : (g.items || []).filter(i => gs.items?.[i.id]?.included).length;
-      groups.push({ fwKey, gid: g.id, title: g.title, included, total, excluded });
-    }
-  }
-
-  if (groups.length === 0) {
-    navEl.style.display = 'none';
-    return;
-  }
-
-  const totalItems = groups.reduce((s, g) => s + g.included, 0);
-  const totalGroups = groups.length;
-
-  let html = '<div class="composer-nav-header">';
-  html += '<span class="composer-nav-title">Quick Navigation</span>';
-  html += '<span class="composer-nav-subtitle">' + totalItems + ' item' + (totalItems !== 1 ? 's' : '') + ' across ' + totalGroups + ' control' + (totalGroups !== 1 ? 's' : '') + ' — click to jump</span>';
-  html += '</div><div class="composer-nav-pills">';
-
-  for (const g of groups) {
-    let cls = 'cn-pill';
-    if (g.excluded) {
-      cls += ' excluded';
-    } else if (g.included === g.total && g.total > 0) {
-      cls += ' complete';
-    } else if (g.included > 0) {
-      cls += ' partial';
-    }
-    const shortTitle = g.title.length > 28 ? g.title.substring(0, 26) + '…' : g.title;
-    const countLabel = g.excluded ? 'excluded' : (g.included + '/' + g.total);
-    html += '<span class="' + cls + '" data-nav-fw="' + esc(g.fwKey) + '" data-nav-gid="' + esc(g.gid) + '" title="' + esc(g.title) + ': ' + countLabel + ' included">';
-    html += esc(shortTitle) + '<span class="cn-count">' + countLabel + '</span></span>';
-  }
-
-  html += '</div>';
-  navEl.innerHTML = html;
-  navEl.style.display = 'block';
-
-  // Wire click handlers
-  navEl.querySelectorAll('[data-nav-fw]').forEach(function(pill) {
-    pill.addEventListener('click', function() {
-      const fwKey = pill.dataset.navFw;
-      const gid = pill.dataset.navGid;
-      if (!fwKey || !gid) return;
-      // Expand the group if collapsed
-      if (composerState[fwKey]?.groups?.[gid]) {
-        if (!composerState[fwKey].groups[gid].expanded) {
-          composerState[fwKey].groups[gid].expanded = true;
-          renderComposer(); // re-render so the group is open, nav stays
-          return; // scroll happens after re-render via the nav rebuild
-        }
-      }
-      // Find the rendered group element and scroll to it
-      const target = document.querySelector('.control-group[data-fw="' + fwKey + '"][data-group="' + gid + '"]');
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        // Brief highlight flash so user sees where they landed
-        target.style.transition = 'box-shadow .2s';
-        target.style.boxShadow = '0 0 0 3px #2563eb44';
-        setTimeout(function() { target.style.boxShadow = ''; }, 900);
-      }
-    });
-  });
-}
-
 function renderComposer() {
  const c = $('#composer');
  if (!c) return;
@@ -8017,7 +7939,9 @@ function wireComposer() {
  cb.addEventListener('change', e => { 
  const el = e.target.closest('.evidence-item'); 
  const { fw, group, item } = el.dataset; 
- composerState[fw].groups[group].items[item].included = e.target.checked; 
+ composerState[fw].groups[group].items[item].included = e.target.checked;
+ // Update nav chip counts immediately on every check/uncheck
+ renderComposerNav();
  renderComposer(); 
  saveFormState(); 
  });
