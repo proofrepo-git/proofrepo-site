@@ -2011,6 +2011,26 @@
 .ei-att-remove:hover { color: #ef4444; }
 .ei-attach-label { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; font-size: 0.78rem; color: #64748b; border: 1px dashed #cbd5e1; border-radius: 6px; padding: 3px 10px; transition: border-color 0.15s, color 0.15s, background 0.15s; white-space: nowrap; }
 .ei-attach-label:hover { border-color: #2563eb; color: #2563eb; background: #eff6ff; }
+/* Dashboard help & resources section */
+.dashboard-help-section{margin-top:28px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:22px 24px}
+.dh-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
+.dh-title{font-size:.9rem;font-weight:700;color:#374151;text-transform:uppercase;letter-spacing:.4px}
+.dh-loom-link{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;font-weight:600;color:#2563eb;text-decoration:none;background:#eff6ff;border:1px solid #bfdbfe;border-radius:20px;padding:5px 12px;transition:background .15s}
+.dh-loom-link:hover{background:#dbeafe}
+.dh-steps{display:flex;flex-direction:column;gap:12px;margin-bottom:18px}
+.dh-step{display:flex;align-items:flex-start;gap:12px}
+.dh-step-num{width:24px;height:24px;border-radius:50%;background:#2563eb;color:#fff;font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.dh-step-body{font-size:.85rem;color:#475569;line-height:1.5}
+.dh-step-body strong{color:#1e293b;display:block;margin-bottom:2px}
+.dh-step-body a{color:#2563eb;text-decoration:none;font-weight:500}
+.dh-step-body a:hover{text-decoration:underline}
+.dh-links{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.dh-link-card{display:flex;align-items:center;gap:10px;padding:12px 14px;background:#fff;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;color:#1e293b;transition:border-color .15s,box-shadow .15s}
+.dh-link-card:hover{border-color:#2563eb;box-shadow:0 1px 4px rgba(37,99,235,.1)}
+.dh-link-icon{font-size:1.2rem;flex-shrink:0;color:#2563eb}
+.dh-link-label{display:block;font-size:.82rem;font-weight:600;color:#1e293b}
+.dh-link-sub{display:block;font-size:.73rem;color:#94a3b8;margin-top:1px}
+@media(max-width:600px){.dh-links{grid-template-columns:1fr}.dh-header{flex-direction:column;align-items:flex-start}}
 /* Composer Quick Navigation */
 .composer-nav{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px 14px;margin-bottom:14px;display:none}
 .composer-nav-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
@@ -3668,6 +3688,52 @@
  <div class="loading-placeholder">Loading templates...</div>
  </div>
  </div>
+
+  <!-- Help & Resources Section -->
+  <div class="dashboard-help-section">
+    <div class="dh-header">
+      <span class="dh-title">How ProofRepo works</span>
+      <a href="https://www.loom.com/share/d7a3709ad77247c48871eb7a7573d835" target="_blank" class="dh-loom-link">&#9654; Watch the 2-min walkthrough</a>
+    </div>
+    <div class="dh-steps">
+      <div class="dh-step">
+        <div class="dh-step-num">1</div>
+        <div class="dh-step-body">
+          <strong>Build your request</strong>
+          <span>Pick a framework, choose a depth level, customize evidence items. <a href="#" onclick="event.preventDefault(); showComposerFromDashboard()">Start a request &rarr;</a></span>
+        </div>
+      </div>
+      <div class="dh-step">
+        <div class="dh-step-num">2</div>
+        <div class="dh-step-body">
+          <strong>Send to your client</strong>
+          <span>Your client gets a branded upload link &mdash; no login required. Files are auto-matched to control items.</span>
+        </div>
+      </div>
+      <div class="dh-step">
+        <div class="dh-step-num">3</div>
+        <div class="dh-step-body">
+          <strong>Review &amp; export</strong>
+          <span>View submissions in the ProofPack viewer, filter by control domain, and export a PDF workpaper summary in one click.</span>
+        </div>
+      </div>
+    </div>
+    <div class="dh-links">
+      <a href="https://www.loom.com/share/d7a3709ad77247c48871eb7a7573d835" target="_blank" class="dh-link-card">
+        <span class="dh-link-icon">&#9654;</span>
+        <div><span class="dh-link-label">Demo walkthrough</span><span class="dh-link-sub">See the full workflow</span></div>
+      </a>
+      <a href="mailto:support@proofrepo.com" class="dh-link-card">
+        <span class="dh-link-icon">&#9993;</span>
+        <div><span class="dh-link-label">Contact support</span><span class="dh-link-sub">support@proofrepo.com</span></div>
+      </a>
+      <a href="#" onclick="event.preventDefault(); showComposerFromDashboard()" class="dh-link-card">
+        <span class="dh-link-icon">&#43;</span>
+        <div><span class="dh-link-label">New request</span><span class="dh-link-sub">7 frameworks, 519 items</span></div>
+      </a>
+    </div>
+  </div>
+
  </div>
 
  <div id="auditorFlow" style="display: none;">
