@@ -2011,6 +2011,20 @@
 .ei-att-remove:hover { color: #ef4444; }
 .ei-attach-label { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; font-size: 0.78rem; color: #64748b; border: 1px dashed #cbd5e1; border-radius: 6px; padding: 3px 10px; transition: border-color 0.15s, color 0.15s, background 0.15s; white-space: nowrap; }
 .ei-attach-label:hover { border-color: #2563eb; color: #2563eb; background: #eff6ff; }
+/* Composer Quick Navigation */
+.composer-nav{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px 14px;margin-bottom:14px;display:none}
+.composer-nav-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.composer-nav-title{font-size:.78rem;font-weight:600;color:#374151;text-transform:uppercase;letter-spacing:.4px}
+.composer-nav-subtitle{font-size:.73rem;color:#94a3b8}
+.composer-nav-pills{display:flex;flex-wrap:wrap;gap:6px}
+.cn-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:.75rem;font-weight:500;cursor:pointer;border:1px solid #e2e8f0;background:#fff;color:#475569;transition:all .15s;white-space:nowrap;user-select:none}
+.cn-pill:hover{border-color:#2563eb;color:#1d4ed8;background:#eff6ff}
+.cn-pill.complete{background:#ecfdf3;border-color:#86efac;color:#15803d}
+.cn-pill.partial{background:#fffbeb;border-color:#fcd34d;color:#92400e}
+.cn-pill.excluded{background:#f1f5f9;border-color:#e2e8f0;color:#94a3b8;text-decoration:line-through;cursor:default}
+.cn-pill .cn-count{font-size:.68rem;font-weight:700;background:rgba(0,0,0,.06);padding:1px 5px;border-radius:8px}
+.cn-pill.complete .cn-count{background:rgba(22,163,74,.12)}
+.cn-pill.partial .cn-count{background:rgba(202,138,4,.12)}
 .save-template-bar {
  background: var(--bg-subtle);
  border: 1px solid var(--border);
@@ -3768,7 +3782,8 @@
  <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
  Check frameworks, then customize what evidence you need. Items with &#x2713; are included by default.
  </p>
- <div id="composer"></div>
+ <div id="composerNav" class="composer-nav"></div>
+  <div id="composer"></div>
  </div>
 
  <!-- Payment Section -->
@@ -7557,6 +7572,84 @@ const TEMPLATE_LEVELS = {
 
 // ==================== COMPOSER RENDERING ====================
 
+function renderComposerNav() {
+  const navEl = document.getElementById('composerNav');
+  if (!navEl) return;
+  const allFw = getAllFrameworks();
+
+  // Collect all groups across all enabled frameworks
+  const groups = [];
+  for (const [fwKey, fw] of Object.entries(allFw)) {
+    if (!composerState[fwKey]?.enabled) continue;
+    for (const g of (fw.controlGroups || [])) {
+      const gs = composerState[fwKey]?.groups?.[g.id];
+      if (!gs) continue;
+      const excluded = gs.excluded;
+      const total = (g.items || []).length;
+      const included = excluded ? 0 : (g.items || []).filter(i => gs.items?.[i.id]?.included).length;
+      groups.push({ fwKey, gid: g.id, title: g.title, included, total, excluded });
+    }
+  }
+
+  if (groups.length === 0) {
+    navEl.style.display = 'none';
+    return;
+  }
+
+  const totalItems = groups.reduce((s, g) => s + g.included, 0);
+  const totalGroups = groups.length;
+
+  let html = '<div class="composer-nav-header">';
+  html += '<span class="composer-nav-title">Quick Navigation</span>';
+  html += '<span class="composer-nav-subtitle">' + totalItems + ' item' + (totalItems !== 1 ? 's' : '') + ' across ' + totalGroups + ' control' + (totalGroups !== 1 ? 's' : '') + ' — click to jump</span>';
+  html += '</div><div class="composer-nav-pills">';
+
+  for (const g of groups) {
+    let cls = 'cn-pill';
+    if (g.excluded) {
+      cls += ' excluded';
+    } else if (g.included === g.total && g.total > 0) {
+      cls += ' complete';
+    } else if (g.included > 0) {
+      cls += ' partial';
+    }
+    const shortTitle = g.title.length > 28 ? g.title.substring(0, 26) + '…' : g.title;
+    const countLabel = g.excluded ? 'excluded' : (g.included + '/' + g.total);
+    html += '<span class="' + cls + '" data-nav-fw="' + esc(g.fwKey) + '" data-nav-gid="' + esc(g.gid) + '" title="' + esc(g.title) + ': ' + countLabel + ' included">';
+    html += esc(shortTitle) + '<span class="cn-count">' + countLabel + '</span></span>';
+  }
+
+  html += '</div>';
+  navEl.innerHTML = html;
+  navEl.style.display = 'block';
+
+  // Wire click handlers
+  navEl.querySelectorAll('[data-nav-fw]').forEach(function(pill) {
+    pill.addEventListener('click', function() {
+      const fwKey = pill.dataset.navFw;
+      const gid = pill.dataset.navGid;
+      if (!fwKey || !gid) return;
+      // Expand the group if collapsed
+      if (composerState[fwKey]?.groups?.[gid]) {
+        if (!composerState[fwKey].groups[gid].expanded) {
+          composerState[fwKey].groups[gid].expanded = true;
+          renderComposer(); // re-render so the group is open, nav stays
+          return; // scroll happens after re-render via the nav rebuild
+        }
+      }
+      // Find the rendered group element and scroll to it
+      const target = document.querySelector('.control-group[data-fw="' + fwKey + '"][data-group="' + gid + '"]');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Brief highlight flash so user sees where they landed
+        target.style.transition = 'box-shadow .2s';
+        target.style.boxShadow = '0 0 0 3px #2563eb44';
+        setTimeout(function() { target.style.boxShadow = ''; }, 900);
+      }
+    });
+  });
+}
+
 function renderComposer() {
  const c = $('#composer');
  if (!c) return;
@@ -7593,6 +7686,7 @@ function renderComposer() {
  wireComposer();
  const gi = $('#globalInstructions');
  if (gi) gi.addEventListener('input', saveFormState);
+  renderComposerNav();
  
  // Wire save template button
  const saveBtn = $('#saveTemplateBtn');
@@ -7747,6 +7841,84 @@ function renderItem(fwKey, gid, item, gs) {
  </div>`;
 }
 
+
+
+function renderComposerNav() {
+  const navEl = document.getElementById('composerNav');
+  if (!navEl) return;
+
+  const allFw = getAllFrameworks();
+  const pills = [];
+
+  // Collect all control groups across enabled frameworks
+  for (const [fwKey, fs] of Object.entries(composerState)) {
+    if (!fs.enabled) continue;
+    const fw = allFw[fwKey];
+    if (!fw) continue;
+    for (const g of (fw.controlGroups || [])) {
+      const gs = fs.groups?.[g.id];
+      if (!gs) continue;
+      const excluded = gs.excluded;
+      const included = excluded ? 0 : (g.items || []).filter(i => gs.items?.[i.id]?.included).length;
+      const total = (g.items || []).length;
+      pills.push({ fwKey, gid: g.id, title: g.title, included, total, excluded });
+    }
+  }
+
+  // Hide nav if no enabled frameworks
+  if (pills.length === 0) {
+    navEl.style.display = 'none';
+    return;
+  }
+
+  const totalItems = pills.reduce((s, p) => s + p.included, 0);
+  const totalGroups = pills.filter(p => !p.excluded).length;
+
+  let html = '<div class="composer-nav-header">';
+  html += '<span class="composer-nav-title">Quick Navigation</span>';
+  html += '<span class="composer-nav-subtitle">' + totalItems + ' item' + (totalItems !== 1 ? 's' : '') + ' selected across ' + totalGroups + ' group' + (totalGroups !== 1 ? 's' : '') + ' — click to jump</span>';
+  html += '</div><div class="composer-nav-pills">';
+
+  for (var pi = 0; pi < pills.length; pi++) {
+    var p = pills[pi];
+    var cls = 'cn-pill';
+    if (p.excluded) {
+      cls += ' excluded';
+    } else if (p.included === p.total && p.total > 0) {
+      cls += ' complete';
+    } else if (p.included > 0) {
+      cls += ' partial';
+    }
+    var label = p.title.length > 22 ? p.title.substring(0, 20) + '…' : p.title;
+    html += '<span class="' + cls + '" data-nav-fw="' + esc(p.fwKey) + '" data-nav-gid="' + esc(p.gid) + '" title="' + esc(p.title) + ': ' + p.included + '/' + p.total + ' items selected">';
+    html += esc(label);
+    if (!p.excluded) html += '<span class="cn-count">' + p.included + '/' + p.total + '</span>';
+    html += '</span>';
+  }
+
+  html += '</div>';
+  navEl.innerHTML = html;
+  navEl.style.display = 'block';
+
+  // Wire click handlers — scroll to group + expand it
+  navEl.querySelectorAll('[data-nav-fw]').forEach(function(pill) {
+    if (pill.classList.contains('excluded')) return;
+    pill.addEventListener('click', function() {
+      var fwKey = pill.dataset.navFw;
+      var gid = pill.dataset.navGid;
+      // Expand the group if collapsed
+      if (composerState[fwKey]?.groups?.[gid]) {
+        composerState[fwKey].groups[gid].expanded = true;
+      }
+      renderComposer(); // re-render so group is open
+      // Scroll to it after render
+      setTimeout(function() {
+        var target = document.querySelector('[data-fw="' + fwKey + '"][data-group="' + gid + '"]');
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 80);
+    });
+  });
+}
 
 async function handleAttachmentUpload(fwKey, gid, itemId, file) {
   if (!state.isLoggedIn) {
@@ -8623,106 +8795,123 @@ function closePreviewModal() {
 }
 
 function exportRequestPDF() {
- const evidence = getPayload();
- if (evidence.length === 0) {
- alert('No evidence items selected. Add items to your request first.');
- return;
- }
- 
- const company = $('#clientCompany')?.value || 'Client';
- const frameworks = Object.entries(composerState).filter(([k,v]) => v.enabled).map(([k]) => {
- const allFw = getAllFrameworks();
- return allFw[k]?.label || k;
- });
- 
- // Group by control domain
- const grouped = {};
- for (const item of evidence) {
- const g = item.group || 'General';
- if (!grouped[g]) grouped[g] = [];
- grouped[g].push(item);
- }
- 
- // Build print document
- var iframe = document.createElement('iframe');
- iframe.style.cssText = 'position:fixed;left:-9999px;width:0;height:0;border:none';
- document.body.appendChild(iframe);
- var pw = iframe.contentWindow.document;
- pw.open();
- pw.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>Evidence Request</title><style>');
- pw.write('body{margin:0;padding:28px 36px;font-family:system-ui,-apple-system,sans-serif;color:#1e293b;font-size:13px;line-height:1.5}');
- pw.write('.cover{text-align:center;padding:24px 0 20px;border-bottom:3px solid #1e3a5f;margin-bottom:24px}');
- pw.write('.cover h1{font-size:1.5rem;color:#1e3a5f;margin:8px 0 4px}');
- pw.write('.cover-meta{font-size:.85rem;color:#64748b}');
- pw.write('.summary{display:flex;gap:16px;margin-bottom:24px}');
- pw.write('.summary-item{flex:1;text-align:center;padding:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px}');
- pw.write('.summary-num{font-size:1.3rem;font-weight:700;color:#1e40af}');
- pw.write('.summary-label{font-size:.7rem;color:#64748b;margin-top:2px}');
- pw.write('.group{margin-bottom:20px;page-break-inside:avoid}');
- pw.write('.group-title{font-size:.9rem;font-weight:700;padding:8px 14px;border:2px solid #1e3a5f;border-left:4px solid #2563eb;border-radius:6px;margin-bottom:8px;color:#1e3a5f}');
- pw.write('.item{padding:10px 12px;border:1px solid #e2e8f0;border-left:3px solid #cbd5e1;border-radius:5px;margin-bottom:5px;page-break-inside:avoid}');
- pw.write('.item-title{font-size:.85rem;font-weight:600;color:#1e293b;margin-bottom:3px}');
- pw.write('.item-desc{font-size:.75rem;color:#64748b;line-height:1.5;margin-bottom:4px}');
- pw.write('.badge{display:inline-block;font-size:.6rem;font-weight:700;padding:1px 6px;border-radius:3px;margin-right:4px;text-transform:uppercase}');
- pw.write('.badge-fmt{border:1px solid #2563eb;color:#1d4ed8}');
- pw.write('.badge-ctrl{border:1px solid #16a34a;color:#15803d}');
- pw.write('.badge-type{border:1px solid #d97706;color:#92400e}');
- pw.write('.badge-multi{border:1px solid #8b5cf6;color:#6d28d9}');
- pw.write('.footer{margin-top:30px;padding-top:12px;border-top:2px solid #1e3a5f;text-align:center;font-size:.75rem;color:#64748b}');
- pw.write('@media print{@page{margin:0.5in}}');
- pw.write('</style></head><body>');
- 
- // Cover
- pw.write('<div class="cover">');
- pw.write('<h1>Evidence Request Summary</h1>');
- pw.write('<div class="cover-meta">' + esc(company) + ' &bull; ' + esc(frameworks.join(', ')) + ' &bull; ' + new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'}) + '</div>');
- pw.write('</div>');
- 
- // Summary
- pw.write('<div class="summary">');
- pw.write('<div class="summary-item"><div class="summary-num">' + evidence.length + '</div><div class="summary-label">Items Requested</div></div>');
- pw.write('<div class="summary-item"><div class="summary-num">' + Object.keys(grouped).length + '</div><div class="summary-label">Control Domains</div></div>');
- pw.write('<div class="summary-item"><div class="summary-num">' + esc(frameworks.join(', ')) + '</div><div class="summary-label">Frameworks</div></div>');
- pw.write('</div>');
- 
- // Items by group
- var groupNames = Object.keys(grouped);
- for (var g = 0; g < groupNames.length; g++) {
- var groupName = groupNames[g];
- var items = grouped[groupName];
- pw.write('<div class="group">');
- pw.write('<div class="group-title">' + esc(groupName) + ' (' + items.length + ')</div>');
- for (var j = 0; j < items.length; j++) {
- var itm = items[j];
- pw.write('<div class="item">');
- pw.write('<div class="item-title">' + esc(itm.title) + '</div>');
- if (itm.description) pw.write('<div class="item-desc">' + esc(itm.description) + '</div>');
- // Badges
- if (itm.expectedFormats && itm.expectedFormats.length > 0) {
- for (var f = 0; f < itm.expectedFormats.length; f++) {
- pw.write('<span class="badge badge-fmt">' + esc(itm.expectedFormats[f]) + '</span>');
- }
- }
- if (itm.controlRef) pw.write('<span class="badge badge-ctrl">' + esc(itm.controlRef) + '</span>');
- if (itm.evidenceType) {
- pw.write('<span class="badge badge-type">' + (itm.evidenceType === 'period-of-time' ? 'Period' : 'Point-in-time') + '</span>');
- }
- if (itm.fileMode === 'multi') pw.write('<span class="badge badge-multi">Multi-file</span>');
- pw.write('</div>');
- }
- pw.write('</div>');
- }
- 
- // Footer
- pw.write('<div class="footer">Generated by ProofRepo &bull; proofrepo.com</div>');
- pw.write('</body></html>');
- pw.close();
- 
- setTimeout(function() {
- iframe.contentWindow.focus();
- iframe.contentWindow.print();
- setTimeout(function() { document.body.removeChild(iframe); }, 2000);
- }, 300);
+  const evidence = getPayload();
+  if (evidence.length === 0) {
+    alert('No evidence items selected. Add items to your request first.');
+    return;
+  }
+
+  const company = $('#clientCompany')?.value || 'Client';
+  const frameworks = Object.entries(composerState).filter(([k,v]) => v.enabled).map(([k]) => {
+    const allFw = getAllFrameworks();
+    return allFw[k]?.label || k;
+  });
+
+  // Group by control domain — always reflects current state at time of export
+  const grouped = {};
+  for (const item of evidence) {
+    const g = item.group || 'General';
+    if (!grouped[g]) grouped[g] = [];
+    grouped[g].push(item);
+  }
+
+  const LOGO = 'https://proofrepo.com/logo.png';
+  const dateStr = new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
+
+  // Build full HTML string then open in new tab — composer remains fully interactive
+  var lines = [];
+  lines.push('<!DOCTYPE html><html><head><meta charset="utf-8"><title>Evidence Request — ' + esc(company) + '</title><style>');
+  lines.push('body{margin:0;padding:28px 36px;font-family:system-ui,-apple-system,sans-serif;color:#1e293b;font-size:13px;line-height:1.5}');
+  lines.push('.cover{text-align:center;padding:20px 0 18px;border-bottom:3px solid #1e3a5f;margin-bottom:22px}');
+  lines.push('.cover-logo{width:44px;height:44px;border-radius:10px;margin-bottom:8px}');
+  lines.push('.cover-brand{font-size:.82rem;font-weight:700;color:#1e40af;letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px}');
+  lines.push('.cover h1{font-size:1.4rem;color:#1e3a5f;margin:6px 0 4px;font-weight:700}');
+  lines.push('.cover-meta{font-size:.82rem;color:#64748b;margin-top:4px}');
+  lines.push('.cover-meta .sep{margin:0 6px;color:#cbd5e1}');
+  lines.push('.summary{display:flex;gap:14px;margin-bottom:22px}');
+  lines.push('.summary-item{flex:1;text-align:center;padding:10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px}');
+  lines.push('.summary-num{font-size:1.25rem;font-weight:700;color:#1e40af}');
+  lines.push('.summary-label{font-size:.68rem;color:#64748b;margin-top:2px;text-transform:uppercase;letter-spacing:.4px}');
+  lines.push('.group{margin-bottom:18px;page-break-inside:avoid}');
+  lines.push('.group-title{font-size:.88rem;font-weight:700;padding:7px 12px;background:#f1f5f9;border-left:4px solid #2563eb;border-radius:0 5px 5px 0;margin-bottom:7px;color:#1e3a5f;display:flex;justify-content:space-between;align-items:center}');
+  lines.push('.group-count{font-size:.7rem;color:#64748b;font-weight:400}');
+  lines.push('.item{padding:9px 12px;border:1px solid #e2e8f0;border-left:3px solid #cbd5e1;border-radius:5px;margin-bottom:5px;page-break-inside:avoid}');
+  lines.push('.item-header{display:flex;align-items:flex-start;gap:8px;margin-bottom:3px}');
+  lines.push('.item-num{background:#e2e8f0;color:#475569;font-size:.68rem;font-weight:700;padding:1px 5px;border-radius:3px;flex-shrink:0;margin-top:1px}');
+  lines.push('.item-title{font-size:.85rem;font-weight:600;color:#1e293b}');
+  lines.push('.item-desc{font-size:.75rem;color:#64748b;line-height:1.5;margin:3px 0 5px 0}');
+  lines.push('.badge{display:inline-block;font-size:.6rem;font-weight:700;padding:1px 6px;border-radius:3px;margin-right:4px;text-transform:uppercase}');
+  lines.push('.badge-fmt{border:1px solid #2563eb;color:#1d4ed8}');
+  lines.push('.badge-ctrl{border:1px solid #16a34a;color:#15803d}');
+  lines.push('.badge-type{border:1px solid #d97706;color:#92400e}');
+  lines.push('.badge-multi{border:1px solid #8b5cf6;color:#6d28d9}');
+  lines.push('.footer{margin-top:28px;padding-top:10px;border-top:2px solid #1e3a5f;display:flex;align-items:center;justify-content:space-between}');
+  lines.push('.footer-brand{display:flex;align-items:center;gap:6px;font-size:.8rem;font-weight:700;color:#1e3a5f}');
+  lines.push('.footer-brand img{width:20px;height:20px;border-radius:5px}');
+  lines.push('.footer-meta{font-size:.72rem;color:#94a3b8}');
+  lines.push('@media print{@page{margin:0.5in}}');
+  lines.push('</style></head><body>');
+
+  // Cover
+  lines.push('<div class="cover">');
+  lines.push('<img src="' + LOGO + '" alt="ProofRepo" class="cover-logo">');
+  lines.push('<div class="cover-brand">ProofRepo</div>');
+  lines.push('<h1>Evidence Request Summary</h1>');
+  lines.push('<div class="cover-meta">' + esc(company));
+  if (frameworks.length) lines.push('<span class="sep">|</span>' + esc(frameworks.join(', ')));
+  lines.push('<span class="sep">|</span>' + dateStr + '</div>');
+  lines.push('</div>');
+
+  // Summary bar
+  lines.push('<div class="summary">');
+  lines.push('<div class="summary-item"><div class="summary-num">' + evidence.length + '</div><div class="summary-label">Items Requested</div></div>');
+  lines.push('<div class="summary-item"><div class="summary-num">' + Object.keys(grouped).length + '</div><div class="summary-label">Control Domains</div></div>');
+  lines.push('<div class="summary-item"><div class="summary-num" style="font-size:1rem;color:#2563eb">' + esc(frameworks.join(', ') || '—') + '</div><div class="summary-label">Framework</div></div>');
+  lines.push('</div>');
+
+  // Items by group
+  var groupNames = Object.keys(grouped);
+  var itemCounter = 0;
+  for (var g = 0; g < groupNames.length; g++) {
+    var groupName = groupNames[g];
+    var items = grouped[groupName];
+    lines.push('<div class="group">');
+    lines.push('<div class="group-title">' + esc(groupName) + '<span class="group-count">' + items.length + ' item' + (items.length !== 1 ? 's' : '') + '</span></div>');
+    for (var j = 0; j < items.length; j++) {
+      itemCounter++;
+      var itm = items[j];
+      lines.push('<div class="item">');
+      lines.push('<div class="item-header"><span class="item-num">' + itemCounter + '</span><span class="item-title">' + esc(itm.title) + '</span></div>');
+      if (itm.description) lines.push('<div class="item-desc">' + esc(itm.description) + '</div>');
+      var badges = '';
+      if (itm.expectedFormats && itm.expectedFormats.length) {
+        for (var f = 0; f < itm.expectedFormats.length; f++) badges += '<span class="badge badge-fmt">' + esc(itm.expectedFormats[f]) + '</span>';
+      }
+      if (itm.controlRef) badges += '<span class="badge badge-ctrl">' + esc(itm.controlRef) + '</span>';
+      if (itm.evidenceType) badges += '<span class="badge badge-type">' + (itm.evidenceType === 'period-of-time' ? 'Period' : 'Point-in-time') + '</span>';
+      if (itm.fileMode === 'multi') badges += '<span class="badge badge-multi">Multi-file</span>';
+      if (badges) lines.push(badges);
+      lines.push('</div>');
+    }
+    lines.push('</div>');
+  }
+
+  // Footer with logo
+  lines.push('<div class="footer">');
+  lines.push('<div class="footer-brand"><img src="' + LOGO + '" alt="P"><span>ProofRepo</span></div>');
+  lines.push('<div class="footer-meta">proofrepo.com &bull; Generated ' + dateStr + '</div>');
+  lines.push('</div>');
+  lines.push('</body></html>');
+
+  // Open in new tab — leaves composer fully interactive
+  var win = window.open('', '_blank');
+  if (!win) {
+    alert('Please allow pop-ups for this page to export the PDF, then try again.');
+    return;
+  }
+  win.document.write(lines.join(''));
+  win.document.close();
+  setTimeout(function() { win.focus(); win.print(); }, 350);
 }
 
 // ==================== CODE VALIDATION ====================
