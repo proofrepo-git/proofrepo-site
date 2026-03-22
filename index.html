@@ -4092,6 +4092,12 @@
  <small id="auditPeriodHint" style="margin-top:6px;display:block;color:var(--text-muted);font-size:12px;"></small>
  </div>
 
+ <div class="form-group">
+  <label class="form-label">Engagement Reference <span style="font-weight:normal;color:var(--text-muted);">(optional)</span></label>
+  <input type="text" class="form-input" id="engagementRef" placeholder="e.g. ENG-2024-001, Acme_SOC2_Q1" maxlength="80">
+  <span class="form-hint">Internal reference for this engagement</span>
+ </div>
+
  </div><!-- /who-fields -->
 
  <!-- Step 2: What section header -->
@@ -7575,6 +7581,7 @@ function saveFormState() {
  try {
  const data = {
  role: $('#roleSelect')?.value || '',
+ engagementRef: $('#engagementRef')?.value || '',
  auditorEmails: getChipEmails('auditorEmailsContainer'),
  clientCompany: $('#clientCompany')?.value || '',
  clientEmails: getChipEmails('clientEmailsContainer'),
@@ -7605,6 +7612,7 @@ function loadFormState() {
 function restoreFormState(data) {
  if (!data) return false;
  if (data.role) $('#roleSelect').value = data.role;
+ if (data.engagementRef !== undefined) { const er = $('#engagementRef'); if (er) er.value = data.engagementRef; }
  if (data.auditorEmails && data.auditorEmails.length) {
  setChipEmails('auditorEmailsContainer', data.auditorEmails);
  } else if (data.auditorEmail) {
@@ -8492,7 +8500,7 @@ function wireComposer() {
  }
  }
  const count = included.length;
- if (count === 0) { alert('No selected items to clear.'); return; }
+ if (count === 0) { showToast('No selected items to clear.', 'error'); return; }
  if (!confirm('Clear all client guidance for the ' + count + ' selected ' + (fw.label || fwKey) + ' items?\\n\\nYou can restore ProofRepo defaults at any time.')) return;
  for (const g of (fw.controlGroups || [])) {
  const gs = composerState[fwKey].groups?.[g.id];
@@ -8538,7 +8546,7 @@ function wireComposer() {
  const nameInput = document.querySelector(`[data-custom-name="${fk}-${gid}"]`);
  const instrInput = document.querySelector(`[data-custom-instr="${fk}-${gid}"]`);
  const title = (nameInput?.value || '').trim(), customDesc = (instrInput?.value || '').trim();
- if (!title) { alert('Please enter a request name.'); return; }
+ if (!title) { showToast('Please enter a request name.', 'error'); return; }
  const cid = 'c_' + Math.random().toString(36).slice(2, 8);
  const fw = allFw[fk], grp = fw?.controlGroups?.find(g => g.id === gid);
  if (grp) { 
@@ -8992,7 +9000,7 @@ function showClientPreview() {
  const globalInstr = $('#globalInstructions')?.value || '';
  
  if (payload.length === 0) {
- alert('No evidence items selected. Please select at least one item to preview.');
+ showToast('No evidence items selected. Select at least one item to preview.', 'error');
  return;
  }
  
@@ -9502,6 +9510,11 @@ async function fetchAndRenderDashboard() {
  headers: { 'Authorization': `Bearer ${state.authToken}` }
  });
  
+ if (res.status === 401) {
+    showToast('Your session has expired. Please sign in again.', 'error', 6000);
+    handleLogout();
+    return;
+   }
  if (!res.ok) {
  throw new Error(`HTTP ${res.status}`);
  }
@@ -9742,10 +9755,10 @@ async function duplicateTemplate(templateId) {
  renderTemplatesSection();
  wireTemplateActions();
  } else {
- alert(data.error || 'Error duplicating template');
+ showToast(data.error || 'Error duplicating template', 'error');
  }
  } catch (e) {
- alert('Error duplicating template');
+ showToast('Error duplicating template', 'error');
  }
 }
 
@@ -9769,10 +9782,10 @@ async function deleteTemplateFromDashboard(templateId) {
  wireTemplateActions();
  updateLoggedInBar(); // Update template dropdown in composer if visible
  } else {
- alert(data.error || 'Error deleting template');
+ showToast(data.error || 'Error deleting template', 'error');
  }
  } catch (e) {
- alert('Error deleting template');
+ showToast('Error deleting template', 'error');
  }
 }
 
@@ -9897,7 +9910,7 @@ function wireRequestActions() {
  btn.textContent = 'Copied!';
  setTimeout(() => btn.textContent = originalText, 2000);
  } catch (e) {
- alert('Link: ' + link);
+ showToast('Link copied to clipboard.', 'success');
  }
  });
  });
@@ -9926,12 +9939,12 @@ function wireRequestActions() {
  btn.textContent = 'Sent!';
  setTimeout(() => { btn.textContent = 'Resend Email'; btn.disabled = false; }, 2500);
  } else {
- alert('Error resending: ' + (data.error || 'Unknown error'));
+ showToast('Error resending: ' + (data.error || 'Unknown error', 'error'));
  btn.textContent = 'Resend Email';
  btn.disabled = false;
  }
  } catch (e) {
- alert('Error resending email: ' + e.message);
+ showToast('Error resending email: ' + e.message, 'error');
  btn.textContent = 'Resend Email';
  btn.disabled = false;
  }
@@ -9964,16 +9977,16 @@ function wireRequestActions() {
  const data = await res.json();
  
  if (data.ok) {
- alert(`Deadline extended by ${days} days. New deadline: ${new Date(data.deadlineISO).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}`);
+ showToast(`Deadline extended by ${days} days. New deadline: ${new Date(data.deadlineISO).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}`, 'info');
  // Refresh dashboard to show updated deadline
  await fetchAndRenderDashboard();
  } else {
- alert('Error extending deadline: ' + (data.error || 'Unknown error'));
+ showToast('Error extending deadline: ' + (data.error || 'Unknown error', 'error'));
  btn.disabled = false;
  btn.textContent = 'Extend Deadline';
  }
  } catch (e) {
- alert('Error extending deadline: ' + e.message);
+ showToast('Error extending deadline: ' + e.message, 'error');
  btn.disabled = false;
  btn.textContent = 'Extend Deadline';
  }
@@ -10005,12 +10018,12 @@ function wireRequestActions() {
  if (data.ok) {
  await fetchAndRenderDashboard();
  } else {
- alert('Error cancelling: ' + (data.error || 'Unknown error'));
+ showToast('Error cancelling: ' + (data.error || 'Unknown error', 'error'));
  btn.disabled = false;
  btn.textContent = 'Cancel Request';
  }
  } catch (e) {
- alert('Error cancelling: ' + e.message);
+ showToast('Error cancelling: ' + e.message, 'error');
  btn.disabled = false;
  btn.textContent = 'Cancel Request';
  }
@@ -10280,7 +10293,7 @@ async function handleStartTrial() {
  const email = ($('#trialUserEmail')?.value || '').trim().toLowerCase();
  
  if (!email || !email.includes('@') || !email.includes('.')) {
- alert('Please enter a valid email address');
+ showToast('Please enter a valid email address', 'error');
  return;
  }
  
@@ -10680,9 +10693,9 @@ async function handleResendVerification() {
  });
  
  const data = await res.json();
- alert(data.ok ? 'Verification email sent!' : (data.error || 'Error sending email'));
+ showToast(data.ok ? 'Verification email sent!' : (data.error || 'Error sending email', 'error'));
  } catch (e) {
- alert('Error sending verification email');
+ showToast('Error sending verification email', 'error');
  }
 }
 
@@ -10742,7 +10755,7 @@ async function loadTemplate(templateId) {
 
 async function saveAsTemplate() {
  if (!state.isLoggedIn) {
- alert('Please sign in to save templates');
+ showToast('Please sign in to save templates', 'error');
  return;
  }
  
@@ -11256,21 +11269,21 @@ async function handleMainAction() {
  const company = ($('#clientCompany')?.value || '').trim();
  
  if (auditorEmails.length === 0) {
- alert('Please enter at least one team email address.');
+ showToast('Please enter at least one team email address.', 'error');
  return;
  }
  if (!company) {
- alert('Please enter the client company name.');
+ showToast('Please enter the client company name.', 'error');
  return;
  }
  if (clientEmails.length === 0) {
- alert('Please enter at least one client email address.');
+ showToast('Please enter at least one client email address.', 'error');
  return;
  }
  
  const evidence = getPayload();
  if (evidence.length === 0) {
- alert('Please select at least one evidence item to request.');
+ showToast('Please select at least one evidence item to request.', 'error');
  return;
  }
  
@@ -11318,7 +11331,7 @@ async function handleMainAction() {
  await sendRequest();
  return;
  }
- alert('Please enter a credit code and click Apply, or purchase credits above.');
+ showToast('Please enter a credit code and click Apply, or purchase credits above.', 'error');
  $('#auditorCode')?.focus();
  return;
  }
@@ -11335,7 +11348,7 @@ async function handleMainAction() {
  await sendRequest();
  return;
  }
- alert('Please enter a credit code and click Apply, or purchase credits above.');
+ showToast('Please enter a credit code and click Apply, or purchase credits above.', 'error');
  $('#auditorCode')?.focus();
 }
 
@@ -11417,6 +11430,7 @@ async function sendRequest() {
  deadlineISO: deadline.toISOString(),
  auditorCode: state.code || '',
  globalInstructions: $('#globalInstructions')?.value || '',
+ engagementRef: $('#engagementRef')?.value?.trim() || null,
  requestedEvidence: requestedEvidence,
  auditPeriodStart: auditPeriodStart,
  auditPeriodEnd: auditPeriodEnd,
