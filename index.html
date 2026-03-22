@@ -902,9 +902,16 @@
 
  .stats-grid {
  display: grid;
- grid-template-columns: repeat(4, 1fr);
- gap: 14px;
+ grid-template-columns: repeat(5, 1fr);
+ gap: 12px;
  margin-bottom: 28px;
+ }
+ .stat-sublabel {
+ font-size: 0.7rem;
+ color: var(--text-muted);
+ margin-top: 3px;
+ font-weight: 400;
+ min-height: 14px;
  }
 
  .stat-card {
@@ -3205,6 +3212,24 @@
 
 @media(max-width:600px){.dh-links{grid-template-columns:1fr}.dh-header{flex-direction:column;align-items:flex-start}}
 
+
+/* Deadline countdown badges */
+.deadline-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.deadline-badge.ok { background: #dcfce7; color: #166534; }
+.deadline-badge.warn { background: #fef9c3; color: #854d0e; }
+.deadline-badge.urgent { background: #fee2e2; color: #991b1b; animation: pulse-urgent 2s ease-in-out infinite; }
+@keyframes pulse-urgent { 0%,100% { opacity: 1; } 50% { opacity: 0.7; } }
+
 /* ==================== TOAST NOTIFICATIONS ==================== */
  .toast-container {
  position: fixed; top: 20px; right: 20px; z-index: 10000;
@@ -3869,20 +3894,29 @@
  <!-- Stats Cards -->
  <div class="stats-grid" id="statsGrid">
  <div class="stat-card">
- <div class="stat-value" id="statActive">-</div>
- <div class="stat-label">Active Requests</div>
+  <div class="stat-value" id="statCompleted">-</div>
+  <div class="stat-label">Engagements Complete</div>
+  <div class="stat-sublabel" id="statCompletedSub"></div>
  </div>
  <div class="stat-card">
- <div class="stat-value" id="statCompleted">-</div>
- <div class="stat-label">Completed</div>
+  <div class="stat-value" id="statEvidence">-</div>
+  <div class="stat-label">Evidence Items Collected</div>
+  <div class="stat-sublabel">lifetime total</div>
  </div>
  <div class="stat-card">
- <div class="stat-value" id="statEvidence">-</div>
- <div class="stat-label">Evidence Items Collected</div>
+  <div class="stat-value" id="statMatchRate">-</div>
+  <div class="stat-label">Avg Match Rate</div>
+  <div class="stat-sublabel">files auto-matched</div>
+ </div>
+ <div class="stat-card">
+  <div class="stat-value" id="statTurnaround">-</div>
+  <div class="stat-label">Avg Turnaround</div>
+  <div class="stat-sublabel">request to submission</div>
  </div>
  <div class="stat-card highlight">
- <div class="stat-value" id="statThisMonth">-</div>
- <div class="stat-label">Requests This Month</div>
+  <div class="stat-value" id="statActive">-</div>
+  <div class="stat-label">Active Now</div>
+  <div class="stat-sublabel" id="statActiveSub"></div>
  </div>
  </div>
  
@@ -9542,10 +9576,17 @@ async function fetchAndRenderDashboard() {
 
 function renderDashboard(requests, stats) {
  // Update stats
- $('#statActive').textContent = stats.activeRequests || 0;
- $('#statCompleted').textContent = stats.completedRequests || 0;
- $('#statEvidence').textContent = stats.totalEvidenceCollected || 0;
- $('#statThisMonth').textContent = stats.requestsThisMonth || 0;
+ // Populate dashboard stats
+ const sa = $('#statActive'), sc = $('#statCompleted'), se = $('#statEvidence');
+ const smr = $('#statMatchRate'), st = $('#statTurnaround');
+ const saS = $('#statActiveSub'), scS = $('#statCompletedSub');
+ if (sa) sa.textContent = stats.activeRequests || 0;
+ if (sc) sc.textContent = stats.completedRequests || 0;
+ if (se) se.textContent = stats.totalEvidenceCollected || 0;
+ if (smr) smr.textContent = stats.avgMatchRate != null ? stats.avgMatchRate + '%' : '--';
+ if (st) st.textContent = stats.avgTurnaroundDays != null ? stats.avgTurnaroundDays + 'd' : '--';
+ if (saS) saS.textContent = (stats.requestsThisMonth > 0) ? stats.requestsThisMonth + ' this month' : '';
+ if (scS) scS.textContent = (stats.totalRequests > 0) ? stats.totalRequests + ' total sent' : '';
  
  // Show/hide credit alert based on credit balance
  const credits = state.user?.credits || 0;
@@ -9798,6 +9839,22 @@ function renderRequestCard(req, type) {
  const deadlineStr = deadline ? deadline.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' }) : 'No deadline';
  const createdStr = created.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
  
+ // Deadline countdown
+ const hoursLeft = deadline ? (deadline - now) / (1000 * 60 * 60) : null;
+ const daysLeft = hoursLeft !== null ? Math.ceil(hoursLeft / 24) : null;
+ let countdownHtml = '';
+ if (deadline && req.status === 'pending') {
+  if (daysLeft > 7) {
+   countdownHtml = `<span class="deadline-badge ok">${daysLeft}d left</span>`;
+  } else if (daysLeft > 2) {
+   countdownHtml = `<span class="deadline-badge warn">${daysLeft}d left</span>`;
+  } else if (daysLeft > 0) {
+   countdownHtml = `<span class="deadline-badge urgent">${daysLeft === 1 ? 'Due tomorrow' : daysLeft + 'd left'}</span>`;
+  } else if (daysLeft <= 0) {
+   countdownHtml = `<span class="deadline-badge urgent">Due today</span>`;
+  }
+ }
+ 
  // Check if overdue
  const isOverdue = deadline && deadline < now && req.status === 'pending';
  
@@ -9839,6 +9896,7 @@ function renderRequestCard(req, type) {
  } else {
  actionsHtml = `
  <button class="request-action-btn primary" data-action="view-pack" data-token="${esc(req.token)}">View ProofPack</button>
+ <button class="request-action-btn" data-action="followup" data-token="${esc(req.token)}">+ Follow-up Request</button>
  <button class="request-action-btn" data-action="copy-link" data-token="${esc(req.token)}">Copy Client Link</button>
  `;
  }
@@ -9868,7 +9926,7 @@ function renderRequestCard(req, type) {
  <span></span> ${esc(req.clientEmail || 'No client email')}
  </div>
  <div class="request-meta-item">
- <span></span> Due: ${deadlineStr}
+ <span></span> Due: ${deadlineStr} ${countdownHtml}
  </div>
  <div class="request-meta-item">
  <span></span> ${req.totalItems || 0} evidence items
@@ -9957,6 +10015,35 @@ function wireRequestActions() {
  const token = btn.dataset.token;
  // Use /pack?t=TOKEN which resolves a fresh signed URL each time
  window.open(`${API}/pack?t=${token}`, '_blank');
+ });
+ });
+
+ // Follow-up request buttons
+ $$('[data-action="followup"]').forEach(btn => {
+ btn.addEventListener('click', async () => {
+ const token = btn.dataset.token;
+ btn.disabled = true;
+ btn.textContent = 'Loading...';
+ try {
+ const res = await fetchWithTimeout(`${API}/followup-prefill?t=${token}`, {
+ headers: { 'Authorization': `Bearer ${state.authToken}` }
+ });
+ const data = await res.json();
+ if (data.ok && data.prefill) {
+ // Store prefill and open composer
+ state.pendingFollowup = data.prefill;
+ showComposerFromDashboard();
+ if (typeof applyFollowup === 'function') applyFollowup(data.prefill);
+ } else {
+ showToast(data.error || 'Could not load previous request', 'error');
+ btn.disabled = false;
+ btn.textContent = '+ Follow-up Request';
+ }
+ } catch(e) {
+ showToast('Error loading request: ' + e.message, 'error');
+ btn.disabled = false;
+ btn.textContent = '+ Follow-up Request';
+ }
  });
  });
  
