@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+api.proofrepo.com<!DOCTYPE html>
 <html lang="en">
 <head>
  <meta charset="UTF-8" />
@@ -18,7 +18,7 @@
  var params = new URLSearchParams(window.location.search);
  var token = params.get('t');
  if (token && token.indexOf('req_') === 0) {
- window.location.replace('https://proofrepo-intake.atucker5.workers.dev/upload?t=' + encodeURIComponent(token));
+ window.location.replace('https://api.proofrepo.com/upload?t=' + encodeURIComponent(token));
  }
  })();
  </script>
@@ -4499,7 +4499,7 @@
  </div>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-const API = 'https://proofrepo-intake.atucker5.workers.dev';
+const API = 'https://api.proofrepo.com';
 const STORAGE_KEY = 'proofrepo_form_state';
 
 
