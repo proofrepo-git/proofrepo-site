@@ -79,7 +79,7 @@
  color: var(--text);
  line-height: 1.6;
  min-height: 100vh;
- padding-bottom: var(--marquee-height);
+ /* padding-bottom: var(--marquee-height); — removed with ticker */
  -webkit-font-smoothing: antialiased;
  -moz-osx-font-smoothing: grayscale;
  }
@@ -2958,7 +2958,7 @@
  }
 
  /* ==================== MARQUEE ==================== */
- .marquee-fixed {
+ .marquee-fixed { display: none !important; /* removed: distracting ticker adds noise without conversion value */
  position: fixed;
  bottom: 0;
  left: 0;
@@ -4323,7 +4323,8 @@
  <div class="section-inner">
  <div class="section-header">
  <h2>Simple, transparent pricing</h2>
- <p class="section-subtitle">One credit per request. No subscriptions, no per-seat fees, no annual contracts.</p>
+ <p class="section-subtitle">No subscriptions, no per-seat fees, no annual contracts.</p>
+ <p style="margin:-8px 0 24px;color:#64748b;font-size:0.9rem;text-align:center;">1 credit = 1 evidence request sent to a client, with any number of evidence items, frameworks, and follow-ups included.</p>
  </div>
  <div class="pricing-landing-grid">
  <div class="pricing-landing-card">
@@ -4331,20 +4332,21 @@
  <div class="pricing-landing-price">$79</div>
  <div class="pricing-landing-per">1 credit</div>
  </div>
- <div class="pricing-landing-card">
+ <div class="pricing-landing-card" style="border:2px solid var(--primary);position:relative;">
+ <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--primary);color:#fff;font-size:0.7rem;font-weight:600;padding:2px 12px;border-radius:99px;white-space:nowrap;">MOST POPULAR</div>
  <div class="pricing-landing-name">5-Pack</div>
  <div class="pricing-landing-price">$299</div>
- <div class="pricing-landing-per">5 credits</div>
+ <div class="pricing-landing-per">5 credits &middot; $60 each</div>
  </div>
  <div class="pricing-landing-card">
  <div class="pricing-landing-name">15-Pack</div>
  <div class="pricing-landing-price">$749</div>
- <div class="pricing-landing-per">15 credits</div>
+ <div class="pricing-landing-per">15 credits &middot; $50 each</div>
  </div>
  <div class="pricing-landing-card">
  <div class="pricing-landing-name">50-Pack</div>
  <div class="pricing-landing-price">$1,999</div>
- <div class="pricing-landing-per">50 credits</div>
+ <div class="pricing-landing-per">50 credits &middot; $40 each</div>
  </div>
  </div>
  <p class="pricing-landing-note">Have a trial code? <a href="#" onclick="event.preventDefault(); document.getElementById('roleSelect').value='new'; handleRoleChange('new'); document.getElementById('roleSelectSection').scrollIntoView({behavior:'smooth'});">Start here</a> &mdash; your first request is on us.</p>
