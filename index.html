@@ -9591,21 +9591,24 @@ function renderDashboard(requests, stats) {
  // Show/hide credit alert based on credit balance
  const credits = state.user?.credits || 0;
  const creditAlert = $('#creditAlert');
+ if (creditAlert) {
  if (credits <= 2) {
- creditAlert.style.display = 'flex';
- $('#creditAlertCount').textContent = credits;
- 
- if (credits === 0) {
- creditAlert.classList.add('critical');
- $('#creditAlertTitle').textContent = 'No credits remaining';
- $('#creditAlertDesc').innerHTML = 'You need to <strong>purchase credits</strong> to send new evidence requests.';
+  creditAlert.style.display = 'flex';
+  // Note: creditAlertCount span lives inside creditAlertDesc and gets destroyed
+  // by the innerHTML overwrite below — do NOT set it separately.
+
+  if (credits === 0) {
+  creditAlert.classList.add('critical');
+  const t0 = $('#creditAlertTitle'); if (t0) t0.textContent = 'No credits remaining';
+  const d0 = $('#creditAlertDesc'); if (d0) d0.innerHTML = 'You need to <strong>purchase credits</strong> to send new evidence requests.';
+  } else {
+  creditAlert.classList.remove('critical');
+  const t1 = $('#creditAlertTitle'); if (t1) t1.textContent = credits === 1 ? 'Last credit remaining' : 'Running low on credits';
+  const d1 = $('#creditAlertDesc'); if (d1) d1.innerHTML = `You have <strong>${credits}</strong> credit${credits !== 1 ? 's' : ''} remaining.`;
+  }
  } else {
- creditAlert.classList.remove('critical');
- $('#creditAlertTitle').textContent = credits === 1 ? 'Last credit remaining' : 'Running low on credits';
- $('#creditAlertDesc').innerHTML = `You have <strong>${credits}</strong> credit${credits !== 1 ? 's' : ''} remaining.`;
+  creditAlert.style.display = 'none';
  }
- } else {
- creditAlert.style.display = 'none';
  }
  
  // Split requests into active and completed
@@ -9614,7 +9617,7 @@ function renderDashboard(requests, stats) {
  
  // Render active requests
  const activeList = $('#activeRequestsList');
- $('#activeCount').textContent = `(${active.length})`;
+ const acEl = $('#activeCount'); if (acEl) acEl.textContent = `(${active.length})`;
  const welcomeCard = $('#welcomeCard');
  const requestsColumns = $('#requestsColumns');
  
@@ -9639,7 +9642,7 @@ function renderDashboard(requests, stats) {
  
  // Render completed requests
  const completedList = $('#completedRequestsList');
- $('#completedCount').textContent = `(${completed.length})`;
+ const ccEl = $('#completedCount'); if (ccEl) ccEl.textContent = `(${completed.length})`;
  if (completed.length === 0) {
  completedList.innerHTML = `
  <div class="empty-state">
