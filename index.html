@@ -298,14 +298,32 @@
   max-width: 600px; margin: 0 auto;
 }
 
-/* Product mockup section */
+/* Product mockup showcase */
 .product-mockup-section {
-  position: relative; max-width: 960px; margin: -20px auto 0; padding: 0 24px 48px;
+  position: relative; max-width: 1060px; margin: -20px auto 0; padding: 0 24px 48px;
+}
+.mockup-tabs {
+  display: flex; justify-content: center; gap: 6px; margin-bottom: 20px; flex-wrap: wrap;
+}
+.mockup-tab {
+  padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600;
+  color: #64748b; background: #f1f5f9; border: 1px solid #e2e8f0;
+  cursor: pointer; transition: all 0.2s ease; user-select: none;
+}
+.mockup-tab:hover { color: #1e40af; border-color: #93c5fd; background: #eff6ff; }
+.mockup-tab.active { color: #fff; background: #1e40af; border-color: #1e40af; }
+.mockup-showcase {
+  position: relative;
 }
 .mockup-browser {
   background: #fff; border-radius: 12px; overflow: hidden;
   box-shadow: 0 25px 60px -12px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.05);
   position: relative; z-index: 2;
+  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1), box-shadow 0.35s ease;
+}
+.mockup-browser:hover {
+  transform: scale(1.015);
+  box-shadow: 0 32px 72px -12px rgba(0,0,0,0.22), 0 0 0 1px rgba(0,0,0,0.05);
 }
 .mockup-toolbar {
   background: #f1f5f9; border-bottom: 1px solid #e2e8f0;
@@ -321,7 +339,33 @@
   background: #fff; border-radius: 6px; padding: 4px 12px;
   border: 1px solid #e2e8f0;
 }
-.mockup-screen { padding: 20px 24px 24px; }
+.mockup-preview-label {
+  font-size: 10px; color: #94a3b8; background: #f1f5f9; padding: 2px 8px;
+  border-radius: 4px; margin-left: auto; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600;
+}
+.mockup-screen { padding: 20px 24px 24px; position: relative; }
+.mockup-panel { display: none; }
+.mockup-panel.active { display: block; animation: mockupFadeIn 0.3s ease; }
+@keyframes mockupFadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Overlay callouts — positioned ON the mockup */
+.callout-overlay {
+  position: absolute; display: flex; align-items: center; gap: 6px;
+  pointer-events: none; z-index: 5;
+}
+.callout-overlay .co-dot {
+  width: 8px; height: 8px; background: #3b82f6; border-radius: 50%; flex-shrink: 0;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.2); animation: coPulse 2s ease-in-out infinite;
+}
+@keyframes coPulse { 0%,100% { box-shadow: 0 0 0 3px rgba(59,130,246,0.2); } 50% { box-shadow: 0 0 0 6px rgba(59,130,246,0.12); } }
+.callout-overlay .co-label {
+  font-size: 11px; font-weight: 600; color: #1e40af; white-space: nowrap;
+  background: rgba(255,255,255,0.92); backdrop-filter: blur(4px);
+  padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(59,130,246,0.2);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+/* Dashboard mockup elements */
 .mock-header { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
 .mock-logo {
   width: 28px; height: 28px; background: #1e40af; color: #fff;
@@ -365,26 +409,71 @@
   display: inline-block; padding: 4px 12px; border-radius: 6px; font-weight: 600;
 }
 
-/* Mockup callouts */
-.mockup-callouts { position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 1; }
-.callout {
-  position: absolute; display: flex; align-items: center; gap: 8px;
+/* Upload mockup elements */
+.mock-upload-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid #e2e8f0; }
+.mock-upload-title { font-size: 15px; font-weight: 700; color: #1e293b; }
+.mock-upload-sub { font-size: 11px; color: #64748b; }
+.mock-progress-bar { height: 8px; background: #e2e8f0; border-radius: 4px; margin-bottom: 16px; overflow: hidden; }
+.mock-progress-fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #22c55e); border-radius: 4px; }
+.mock-checklist-item {
+  display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px;
+  border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 6px; font-size: 12px;
 }
-.callout-left { right: calc(50% + 460px); flex-direction: row-reverse; }
-.callout-right { left: calc(50% + 460px); }
-.callout-dot { width: 10px; height: 10px; background: #3b82f6; border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 0 4px rgba(59,130,246,0.2); }
-.callout-text {
-  font-size: 13px; font-weight: 600; color: #334155; white-space: nowrap;
-  background: #fff; padding: 6px 14px; border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08); border: 1px solid #e2e8f0;
+.mock-check { width: 18px; height: 18px; border-radius: 4px; flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; font-size: 11px; }
+.mock-check.done { background: #dcfce7; color: #166534; }
+.mock-check.pending { background: #f1f5f9; border: 1px solid #cbd5e1; }
+.mock-item-text { color: #334155; line-height: 1.4; }
+.mock-item-file { font-size: 10px; color: #3b82f6; margin-top: 2px; }
+
+/* ProofPack mockup elements */
+.mock-pack-header { text-align: center; margin-bottom: 16px; }
+.mock-pack-title { font-size: 16px; font-weight: 700; color: #1e293b; }
+.mock-pack-meta { font-size: 11px; color: #64748b; margin-top: 4px; }
+.mock-pack-summary {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px;
 }
-@media (max-width: 1200px) {
-  .mockup-callouts { display: none; }
+.mock-pack-stat {
+  text-align: center; padding: 12px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;
 }
+.mock-pack-stat-num { font-size: 20px; font-weight: 800; }
+.mock-pack-stat-label { font-size: 10px; color: #64748b; text-transform: uppercase; }
+.mock-pack-category {
+  border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 14px; margin-bottom: 8px;
+}
+.mock-pack-cat-head { display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px; }
+.mock-pack-bar { height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
+.mock-pack-bar-fill { height: 100%; border-radius: 3px; }
+
+/* Request builder mockup elements */
+.mock-rb-step { font-size: 10px; color: #3b82f6; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+.mock-rb-title { font-size: 15px; font-weight: 700; color: #1e293b; margin-bottom: 12px; }
+.mock-fw-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
+.mock-fw-chip {
+  padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0; text-align: center;
+  font-size: 12px; font-weight: 600; color: #475569; background: #fff; transition: all 0.15s;
+}
+.mock-fw-chip.selected { border-color: #3b82f6; background: #eff6ff; color: #1e40af; box-shadow: 0 0 0 2px rgba(59,130,246,0.15); }
+.mock-fw-chip .fw-count { font-size: 10px; color: #94a3b8; font-weight: 500; display: block; margin-top: 2px; }
+.mock-rb-field { margin-bottom: 12px; }
+.mock-rb-label { font-size: 11px; font-weight: 600; color: #475569; margin-bottom: 4px; }
+.mock-rb-input {
+  width: 100%; padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 6px;
+  font-size: 12px; color: #94a3b8; background: #fff; box-sizing: border-box;
+}
+.mock-rb-btn {
+  display: inline-block; padding: 8px 20px; background: #1e40af; color: #fff;
+  border-radius: 8px; font-size: 12px; font-weight: 600;
+}
+
 @media (max-width: 640px) {
   .mock-stats-row { grid-template-columns: repeat(2, 1fr); }
   .mock-columns { grid-template-columns: 1fr; }
+  .mock-fw-grid { grid-template-columns: repeat(2, 1fr); }
+  .mock-pack-summary { grid-template-columns: 1fr; }
   .mockup-screen { padding: 14px 16px 18px; }
+  .callout-overlay { display: none; }
+  .mockup-tabs { gap: 4px; }
+  .mockup-tab { padding: 6px 12px; font-size: 12px; }
 }
 
 /* Stats strip */
@@ -3689,74 +3778,157 @@
   </div>
  </section>
 
- <!-- Product Mockup -->
+ <!-- Product Mockup Showcase -->
  <section class="product-mockup-section">
-  <div class="mockup-browser">
-   <div class="mockup-toolbar">
-    <div class="mockup-dots"><span></span><span></span><span></span></div>
-    <div class="mockup-url">proofrepo.com</div>
-   </div>
-   <div class="mockup-screen">
-    <!-- Dashboard mockup content -->
-    <div class="mock-header">
-     <div class="mock-logo">P</div>
-     <span style="font-weight:700;font-size:14px;color:#1e293b">ProofRepo</span>
-     <div style="margin-left:auto;font-size:11px;color:#64748b">ops@yourfirm.com</div>
-    </div>
-    <div class="mock-stats-row">
-     <div class="mock-stat"><div class="mock-stat-num" style="color:#1e40af">5</div><div class="mock-stat-label">Engagements</div></div>
-     <div class="mock-stat"><div class="mock-stat-num" style="color:#1e40af">182</div><div class="mock-stat-label">Items Collected</div></div>
-     <div class="mock-stat"><div class="mock-stat-num" style="color:#059669">91%</div><div class="mock-stat-label">Match Rate</div></div>
-     <div class="mock-stat"><div class="mock-stat-num" style="color:#1e40af">1.2d</div><div class="mock-stat-label">Avg Turnaround</div></div>
-    </div>
-    <div class="mock-columns">
-     <div class="mock-col">
-      <div class="mock-col-title">Active Requests <span class="mock-badge">2</span></div>
-      <div class="mock-card">
-       <div class="mock-card-head"><strong>Acme Corp</strong><span class="mock-pill orange">Waiting</span></div>
-       <div class="mock-card-tags"><span class="mock-tag">SOC 2</span><span class="mock-tag">HIPAA</span></div>
-       <div class="mock-card-meta">89 items &middot; Due Apr 2 &middot; Auto-reminder Apr 1</div>
-      </div>
-      <div class="mock-card">
-       <div class="mock-card-head"><strong>Northwind Health</strong><span class="mock-pill orange">Waiting</span></div>
-       <div class="mock-card-tags"><span class="mock-tag">SOC 2</span></div>
-       <div class="mock-card-meta">36 items &middot; Due Apr 2</div>
-      </div>
-     </div>
-     <div class="mock-col">
-      <div class="mock-col-title">Completed <span class="mock-badge green">3</span></div>
-      <div class="mock-card completed">
-       <div class="mock-card-head"><strong>Pinnacle Data</strong><span class="mock-pill green">Complete</span></div>
-       <div class="mock-card-tags"><span class="mock-tag">SOC 2</span></div>
-       <div class="mock-card-meta">36 items &middot; 100% matched</div>
-       <div class="mock-card-btn">View ProofPack</div>
-      </div>
-      <div class="mock-card completed">
-       <div class="mock-card-head"><strong>Meridian Financial</strong><span class="mock-pill green">Complete</span></div>
-       <div class="mock-card-tags"><span class="mock-tag">SOC 2</span><span class="mock-tag">HIPAA</span></div>
-       <div class="mock-card-meta">89 items &middot; 78% matched</div>
-       <div class="mock-card-btn">View ProofPack</div>
-      </div>
-     </div>
-    </div>
-   </div>
+  <div class="mockup-tabs">
+   <div class="mockup-tab active" data-panel="dashboard">Dashboard</div>
+   <div class="mockup-tab" data-panel="upload">Client Upload</div>
+   <div class="mockup-tab" data-panel="proofpack">ProofPack</div>
+   <div class="mockup-tab" data-panel="builder">Request Builder</div>
   </div>
-  <div class="mockup-callouts">
-   <div class="callout callout-left" style="top:18%">
-    <div class="callout-dot"></div>
-    <div class="callout-text">Real-time status on every request</div>
-   </div>
-   <div class="callout callout-right" style="top:38%">
-    <div class="callout-dot"></div>
-    <div class="callout-text">Multi-framework support</div>
-   </div>
-   <div class="callout callout-left" style="top:65%">
-    <div class="callout-dot"></div>
-    <div class="callout-text">Auto-reminders before deadlines</div>
-   </div>
-   <div class="callout callout-right" style="top:82%">
-    <div class="callout-dot"></div>
-    <div class="callout-text">One-click ProofPack review</div>
+  <div class="mockup-showcase">
+   <div class="mockup-browser">
+    <div class="mockup-toolbar">
+     <div class="mockup-dots"><span></span><span></span><span></span></div>
+     <div class="mockup-url">proofrepo.com</div>
+     <div class="mockup-preview-label">Preview</div>
+    </div>
+    <div class="mockup-screen">
+
+     <!-- Panel 1: Dashboard -->
+     <div class="mockup-panel active" data-panel="dashboard">
+      <div class="mock-header">
+       <div class="mock-logo">P</div>
+       <span style="font-weight:700;font-size:14px;color:#1e293b">ProofRepo</span>
+       <div style="margin-left:auto;font-size:11px;color:#64748b">ops@yourfirm.com</div>
+      </div>
+      <div class="mock-stats-row">
+       <div class="mock-stat"><div class="mock-stat-num" style="color:#1e40af">5</div><div class="mock-stat-label">Engagements</div></div>
+       <div class="mock-stat"><div class="mock-stat-num" style="color:#1e40af">182</div><div class="mock-stat-label">Items Collected</div></div>
+       <div class="mock-stat"><div class="mock-stat-num" style="color:#059669">91%</div><div class="mock-stat-label">Match Rate</div></div>
+       <div class="mock-stat"><div class="mock-stat-num" style="color:#1e40af">1.2d</div><div class="mock-stat-label">Avg Turnaround</div></div>
+      </div>
+      <div class="mock-columns">
+       <div class="mock-col">
+        <div class="mock-col-title">Active Requests <span class="mock-badge">2</span></div>
+        <div class="mock-card">
+         <div class="mock-card-head"><strong>Acme Corp</strong><span class="mock-pill orange">Waiting</span></div>
+         <div class="mock-card-tags"><span class="mock-tag">SOC 2</span><span class="mock-tag">HIPAA</span></div>
+         <div class="mock-card-meta">89 items &middot; Due Apr 2 &middot; Auto-reminder Apr 1</div>
+        </div>
+        <div class="mock-card">
+         <div class="mock-card-head"><strong>Northwind Health</strong><span class="mock-pill orange">Waiting</span></div>
+         <div class="mock-card-tags"><span class="mock-tag">SOC 2</span></div>
+         <div class="mock-card-meta">36 items &middot; Due Apr 2</div>
+        </div>
+       </div>
+       <div class="mock-col">
+        <div class="mock-col-title">Completed <span class="mock-badge green">3</span></div>
+        <div class="mock-card completed">
+         <div class="mock-card-head"><strong>Pinnacle Data</strong><span class="mock-pill green">Complete</span></div>
+         <div class="mock-card-tags"><span class="mock-tag">SOC 2</span></div>
+         <div class="mock-card-meta">36 items &middot; 100% matched</div>
+         <div class="mock-card-btn">View ProofPack</div>
+        </div>
+        <div class="mock-card completed">
+         <div class="mock-card-head"><strong>Meridian Financial</strong><span class="mock-pill green">Complete</span></div>
+         <div class="mock-card-tags"><span class="mock-tag">SOC 2</span><span class="mock-tag">HIPAA</span></div>
+         <div class="mock-card-meta">89 items &middot; 78% matched</div>
+         <div class="mock-card-btn">View ProofPack</div>
+        </div>
+       </div>
+      </div>
+      <!-- Dashboard callouts -->
+      <div class="callout-overlay" style="top:8px;right:180px"><div class="co-dot"></div><div class="co-label">Real-time status tracking</div></div>
+      <div class="callout-overlay" style="bottom:72px;left:14px"><div class="co-dot"></div><div class="co-label">Auto-reminders before deadlines</div></div>
+      <div class="callout-overlay" style="bottom:14px;right:14px"><div class="co-dot"></div><div class="co-label">One-click ProofPack review</div></div>
+     </div>
+
+     <!-- Panel 2: Client Upload -->
+     <div class="mockup-panel" data-panel="upload">
+      <div class="mock-upload-header">
+       <div>
+        <div class="mock-upload-title">Upload Evidence &mdash; Acme Corp</div>
+        <div class="mock-upload-sub">SOC 2 + HIPAA &middot; 89 items requested &middot; Due Apr 2</div>
+       </div>
+      </div>
+      <div class="mock-progress-bar"><div class="mock-progress-fill" style="width:67%"></div></div>
+      <div class="mock-checklist-item">
+       <div class="mock-check done">&#10003;</div>
+       <div><div class="mock-item-text">Access control policy document</div><div class="mock-item-file">&#128206; access-control-policy-2025.pdf</div></div>
+      </div>
+      <div class="mock-checklist-item">
+       <div class="mock-check done">&#10003;</div>
+       <div><div class="mock-item-text">Employee security training records</div><div class="mock-item-file">&#128206; security-training-log-Q1.xlsx</div></div>
+      </div>
+      <div class="mock-checklist-item">
+       <div class="mock-check pending"></div>
+       <div><div class="mock-item-text">Incident response plan</div><div style="font-size:10px;color:#94a3b8;margin-top:2px">Tip: Include escalation procedures and contact list</div></div>
+      </div>
+      <div class="mock-checklist-item">
+       <div class="mock-check pending"></div>
+       <div><div class="mock-item-text">Vulnerability scan results (last 90 days)</div><div style="font-size:10px;color:#94a3b8;margin-top:2px">Format: PDF or CSV export from your scanning tool</div></div>
+      </div>
+      <!-- Upload callouts -->
+      <div class="callout-overlay" style="top:52px;right:14px"><div class="co-dot"></div><div class="co-label">Progress tracking per item</div></div>
+      <div class="callout-overlay" style="bottom:50px;right:14px"><div class="co-dot"></div><div class="co-label">Built-in tips reduce back-and-forth</div></div>
+     </div>
+
+     <!-- Panel 3: ProofPack -->
+     <div class="mockup-panel" data-panel="proofpack">
+      <div class="mock-pack-header">
+       <div class="mock-pack-title">ProofPack &mdash; Pinnacle Data Systems</div>
+       <div class="mock-pack-meta">SOC 2 &middot; Submitted Mar 27, 2026 &middot; 36 items</div>
+      </div>
+      <div class="mock-pack-summary">
+       <div class="mock-pack-stat"><div class="mock-pack-stat-num" style="color:#059669">36</div><div class="mock-pack-stat-label">Matched</div></div>
+       <div class="mock-pack-stat"><div class="mock-pack-stat-num" style="color:#dc2626">0</div><div class="mock-pack-stat-label">Missing</div></div>
+       <div class="mock-pack-stat"><div class="mock-pack-stat-num" style="color:#1e40af">100%</div><div class="mock-pack-stat-label">Coverage</div></div>
+      </div>
+      <div class="mock-pack-category">
+       <div class="mock-pack-cat-head"><span>Access Control (CC6.1)</span><span style="color:#059669;font-size:11px">8/8</span></div>
+       <div class="mock-pack-bar"><div class="mock-pack-bar-fill" style="width:100%;background:#22c55e"></div></div>
+      </div>
+      <div class="mock-pack-category">
+       <div class="mock-pack-cat-head"><span>Change Management (CC8.1)</span><span style="color:#059669;font-size:11px">6/6</span></div>
+       <div class="mock-pack-bar"><div class="mock-pack-bar-fill" style="width:100%;background:#22c55e"></div></div>
+      </div>
+      <div class="mock-pack-category">
+       <div class="mock-pack-cat-head"><span>Risk Assessment (CC3.2)</span><span style="color:#eab308;font-size:11px">4/5</span></div>
+       <div class="mock-pack-bar"><div class="mock-pack-bar-fill" style="width:80%;background:#eab308"></div></div>
+      </div>
+      <!-- ProofPack callouts -->
+      <div class="callout-overlay" style="top:8px;right:14px"><div class="co-dot"></div><div class="co-label">Organized by control category</div></div>
+      <div class="callout-overlay" style="bottom:14px;left:14px"><div class="co-dot"></div><div class="co-label">Instant gap analysis</div></div>
+     </div>
+
+     <!-- Panel 4: Request Builder -->
+     <div class="mockup-panel" data-panel="builder">
+      <div class="mock-rb-step">Step 1 of 3</div>
+      <div class="mock-rb-title">Select frameworks for this engagement</div>
+      <div class="mock-fw-grid">
+       <div class="mock-fw-chip selected">SOC 2<span class="fw-count">89 items</span></div>
+       <div class="mock-fw-chip selected">HIPAA<span class="fw-count">72 items</span></div>
+       <div class="mock-fw-chip">ISO 27001<span class="fw-count">93 items</span></div>
+       <div class="mock-fw-chip">SOC 1<span class="fw-count">44 items</span></div>
+       <div class="mock-fw-chip">NIST CSF<span class="fw-count">108 items</span></div>
+       <div class="mock-fw-chip">CMMC<span class="fw-count">72 items</span></div>
+      </div>
+      <div class="mock-rb-field">
+       <div class="mock-rb-label">Client company name</div>
+       <div class="mock-rb-input">Acme Corp</div>
+      </div>
+      <div class="mock-rb-field">
+       <div class="mock-rb-label">Client email</div>
+       <div class="mock-rb-input">compliance@acmecorp.com</div>
+      </div>
+      <div style="margin-top:16px"><div class="mock-rb-btn">Continue &rarr;</div></div>
+      <!-- Builder callouts -->
+      <div class="callout-overlay" style="top:48px;right:14px"><div class="co-dot"></div><div class="co-label">Multi-framework in one request</div></div>
+      <div class="callout-overlay" style="bottom:48px;left:14px"><div class="co-dot"></div><div class="co-label">Fully customizable per client</div></div>
+     </div>
+
+    </div>
    </div>
   </div>
  </section>
@@ -12319,6 +12491,26 @@ function expandWhoSection() {
         });
       }
     }, 500);
+  });
+})();
+
+// Mockup showcase tab switching
+(function() {
+  document.addEventListener('click', function(e) {
+    var tab = e.target.closest('.mockup-tab');
+    if (!tab) return;
+    var panel = tab.getAttribute('data-panel');
+    // Update tabs
+    document.querySelectorAll('.mockup-tab').forEach(function(t) { t.classList.remove('active'); });
+    tab.classList.add('active');
+    // Update panels
+    document.querySelectorAll('.mockup-panel').forEach(function(p) { p.classList.remove('active'); });
+    var target = document.querySelector('.mockup-panel[data-panel="' + panel + '"]');
+    if (target) target.classList.add('active');
+    // Update URL bar
+    var urlMap = { dashboard: 'proofrepo.com', upload: 'proofrepo.com/upload', proofpack: 'proofrepo.com/proofpack', builder: 'proofrepo.com/new-request' };
+    var urlEl = document.querySelector('.mockup-url');
+    if (urlEl && urlMap[panel]) urlEl.textContent = urlMap[panel];
   });
 })();
 
