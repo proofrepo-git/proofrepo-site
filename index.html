@@ -298,6 +298,95 @@
   max-width: 600px; margin: 0 auto;
 }
 
+/* Product mockup section */
+.product-mockup-section {
+  position: relative; max-width: 960px; margin: -20px auto 0; padding: 0 24px 48px;
+}
+.mockup-browser {
+  background: #fff; border-radius: 12px; overflow: hidden;
+  box-shadow: 0 25px 60px -12px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.05);
+  position: relative; z-index: 2;
+}
+.mockup-toolbar {
+  background: #f1f5f9; border-bottom: 1px solid #e2e8f0;
+  display: flex; align-items: center; padding: 10px 16px; gap: 12px;
+}
+.mockup-dots { display: flex; gap: 6px; }
+.mockup-dots span { width: 10px; height: 10px; border-radius: 50%; }
+.mockup-dots span:nth-child(1) { background: #ef4444; }
+.mockup-dots span:nth-child(2) { background: #eab308; }
+.mockup-dots span:nth-child(3) { background: #22c55e; }
+.mockup-url {
+  flex: 1; text-align: center; font-size: 12px; color: #64748b;
+  background: #fff; border-radius: 6px; padding: 4px 12px;
+  border: 1px solid #e2e8f0;
+}
+.mockup-screen { padding: 20px 24px 24px; }
+.mock-header { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+.mock-logo {
+  width: 28px; height: 28px; background: #1e40af; color: #fff;
+  border-radius: 6px; display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 14px;
+}
+.mock-stats-row {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px;
+}
+.mock-stat {
+  border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; text-align: center;
+}
+.mock-stat-num { font-size: 22px; font-weight: 800; line-height: 1.2; }
+.mock-stat-label { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+.mock-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.mock-col-title { font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 10px; }
+.mock-badge {
+  display: inline-block; background: #f1f5f9; color: #475569; font-size: 11px;
+  padding: 1px 7px; border-radius: 10px; font-weight: 600;
+}
+.mock-badge.green { background: #dcfce7; color: #166534; }
+.mock-card {
+  background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;
+  padding: 12px 14px; margin-bottom: 8px;
+}
+.mock-card.completed { border-left: 3px solid #22c55e; }
+.mock-card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 13px; }
+.mock-pill {
+  font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600;
+}
+.mock-pill.orange { background: #fef3c7; color: #92400e; }
+.mock-pill.green { background: #dcfce7; color: #166534; }
+.mock-card-tags { display: flex; gap: 4px; margin-bottom: 4px; }
+.mock-tag {
+  font-size: 10px; background: #dbeafe; color: #1e40af; padding: 1px 6px;
+  border-radius: 4px; font-weight: 600;
+}
+.mock-card-meta { font-size: 11px; color: #64748b; }
+.mock-card-btn {
+  margin-top: 8px; font-size: 11px; color: #fff; background: #1e40af;
+  display: inline-block; padding: 4px 12px; border-radius: 6px; font-weight: 600;
+}
+
+/* Mockup callouts */
+.mockup-callouts { position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 1; }
+.callout {
+  position: absolute; display: flex; align-items: center; gap: 8px;
+}
+.callout-left { right: calc(50% + 460px); flex-direction: row-reverse; }
+.callout-right { left: calc(50% + 460px); }
+.callout-dot { width: 10px; height: 10px; background: #3b82f6; border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 0 4px rgba(59,130,246,0.2); }
+.callout-text {
+  font-size: 13px; font-weight: 600; color: #334155; white-space: nowrap;
+  background: #fff; padding: 6px 14px; border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08); border: 1px solid #e2e8f0;
+}
+@media (max-width: 1200px) {
+  .mockup-callouts { display: none; }
+}
+@media (max-width: 640px) {
+  .mock-stats-row { grid-template-columns: repeat(2, 1fr); }
+  .mock-columns { grid-template-columns: 1fr; }
+  .mockup-screen { padding: 14px 16px 18px; }
+}
+
 /* Stats strip */
 .proof-bar { background: #fff; border-bottom: 1px solid var(--border); }
 .proof-bar-inner {
@@ -394,6 +483,17 @@
  .form-input::placeholder, .form-textarea::placeholder {
  color: #94A3B8;
  }
+
+ /* Password visibility toggle */
+ .pw-wrap { position: relative; }
+ .pw-wrap .form-input { padding-right: 44px; }
+ .pw-toggle {
+   position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+   background: none; border: none; cursor: pointer; padding: 4px;
+   color: #94A3B8; font-size: 18px; line-height: 1; display: flex; align-items: center;
+ }
+ .pw-toggle:hover { color: #475569; }
+ .pw-toggle svg { width: 20px; height: 20px; }
 
  .form-textarea {
  min-height: 100px;
@@ -3589,6 +3689,78 @@
   </div>
  </section>
 
+ <!-- Product Mockup -->
+ <section class="product-mockup-section">
+  <div class="mockup-browser">
+   <div class="mockup-toolbar">
+    <div class="mockup-dots"><span></span><span></span><span></span></div>
+    <div class="mockup-url">proofrepo.com</div>
+   </div>
+   <div class="mockup-screen">
+    <!-- Dashboard mockup content -->
+    <div class="mock-header">
+     <div class="mock-logo">P</div>
+     <span style="font-weight:700;font-size:14px;color:#1e293b">ProofRepo</span>
+     <div style="margin-left:auto;font-size:11px;color:#64748b">ops@yourfirm.com</div>
+    </div>
+    <div class="mock-stats-row">
+     <div class="mock-stat"><div class="mock-stat-num" style="color:#1e40af">5</div><div class="mock-stat-label">Engagements</div></div>
+     <div class="mock-stat"><div class="mock-stat-num" style="color:#1e40af">182</div><div class="mock-stat-label">Items Collected</div></div>
+     <div class="mock-stat"><div class="mock-stat-num" style="color:#059669">91%</div><div class="mock-stat-label">Match Rate</div></div>
+     <div class="mock-stat"><div class="mock-stat-num" style="color:#1e40af">1.2d</div><div class="mock-stat-label">Avg Turnaround</div></div>
+    </div>
+    <div class="mock-columns">
+     <div class="mock-col">
+      <div class="mock-col-title">Active Requests <span class="mock-badge">2</span></div>
+      <div class="mock-card">
+       <div class="mock-card-head"><strong>Acme Corp</strong><span class="mock-pill orange">Waiting</span></div>
+       <div class="mock-card-tags"><span class="mock-tag">SOC 2</span><span class="mock-tag">HIPAA</span></div>
+       <div class="mock-card-meta">89 items &middot; Due Apr 2 &middot; Auto-reminder Apr 1</div>
+      </div>
+      <div class="mock-card">
+       <div class="mock-card-head"><strong>Northwind Health</strong><span class="mock-pill orange">Waiting</span></div>
+       <div class="mock-card-tags"><span class="mock-tag">SOC 2</span></div>
+       <div class="mock-card-meta">36 items &middot; Due Apr 2</div>
+      </div>
+     </div>
+     <div class="mock-col">
+      <div class="mock-col-title">Completed <span class="mock-badge green">3</span></div>
+      <div class="mock-card completed">
+       <div class="mock-card-head"><strong>Pinnacle Data</strong><span class="mock-pill green">Complete</span></div>
+       <div class="mock-card-tags"><span class="mock-tag">SOC 2</span></div>
+       <div class="mock-card-meta">36 items &middot; 100% matched</div>
+       <div class="mock-card-btn">View ProofPack</div>
+      </div>
+      <div class="mock-card completed">
+       <div class="mock-card-head"><strong>Meridian Financial</strong><span class="mock-pill green">Complete</span></div>
+       <div class="mock-card-tags"><span class="mock-tag">SOC 2</span><span class="mock-tag">HIPAA</span></div>
+       <div class="mock-card-meta">89 items &middot; 78% matched</div>
+       <div class="mock-card-btn">View ProofPack</div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div class="mockup-callouts">
+   <div class="callout callout-left" style="top:18%">
+    <div class="callout-dot"></div>
+    <div class="callout-text">Real-time status on every request</div>
+   </div>
+   <div class="callout callout-right" style="top:38%">
+    <div class="callout-dot"></div>
+    <div class="callout-text">Multi-framework support</div>
+   </div>
+   <div class="callout callout-left" style="top:65%">
+    <div class="callout-dot"></div>
+    <div class="callout-text">Auto-reminders before deadlines</div>
+   </div>
+   <div class="callout callout-right" style="top:82%">
+    <div class="callout-dot"></div>
+    <div class="callout-text">One-click ProofPack review</div>
+   </div>
+  </div>
+ </section>
+
  <div class="proof-bar">
   <div class="proof-bar-inner">
    <div class="proof-item">
@@ -3685,7 +3857,7 @@
  </div>
  <div class="form-group">
  <label class="form-label">Password</label>
- <input type="password" class="form-input" id="trialSignupPassword" placeholder="Create a password">
+ <div class="pw-wrap"><input type="password" class="form-input" id="trialSignupPassword" placeholder="Create a password"><button type="button" class="pw-toggle" tabindex="-1" aria-label="Show password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
  <div class="password-reqs">
  <span class="req" data-req="length">8+ characters</span>
  <span class="req" data-req="number">1 number</span>
@@ -3694,7 +3866,7 @@
  </div>
  <div class="form-group">
  <label class="form-label">Confirm Password</label>
- <input type="password" class="form-input" id="trialSignupPasswordConfirm" placeholder="Confirm password">
+ <div class="pw-wrap"><input type="password" class="form-input" id="trialSignupPasswordConfirm" placeholder="Confirm password"><button type="button" class="pw-toggle" tabindex="-1" aria-label="Show password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
  </div>
  <button class="btn btn-accent btn-full" id="trialCreateAccountBtn">Create Account &amp; Continue</button>
  <div id="trialSignupStatus" class="auth-status"></div>
@@ -3752,7 +3924,7 @@
  </div>
  <div class="form-group">
  <label class="form-label">Password</label>
- <input type="password" class="form-input" id="signupPassword" placeholder="Create a password">
+ <div class="pw-wrap"><input type="password" class="form-input" id="signupPassword" placeholder="Create a password"><button type="button" class="pw-toggle" tabindex="-1" aria-label="Show password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
  <div class="password-reqs">
  <span class="req" data-req="length">8+ characters</span>
  <span class="req" data-req="number">1 number</span>
@@ -3761,7 +3933,7 @@
  </div>
  <div class="form-group">
  <label class="form-label">Confirm Password</label>
- <input type="password" class="form-input" id="signupPasswordConfirm" placeholder="Confirm password">
+ <div class="pw-wrap"><input type="password" class="form-input" id="signupPasswordConfirm" placeholder="Confirm password"><button type="button" class="pw-toggle" tabindex="-1" aria-label="Show password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
  </div>
  <button class="btn btn-primary btn-full" id="signupBtn">Create Account</button>
  <p class="auth-footnote">We'll send a verification email to confirm your account.</p>
@@ -3783,7 +3955,7 @@
  </div>
  <div class="form-group">
  <label class="form-label">Password</label>
- <input type="password" class="form-input" id="loginPassword" placeholder="Your password">
+ <div class="pw-wrap"><input type="password" class="form-input" id="loginPassword" placeholder="Your password"><button type="button" class="pw-toggle" tabindex="-1" aria-label="Show password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
  </div>
  <div class="login-options">
  <label class="checkbox-label">
@@ -3816,7 +3988,7 @@
  <p class="auth-subtitle">Choose a new password for your account.</p>
  <div class="form-group">
  <label class="form-label">New Password</label>
- <input type="password" class="form-input" id="newPassword" placeholder="Minimum 8 characters">
+ <div class="pw-wrap"><input type="password" class="form-input" id="newPassword" placeholder="Minimum 8 characters"><button type="button" class="pw-toggle" tabindex="-1" aria-label="Show password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
  <div class="password-requirements" id="resetPwReqs">
  <span id="resetReqLength">&#x2717; 8+ characters</span>
  <span id="resetReqNumber">&#x2717; 1 number</span>
@@ -3825,7 +3997,7 @@
  </div>
  <div class="form-group">
  <label class="form-label">Confirm Password</label>
- <input type="password" class="form-input" id="confirmNewPassword" placeholder="Re-enter new password">
+ <div class="pw-wrap"><input type="password" class="form-input" id="confirmNewPassword" placeholder="Re-enter new password"><button type="button" class="pw-toggle" tabindex="-1" aria-label="Show password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
  </div>
  <button class="btn btn-primary btn-full" id="resetPasswordBtn">Reset Password</button>
  <div id="resetPasswordStatus" class="auth-status"></div>
@@ -12149,6 +12321,20 @@ function expandWhoSection() {
     }, 500);
   });
 })();
+
+// Password visibility toggle (eye icon)
+document.addEventListener('click', function(e) {
+  var btn = e.target.closest('.pw-toggle');
+  if (!btn) return;
+  var input = btn.parentElement.querySelector('input');
+  if (!input) return;
+  var showing = input.type === 'text';
+  input.type = showing ? 'password' : 'text';
+  btn.innerHTML = showing
+    ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
+    : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+  input.focus();
+});
 
 document.addEventListener('DOMContentLoaded', init);
 </script>
