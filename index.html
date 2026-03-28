@@ -476,6 +476,12 @@
 .m-rb-input.placeholder { color: #94a3b8; }
 .m-rb-btn { display: inline-block; padding: 8px 20px; background: linear-gradient(135deg, #0d9488, #0f766e); color: #fff; border-radius: 8px; font-size: 12px; font-weight: 600; box-shadow: 0 1px 3px rgba(13,148,136,0.3); }
 
+/* Demo video panel */
+.m-demo-video-wrap {
+  position: relative; padding-bottom: 53.75%; height: 0; border-radius: 8px; overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
 @media (max-width: 640px) {
   .m-stats-grid { grid-template-columns: repeat(2, 1fr); }
   .m-req-cols { grid-template-columns: 1fr; }
@@ -3387,6 +3393,20 @@
 
 
 /* ==================== DASHBOARD HELP SECTION ==================== */
+/* Dashboard Product Tour Card */
+.tour-card{background:#f0f9ff;border:1px solid #bfdbfe;border-radius:12px;margin-bottom:20px;overflow:hidden;transition:all .2s}
+.tour-card-header{display:flex;align-items:center;gap:12px;padding:16px 20px;cursor:pointer;position:relative}
+.tour-card-title{display:flex;align-items:center;gap:8px;font-size:.95rem;font-weight:700;color:#1e40af}
+.tour-card-subtitle{font-size:.82rem;color:#64748b;flex:1}
+.tour-chevron{position:absolute;right:16px;top:50%;transform:translateY(-50%);color:#64748b;transition:transform .2s}
+.tour-card.collapsed .tour-chevron{transform:translateY(-50%) rotate(-90deg)}
+.tour-card.collapsed .tour-card-body{display:none}
+.tour-card-body{padding:0 16px 16px}
+.tour-card-body .mockup-showcase-anchor{display:contents}
+.tour-card-body .product-mockup-section{margin:0;padding:0}
+.tour-card-body .mockup-tabs{margin-bottom:12px}
+.tour-card-body .mockup-browser{max-height:420px}
+
 .dashboard-help-section{margin-top:28px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:22px 24px}
 .dh-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
 .dh-title{font-size:.9rem;font-weight:700;color:#374151;text-transform:uppercase;letter-spacing:.4px}
@@ -3791,13 +3811,32 @@
   </div>
  </section>
 
+ <div class="proof-bar">
+  <div class="proof-bar-inner">
+   <div class="proof-item">
+    <span class="proof-number">7 frameworks</span>
+    <span class="proof-label">519 items with tips, formats &amp; control refs</span>
+   </div>
+   <div class="proof-item">
+    <span class="proof-number">Fully customizable</span>
+    <span class="proof-label">Edit anything, save templates, reuse across clients</span>
+   </div>
+   <div class="proof-item">
+    <span class="proof-number">One dashboard</span>
+    <span class="proof-label">Deadlines, status, and automated follow-ups</span>
+   </div>
+  </div>
+ </div>
+
+<div class="mockup-showcase-anchor">
  <!-- Product Mockup Showcase -->
  <section class="product-mockup-section">
   <div class="mockup-tabs">
-   <div class="mockup-tab active" data-panel="dashboard">Dashboard</div>
-   <div class="mockup-tab" data-panel="upload">Client Upload</div>
-   <div class="mockup-tab" data-panel="proofpack">ProofPack</div>
-   <div class="mockup-tab" data-panel="builder">Request Builder</div>
+   <div class="mockup-tab active" data-panel="dashboard">Your Dashboard</div>
+   <div class="mockup-tab" data-panel="builder">1. Build a Request</div>
+   <div class="mockup-tab" data-panel="upload">2. Client Uploads</div>
+   <div class="mockup-tab" data-panel="proofpack">3. Your ProofPack</div>
+   <div class="mockup-tab" data-panel="demo">Watch Demo</div>
   </div>
   <div class="mockup-showcase">
    <div class="mockup-browser">
@@ -3990,29 +4029,94 @@
       <div class="co-wrap co-left" style="bottom:14px;left:14px"><div class="co-dot"></div><div class="co-line"></div><div class="co-label">Save &amp; reuse templates</div></div>
      </div>
 
+     <!-- Panel 5: Watch Demo (Loom video) -->
+     <div class="mockup-panel" data-panel="demo">
+      <div style="text-align:center;margin-bottom:12px">
+       <div style="font-size:15px;font-weight:700;color:#0f172a;margin-bottom:4px">See the full workflow in action</div>
+       <div style="font-size:11px;color:#64748b">From building a request to one-click follow-up &mdash; under 10 minutes.</div>
+      </div>
+      <div class="m-demo-video-wrap">
+       <iframe src="https://www.loom.com/embed/d7a3709ad77247c48871eb7a7573d835" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:8px;"></iframe>
+      </div>
+     </div>
+
     </div>
    </div>
   </div>
  </section>
-
- <div class="proof-bar">
-  <div class="proof-bar-inner">
-   <div class="proof-item">
-    <span class="proof-number">7 frameworks</span>
-    <span class="proof-label">519 items with tips, formats &amp; control refs</span>
-   </div>
-   <div class="proof-item">
-    <span class="proof-number">Fully customizable</span>
-    <span class="proof-label">Edit anything, save templates, reuse across clients</span>
-   </div>
-   <div class="proof-item">
-    <span class="proof-number">One dashboard</span>
-    <span class="proof-label">Deadlines, status, and automated follow-ups</span>
-   </div>
-  </div>
- </div>
+</div><!-- /mockup-showcase-anchor -->
 
  <div class="side-ref" id="sideRef"></div>
+
+
+ <section class="workflow-section">
+ <h2>Everything you need to collect evidence efficiently</h2>
+ <p class="workflow-subtitle">Guided enough to eliminate back-and-forth. Flexible enough to fit how your firm actually works.</p>
+ <div class="workflow-grid">
+ <div class="workflow-card">
+ <div class="workflow-icon">
+ <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+ </div>
+ <h3>Curated evidence library</h3>
+ <p>519 items across SOC 2, ISO 27001, SOC 1, HIPAA, NIST CSF, CMMC, and GDPR. Each with descriptions, expected formats, control references, and tips that reduce re-requests.</p>
+ </div>
+ <div class="workflow-card">
+ <div class="workflow-icon">
+ <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+ </div>
+ <h3>Customize per engagement</h3>
+ <p>Edit descriptions, add custom items, remove what doesn't apply, set per-framework template levels. Every request reflects your standards, not a generic checklist.</p>
+ </div>
+ <div class="workflow-card">
+ <div class="workflow-icon">
+ <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg>
+ </div>
+ <h3>Save templates, stay consistent</h3>
+ <p>Save any request as a reusable template. Next engagement, load it in one click and adjust. Build consistency across your practice without rebuilding from scratch.</p>
+ </div>
+ <div class="workflow-card">
+ <div class="workflow-icon">
+ <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm0 8a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zm10 0a1 1 0 011-1h4a1 1 0 011 1v6a1 1 0 01-1 1h-4a1 1 0 01-1-1v-6z"/></svg>
+ </div>
+ <h3>Dashboard and auto follow-ups</h3>
+ <p>Track every request in one place &mdash; who's submitted, who's overdue, what's coming due. Automated reminders go out before deadlines so you focus on review, not chasing.</p>
+ </div>
+ </div>
+</section>
+
+ <section class="pricing-landing-section" id="pricing">
+ <div class="section-inner">
+ <div class="section-header">
+ <h2>Simple, transparent pricing</h2>
+ <p class="section-subtitle">No subscriptions, no per-seat fees, no annual contracts.</p>
+ <p style="margin:-8px 0 24px;color:#64748b;font-size:0.9rem;text-align:center;">1 credit = 1 evidence request sent to a client, with any number of evidence items, frameworks, and follow-ups included.</p>
+ </div>
+ <div class="pricing-landing-grid">
+ <div class="pricing-landing-card">
+ <div class="pricing-landing-name">Single</div>
+ <div class="pricing-landing-price">$79</div>
+ <div class="pricing-landing-per">1 credit</div>
+ </div>
+ <div class="pricing-landing-card" style="border:2px solid var(--primary);position:relative;">
+ <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--primary);color:#fff;font-size:0.7rem;font-weight:600;padding:2px 12px;border-radius:99px;white-space:nowrap;">MOST POPULAR</div>
+ <div class="pricing-landing-name">5-Pack</div>
+ <div class="pricing-landing-price">$299</div>
+ <div class="pricing-landing-per">5 credits &middot; $60 each</div>
+ </div>
+ <div class="pricing-landing-card">
+ <div class="pricing-landing-name">15-Pack</div>
+ <div class="pricing-landing-price">$749</div>
+ <div class="pricing-landing-per">15 credits &middot; $50 each</div>
+ </div>
+ <div class="pricing-landing-card">
+ <div class="pricing-landing-name">50-Pack</div>
+ <div class="pricing-landing-price">$1,999</div>
+ <div class="pricing-landing-per">50 credits &middot; $40 each</div>
+ </div>
+ </div>
+ <p class="pricing-landing-note">Have a trial code? <a href="#" onclick="event.preventDefault(); document.getElementById('roleSelect').value='new'; handleRoleChange('new'); document.getElementById('roleSelectSection').scrollIntoView({behavior:'smooth'});">Start here</a> &mdash; your first request is on us.</p>
+ </div>
+ </section>
 
  <main class="main-container">
  <!-- Success Banner -->
@@ -4297,6 +4401,20 @@
  <div id="redeemCodeStatus" class="auth-status" style="margin-top:6px;"></div>
  </div>
  
+<!-- Product Tour Card (shown to logged-in users) -->
+<div id="dashboardTourCard" class="tour-card" style="display:none;">
+ <div class="tour-card-header" id="tourCardToggle">
+  <div class="tour-card-title">
+   <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 10l-4 4l6 6l4-16l-18 7l4 2l2 6l3-4"/></svg>
+   Product Tour
+  </div>
+  <div class="tour-card-subtitle">Explore the different screens of ProofRepo</div>
+  <svg class="tour-chevron" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+ </div>
+ <div class="tour-card-body">
+ </div>
+</div>
+
  <!-- Stats Cards -->
  <div class="stats-grid" id="statsGrid">
  <div class="stat-card">
@@ -4652,115 +4770,7 @@
  </div>
  </main>
 
- <section id="how-it-works" class="how-section">
- <h2>How it works</h2>
- <div class="how-grid">
- <div class="how-card">
- <div class="step-number">1</div>
- <h3>Build your request</h3>
- <p>Select from 7 compliance frameworks and 519 curated evidence items. Customize descriptions, set deadlines, and save templates for recurring audits.</p>
- </div>
- <div class="how-card">
- <div class="step-number">2</div>
- <h3>Client uploads with guidance</h3>
- <p>Your client gets a professional upload link with clear descriptions, expected file formats, and helpful tips &mdash; no more back-and-forth about what you need.</p>
- </div>
- <div class="how-card">
- <div class="step-number">3</div>
- <h3>Get your ProofPack</h3>
- <p>Evidence arrives organized by control area with a complete manifest &mdash; mapped to specific controls, ready to drop into your workpapers, reports, or compliance documentation.</p>
- </div>
- </div>
- </section>
 
- <!-- WORKFLOW SECTION -->
- <section class="workflow-section">
- <h2>Everything you need to collect evidence efficiently</h2>
- <p class="workflow-subtitle">Guided enough to eliminate back-and-forth. Flexible enough to fit how your firm actually works.</p>
- <div class="workflow-grid">
- <div class="workflow-card">
- <div class="workflow-icon">
- <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
- </div>
- <h3>Curated evidence library</h3>
- <p>519 items across SOC 2, ISO 27001, SOC 1, HIPAA, NIST CSF, CMMC, and GDPR. Each with descriptions, expected formats, control references, and tips that reduce re-requests.</p>
- </div>
- <div class="workflow-card">
- <div class="workflow-icon">
- <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
- </div>
- <h3>Customize per engagement</h3>
- <p>Edit descriptions, add custom items, remove what doesn't apply, set per-framework template levels. Every request reflects your standards, not a generic checklist.</p>
- </div>
- <div class="workflow-card">
- <div class="workflow-icon">
- <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg>
- </div>
- <h3>Save templates, stay consistent</h3>
- <p>Save any request as a reusable template. Next engagement, load it in one click and adjust. Build consistency across your practice without rebuilding from scratch.</p>
- </div>
- <div class="workflow-card">
- <div class="workflow-icon">
- <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm0 8a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zm10 0a1 1 0 011-1h4a1 1 0 011 1v6a1 1 0 01-1 1h-4a1 1 0 01-1-1v-6z"/></svg>
- </div>
- <h3>Dashboard and auto follow-ups</h3>
- <p>Track every request in one place &mdash; who's submitted, who's overdue, what's coming due. Automated reminders go out before deadlines so you focus on review, not chasing.</p>
- </div>
- </div>
- <!-- DEMO VIDEO SECTION -->
- <div class="demo-video-section" id="demo">
- <h3>See ProofRepo in action</h3>
- <p class="demo-subtitle">Watch the full workflow — from building a request to one-click follow-up.</p>
- <div class="demo-video-wrap">
- <div style="position:relative;padding-bottom:53.75%;height:0;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.10);">
- <iframe src="https://www.loom.com/embed/d7a3709ad77247c48871eb7a7573d835" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;"></iframe>
- </div>
- </div>
- <div class="demo-cta">
- <a href="https://docs.google.com/forms/d/e/1FAIpQLSfCXvVXnvuWqKysjEkO8BK60D3cOB54wD0TYAoURPBNMdy9sw/viewform?usp=sf_link" target="_blank" rel="noopener" class="btn btn-primary btn-demo-cta">Request Free Access</a>
- <span class="demo-cta-hint">We'll set you up with a free credit to try it out.</span>
- </div>
- </div>
- </section>
-
-
- <!-- PRICING SECTION -->
- <section class="pricing-landing-section" id="pricing">
- <div class="section-inner">
- <div class="section-header">
- <h2>Simple, transparent pricing</h2>
- <p class="section-subtitle">No subscriptions, no per-seat fees, no annual contracts.</p>
- <p style="margin:-8px 0 24px;color:#64748b;font-size:0.9rem;text-align:center;">1 credit = 1 evidence request sent to a client, with any number of evidence items, frameworks, and follow-ups included.</p>
- </div>
- <div class="pricing-landing-grid">
- <div class="pricing-landing-card">
- <div class="pricing-landing-name">Single</div>
- <div class="pricing-landing-price">$79</div>
- <div class="pricing-landing-per">1 credit</div>
- </div>
- <div class="pricing-landing-card" style="border:2px solid var(--primary);position:relative;">
- <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--primary);color:#fff;font-size:0.7rem;font-weight:600;padding:2px 12px;border-radius:99px;white-space:nowrap;">MOST POPULAR</div>
- <div class="pricing-landing-name">5-Pack</div>
- <div class="pricing-landing-price">$299</div>
- <div class="pricing-landing-per">5 credits &middot; $60 each</div>
- </div>
- <div class="pricing-landing-card">
- <div class="pricing-landing-name">15-Pack</div>
- <div class="pricing-landing-price">$749</div>
- <div class="pricing-landing-per">15 credits &middot; $50 each</div>
- </div>
- <div class="pricing-landing-card">
- <div class="pricing-landing-name">50-Pack</div>
- <div class="pricing-landing-price">$1,999</div>
- <div class="pricing-landing-per">50 credits &middot; $40 each</div>
- </div>
- </div>
- <p class="pricing-landing-note">Have a trial code? <a href="#" onclick="event.preventDefault(); document.getElementById('roleSelect').value='new'; handleRoleChange('new'); document.getElementById('roleSelectSection').scrollIntoView({behavior:'smooth'});">Start here</a> &mdash; your first request is on us.</p>
- </div>
- </section>
-
-
- <!-- TRUST SECTION -->
  <section class="trust-section" id="trust">
  <div class="section-inner">
  <div class="section-header">
@@ -9905,6 +9915,15 @@ async function showDashboardInternal() {
  if (workflowSection) workflowSection.style.display = 'none';
  const howSection = document.querySelector('.how-section');
  if (howSection) howSection.style.display = 'none';
+ var mockupSection = document.querySelector('.product-mockup-section');
+ if (mockupSection) {
+   var tourCard = document.getElementById('dashboardTourCard');
+   if (tourCard) {
+     var tourBody = tourCard.querySelector('.tour-card-body');
+     if (tourBody) { tourBody.innerHTML = ''; tourBody.appendChild(mockupSection); }
+     tourCard.style.display = 'block';
+   }
+ }
  const pricingSection = document.querySelector('.pricing-landing-section');
  if (pricingSection) pricingSection.style.display = 'none';
  const trustSection = document.querySelector('.trust-section');
@@ -11172,6 +11191,13 @@ function handleLogout() {
  if (workflowSection) workflowSection.style.display = '';
  const howSection = document.querySelector('.how-section');
  if (howSection) howSection.style.display = '';
+ var mockupSection = document.querySelector('.product-mockup-section');
+ if (mockupSection) {
+   var origParent = document.querySelector('.mockup-showcase-anchor');
+   if (origParent) { origParent.appendChild(mockupSection); }
+ }
+ var tourCard = document.getElementById('dashboardTourCard');
+ if (tourCard) tourCard.style.display = 'none';
  const pricingSection = document.querySelector('.pricing-landing-section');
  if (pricingSection) pricingSection.style.display = '';
  const trustSection = document.querySelector('.trust-section');
@@ -12570,9 +12596,19 @@ function expandWhoSection() {
     var target = document.querySelector('.mockup-panel[data-panel="' + panel + '"]');
     if (target) target.classList.add('active');
     // Update URL bar
-    var urlMap = { dashboard: 'proofrepo.com', upload: 'proofrepo.com/upload', proofpack: 'proofrepo.com/proofpack', builder: 'proofrepo.com/new-request' };
+    var urlMap = { dashboard: 'proofrepo.com', builder: 'proofrepo.com/new-request', upload: 'proofrepo.com/upload', proofpack: 'proofrepo.com/proofpack', demo: 'loom.com/share/proofrepo-demo' };
     var urlEl = document.querySelector('.mockup-url');
     if (urlEl && urlMap[panel]) urlEl.textContent = urlMap[panel];
+  });
+})();
+
+// Tour card collapse/expand
+(function() {
+  document.addEventListener('click', function(e) {
+    var header = e.target.closest('#tourCardToggle');
+    if (!header) return;
+    var card = document.getElementById('dashboardTourCard');
+    if (card) card.classList.toggle('collapsed');
   });
 })();
 
