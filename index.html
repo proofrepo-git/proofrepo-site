@@ -394,6 +394,14 @@
 .m-action-btn { font-size: 9.5px; font-weight: 500; padding: 4px 10px; border-radius: 6px; border: 1px solid #e2e8f0; background: #fff; color: #334155; }
 .m-action-btn.primary { background: #1e40af; color: #fff; border-color: #1e40af; }
 .m-action-btn.accent { background: #0d9488; color: #fff; border-color: #0d9488; }
+.m-action-danger { color: #dc2626; border-color: transparent; font-size: 9px; }
+.m-deadline-badge { display: inline-block; padding: 1px 6px; font-size: 8.5px; font-weight: 600; border-radius: 4px; margin-left: 4px; vertical-align: middle; }
+.m-dl-ok { background: #dcfce7; color: #166534; }
+.m-dl-warn { background: #fef9c3; color: #854d0e; }
+.m-dl-urgent { background: #fee2e2; color: #991b1b; }
+.m-reminder-info { color: #1e40af; font-size: 9px; font-style: italic; }
+.m-req-card-overdue { border-color: rgba(217,119,6,0.4); background: linear-gradient(135deg, #fff, rgba(254,243,199,0.3)); }
+.m-overdue-alert { font-size: 9.5px; color: #d97706; font-weight: 500; margin-bottom: 4px; padding: 4px 8px; background: #fffbeb; border-radius: 4px; border: 1px solid #fde68a; }
 
 /* ---- UPLOAD MOCKUP (matches real upload page) ---- */
 .m-up-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
@@ -409,11 +417,20 @@
 .m-drop-zone { border: 2px dashed #cbd5e1; border-radius: 8px; padding: 10px; text-align: center; font-size: 11px; color: #64748b; margin-bottom: 10px; }
 .m-drop-zone span { color: #2563eb; font-weight: 600; }
 .m-file-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; }
-.m-file-chip { display: inline-flex; padding: 2px 7px; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 9.5px; color: #334155; border-left: 3px solid #16a34a; }
+.m-file-chip { display: inline-flex; align-items: center; padding: 2px 7px; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 9.5px; color: #334155; border-left: 3px solid #16a34a; }
+.m-file-chip.m-file-unmatched { border-left-color: #f59e0b; background: #fffbeb; border-color: #fde68a; }
+.m-tag-btn { font-size: 8px; color: #2563eb; font-weight: 600; margin-left: 5px; background: #eff6ff; padding: 1px 5px; border-radius: 3px; }
+.m-up-summary-bar { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; margin-bottom: 10px; }
+.m-up-sum-stat { background: #fff; border: 1px solid #e2e8f0; border-radius: 7px; padding: 6px; text-align: center; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+.m-up-sum-num { font-size: 16px; font-weight: 700; }
+.m-up-sum-lbl { font-size: 8px; color: #64748b; text-transform: uppercase; letter-spacing: 0.03em; }
 .m-checklist-h2 { font-size: 13px; font-weight: 700; color: #1e293b; margin: 0 0 6px; }
 .m-nav-pills { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
 .m-nav-pill { font-size: 9px; padding: 3px 8px; border-radius: 12px; background: #f1f5f9; color: #334155; font-weight: 600; }
 .m-nav-pill .pill-ct { background: #2563eb; color: #fff; font-size: 8px; padding: 1px 5px; border-radius: 8px; margin-left: 4px; }
+.m-nav-pill-done { background: #f0fdf4; border: 1px solid #bbf7d0; }
+.m-nav-pill-done .pill-ct { background: #16a34a; }
+.m-pg { color: #16a34a; font-weight: 700; } .m-pw { color: #f59e0b; font-weight: 700; } .m-pr { color: #ef4444; font-weight: 700; } .m-ps { color: #8b5cf6; font-weight: 700; } .m-pgr { color: #94a3b8; font-weight: 700; }
 .m-ci-row { display: flex; align-items: flex-start; gap: 8px; padding: 7px 9px; border: 1px solid #e2e8f0; border-radius: 6px; background: #fff; font-size: 11px; margin-bottom: 4px; }
 .m-ci-row.fulfilled { border-color: #16a34a; background: #f0fdf4; }
 .m-ci-row.noted { border-color: #f59e0b; background: #fffbeb; }
@@ -459,6 +476,7 @@
 .m-pp-item-icon.red { background: #fef2f2; color: #dc2626; }
 .m-pp-item-title { font-weight: 600; color: #334155; }
 .m-pp-item-ref { display: inline-block; font-size: 8.5px; padding: 1px 5px; background: #eff6ff; color: #2563eb; border-radius: 3px; font-family: monospace; margin-top: 2px; }
+.m-pp-item-files { font-size: 9px; color: #2563eb; margin-top: 2px; }
 
 /* ---- REQUEST BUILDER MOCKUP (matches real request composer) ---- */
 .m-rb-step { font-size: 10px; color: #2563eb; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
@@ -475,6 +493,13 @@
 .m-rb-input { width: 100%; padding: 7px 10px; border: 1px solid #e2e8f0; border-radius: 7px; font-size: 11px; color: #1e293b; background: #fff; box-sizing: border-box; }
 .m-rb-input.placeholder { color: #94a3b8; }
 .m-rb-btn { display: inline-block; padding: 8px 20px; background: linear-gradient(135deg, #0d9488, #0f766e); color: #fff; border-radius: 8px; font-size: 12px; font-weight: 600; box-shadow: 0 1px 3px rgba(13,148,136,0.3); }
+.m-rb-followup-toggle { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; margin-top: 10px; }
+.m-toggle-track { width: 28px; height: 16px; background: #cbd5e1; border-radius: 8px; position: relative; flex-shrink: 0; transition: background 0.2s; }
+.m-toggle-track.m-toggle-on { background: #16a34a; }
+.m-toggle-thumb { width: 12px; height: 12px; background: #fff; border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: left 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.15); }
+.m-toggle-track.m-toggle-on .m-toggle-thumb { left: 14px; }
+.m-toggle-label { font-size: 11px; font-weight: 600; color: #166534; }
+.m-toggle-hint { font-size: 9px; color: #64748b; margin-top: 1px; }
 
 /* Demo video panel */
 .m-demo-video-wrap {
@@ -3867,34 +3892,36 @@
        <div>
         <div class="m-section-title">Active Requests <span class="m-section-count">(2)</span></div>
         <div class="m-req-card">
-         <div class="m-req-card-head"><div><div class="m-req-company">Acme Corp</div><div class="m-req-tags"><span class="m-fw-tag">SOC 2</span><span class="m-fw-tag">HIPAA</span></div></div><span class="m-req-status pending"><span class="m-status-dot"></span>Pending</span></div>
-         <div class="m-req-meta"><strong>Due:</strong> Apr 2 &middot; <strong>Created:</strong> 5 days ago</div>
-         <div class="m-req-actions"><span class="m-action-btn primary">Copy Upload Link</span><span class="m-action-btn">Remind</span></div>
+         <div class="m-req-card-head"><div><div class="m-req-company">Acme Corp</div><div class="m-req-tags"><span class="m-fw-tag">SOC 2</span><span class="m-fw-tag">HIPAA</span></div></div><span class="m-req-status pending"><span class="m-status-dot"></span>&#9202; Waiting for upload</span></div>
+         <div class="m-req-meta">&#128231; compliance@acmecorp.com &middot; <strong>Due:</strong> Apr 2 <span class="m-deadline-badge m-dl-warn">4d left</span> &middot; 161 items</div>
+         <div class="m-req-meta m-reminder-info">&#128276; Auto-reminders on &middot; next: 48h before deadline</div>
+         <div class="m-req-actions"><span class="m-action-btn primary">Copy Client Link</span><span class="m-action-btn">&#128231; Resend to Client</span><span class="m-action-btn">Extend Deadline</span></div>
         </div>
-        <div class="m-req-card">
-         <div class="m-req-card-head"><div><div class="m-req-company">Northwind Health</div><div class="m-req-tags"><span class="m-fw-tag">SOC 2</span></div></div><span class="m-req-status pending"><span class="m-status-dot"></span>Pending</span></div>
-         <div class="m-req-meta"><strong>Due:</strong> Apr 2 &middot; <strong>Items:</strong> 36</div>
-         <div class="m-req-actions"><span class="m-action-btn primary">Copy Upload Link</span><span class="m-action-btn">Remind</span></div>
+        <div class="m-req-card m-req-card-overdue">
+         <div class="m-req-card-head"><div><div class="m-req-company">Northwind Health</div><div class="m-req-tags"><span class="m-fw-tag">SOC 2</span></div></div><span class="m-req-status pending"><span class="m-status-dot"></span>&#9202; Overdue (2d)</span></div>
+         <div class="m-overdue-alert">&#9888; Deadline passed 2 days ago. Client can still upload late.</div>
+         <div class="m-req-meta">&#128231; ops@northwind.com &middot; <strong>Due:</strong> Mar 27 &middot; 36 items</div>
+         <div class="m-req-actions"><span class="m-action-btn primary" style="background:#d97706;border-color:#d97706">Extend Deadline</span><span class="m-action-btn">&#128231; Resend to Client</span><span class="m-action-btn m-action-danger">Cancel</span></div>
         </div>
        </div>
        <div>
         <div class="m-section-title">Completed <span class="m-section-count">(3)</span></div>
         <div class="m-req-card">
-         <div class="m-req-card-head"><div><div class="m-req-company">Pinnacle Data</div><div class="m-req-tags"><span class="m-fw-tag">SOC 2</span></div></div><span class="m-req-status complete"><span class="m-status-dot"></span>Complete</span></div>
-         <div class="m-req-meta"><strong>Submitted:</strong> Mar 27 &middot; 36 items &middot; 100% matched</div>
-         <div class="m-req-actions"><span class="m-action-btn accent">View ProofPack</span><span class="m-action-btn">Download PDF</span></div>
+         <div class="m-req-card-head"><div><div class="m-req-company">Pinnacle Data</div><div class="m-req-tags"><span class="m-fw-tag">SOC 2</span></div></div><span class="m-req-status complete"><span class="m-status-dot"></span>&#10003; Mar 27</span></div>
+         <div class="m-req-meta"><strong>36</strong> items &middot; <strong style="color:#16a34a">100%</strong> matched &middot; 36 files</div>
+         <div class="m-req-actions"><span class="m-action-btn accent">View ProofPack</span><span class="m-action-btn">+ Follow-up Request</span></div>
         </div>
         <div class="m-req-card">
-         <div class="m-req-card-head"><div><div class="m-req-company">Meridian Financial</div><div class="m-req-tags"><span class="m-fw-tag">SOC 2</span><span class="m-fw-tag">HIPAA</span></div></div><span class="m-req-status complete"><span class="m-status-dot"></span>Complete</span></div>
-         <div class="m-req-meta"><strong>Submitted:</strong> Mar 28 &middot; 89 items &middot; 78% matched</div>
-         <div class="m-req-actions"><span class="m-action-btn accent">View ProofPack</span><span class="m-action-btn">Download PDF</span></div>
+         <div class="m-req-card-head"><div><div class="m-req-company">Meridian Financial</div><div class="m-req-tags"><span class="m-fw-tag">SOC 2</span><span class="m-fw-tag">HIPAA</span></div></div><span class="m-req-status complete"><span class="m-status-dot"></span>&#10003; Mar 28</span></div>
+         <div class="m-req-meta"><strong>89</strong> items &middot; <strong style="color:#f59e0b">78%</strong> matched &middot; 71 files</div>
+         <div class="m-req-actions"><span class="m-action-btn accent">View ProofPack</span><span class="m-action-btn">+ Follow-up Request</span></div>
         </div>
        </div>
       </div>
-      <!-- Dashboard callouts with connector lines -->
-      <div class="co-wrap co-right" style="top:12px;right:14px"><div class="co-dot"></div><div class="co-line"></div><div class="co-label">Real-time status on every request</div></div>
-      <div class="co-wrap co-left" style="bottom:60px;left:14px"><div class="co-dot"></div><div class="co-line"></div><div class="co-label">Auto-reminders before deadlines</div></div>
-      <div class="co-wrap co-right" style="bottom:10px;right:14px"><div class="co-dot"></div><div class="co-line"></div><div class="co-label">One-click ProofPack review</div></div>
+      <!-- Dashboard callouts -->
+      <div class="co-wrap co-right" style="top:14px;right:14px"><div class="co-dot"></div><div class="co-line"></div><div class="co-label">Deadline countdown &amp; overdue alerts</div></div>
+      <div class="co-wrap co-left" style="bottom:80px;left:14px"><div class="co-dot"></div><div class="co-line"></div><div class="co-label">&#128276; Auto-reminders before deadlines</div></div>
+      <div class="co-wrap co-right" style="bottom:10px;right:14px"><div class="co-dot"></div><div class="co-line"></div><div class="co-label">One-click follow-up requests</div></div>
      </div>
 
      <!-- Panel 2: Client Upload (matches real upload page) -->
@@ -3908,57 +3935,68 @@
         <div><div class="m-up-label">Company</div><div class="m-up-input">SOC 2 + HIPAA Annual</div></div>
         <div><div class="m-up-label">Your name</div><div class="m-up-input">Jessica Martinez</div></div>
        </div>
-       <div style="margin-bottom:6px"><div class="m-up-label">Your email</div><div class="m-up-input">jessica@acmecorp.com</div></div>
+       <div class="m-up-form-row">
+        <div><div class="m-up-label">Your email</div><div class="m-up-input">jessica@acmecorp.com</div></div>
+        <div><div class="m-up-label">Team members CC</div><div class="m-up-input placeholder">security@acmecorp.com</div></div>
+       </div>
        <div class="m-up-fw">Frameworks: <strong>SOC 2</strong> &middot; <strong>HIPAA</strong></div>
       </div>
-      <div class="m-drop-zone">&#128206; Drop files here or <span>browse</span></div>
+      <div class="m-drop-zone">&#128206; Drop files here or <span>browse</span> <span style="background:#f1f5f9;padding:2px 7px;border-radius:10px;font-size:9px;color:#334155;margin-left:6px">6 files</span></div>
       <div class="m-file-chips">
        <span class="m-file-chip">Access_Control_Policy.pdf</span>
        <span class="m-file-chip">Security_Training_Log.xlsx</span>
-       <span class="m-file-chip">Risk_Assessment_Report.pdf</span>
+       <span class="m-file-chip">Risk_Assessment_2025.pdf</span>
        <span class="m-file-chip">Encryption_Policy.pdf</span>
        <span class="m-file-chip">Network_Diagram.pdf</span>
+       <span class="m-file-chip m-file-unmatched">Vendor_List.csv <span class="m-tag-btn">Tag to&hellip;</span></span>
+      </div>
+      <div class="m-up-summary-bar">
+       <div class="m-up-sum-stat"><div class="m-up-sum-num" style="color:#0f172a">6</div><div class="m-up-sum-lbl">Files</div></div>
+       <div class="m-up-sum-stat"><div class="m-up-sum-num" style="color:#16a34a">4</div><div class="m-up-sum-lbl">Matched</div></div>
+       <div class="m-up-sum-stat"><div class="m-up-sum-num" style="color:#f59e0b">1</div><div class="m-up-sum-lbl">Unmatched</div></div>
+       <div class="m-up-sum-stat"><div class="m-up-sum-num" style="color:#8b5cf6">1</div><div class="m-up-sum-lbl">Suggested</div></div>
       </div>
       <div class="m-up-card" style="padding-bottom:6px;">
-       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div class="m-checklist-h2">Evidence Checklist</div><span style="font-size:9px;color:#64748b">89 items across 9 controls</span></div>
+       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div class="m-checklist-h2">Evidence Checklist</div><span style="font-size:9px;color:#64748b">161 items across 14 controls</span></div>
        <div class="m-nav-pills">
-        <span class="m-nav-pill">CC1 - Control Env <span class="pill-ct">3/5</span></span>
+        <span class="m-nav-pill m-nav-pill-done">CC1 - Control Env <span class="pill-ct">5/5</span></span>
         <span class="m-nav-pill">CC2 - Communication <span class="pill-ct">2/4</span></span>
         <span class="m-nav-pill">CC3 - Risk <span class="pill-ct">1/3</span></span>
         <span class="m-nav-pill">CC6 - Logical Access <span class="pill-ct">5/8</span></span>
        </div>
-       <div class="m-ci-row fulfilled"><div class="m-ci-icon green">&#10003;</div><div><div class="m-ci-title">Access Control Policy</div><div class="m-ci-file">&#10003; Access_Control_Policy.pdf</div></div></div>
-       <div class="m-ci-row fulfilled"><div class="m-ci-icon green">&#10003;</div><div><div class="m-ci-title">Security Training Records</div><div class="m-ci-file">&#10003; Security_Training_Log.xlsx</div></div></div>
-       <div class="m-ci-row noted"><div class="m-ci-icon amber">&#128221;</div><div><div class="m-ci-title">Security Awareness Program</div><div class="m-ci-tip">&ldquo;Annual training via KnowBe4. Next cycle starts April.&rdquo;</div></div></div>
-       <div class="m-ci-row"><div class="m-ci-icon gray">&mdash;</div><div><div class="m-ci-title">Incident Response Plan</div><div class="m-ci-tip">Tip: Include escalation procedures and contact list</div></div></div>
+       <div class="m-ci-row fulfilled"><div class="m-ci-icon green">&#10003;</div><div><div class="m-ci-title">Access Control Policy</div><div class="m-ci-file">&#128196; Access_Control_Policy.pdf <span style="color:#94a3b8">(240 KB)</span></div></div></div>
+       <div class="m-ci-row fulfilled"><div class="m-ci-icon green">&#10003;</div><div><div class="m-ci-title">Security Training Records</div><div class="m-ci-file">&#128196; Security_Training_Log.xlsx <span style="color:#94a3b8">(89 KB)</span></div></div></div>
+       <div class="m-ci-row noted"><div class="m-ci-icon amber">&#9678;</div><div><div class="m-ci-title">Security Awareness Program</div><div class="m-ci-tip">&ldquo;Annual training via KnowBe4. Next cycle starts April.&rdquo;</div></div></div>
+       <div class="m-ci-row"><div class="m-ci-icon gray">&#9675;</div><div><div class="m-ci-title">Incident Response Plan</div><div class="m-ci-tip">Tip: Include escalation procedures and contact list</div></div></div>
       </div>
       <div class="m-up-footer">
-       <div class="m-up-counts"><strong style="color:#16a34a">5</strong> matched &middot; <strong style="color:#f59e0b">1</strong> noted &middot; <strong style="color:#64748b">83</strong> incomplete</div>
+       <div class="m-up-counts"><span class="m-pg">5</span> matched &middot; <span class="m-pw">1</span> noted &middot; <span class="m-pr">0</span> missing &middot; <span class="m-ps">1</span> suggested &middot; <span class="m-pgr">154</span> remaining</div>
        <div class="m-up-submit">Review &amp; Submit</div>
       </div>
-      <!-- Upload callouts with connector lines -->
-      <div class="co-wrap co-right" style="top:116px;right:14px"><div class="co-dot"></div><div class="co-line"></div><div class="co-label">Guided checklist per control</div></div>
-      <div class="co-wrap co-left" style="bottom:85px;left:14px"><div class="co-dot"></div><div class="co-line"></div><div class="co-label">Built-in tips reduce re-requests</div></div>
-      <div class="co-wrap co-right" style="bottom:10px;right:14px"><div class="co-dot"></div><div class="co-line"></div><div class="co-label">Live progress tracking</div></div>
+      <!-- Upload callouts -->
+      <div class="co-wrap co-right" style="top:100px;right:14px"><div class="co-dot"></div><div class="co-line"></div><div class="co-label">Files auto-matched to evidence items</div></div>
+      <div class="co-wrap co-left" style="bottom:95px;left:14px"><div class="co-dot"></div><div class="co-line"></div><div class="co-label">Unmatched files? Tag to an item in one click</div></div>
+      <div class="co-wrap co-right" style="bottom:10px;right:14px"><div class="co-dot"></div><div class="co-line"></div><div class="co-label">Live progress &mdash; nothing falls through the cracks</div></div>
      </div>
 
      <!-- Panel 3: ProofPack (matches real submission summary) -->
      <div class="mockup-panel" data-panel="proofpack">
       <div class="m-pp-header">
        <div class="m-pp-logo">P</div>
-       <div><div class="m-pp-h1">Submission Summary</div><div class="m-pp-sub">Pinnacle Data Systems &middot; SOC 2 &middot; Submitted Mar 27, 2026</div></div>
+       <div style="flex:1"><div class="m-pp-h1">Submission Summary</div><div class="m-pp-sub">Acme Corp &middot; SOC 2 + HIPAA &middot; Submitted Mar 28, 2026</div></div>
+       <div style="display:flex;gap:5px"><span class="m-action-btn" style="font-size:9px;padding:4px 8px">&#128196; Export PDF</span><span class="m-action-btn" style="font-size:9px;padding:4px 8px">&#128229; Download JSON</span></div>
       </div>
       <div class="m-pp-stats">
-       <div class="m-pp-stat"><div class="m-pp-stat-num" style="color:#0f172a">36</div><div class="m-pp-stat-lbl">Files Uploaded</div></div>
-       <div class="m-pp-stat"><div class="m-pp-stat-num" style="color:#16a34a">36</div><div class="m-pp-stat-lbl">Items Matched</div></div>
-       <div class="m-pp-stat"><div class="m-pp-stat-num" style="color:#f59e0b">0</div><div class="m-pp-stat-lbl">With Notes</div></div>
-       <div class="m-pp-stat"><div class="m-pp-stat-num" style="color:#ef4444">0</div><div class="m-pp-stat-lbl">Incomplete</div></div>
+       <div class="m-pp-stat"><div class="m-pp-stat-num" style="color:#0f172a">71</div><div class="m-pp-stat-lbl">Files Uploaded</div></div>
+       <div class="m-pp-stat"><div class="m-pp-stat-num" style="color:#16a34a">127</div><div class="m-pp-stat-lbl">Items Matched</div></div>
+       <div class="m-pp-stat"><div class="m-pp-stat-num" style="color:#f59e0b">8</div><div class="m-pp-stat-lbl">With Notes</div></div>
+       <div class="m-pp-stat"><div class="m-pp-stat-num" style="color:#ef4444">26</div><div class="m-pp-stat-lbl">Incomplete</div></div>
       </div>
       <div class="m-pp-filters">
-       <span class="m-pp-pill active">All (36)</span>
-       <span class="m-pp-pill">Matched (36)</span>
-       <span class="m-pp-pill">Noted (0)</span>
-       <span class="m-pp-pill">Missing (0)</span>
+       <span class="m-pp-pill active">All (161)</span>
+       <span class="m-pp-pill">Matched (127)</span>
+       <span class="m-pp-pill">Noted (8)</span>
+       <span class="m-pp-pill">Missing (26)</span>
       </div>
       <div class="m-pp-section open">
        <div class="m-pp-section-head">
@@ -3969,40 +4007,40 @@
        </div>
        <div class="m-pp-section-body">
         <div class="m-pp-items">
-         <div class="m-pp-item"><div class="m-pp-item-icon green">&#10003;</div><div><div class="m-pp-item-title">Code of Conduct</div><div><span class="m-pp-item-ref">CC1.1</span></div></div></div>
-         <div class="m-pp-item"><div class="m-pp-item-icon green">&#10003;</div><div><div class="m-pp-item-title">HR Security Policies</div><div><span class="m-pp-item-ref">CC1.4</span></div></div></div>
-         <div class="m-pp-item"><div class="m-pp-item-icon green">&#10003;</div><div><div class="m-pp-item-title">Organizational Chart</div><div><span class="m-pp-item-ref">CC1.3</span></div></div></div>
-         <div class="m-pp-item"><div class="m-pp-item-icon green">&#10003;</div><div><div class="m-pp-item-title">Board Meeting Minutes</div><div><span class="m-pp-item-ref">CC1.2</span></div></div></div>
+         <div class="m-pp-item"><div class="m-pp-item-icon green">&#10003;</div><div><div class="m-pp-item-title">Code of Conduct</div><div class="m-pp-item-files">&#128196; Code_of_Conduct_2025.pdf</div><div><span class="m-pp-item-ref">CC1.1</span></div></div></div>
+         <div class="m-pp-item"><div class="m-pp-item-icon green">&#10003;</div><div><div class="m-pp-item-title">HR Security Policies</div><div class="m-pp-item-files">&#128196; HR_Policy_Manual.pdf</div><div><span class="m-pp-item-ref">CC1.4</span></div></div></div>
+         <div class="m-pp-item"><div class="m-pp-item-icon green">&#10003;</div><div><div class="m-pp-item-title">Organizational Chart</div><div class="m-pp-item-files">&#128196; Org_Chart_Q1.pdf</div><div><span class="m-pp-item-ref">CC1.3</span></div></div></div>
+         <div class="m-pp-item"><div class="m-pp-item-icon green">&#10003;</div><div><div class="m-pp-item-title">Board Meeting Minutes</div><div class="m-pp-item-files">&#128196; Board_Minutes_Mar.pdf</div><div><span class="m-pp-item-ref">CC1.2</span></div></div></div>
         </div>
        </div>
       </div>
       <div class="m-pp-section">
        <div class="m-pp-section-head">
-        <span class="m-pp-section-title">CC2 - Communication &amp; Information</span>
-        <span class="m-pp-section-ct">4/4</span>
-        <div class="m-pp-section-bar"><div class="m-pp-section-bar-fill" style="width:100%;background:#16a34a"></div></div>
-        <span class="m-pp-section-arrow">&#9654;</span>
-       </div>
-      </div>
-      <div class="m-pp-section">
-       <div class="m-pp-section-head">
-        <span class="m-pp-section-title">CC3 - Risk Assessment</span>
-        <span class="m-pp-section-ct">3/3</span>
-        <div class="m-pp-section-bar"><div class="m-pp-section-bar-fill" style="width:100%;background:#16a34a"></div></div>
-        <span class="m-pp-section-arrow">&#9654;</span>
-       </div>
-      </div>
-      <div class="m-pp-section">
-       <div class="m-pp-section-head">
         <span class="m-pp-section-title">CC6 - Logical &amp; Physical Access</span>
-        <span class="m-pp-section-ct">8/8</span>
-        <div class="m-pp-section-bar"><div class="m-pp-section-bar-fill" style="width:100%;background:#16a34a"></div></div>
+        <span class="m-pp-section-ct">6/8</span>
+        <div class="m-pp-section-bar"><div class="m-pp-section-bar-fill" style="width:75%;background:#f59e0b"></div></div>
         <span class="m-pp-section-arrow">&#9654;</span>
        </div>
       </div>
-      <!-- ProofPack callouts with connector lines -->
-      <div class="co-wrap co-right" style="top:10px;right:14px"><div class="co-dot"></div><div class="co-line"></div><div class="co-label">Organized by control domain</div></div>
-      <div class="co-wrap co-left" style="bottom:10px;left:14px"><div class="co-dot"></div><div class="co-line"></div><div class="co-label">Instant gap analysis per section</div></div>
+      <div class="m-pp-section">
+       <div class="m-pp-section-head">
+        <span class="m-pp-section-title">CC7 - System Operations</span>
+        <span class="m-pp-section-ct">9/12</span>
+        <div class="m-pp-section-bar"><div class="m-pp-section-bar-fill" style="width:75%;background:#f59e0b"></div></div>
+        <span class="m-pp-section-arrow">&#9654;</span>
+       </div>
+      </div>
+      <div class="m-pp-section">
+       <div class="m-pp-section-head">
+        <span class="m-pp-section-title">HIPAA - Administrative Safeguards</span>
+        <span class="m-pp-section-ct">14/18</span>
+        <div class="m-pp-section-bar"><div class="m-pp-section-bar-fill" style="width:78%;background:#f59e0b"></div></div>
+        <span class="m-pp-section-arrow">&#9654;</span>
+       </div>
+      </div>
+      <!-- ProofPack callouts -->
+      <div class="co-wrap co-right" style="top:10px;right:14px"><div class="co-dot"></div><div class="co-line"></div><div class="co-label">Export PDF or JSON for workpapers</div></div>
+      <div class="co-wrap co-left" style="bottom:10px;left:14px"><div class="co-dot"></div><div class="co-line"></div><div class="co-label">Instant gap analysis &mdash; see what&#39;s missing per domain</div></div>
      </div>
 
      <!-- Panel 4: Request Builder (matches real request composer) -->
@@ -4016,17 +4054,29 @@
        <div class="m-fw-chip">SOC 1<span class="fw-count">44 items</span></div>
        <div class="m-fw-chip">NIST CSF<span class="fw-count">108 items</span></div>
        <div class="m-fw-chip">CMMC<span class="fw-count">72 items</span></div>
+       <div class="m-fw-chip">PCI DSS<span class="fw-count">63 items</span></div>
       </div>
       <div class="m-rb-field"><div class="m-rb-label">Client company name</div><div class="m-rb-input">Acme Corp</div></div>
       <div class="m-rb-field"><div class="m-rb-label">Client email</div><div class="m-rb-input">compliance@acmecorp.com</div></div>
-      <div class="m-rb-field"><div class="m-rb-label">Due date</div><div class="m-rb-input placeholder">Select a deadline&hellip;</div></div>
+      <div class="m-up-form-row">
+       <div class="m-rb-field" style="margin-bottom:0"><div class="m-rb-label">Due date</div><div class="m-rb-input">April 15, 2026</div></div>
+       <div class="m-rb-field" style="margin-bottom:0"><div class="m-rb-label">Engagement reference</div><div class="m-rb-input placeholder">e.g. ENG-2026-042</div></div>
+      </div>
+      <div class="m-rb-followup-toggle">
+       <div class="m-toggle-track m-toggle-on"><div class="m-toggle-thumb"></div></div>
+       <div>
+        <div class="m-toggle-label">&#128276; Automatic follow-up reminders</div>
+        <div class="m-toggle-hint">Send reminders at 72h, 48h, and 24h before deadline</div>
+       </div>
+      </div>
       <div style="margin-top:14px;display:flex;gap:8px;align-items:center">
        <div class="m-rb-btn">Send Request &rarr;</div>
        <span style="font-size:10px;color:#64748b">or save as template</span>
       </div>
-      <!-- Builder callouts with connector lines -->
-      <div class="co-wrap co-right" style="top:42px;right:14px"><div class="co-dot"></div><div class="co-line"></div><div class="co-label">Multi-framework in one request</div></div>
-      <div class="co-wrap co-left" style="bottom:14px;left:14px"><div class="co-dot"></div><div class="co-line"></div><div class="co-label">Save &amp; reuse templates</div></div>
+      <!-- Builder callouts -->
+      <div class="co-wrap co-right" style="top:42px;right:14px"><div class="co-dot"></div><div class="co-line"></div><div class="co-label">7 frameworks, 500+ evidence items</div></div>
+      <div class="co-wrap co-left" style="bottom:50px;left:14px"><div class="co-dot"></div><div class="co-line"></div><div class="co-label">Toggle auto follow-up reminders</div></div>
+      <div class="co-wrap co-right" style="bottom:10px;right:14px"><div class="co-dot"></div><div class="co-line"></div><div class="co-label">Save &amp; reuse templates</div></div>
      </div>
 
      <!-- Panel 5: Watch Demo (Loom video) -->
