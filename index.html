@@ -10152,7 +10152,7 @@ async function showDashboardInternal() {
  if (typeof loadSubscriptionStatus === 'function') loadSubscriptionStatus();
 
  // Scroll to top
- $('#dashboardView').scrollIntoView({ behavior: 'smooth', block: 'start' });
+ window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 async function fetchAndRenderDashboard() {
