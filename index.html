@@ -9711,26 +9711,15 @@ function showClientPreview() {
  previewHtml += '</div>';
  }
  
- // Open in new tab — leaves composer fully interactive
-  var company_preview = esc($('#clientCompany')?.value || 'Client');
-  var fullHtml = '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Client Preview</title>'
-    + '<style>body{margin:0;padding:24px;background:#f3f4f6;font-family:system-ui,sans-serif;color:#1e293b}.card{max-width:680px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.08);overflow:hidden}.banner{background:#1e40af;padding:20px 24px;text-align:center}.banner p{margin:0;font-size:.78rem;color:#93c5fd}.body{padding:28px}.upload-btn{display:block;width:100%;padding:14px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;text-align:center;margin-top:24px;opacity:.5;cursor:default}.note{text-align:center;font-size:.72rem;color:#94a3b8;margin-top:6px}</style>'
-    + '</head><body><div class="card"><div class="banner"><p>&#128065; CLIENT UPLOAD PAGE PREVIEW &mdash; This is how your client will see the request</p></div>'
-    + '<div class="body">' + previewHtml
-    + '<div class="upload-btn">Upload Evidence</div><p class="note">Upload button inactive in preview mode</p>'
-    + '</div></div></body></html>';
-
-  var win = window.open('', '_blank');
-  if (!win) {
-    // Fallback to modal if pop-ups blocked
-    const modal = $('#previewModal');
-    const content = $('#previewModalContent');
-    if (modal && content) { content.innerHTML = previewHtml; modal.classList.remove('hidden'); }
-    return;
+ // Show in inline modal — no new tab, stays in context
+  const modal = $('#previewModal');
+  const content = $('#previewModalContent');
+  if (modal && content) {
+    content.innerHTML = previewHtml;
+    modal.classList.remove('hidden');
+    // Scroll modal into view
+    modal.scrollTop = 0;
   }
-  win.document.write(fullHtml);
-  win.document.close();
-  win.focus();
 }
 
 function closePreviewModal() {
