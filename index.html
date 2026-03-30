@@ -2603,7 +2603,7 @@
 
  .pricing-grid {
  display: grid;
- grid-template-columns: repeat(2, 1fr);
+ grid-template-columns: repeat(3, 1fr);
  gap: 12px;
  margin-bottom: 16px;
  }
@@ -2990,7 +2990,7 @@
  .pricing-landing-section .section-header { text-align: center; margin-bottom: 40px; }
  .pricing-landing-section .section-header h2 { font-size: 1.8rem; color: #0f172a; margin: 0 0 8px; }
  .pricing-landing-grid {
- display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+ display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 780px; margin: 0 auto;
  }
  .pricing-landing-card {
  background: #fff; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 28px 20px; text-align: center;
@@ -2998,6 +2998,11 @@
  }
  .pricing-landing-card:hover { border-color: #2563eb; box-shadow: 0 4px 16px rgba(37,99,235,0.08); }
  .pricing-landing-card.popular { border-color: #2563eb; box-shadow: 0 4px 16px rgba(37,99,235,0.10); }
+ .pricing-landing-card.portal-highlight {
+   border: 2px solid #2563eb; background: linear-gradient(180deg, #eff6ff 0%, #fff 40%);
+   box-shadow: 0 8px 24px rgba(37,99,235,0.12); transform: scale(1.04);
+ }
+ .pricing-landing-card.portal-highlight:hover { transform: scale(1.06); box-shadow: 0 12px 32px rgba(37,99,235,0.16); }
  .pricing-landing-badge {
  position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
  background: #2563eb; color: #fff; font-size: 0.7rem; font-weight: 700; padding: 3px 12px;
@@ -3006,11 +3011,11 @@
  .pricing-landing-name { font-size: 0.85rem; font-weight: 600; color: #64748b; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
  .pricing-landing-price { font-size: 2rem; font-weight: 800; color: #0f172a; margin-bottom: 4px; }
  .pricing-landing-per { font-size: 0.85rem; color: #2563eb; font-weight: 600; margin-bottom: 8px; }
- .pricing-landing-desc { font-size: 0.82rem; color: #94a3b8; }
+ .pricing-landing-desc { font-size: 0.82rem; color: #94a3b8; margin-top: 6px; }
  .pricing-landing-note { text-align: center; margin-top: 28px; font-size: 0.9rem; color: #64748b; }
  .pricing-landing-note a { color: #2563eb; font-weight: 600; text-decoration: none; }
  @media (max-width: 700px) {
- .pricing-landing-grid { grid-template-columns: repeat(2, 1fr); }
+ .pricing-landing-grid { grid-template-columns: 1fr; max-width: 320px; }
  }
 
  .trust-section {
@@ -4188,21 +4193,27 @@
  <div class="pricing-landing-name">Single</div>
  <div class="pricing-landing-price">$79</div>
  <div class="pricing-landing-per">1 credit</div>
+ <div class="pricing-landing-desc">Try it out</div>
  </div>
  <div class="pricing-landing-card">
  <div class="pricing-landing-name">5-Pack</div>
  <div class="pricing-landing-price">$349</div>
  <div class="pricing-landing-per">5 credits &middot; $70 each</div>
+ <div class="pricing-landing-desc">Save 11%</div>
  </div>
- <div class="pricing-landing-card pricing-landing-card-sub" style="border:2px solid var(--primary);position:relative;cursor:pointer;" onclick="document.getElementById('roleSelect').value='new'; handleRoleChange('new'); document.getElementById('roleSelectSection').scrollIntoView({behavior:'smooth'});">
- <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--primary);color:#fff;font-size:0.7rem;font-weight:600;padding:2px 12px;border-radius:99px;white-space:nowrap;">BEST VALUE</div>
+ <div class="pricing-landing-card portal-highlight" style="position:relative;cursor:pointer;" onclick="document.getElementById('roleSelect').value='new'; handleRoleChange('new'); document.getElementById('roleSelectSection').scrollIntoView({behavior:'smooth'});">
+ <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#2563eb,#0d9488);color:#fff;font-size:0.7rem;font-weight:700;padding:3px 14px;border-radius:99px;white-space:nowrap;letter-spacing:0.5px;">BEST VALUE</div>
  <div class="pricing-landing-name">Portal</div>
  <div class="pricing-landing-price">$199<span style="font-size:0.45em;font-weight:400;color:#64748b">/mo</span></div>
  <div class="pricing-landing-per">5 credits/mo &middot; $40 each</div>
- <div style="margin-top:8px;font-size:0.75rem;color:#64748b;line-height:1.4;">+ Your logo &amp; colors<br>+ Branded client portal<br>+ Custom subdomain</div>
+ <div style="margin-top:10px;font-size:0.78rem;color:#475569;line-height:1.5;text-align:left;padding:0 4px;">
+ <div style="margin-bottom:3px;">&#10003; Your logo &amp; brand colors</div>
+ <div style="margin-bottom:3px;">&#10003; Branded client upload portal</div>
+ <div>&#10003; Custom subdomain</div>
  </div>
  </div>
- <p class="pricing-landing-note">Have a trial code? <a href="#" onclick="event.preventDefault(); document.getElementById('roleSelect').value='new'; handleRoleChange('new'); document.getElementById('roleSelectSection').scrollIntoView({behavior:'smooth'});">Start here</a> &mdash; your first request is on us.</p>
+ </div>
+ <p class="pricing-landing-note">No contracts, cancel anytime. Have a trial code? <a href="#" onclick="event.preventDefault(); document.getElementById('roleSelect').value='new'; handleRoleChange('new'); document.getElementById('roleSelectSection').scrollIntoView({behavior:'smooth'});">Start free</a></p>
  </div>
  </section>
 
