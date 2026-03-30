@@ -3432,6 +3432,48 @@
 .tour-card-body .mockup-tabs{margin-bottom:12px}
 .tour-card-body .mockup-browser{max-height:420px}
 
+/* v21: Subscription & Branding Settings */
+.sub-card{background:linear-gradient(135deg,#eff6ff 0%,#f0fdfa 100%);border:1px solid #bfdbfe;border-radius:12px;margin-bottom:20px;overflow:hidden}
+.sub-card-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;cursor:pointer}
+.sub-card-title{font-size:.95rem;font-weight:700;color:#1e40af;display:flex;align-items:center;gap:8px}
+.sub-card-badge{font-size:.7rem;font-weight:600;background:#16a34a;color:#fff;padding:2px 10px;border-radius:99px}
+.sub-card-badge.past-due{background:#d97706}
+.sub-card-badge.cancelled{background:#64748b}
+.sub-card.collapsed .sub-card-body{display:none}
+.sub-card.collapsed .sub-chevron{transform:translateY(-50%) rotate(-90deg)}
+.sub-chevron{color:#64748b;transition:transform .2s}
+.sub-card-body{padding:0 20px 20px}
+.sub-credits-bar{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding:12px 16px;background:#fff;border-radius:8px;border:1px solid #e2e8f0}
+.sub-credits-bar .credits-count{font-size:1.5rem;font-weight:700;color:#1e40af}
+.sub-credits-bar .credits-label{font-size:.82rem;color:#64748b;line-height:1.3}
+.sub-credits-bar .credits-progress{flex:1;height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden}
+.sub-credits-bar .credits-fill{height:100%;background:linear-gradient(90deg,#1e40af,#0d9488);border-radius:3px;transition:width .3s}
+.branding-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:640px){.branding-grid{grid-template-columns:1fr}}
+.branding-field{display:flex;flex-direction:column;gap:6px}
+.branding-field label{font-size:.8rem;font-weight:600;color:#334155}
+.branding-field input[type="text"],.branding-field input[type="color"]{padding:8px 12px;border:1px solid #d1d5db;border-radius:6px;font-size:.85rem}
+.branding-field input[type="color"]{width:48px;height:36px;padding:2px;cursor:pointer}
+.branding-color-row{display:flex;align-items:center;gap:8px}
+.logo-upload-zone{border:2px dashed #cbd5e1;border-radius:8px;padding:20px;text-align:center;cursor:pointer;transition:border-color .2s}
+.logo-upload-zone:hover{border-color:#1e40af}
+.logo-upload-zone img{max-height:48px;max-width:200px;object-fit:contain}
+.logo-upload-zone .upload-hint{font-size:.8rem;color:#94a3b8;margin-top:6px}
+.branding-actions{display:flex;gap:8px;margin-top:16px}
+.branding-preview{margin-top:16px;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;background:#fff}
+.branding-preview-header{padding:12px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #e2e8f0}
+.branding-preview-header img{max-height:28px}
+.branding-preview-body{padding:16px;font-size:.82rem;color:#64748b}
+.sub-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0}
+.sub-toggle-label{font-size:.85rem;color:#334155}
+.sub-manage-row{display:flex;align-items:center;gap:12px;margin-top:12px;padding-top:12px;border-top:1px solid #e2e8f0}
+.sub-manage-row .sub-period{font-size:.8rem;color:#64748b}
+.sub-upsell{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:20px;margin-bottom:20px;text-align:center}
+.sub-upsell h4{font-size:1rem;font-weight:700;color:#1e293b;margin:0 0 6px}
+.sub-upsell p{font-size:.85rem;color:#64748b;margin:0 0 14px;line-height:1.5}
+.sub-upsell .sub-features{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:14px}
+.sub-upsell .sub-feat{font-size:.75rem;background:#f0f9ff;color:#1e40af;padding:4px 10px;border-radius:99px;border:1px solid #bfdbfe}
+
 .dashboard-help-section{margin-top:28px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:22px 24px}
 .dh-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
 .dh-title{font-size:.9rem;font-weight:700;color:#374151;text-transform:uppercase;letter-spacing:.4px}
@@ -4138,7 +4180,7 @@
  <div class="section-inner">
  <div class="section-header">
  <h2>Simple, transparent pricing</h2>
- <p class="section-subtitle">No subscriptions, no per-seat fees, no annual contracts.</p>
+ <p class="section-subtitle">Pay per request, or subscribe for volume &amp; your own branded portal.</p>
  <p style="margin:-8px 0 24px;color:#64748b;font-size:0.9rem;text-align:center;">1 credit = 1 evidence request sent to a client, with any number of evidence items, frameworks, and follow-ups included.</p>
  </div>
  <div class="pricing-landing-grid">
@@ -4147,21 +4189,17 @@
  <div class="pricing-landing-price">$79</div>
  <div class="pricing-landing-per">1 credit</div>
  </div>
- <div class="pricing-landing-card" style="border:2px solid var(--primary);position:relative;">
- <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--primary);color:#fff;font-size:0.7rem;font-weight:600;padding:2px 12px;border-radius:99px;white-space:nowrap;">MOST POPULAR</div>
+ <div class="pricing-landing-card">
  <div class="pricing-landing-name">5-Pack</div>
- <div class="pricing-landing-price">$299</div>
- <div class="pricing-landing-per">5 credits &middot; $60 each</div>
+ <div class="pricing-landing-price">$349</div>
+ <div class="pricing-landing-per">5 credits &middot; $70 each</div>
  </div>
- <div class="pricing-landing-card">
- <div class="pricing-landing-name">15-Pack</div>
- <div class="pricing-landing-price">$749</div>
- <div class="pricing-landing-per">15 credits &middot; $50 each</div>
- </div>
- <div class="pricing-landing-card">
- <div class="pricing-landing-name">50-Pack</div>
- <div class="pricing-landing-price">$1,999</div>
- <div class="pricing-landing-per">50 credits &middot; $40 each</div>
+ <div class="pricing-landing-card pricing-landing-card-sub" style="border:2px solid var(--primary);position:relative;cursor:pointer;" onclick="document.getElementById('roleSelect').value='new'; handleRoleChange('new'); document.getElementById('roleSelectSection').scrollIntoView({behavior:'smooth'});">
+ <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--primary);color:#fff;font-size:0.7rem;font-weight:600;padding:2px 12px;border-radius:99px;white-space:nowrap;">BEST VALUE</div>
+ <div class="pricing-landing-name">Portal</div>
+ <div class="pricing-landing-price">$199<span style="font-size:0.45em;font-weight:400;color:#64748b">/mo</span></div>
+ <div class="pricing-landing-per">5 credits/mo &middot; $40 each</div>
+ <div style="margin-top:8px;font-size:0.75rem;color:#64748b;line-height:1.4;">+ Your logo &amp; colors<br>+ Branded client portal<br>+ Custom subdomain</div>
  </div>
  </div>
  <p class="pricing-landing-note">Have a trial code? <a href="#" onclick="event.preventDefault(); document.getElementById('roleSelect').value='new'; handleRoleChange('new'); document.getElementById('roleSelectSection').scrollIntoView({behavior:'smooth'});">Start here</a> &mdash; your first request is on us.</p>
@@ -4451,18 +4489,117 @@
  <div id="redeemCodeStatus" class="auth-status" style="margin-top:6px;"></div>
  </div>
  
-<!-- Product Tour Card (shown to logged-in users) -->
-<div id="dashboardTourCard" class="tour-card" style="display:none;">
- <div class="tour-card-header" id="tourCardToggle">
-  <div class="tour-card-title">
-   <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 10l-4 4l6 6l4-16l-18 7l4 2l2 6l3-4"/></svg>
-   Product Tour
-  </div>
-  <div class="tour-card-subtitle">Explore the different screens of ProofRepo</div>
-  <svg class="tour-chevron" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
- </div>
- <div class="tour-card-body">
- </div>
+<!-- v21: Subscription Upsell (shown to non-subscribers) -->
+<div id="subUpsellCard" class="sub-upsell" style="display:none;">
+<h4>Get your own branded portal</h4>
+<p>Subscribe to ProofRepo Portal — half the cost per credit, plus your logo, colors, and custom subdomain on every client-facing page.</p>
+<div class="sub-features">
+<span class="sub-feat">5 credits/mo at $40 ea</span>
+<span class="sub-feat">Your logo &amp; colors</span>
+<span class="sub-feat">Custom subdomain</span>
+<span class="sub-feat">Branded emails</span>
+</div>
+<button class="btn btn-accent" id="subUpsellBtn" style="padding:10px 28px;">Subscribe — $199/mo</button>
+</div>
+
+<!-- v21: Subscription & Branding Settings (shown to active subscribers) -->
+<div id="subSettingsCard" class="sub-card" style="display:none;">
+<div class="sub-card-header" id="subCardToggle">
+<div class="sub-card-title">
+<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+Portal &amp; Branding
+<span class="sub-card-badge" id="subStatusBadge">Active</span>
+</div>
+<svg class="sub-chevron" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+</div>
+<div class="sub-card-body">
+
+<!-- Credits bar -->
+<div class="sub-credits-bar">
+<div>
+<div class="credits-count" id="subCreditsCount">5</div>
+<div class="credits-label">monthly credits<br>remaining</div>
+</div>
+<div class="credits-progress">
+<div class="credits-fill" id="subCreditsFill" style="width:100%"></div>
+</div>
+<div style="text-align:right;">
+<div style="font-size:.8rem;color:#64748b;">Resets</div>
+<div style="font-size:.85rem;font-weight:600;color:#334155;" id="subResetDate">—</div>
+</div>
+</div>
+
+<!-- Branding fields -->
+<div class="branding-grid">
+<div class="branding-field" style="grid-column:1/-1;">
+<label>Company Logo</label>
+<div class="logo-upload-zone" id="logoUploadZone">
+<div id="logoPreview"><span style="font-size:1.5rem;color:#94a3b8;">+</span></div>
+<div class="upload-hint">Click to upload (PNG or JPG, max 375KB)</div>
+<input type="file" id="logoFileInput" accept="image/png,image/jpeg" style="display:none;">
+</div>
+</div>
+
+<div class="branding-field">
+<label>Firm Name</label>
+<input type="text" id="brandFirmName" placeholder="Acme Assurance LLC" maxlength="100">
+</div>
+
+<div class="branding-field">
+<label>Subdomain Slug</label>
+<div style="display:flex;align-items:center;gap:4px;">
+<input type="text" id="brandSlug" placeholder="acme-assurance" maxlength="40" style="flex:1;">
+<span style="font-size:.75rem;color:#94a3b8;white-space:nowrap;">.portal.proofrepo.com</span>
+</div>
+</div>
+
+<div class="branding-field">
+<label>Primary Color</label>
+<div class="branding-color-row">
+<input type="color" id="brandPrimary" value="#1E40AF">
+<input type="text" id="brandPrimaryHex" placeholder="#1E40AF" maxlength="7" style="flex:1;">
+</div>
+</div>
+
+<div class="branding-field">
+<label>Accent Color</label>
+<div class="branding-color-row">
+<input type="color" id="brandAccent" value="#0D9488">
+<input type="text" id="brandAccentHex" placeholder="#0D9488" maxlength="7" style="flex:1;">
+</div>
+</div>
+</div>
+
+<div class="sub-toggle-row">
+<span class="sub-toggle-label">Remove "Powered by ProofRepo" badge</span>
+<label style="position:relative;display:inline-block;width:44px;height:24px;">
+<input type="checkbox" id="brandRemovePowered" style="opacity:0;width:0;height:0;">
+<span style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#cbd5e1;border-radius:12px;transition:.2s;"></span>
+<span id="brandToggleThumb" style="position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.2s;"></span>
+</label>
+</div>
+
+<!-- Preview -->
+<div class="branding-preview" id="brandingPreview">
+<div class="branding-preview-header">
+<img id="previewLogo" src="" alt="" style="display:none;">
+<span id="previewFirmName" style="font-weight:600;color:#1e293b;font-size:.9rem;"></span>
+</div>
+<div class="branding-preview-body">
+This is how your client-facing pages will look. Upload a logo and set colors above to see a live preview.
+</div>
+</div>
+
+<div class="branding-actions">
+<button class="btn btn-accent" id="saveBrandingBtn">Save Branding</button>
+<span id="brandingSaveStatus" style="font-size:.82rem;color:#64748b;align-self:center;"></span>
+</div>
+
+<div class="sub-manage-row">
+<span class="sub-period" id="subPeriodInfo">Next billing: —</span>
+<button class="btn btn-sm btn-outline" id="cancelSubBtn" style="margin-left:auto;font-size:.78rem;color:#dc2626;border-color:#fca5a5;">Cancel Subscription</button>
+</div>
+</div>
 </div>
 
  <!-- Stats Cards -->
@@ -4530,6 +4667,20 @@
  <div id="templatesList" class="templates-list">
  <div class="dash-skeleton"><div class="skel-card skel-short"></div><div class="skel-card skel-short"></div></div>
  </div>
+
+<!-- Product Tour Card (shown to logged-in users) -->
+<div id="dashboardTourCard" class="tour-card collapsed" style="display:none;">
+ <div class="tour-card-header" id="tourCardToggle">
+  <div class="tour-card-title">
+   <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 10l-4 4l6 6l4-16l-18 7l4 2l2 6l3-4"/></svg>
+   Product Tour
+  </div>
+  <div class="tour-card-subtitle">Explore the different screens of ProofRepo</div>
+  <svg class="tour-chevron" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+ </div>
+ <div class="tour-card-body">
+ </div>
+</div>
 
   <!-- How ProofRepo Works — always visible when logged in -->
   <div class="dashboard-help-section">
@@ -4771,18 +4922,15 @@
  </div>
  <div class="pricing-card" data-tier="pack5">
  <div class="pricing-card-name">5-Pack</div>
- <div class="pricing-card-price">$299</div>
- <div class="pricing-card-desc">$60 each</div>
+ <div class="pricing-card-price">$349</div>
+ <div class="pricing-card-desc">$70 each</div>
  </div>
- <div class="pricing-card" data-tier="pack15">
- <div class="pricing-card-name">15-Pack</div>
- <div class="pricing-card-price">$749</div>
- <div class="pricing-card-desc">$50 each</div>
- </div>
- <div class="pricing-card" data-tier="pack50">
- <div class="pricing-card-name">50-Pack</div>
- <div class="pricing-card-price">$1,999</div>
- <div class="pricing-card-desc">$40 each</div>
+ <div class="pricing-card pricing-card-sub" data-tier="portal" style="border:2px solid var(--primary);position:relative;">
+ <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--primary);color:#fff;font-size:0.65rem;font-weight:600;padding:2px 10px;border-radius:99px;white-space:nowrap;">BEST VALUE</div>
+ <div class="pricing-card-name">Portal</div>
+ <div class="pricing-card-price">$199<span style="font-size:0.5em;font-weight:400;color:#64748b">/mo</span></div>
+ <div class="pricing-card-desc">5 credits/mo &middot; $40 ea</div>
+ <div style="margin-top:4px;font-size:0.7rem;color:#64748b;line-height:1.3;">Your logo, colors &amp; subdomain</div>
  </div>
  </div>
  <button class="btn btn-outline btn-full" id="buyCreditsBtn" disabled>
@@ -9999,7 +10147,10 @@ async function showDashboardInternal() {
  
  // Fetch and render dashboard data
  await fetchAndRenderDashboard();
- 
+
+ // v21: Load subscription status and branding settings
+ if (typeof loadSubscriptionStatus === 'function') loadSubscriptionStatus();
+
  // Scroll to top
  $('#dashboardView').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
@@ -10065,8 +10216,10 @@ function renderDashboard(requests, stats) {
  if (saS) saS.textContent = (stats.requestsThisMonth > 0) ? stats.requestsThisMonth + ' this month' : '';
  if (scS) scS.textContent = (stats.totalRequests > 0) ? stats.totalRequests + ' total sent' : '';
  
- // Show/hide credit alert based on credit balance
- const credits = state.user?.credits || 0;
+ // Show/hide credit alert based on credit balance (v21: include subscription credits)
+ const oneTimeCredits = state.user?.credits || 0;
+ const subCredits = (state.user?.subscription?.status === 'active') ? (state.user?.subscription?.creditsRemaining || 0) : 0;
+ const credits = oneTimeCredits + subCredits;
  const creditAlert = $('#creditAlert');
  if (creditAlert) {
  if (credits <= 2) {
@@ -11815,19 +11968,22 @@ function updateMainButton() {
 }
 
 function selectTier(tier) {
- $$('.pricing-card').forEach(card => { 
- card.classList.toggle('selected', card.dataset.tier === tier); 
+ $$('.pricing-card').forEach(card => {
+ card.classList.toggle('selected', card.dataset.tier === tier);
  });
  state.selectedTier = tier;
  const buyBtn = $('#buyCreditsBtn');
- if (tier) { 
- const prices = { single: '$79', pack5: '$299', pack15: '$749', pack50: '$1,999' }; 
- buyBtn.disabled = false; 
- buyBtn.innerHTML = `Buy Credits &mdash; ${esc(prices[tier])}`;
- // ADD THIS: Highlight the button
+ if (tier) {
+ const prices = { single: '$79', pack5: '$349', portal: '$199/mo' };
+ buyBtn.disabled = false;
+ if (tier === 'portal') {
+   buyBtn.innerHTML = `Subscribe &mdash; ${esc(prices[tier])}`;
+ } else {
+   buyBtn.innerHTML = `Buy Credits &mdash; ${esc(prices[tier])}`;
+ }
  buyBtn.className = 'btn btn-accent btn-full';
- } else { 
- buyBtn.disabled = true; 
+ } else {
+ buyBtn.disabled = true;
  buyBtn.textContent = 'Select a plan to purchase';
  buyBtn.className = 'btn btn-outline btn-full';
  }
@@ -11928,11 +12084,18 @@ async function handleMainAction() {
 
 async function handleCheckout() {
  if (!state.selectedTier) return;
- 
+
+ // v21: Portal subscription requires login
+ if (state.selectedTier === 'portal' && !state.authToken) {
+  showToast('Please sign up or log in to subscribe to ProofRepo Portal.', 'error', 6000);
+  document.getElementById('roleSelectSection')?.scrollIntoView({ behavior: 'smooth' });
+  return;
+ }
+
  const buyBtn = $('#buyCreditsBtn');
  buyBtn.disabled = true;
  buyBtn.innerHTML = '<span class="spinner"></span> Processing...';
- 
+
  saveFormState();
  
  try {
@@ -12660,6 +12823,263 @@ function expandWhoSection() {
     var card = document.getElementById('dashboardTourCard');
     if (card) card.classList.toggle('collapsed');
   });
+})();
+
+// ==================== v21: SUBSCRIPTION & BRANDING UI ====================
+(function() {
+  // Subscription card collapse/expand
+  document.addEventListener('click', function(e) {
+    var header = e.target.closest('#subCardToggle');
+    if (!header) return;
+    var card = document.getElementById('subSettingsCard');
+    if (card) card.classList.toggle('collapsed');
+  });
+
+  // Logo upload
+  var logoZone = document.getElementById('logoUploadZone');
+  var logoInput = document.getElementById('logoFileInput');
+  if (logoZone && logoInput) {
+    logoZone.addEventListener('click', function() { logoInput.click(); });
+    logoInput.addEventListener('change', function() {
+      var file = logoInput.files[0];
+      if (!file) return;
+      if (file.size > 375000) { showToast('Logo file is too large (max 375KB)', 'error'); return; }
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var preview = document.getElementById('logoPreview');
+        if (preview) preview.innerHTML = '<img src="' + e.target.result + '" alt="Logo preview">';
+        var previewLogo = document.getElementById('previewLogo');
+        if (previewLogo) { previewLogo.src = e.target.result; previewLogo.style.display = 'block'; }
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // Color picker sync
+  function syncColor(pickerId, hexId) {
+    var picker = document.getElementById(pickerId);
+    var hex = document.getElementById(hexId);
+    if (!picker || !hex) return;
+    picker.addEventListener('input', function() { hex.value = picker.value; updateBrandingPreview(); });
+    hex.addEventListener('input', function() {
+      if (/^#[0-9a-fA-F]{6}$/.test(hex.value)) { picker.value = hex.value; updateBrandingPreview(); }
+    });
+  }
+  syncColor('brandPrimary', 'brandPrimaryHex');
+  syncColor('brandAccent', 'brandAccentHex');
+
+  // "Remove Powered By" toggle visual
+  var poweredCheck = document.getElementById('brandRemovePowered');
+  var poweredThumb = document.getElementById('brandToggleThumb');
+  if (poweredCheck && poweredThumb) {
+    poweredCheck.addEventListener('change', function() {
+      var track = poweredThumb.previousElementSibling;
+      if (poweredCheck.checked) {
+        track.style.background = '#16a34a';
+        poweredThumb.style.transform = 'translateX(20px)';
+      } else {
+        track.style.background = '#cbd5e1';
+        poweredThumb.style.transform = 'translateX(0)';
+      }
+    });
+  }
+
+  // Live preview update
+  function updateBrandingPreview() {
+    var primary = document.getElementById('brandPrimaryHex')?.value || '#1E40AF';
+    var firmName = document.getElementById('brandFirmName')?.value || '';
+    var previewHeader = document.querySelector('.branding-preview-header');
+    var previewName = document.getElementById('previewFirmName');
+    if (previewHeader && primary) previewHeader.style.borderBottom = '3px solid ' + primary;
+    if (previewName) previewName.textContent = firmName || 'Your Firm Name';
+  }
+
+  // Firm name live preview
+  var firmNameInput = document.getElementById('brandFirmName');
+  if (firmNameInput) firmNameInput.addEventListener('input', updateBrandingPreview);
+
+  // Save branding
+  var saveBtn = document.getElementById('saveBrandingBtn');
+  if (saveBtn) {
+    saveBtn.addEventListener('click', async function() {
+      var status = document.getElementById('brandingSaveStatus');
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Saving...';
+      if (status) status.textContent = '';
+
+      try {
+        var logoPreviewImg = document.querySelector('#logoPreview img');
+        var payload = {
+          firmName: document.getElementById('brandFirmName')?.value || '',
+          firmSlug: document.getElementById('brandSlug')?.value || '',
+          primaryColor: document.getElementById('brandPrimaryHex')?.value || '#1E40AF',
+          accentColor: document.getElementById('brandAccentHex')?.value || '#0D9488',
+          removePoweredBy: document.getElementById('brandRemovePowered')?.checked || false,
+        };
+        if (logoPreviewImg && logoPreviewImg.src && logoPreviewImg.src.startsWith('data:')) {
+          payload.logoBase64 = logoPreviewImg.src;
+        }
+
+        var res = await fetch(API + '/branding', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + state.authToken },
+          body: JSON.stringify(payload)
+        });
+        var data = await res.json();
+        if (data.ok) {
+          showToast('Branding saved!', 'success');
+          if (status) status.textContent = 'Saved';
+        } else {
+          showToast(data.error || 'Failed to save', 'error');
+          if (status) status.textContent = data.error || 'Error';
+        }
+      } catch (e) {
+        showToast('Could not save branding. Check connection.', 'error');
+        if (status) status.textContent = 'Error';
+      }
+      saveBtn.disabled = false;
+      saveBtn.textContent = 'Save Branding';
+    });
+  }
+
+  // Cancel subscription
+  var cancelBtn = document.getElementById('cancelSubBtn');
+  if (cancelBtn) {
+    cancelBtn.addEventListener('click', async function() {
+      if (!confirm('Cancel your ProofRepo Portal subscription? You\u2019ll keep access until the end of your current billing period.')) return;
+      cancelBtn.disabled = true;
+      cancelBtn.textContent = 'Cancelling...';
+      try {
+        var res = await fetch(API + '/subscription/cancel', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + state.authToken }
+        });
+        var data = await res.json();
+        if (data.ok) {
+          showToast('Subscription will cancel at end of billing period', 'info');
+          loadSubscriptionStatus();
+        } else {
+          showToast(data.error || 'Cancel failed', 'error');
+        }
+      } catch (e) {
+        showToast('Could not cancel. Check connection.', 'error');
+      }
+      cancelBtn.disabled = false;
+      cancelBtn.textContent = 'Cancel Subscription';
+    });
+  }
+
+  // Upsell subscribe button
+  var upsellBtn = document.getElementById('subUpsellBtn');
+  if (upsellBtn) {
+    upsellBtn.addEventListener('click', async function() {
+      if (!state.authToken) { showToast('Please log in first', 'error'); return; }
+      upsellBtn.disabled = true;
+      upsellBtn.innerHTML = '<span class="spinner"></span> Processing...';
+      try {
+        var res = await fetch(API + '/checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + state.authToken },
+          body: JSON.stringify({
+            tier: 'portal',
+            email: state.userEmail || '',
+            successUrl: window.location.origin + window.location.pathname + '?session_id={CHECKOUT_SESSION_ID}',
+            cancelUrl: window.location.href
+          })
+        });
+        var data = await res.json();
+        if (data.ok && data.url) {
+          window.location.href = data.url;
+        } else {
+          showToast(data.error || 'Could not start checkout', 'error');
+          upsellBtn.disabled = false;
+          upsellBtn.textContent = 'Subscribe — $199/mo';
+        }
+      } catch (e) {
+        showToast('Could not reach server', 'error');
+        upsellBtn.disabled = false;
+        upsellBtn.textContent = 'Subscribe — $199/mo';
+      }
+    });
+  }
+
+  // Load and display subscription status (called on login)
+  window.loadSubscriptionStatus = async function() {
+    if (!state.authToken) return;
+    try {
+      var res = await fetch(API + '/subscription/status', {
+        headers: { 'Authorization': 'Bearer ' + state.authToken }
+      });
+      var data = await res.json();
+      if (!data.ok) return;
+
+      var upsell = document.getElementById('subUpsellCard');
+      var settings = document.getElementById('subSettingsCard');
+      var sub = data.subscription;
+
+      if (sub && (sub.status === 'active' || sub.status === 'past_due')) {
+        // Show branding settings
+        if (upsell) upsell.style.display = 'none';
+        if (settings) settings.style.display = 'block';
+
+        // Update credits bar
+        var countEl = document.getElementById('subCreditsCount');
+        var fillEl = document.getElementById('subCreditsFill');
+        var resetEl = document.getElementById('subResetDate');
+        var badgeEl = document.getElementById('subStatusBadge');
+        if (countEl) countEl.textContent = sub.creditsRemaining;
+        if (fillEl) fillEl.style.width = ((sub.creditsRemaining / sub.monthlyCredits) * 100) + '%';
+        if (resetEl && sub.creditsResetAt) {
+          var d = new Date(sub.creditsResetAt);
+          resetEl.textContent = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+        if (badgeEl) {
+          badgeEl.textContent = sub.status === 'past_due' ? 'Past Due' : 'Active';
+          badgeEl.className = 'sub-card-badge' + (sub.status === 'past_due' ? ' past-due' : '');
+        }
+        // Period info
+        var periodEl = document.getElementById('subPeriodInfo');
+        if (periodEl && sub.currentPeriodEnd) {
+          var pe = new Date(sub.currentPeriodEnd);
+          periodEl.textContent = 'Next billing: ' + pe.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        // Populate branding fields
+        var b = data.branding || {};
+        var fn = document.getElementById('brandFirmName');
+        var fs = document.getElementById('brandSlug');
+        var pc = document.getElementById('brandPrimary');
+        var ph = document.getElementById('brandPrimaryHex');
+        var ac = document.getElementById('brandAccent');
+        var ah = document.getElementById('brandAccentHex');
+        var rp = document.getElementById('brandRemovePowered');
+        if (fn) fn.value = b.firmName || '';
+        if (fs) fs.value = b.firmSlug || '';
+        if (pc) pc.value = b.primaryColor || '#1E40AF';
+        if (ph) ph.value = b.primaryColor || '#1E40AF';
+        if (ac) ac.value = b.accentColor || '#0D9488';
+        if (ah) ah.value = b.accentColor || '#0D9488';
+        if (rp) {
+          rp.checked = b.removePoweredBy || false;
+          rp.dispatchEvent(new Event('change'));
+        }
+        // Logo preview
+        if (b.logoBase64) {
+          var lp = document.getElementById('logoPreview');
+          if (lp) lp.innerHTML = '<img src="' + b.logoBase64 + '" alt="Logo">';
+          var plg = document.getElementById('previewLogo');
+          if (plg) { plg.src = b.logoBase64; plg.style.display = 'block'; }
+        }
+        updateBrandingPreview();
+      } else {
+        // Show upsell
+        if (upsell) upsell.style.display = 'block';
+        if (settings) settings.style.display = 'none';
+      }
+    } catch (e) {
+      console.error('Subscription status error:', e);
+    }
+  };
 })();
 
 // Password visibility toggle (eye icon)
