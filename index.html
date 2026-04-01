@@ -11502,7 +11502,7 @@ async function handleResendVerification() {
  });
  
  const data = await res.json();
- showToast(data.ok ? 'Verification email sent!' : (data.error || 'Error sending email', 'error'));
+ showToast(data.ok ? 'Verification email sent!' : (data.error || 'Error sending email'), data.ok ? 'success' : 'error');
  } catch (e) {
  showToast('Error sending verification email', 'error');
  }
