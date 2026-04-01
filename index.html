@@ -8136,6 +8136,13 @@ const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
 const esc = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
+function fetchWithTimeout(url, options = {}, timeout = 15000) {
+ return Promise.race([
+  fetch(url, options),
+  new Promise((_, reject) => setTimeout(() => reject(new Error('Request timed out')), timeout))
+ ]);
+}
+
 // ==================== CHIP INPUT FUNCTIONS ====================
 
 function showToast(message, type = 'success', duration = 5000) {
@@ -8640,7 +8647,7 @@ function renderComposerNav() {
     if (p.excluded) cls += ' excluded';
     else if (p.included === p.total && p.total > 0) cls += ' complete';
     else if (p.included > 0) cls += ' partial';
-    var label = p.title.length > 22 ? p.title.substring(0, 20) + '&hellip;' : p.title;
+    var label = p.title.length > 22 ? p.title.substring(0, 20) + '\u2026' : p.title;
     html += '<span class="' + cls + '" data-nav-fw="' + esc(p.fwKey) + '" data-nav-gid="' + esc(p.gid) + '" title="' + esc(p.title) + ': ' + p.included + '/' + p.total + ' items">';
     html += esc(label);
     if (!p.excluded) html += '<span class="cn-count">' + p.included + '/' + p.total + '</span>';
@@ -10533,7 +10540,7 @@ function renderRequestCard(req, type) {
  // Add extend deadline for requests with a deadline
  if (req.extendToken && req.deadlineISO) {
  actionsHtml += `
- <button class="request-action-btn${isOverdue ? ' primary' : ''}" data-action="extend" data-extend-token="${esc(req.extendToken)}" data-company="${esc(req.company || '')}">Extend Deadline</button>
+ <button class="request-action-btn${isOverdue ? ' primary' : ''}" data-action="extend" data-extend-token="${esc(req.extendToken)}" data-company="${esc(req.company || '')}" data-deadline="${esc(req.deadlineISO)}">Extend Deadline</button>
  `;
  }
  } else {
@@ -10575,19 +10582,22 @@ function renderRequestCard(req, type) {
  <span></span> ${req.totalItems || 0} evidence items
  </div>
  ${req.reminderStatus && type === 'active' ? `
- <div class="request-meta-item reminder-info">
+ <div class="request-meta-item reminder-info" style="display:flex;align-items:center;gap:8px;">
  <span></span> ${(() => {
    const rs = req.reminderStatus;
-   if (rs.state === 'scheduled' && rs.nextAt) {
-     return 'Auto-reminder scheduled for ' + new Date(rs.nextAt).toLocaleDateString('en-US', {month:'short',day:'numeric', timeZone:'UTC'});
+   if (rs.state === 'paused') {
+     return '&#128276; Reminders paused';
+   } else if (rs.state === 'scheduled' && rs.nextAt) {
+     return '&#128276; Auto-reminder scheduled for ' + new Date(rs.nextAt).toLocaleDateString('en-US', {month:'short',day:'numeric', timeZone:'UTC'});
    } else if (rs.state === 'imminent') {
-     return 'Auto-reminder sent (deadline within 48h)';
+     return '&#128276; Auto-reminder sent (deadline within 48h)';
    } else if (rs.state === 'overdue') {
-     return 'Overdue notice sent to client';
+     return '&#128276; Overdue notice sent to client';
    } else {
      return esc(rs.label);
    }
  })()}
+ <button class="reminder-toggle-btn" data-action="toggle-reminder" data-token="${esc(req.token)}" data-paused="${req.reminderStatus.paused ? '1' : '0'}" style="background:none;border:1px solid #d1d5db;border-radius:6px;padding:2px 10px;font-size:12px;cursor:pointer;color:${req.reminderStatus.paused ? '#16a34a' : '#dc2626'};margin-left:4px;" title="${req.reminderStatus.paused ? 'Resume auto-reminders' : 'Pause auto-reminders'}">${req.reminderStatus.paused ? '&#9654; Resume' : '&#10074;&#10074; Pause'}</button>
  </div>
  ` : ''}
  </div>
@@ -10640,7 +10650,7 @@ function wireRequestActions() {
  btn.textContent = 'Sent!';
  setTimeout(() => { btn.textContent = 'Resend Email'; btn.disabled = false; }, 2500);
  } else {
- showToast('Error resending: ' + (data.error || 'Unknown error', 'error'));
+ showToast('Error resending: ' + (data.error || 'Unknown error'), 'error');
  btn.textContent = 'Resend Email';
  btn.disabled = false;
  }
@@ -10690,36 +10700,68 @@ function wireRequestActions() {
  });
  });
  
- // Extend deadline buttons
+ // Extend deadline buttons - calendar popup
  $$('[data-action="extend"]').forEach(btn => {
- btn.addEventListener('click', async () => {
+ btn.addEventListener('click', () => {
  const extendToken = btn.dataset.extendToken;
  const company = btn.dataset.company || 'this request';
- 
- const days = prompt(`Extend deadline for "${company}" by how many days?`, '7');
- if (!days || isNaN(parseInt(days))) return;
- 
- btn.disabled = true;
- btn.textContent = 'Extending...';
- 
- try {
- const res = await fetch(`${API}/extend?t=${extendToken}&days=${parseInt(days)}`);
- const data = await res.json();
- 
- if (data.ok) {
- showToast(`Deadline extended by ${days} days. New deadline: ${new Date(data.deadlineISO).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}`, 'info');
- // Refresh dashboard to show updated deadline
- await fetchAndRenderDashboard();
- } else {
- showToast('Error extending deadline: ' + (data.error || 'Unknown error', 'error'));
- btn.disabled = false;
- btn.textContent = 'Extend Deadline';
- }
- } catch (e) {
- showToast('Error extending deadline: ' + e.message, 'error');
- btn.disabled = false;
- btn.textContent = 'Extend Deadline';
- }
+ const currentDeadline = btn.dataset.deadline || '';
+ const defaultDate = currentDeadline ? new Date(new Date(currentDeadline).getTime() + 14*86400000).toISOString().slice(0,10) : new Date(Date.now() + 14*86400000).toISOString().slice(0,10);
+ const currentFmt = currentDeadline ? new Date(currentDeadline).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' }) : 'Not set';
+
+ // Remove any existing popup
+ const old = document.getElementById('extendPopup');
+ if (old) old.remove();
+
+ const popup = document.createElement('div');
+ popup.id = 'extendPopup';
+ popup.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:10000;';
+ popup.innerHTML = `
+ <div style="background:#fff;border-radius:12px;padding:28px 32px;max-width:380px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+  <h3 style="margin:0 0 4px;font-size:18px;color:#1e293b;">Extend Deadline</h3>
+  <p style="margin:0 0 16px;color:#64748b;font-size:14px;">${esc(company)}</p>
+  <div style="margin-bottom:16px;">
+   <label style="display:block;font-size:13px;color:#64748b;margin-bottom:4px;">Current deadline</label>
+   <div style="font-size:15px;font-weight:600;color:#1e293b;">${currentFmt}</div>
+  </div>
+  <div style="margin-bottom:20px;">
+   <label for="extendDateInput" style="display:block;font-size:13px;color:#64748b;margin-bottom:6px;">New deadline</label>
+   <input type="date" id="extendDateInput" value="${defaultDate}" min="${new Date().toISOString().slice(0,10)}" style="width:100%;padding:10px 12px;border:1px solid #d1d5db;border-radius:8px;font-size:15px;color:#1e293b;box-sizing:border-box;">
+  </div>
+  <div style="display:flex;gap:10px;justify-content:flex-end;">
+   <button id="extendCancel" style="padding:9px 18px;border:1px solid #d1d5db;background:#fff;border-radius:8px;font-size:14px;cursor:pointer;color:#64748b;">Cancel</button>
+   <button id="extendConfirm" style="padding:9px 18px;border:none;background:#1e40af;color:#fff;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">Extend</button>
+  </div>
+ </div>`;
+ document.body.appendChild(popup);
+
+ document.getElementById('extendCancel').onclick = () => popup.remove();
+ popup.addEventListener('click', (e) => { if (e.target === popup) popup.remove(); });
+
+ document.getElementById('extendConfirm').onclick = async () => {
+  const newDate = document.getElementById('extendDateInput').value;
+  if (!newDate) { showToast('Please select a date', 'error'); return; }
+  const confirmBtn = document.getElementById('extendConfirm');
+  confirmBtn.disabled = true;
+  confirmBtn.textContent = 'Extending...';
+  try {
+   const res = await fetch(`${API}/extend?t=${extendToken}&confirm=1&deadline=${newDate}&format=json`);
+   const data = await res.json();
+   if (data.ok) {
+    popup.remove();
+    showToast(`Deadline extended to ${new Date(data.deadlineISO).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}`, 'info');
+    await fetchAndRenderDashboard();
+   } else {
+    showToast('Error extending deadline: ' + (data.error || 'Unknown error'), 'error');
+    confirmBtn.disabled = false;
+    confirmBtn.textContent = 'Extend';
+   }
+  } catch (e) {
+   showToast('Error extending deadline: ' + e.message, 'error');
+   confirmBtn.disabled = false;
+   confirmBtn.textContent = 'Extend';
+  }
+ };
  });
  });
  
@@ -10748,7 +10790,7 @@ function wireRequestActions() {
  if (data.ok) {
  await fetchAndRenderDashboard();
  } else {
- showToast('Error cancelling: ' + (data.error || 'Unknown error', 'error'));
+ showToast('Error cancelling: ' + (data.error || 'Unknown error'), 'error');
  btn.disabled = false;
  btn.textContent = 'Cancel Request';
  }
@@ -10756,6 +10798,36 @@ function wireRequestActions() {
  showToast('Error cancelling: ' + e.message, 'error');
  btn.disabled = false;
  btn.textContent = 'Cancel Request';
+ }
+ });
+ });
+
+ // Toggle reminder buttons
+ $$('[data-action="toggle-reminder"]').forEach(btn => {
+ btn.addEventListener('click', async () => {
+ const token = btn.dataset.token;
+ const wasPaused = btn.dataset.paused === '1';
+ btn.disabled = true;
+ btn.textContent = wasPaused ? 'Resuming...' : 'Pausing...';
+ try {
+  const res = await fetch(`${API}/reminder-toggle`, {
+   method: 'POST',
+   headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${state.authToken}` },
+   body: JSON.stringify({ token })
+  });
+  const data = await res.json();
+  if (data.ok) {
+   showToast(data.remindersPaused ? 'Reminders paused for this request' : 'Reminders resumed for this request', 'info');
+   await fetchAndRenderDashboard();
+  } else {
+   showToast('Error toggling reminders: ' + (data.error || 'Unknown error'), 'error');
+   btn.disabled = false;
+   btn.textContent = wasPaused ? '\u25B6 Resume' : '\u23F8 Pause';
+  }
+ } catch(e) {
+  showToast('Error toggling reminders: ' + e.message, 'error');
+  btn.disabled = false;
+  btn.textContent = wasPaused ? '\u25B6 Resume' : '\u23F8 Pause';
  }
  });
  });
