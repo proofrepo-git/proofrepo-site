@@ -3284,7 +3284,7 @@
   background: #10b981;
   color: #fff;
 }
-.cstep.done .cstep-num::after { content: '&#10003;'; }
+.cstep.done .cstep-num::after { content: '\2713'; }
 .cstep.done .cstep-num span { display: none; }
 .cstep.done .cstep-label { color: #065f46; }
 .cstep.done { background: #f0fdf4; }
@@ -4875,6 +4875,10 @@ This is how your client-facing pages will look. Upload a logo and set colors abo
   <label class="form-label">Engagement Reference <span style="font-weight:normal;color:var(--text-muted);">(optional)</span></label>
   <input type="text" class="form-input" id="engagementRef" placeholder="e.g. ENG-2024-001, Acme_SOC2_Q1" maxlength="80">
   <span class="form-hint">Internal reference for this engagement</span>
+ </div>
+
+ <div style="text-align:right;margin-top:12px;padding-bottom:4px;">
+  <button type="button" onclick="collapseWhoSection()" style="background:var(--primary,#2563eb);color:#fff;border:none;padding:8px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">Done</button>
  </div>
 
  </div><!-- /who-fields -->
@@ -10771,7 +10775,7 @@ function wireRequestActions() {
  const token = btn.dataset.token;
  const company = btn.dataset.company || 'this request';
  
- if (!confirm(`Cancel the evidence request for "${company}"? This cannot be undone.`)) return;
+ if (!confirm(`Cancel the evidence request for "${company}"?\n\nIf this request was sent within the last 14 days, your credit will be returned to your balance. After 14 days, the credit is not refunded.\n\nThis cannot be undone.`)) return;
  
  btn.disabled = true;
  btn.textContent = 'Cancelling...';
@@ -10788,6 +10792,7 @@ function wireRequestActions() {
  const data = await res.json();
  
  if (data.ok) {
+ showToast(data.note || 'Request cancelled.', 'success');
  await fetchAndRenderDashboard();
  } else {
  showToast('Error cancelling: ' + (data.error || 'Unknown error'), 'error');
@@ -12820,21 +12825,22 @@ function updateComposerSteps() {
   if (step2) step2.className = 'cstep ' + (step2done ? 'done' : step1done ? 'active' : '');
   if (step3) step3.className = 'cstep ' + (step1done && step2done ? 'active' : '');
 
-  // Auto-collapse Step 1 when complete
+  // Auto-collapse Step 1 when complete (but not if user manually expanded via Edit)
   if (step1done) {
     const whoFields = $('#whoFields');
     const whoSummary = $('#whoSummary');
-    if (whoFields && !whoFields.classList.contains('collapsed')) {
+    // Update summary chips always so they stay current
+    if (whoSummary) {
+      const chip1 = $('#whoChipCompany');
+      const chip2 = $('#whoChipClient');
+      const chip3 = $('#whoChipDeadline');
+      if (chip1) chip1.textContent = company;
+      if (chip2) chip2.textContent = clientEmails[0] + (clientEmails.length > 1 ? ' +' + (clientEmails.length-1) : '');
+      if (chip3) chip3.textContent = deadline.toLocaleDateString('en-US', {month:'short', day:'numeric'});
+    }
+    if (whoFields && !whoFields.classList.contains('collapsed') && !window._whoSectionManuallyExpanded) {
       whoFields.classList.add('collapsed');
-      if (whoSummary) {
-        const chip1 = $('#whoChipCompany');
-        const chip2 = $('#whoChipClient');
-        const chip3 = $('#whoChipDeadline');
-        if (chip1) chip1.textContent = company;
-        if (chip2) chip2.textContent = clientEmails[0] + (clientEmails.length > 1 ? ' +' + (clientEmails.length-1) : '');
-        if (chip3) chip3.textContent = deadline.toLocaleDateString('en-US', {month:'short', day:'numeric'});
-        whoSummary.classList.add('visible');
-      }
+      if (whoSummary) whoSummary.classList.add('visible');
     }
   }
 }
@@ -12842,10 +12848,19 @@ function updateComposerSteps() {
 function expandWhoSection() {
   const whoFields = $('#whoFields');
   const whoSummary = $('#whoSummary');
+  window._whoSectionManuallyExpanded = true;
   if (whoFields) whoFields.classList.remove('collapsed');
   if (whoSummary) whoSummary.classList.remove('visible');
   // Scroll to top of who section
   if (whoFields) whoFields.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function collapseWhoSection() {
+  const whoFields = $('#whoFields');
+  const whoSummary = $('#whoSummary');
+  window._whoSectionManuallyExpanded = false;
+  if (whoFields) whoFields.classList.add('collapsed');
+  if (whoSummary) whoSummary.classList.add('visible');
 }
 
 // Hook into existing events to update steps
