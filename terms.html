@@ -4130,14 +4130,16 @@
       <div class="co-wrap co-right" style="bottom:10px;right:14px"><div class="co-dot"></div><div class="co-line"></div><div class="co-label">Save &amp; reuse templates</div></div>
      </div>
 
-     <!-- Panel 5: Watch Demo (Loom video) -->
+     <!-- Panel 5: Watch Demo (self-hosted video) -->
      <div class="mockup-panel" data-panel="demo">
       <div style="text-align:center;margin-bottom:12px">
        <div style="font-size:15px;font-weight:700;color:#0f172a;margin-bottom:4px">See the full workflow in action</div>
-       <div style="font-size:11px;color:#64748b">From building a request to one-click follow-up &mdash; under 10 minutes.</div>
+       <div style="font-size:11px;color:#64748b">From building a request to one-click follow-up &mdash; under 6 minutes.</div>
       </div>
       <div class="m-demo-video-wrap">
-       <iframe src="https://www.loom.com/embed/d7a3709ad77247c48871eb7a7573d835" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:8px;"></iframe>
+       <video controls preload="metadata" playsinline style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:8px;background:#000">
+        <source src="https://api.proofrepo.com/media/demo.mp4" type="video/mp4">
+       </video>
       </div>
      </div>
 
@@ -4706,7 +4708,7 @@ This is how your client-facing pages will look. Upload a logo and set colors abo
   <div class="dashboard-help-section">
    <div class="dh-header">
     <span class="dh-title">How ProofRepo works</span>
-    <a href="https://www.loom.com/share/d7a3709ad77247c48871eb7a7573d835" target="_blank" class="dh-loom-link">&#9654; Watch the 2-min walkthrough</a>
+    <a href="https://proofrepo.com/demo" target="_blank" class="dh-loom-link">&#9654; Watch the demo</a>
    </div>
    <div class="dh-steps">
     <div class="dh-step">
@@ -4732,7 +4734,7 @@ This is how your client-facing pages will look. Upload a logo and set colors abo
     </div>
    </div>
    <div class="dh-links">
-    <a href="https://www.loom.com/share/d7a3709ad77247c48871eb7a7573d835" target="_blank" class="dh-link-card">
+    <a href="https://proofrepo.com/demo" target="_blank" class="dh-link-card">
      <span class="dh-link-icon">&#9654;</span>
      <div><span class="dh-link-label">Demo walkthrough</span><span class="dh-link-sub">See the full workflow</span></div>
     </a>
@@ -12912,7 +12914,7 @@ function collapseWhoSection() {
     var target = showcase.querySelector('.mockup-panel[data-panel="' + panel + '"]');
     if (target) target.classList.add('active');
     // Update URL bar within this showcase only
-    var urlMap = { dashboard: 'proofrepo.com', builder: 'proofrepo.com/new-request', upload: 'proofrepo.com/upload', proofpack: 'proofrepo.com/proofpack', demo: 'loom.com/share/proofrepo-demo' };
+    var urlMap = { dashboard: 'proofrepo.com', builder: 'proofrepo.com/new-request', upload: 'proofrepo.com/upload', proofpack: 'proofrepo.com/proofpack', demo: 'proofrepo.com/demo' };
     var urlEl = showcase.querySelector('.mockup-url');
     if (urlEl && urlMap[panel]) urlEl.textContent = urlMap[panel];
   });
