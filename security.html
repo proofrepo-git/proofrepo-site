@@ -260,8 +260,8 @@
         <p class="trust-badge-desc">Password hashing</p>
       </div>
       <div class="trust-badge">
-        <div class="trust-badge-label">SOC 2 &amp; ISO 27001</div>
-        <p class="trust-badge-desc">Cloudflare infrastructure</p>
+        <div class="trust-badge-label">SOC 2*</div>
+        <p class="trust-badge-desc">Cloudflare infrastructure&nbsp;*</p>
       </div>
     </div>
 
@@ -275,13 +275,13 @@
 
       <div class="section">
         <h3>Infrastructure</h3>
-        <p>ProofRepo runs entirely on Cloudflare's global network. Cloudflare maintains SOC 2 Type II, ISO 27001, and other security certifications for their infrastructure.</p>
+        <p>ProofRepo runs entirely on Cloudflare's global network. The certifications below belong to our infrastructure providers &mdash; ProofRepo itself is not independently SOC 2 or ISO 27001 certified.</p>
         
         <table class="infra-table">
           <tr>
             <th>Component</th>
             <th>Provider</th>
-            <th>Provider Certifications</th>
+            <th>Certifications</th>
           </tr>
           <tr>
             <td>File storage</td>
@@ -335,9 +335,10 @@
         <h3>Data Retention</h3>
         <p>We minimize data retention to reduce risk:</p>
         <ul>
-          <li><strong>Uploaded files:</strong> Automatically deleted 90 days after submission</li>
-          <li><strong>Request records:</strong> Deleted after 30 days</li>
-          <li><strong>Account data:</strong> Retained until the user deletes their account</li>
+          <li><strong>Uploaded files:</strong> Automatically deleted 90 days after submission via R2 lifecycle rules</li>
+          <li><strong>Request metadata:</strong> Retained for 12 months (needed for dashboard history and analytics)</li>
+          <li><strong>Account data:</strong> Retained until the user deletes their account, then purged within 30 days</li>
+          <li><strong>Credit &amp; billing records:</strong> 12 months for business records</li>
           <li><strong>On-demand deletion:</strong> Auditors can delete submissions immediately via the Pack Viewer</li>
         </ul>
         <div class="highlight-box">
@@ -350,8 +351,9 @@
         <ul>
           <li>We don't access or view your uploaded files</li>
           <li>We don't share data with advertisers or data brokers</li>
-          <li>We don't use tracking cookies or third-party analytics services</li>
+          <li>We don't use tracking cookies or analytics services</li>
           <li>We don't train AI models on your data</li>
+          <li>We don't certify or guarantee compliance with any framework &mdash; ProofRepo is an evidence collection tool, not a compliance certification body</li>
         </ul>
       </div>
 
@@ -378,7 +380,6 @@
       <a href="/security.html">Security</a>
       <a href="/privacy.html">Privacy</a>
       <a href="/terms.html">Terms</a>
-      <a href="/dpa.html">DPA</a>
     </div>
     <p>&copy; 2026 ProofRepo. All rights reserved.</p>
   </footer>
