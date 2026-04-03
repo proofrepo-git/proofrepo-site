@@ -170,7 +170,7 @@
 
  <div class="content">
  <h1>Data Processing Agreement</h1>
- <p class="last-updated">Last updated: February 15, 2026</p>
+ <p class="last-updated">Last updated: April 3, 2026</p>
 
  <p>This Data Processing Agreement ("<strong>DPA</strong>") forms part of the Terms of Service between ProofRepo ("<strong>Processor</strong>") and the entity or individual using the ProofRepo platform ("<strong>Controller</strong>") and governs the processing of personal data by Processor on behalf of Controller.</p>
 
@@ -191,6 +191,8 @@
  </table>
 
  <p>Processing is performed solely for the purpose of providing the Services — specifically, delivering evidence request emails, receiving and storing uploaded files, organizing evidence into ProofPacks, and sending automated reminders and notifications.</p>
+
+ <p><strong>Important:</strong> ProofRepo supports evidence collection for multiple compliance frameworks (including SOC 2, ISO 27001, HIPAA, NIST CSF, CMMC, SOC 1, and GDPR). This means ProofRepo helps organize and deliver compliance evidence &mdash; it does not certify, guarantee, or independently verify compliance with any framework. The Controller remains solely responsible for determining the adequacy of evidence collected and for meeting all applicable regulatory requirements.</p>
 
  <h2>3. Controller Obligations</h2>
  <p>The Controller is responsible for:</p>
@@ -221,7 +223,7 @@
  <li><strong>Access controls:</strong> Token-based authentication; magic links for client access scoped to individual requests</li>
  <li><strong>Data isolation:</strong> Each evidence request is stored with unique tokens; no cross-request data access</li>
  <li><strong>Infrastructure:</strong> Hosted on Cloudflare Workers (edge computing) with no persistent server access</li>
- <li><strong>Retention:</strong> Evidence files retained for the duration of the engagement plus 90 days, then automatically deleted unless the Controller requests earlier deletion</li>
+ <li><strong>Retention:</strong> Evidence files automatically deleted 90 days after submission via R2 lifecycle rules. Request metadata retained for 12 months for dashboard and analytics purposes. Account data retained until deletion, then purged within 30 days. Controller may request earlier deletion of specific submissions at any time.</li>
  </ul>
 
  <h2>6. Sub-processors</h2>
@@ -246,7 +248,7 @@
  <p>The Processor shall notify the Controller without undue delay (and in any event within 72 hours) after becoming aware of a Personal Data breach. Notification will include the nature of the breach, the categories of data affected, the likely consequences, and the measures taken to address the breach.</p>
 
  <h2>10. Term and Termination</h2>
- <p>This DPA remains in effect for as long as the Processor processes Personal Data on behalf of the Controller. Upon termination of the Services, the Processor will delete all Personal Data within 90 days unless legally required to retain it, or the Controller requests earlier deletion.</p>
+ <p>This DPA remains in effect for as long as the Processor processes Personal Data on behalf of the Controller. Upon termination of the Services, the Processor will delete uploaded files within 90 days and account data within 30 days, unless legally required to retain it or the Controller requests earlier deletion. Billing and credit records may be retained for up to 12 months after termination for business records purposes.</p>
 
  <h2>11. Governing Law</h2>
  <p>This DPA is governed by the same governing law as the <a href="/terms.html">Terms of Service</a>.</p>
