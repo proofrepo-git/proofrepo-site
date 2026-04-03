@@ -4000,11 +4000,12 @@
        <span class="m-file-chip">Network_Diagram.pdf</span>
        <span class="m-file-chip m-file-unmatched">Vendor_List.csv <span class="m-tag-btn">Tag to&hellip;</span></span>
       </div>
-      <div class="m-up-summary-bar">
-       <div class="m-up-sum-stat"><div class="m-up-sum-num" style="color:#0f172a">6</div><div class="m-up-sum-lbl">Files</div></div>
+      <div class="m-up-summary-bar" style="grid-template-columns:repeat(5,1fr)">
+       <div class="m-up-sum-stat"><div class="m-up-sum-num" style="color:#0f172a">161</div><div class="m-up-sum-lbl">Requested</div></div>
        <div class="m-up-sum-stat"><div class="m-up-sum-num" style="color:#16a34a">4</div><div class="m-up-sum-lbl">Matched</div></div>
-       <div class="m-up-sum-stat"><div class="m-up-sum-num" style="color:#f59e0b">1</div><div class="m-up-sum-lbl">Unmatched</div></div>
        <div class="m-up-sum-stat"><div class="m-up-sum-num" style="color:#8b5cf6">1</div><div class="m-up-sum-lbl">Suggested</div></div>
+       <div class="m-up-sum-stat"><div class="m-up-sum-num" style="color:#ef4444">156</div><div class="m-up-sum-lbl">Incomplete</div></div>
+       <div class="m-up-sum-stat"><div class="m-up-sum-num" style="color:#f59e0b">1</div><div class="m-up-sum-lbl">With Notes</div></div>
       </div>
       <div class="m-up-card" style="padding-bottom:6px;">
        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div class="m-checklist-h2">Evidence Checklist</div><span style="font-size:9px;color:#64748b">161 items across 14 controls</span></div>
@@ -4016,11 +4017,11 @@
        </div>
        <div class="m-ci-row fulfilled"><div class="m-ci-icon green">&#10003;</div><div><div class="m-ci-title">Access Control Policy</div><div class="m-ci-file">&#128196; Access_Control_Policy.pdf <span style="color:#94a3b8">(240 KB)</span></div></div></div>
        <div class="m-ci-row fulfilled"><div class="m-ci-icon green">&#10003;</div><div><div class="m-ci-title">Security Training Records</div><div class="m-ci-file">&#128196; Security_Training_Log.xlsx <span style="color:#94a3b8">(89 KB)</span></div></div></div>
-       <div class="m-ci-row noted"><div class="m-ci-icon amber">&#9678;</div><div><div class="m-ci-title">Security Awareness Program</div><div class="m-ci-tip">&ldquo;Annual training via KnowBe4. Next cycle starts April.&rdquo;</div></div></div>
+       <div class="m-ci-row"><div class="m-ci-icon gray">&#9675;</div><div><div class="m-ci-title">Security Awareness Program</div><div class="m-ci-tip" style="color:#b45309">&ldquo;Annual training via KnowBe4. Next cycle starts April.&rdquo;</div></div></div>
        <div class="m-ci-row"><div class="m-ci-icon gray">&#9675;</div><div><div class="m-ci-title">Incident Response Plan</div><div class="m-ci-tip">Tip: Include escalation procedures and contact list</div></div></div>
       </div>
       <div class="m-up-footer">
-       <div class="m-up-counts"><span class="m-pg">5</span> matched &middot; <span class="m-pw">1</span> noted &middot; <span class="m-pr">0</span> missing &middot; <span class="m-ps">1</span> suggested &middot; <span class="m-pgr">154</span> remaining</div>
+       <div class="m-up-counts">161 requested &middot; <span class="m-pg">5</span> matched &middot; <span class="m-ps">1</span> suggested &middot; <span class="m-pr">155</span> incomplete &middot; <span class="m-pw">1</span> with notes</div>
        <div class="m-up-submit">Review &amp; Submit</div>
       </div>
       <!-- Upload callouts -->
@@ -4129,14 +4130,16 @@
       <div class="co-wrap co-right" style="bottom:10px;right:14px"><div class="co-dot"></div><div class="co-line"></div><div class="co-label">Save &amp; reuse templates</div></div>
      </div>
 
-     <!-- Panel 5: Watch Demo (Loom video) -->
+     <!-- Panel 5: Watch Demo (self-hosted video) -->
      <div class="mockup-panel" data-panel="demo">
       <div style="text-align:center;margin-bottom:12px">
        <div style="font-size:15px;font-weight:700;color:#0f172a;margin-bottom:4px">See the full workflow in action</div>
-       <div style="font-size:11px;color:#64748b">From building a request to one-click follow-up &mdash; under 10 minutes.</div>
+       <div style="font-size:11px;color:#64748b">From building a request to one-click follow-up &mdash; under 6 minutes.</div>
       </div>
       <div class="m-demo-video-wrap">
-       <iframe src="https://www.loom.com/embed/d7a3709ad77247c48871eb7a7573d835" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:8px;"></iframe>
+       <video controls preload="metadata" playsinline style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:8px;background:#000">
+        <source src="https://api.proofrepo.com/media/demo.mp4" type="video/mp4">
+       </video>
       </div>
      </div>
 
@@ -4705,7 +4708,7 @@ This is how your client-facing pages will look. Upload a logo and set colors abo
   <div class="dashboard-help-section">
    <div class="dh-header">
     <span class="dh-title">How ProofRepo works</span>
-    <a href="https://www.loom.com/share/d7a3709ad77247c48871eb7a7573d835" target="_blank" class="dh-loom-link">&#9654; Watch the 2-min walkthrough</a>
+    <a href="https://proofrepo.com/demo" target="_blank" class="dh-loom-link">&#9654; Watch the demo</a>
    </div>
    <div class="dh-steps">
     <div class="dh-step">
@@ -4731,7 +4734,7 @@ This is how your client-facing pages will look. Upload a logo and set colors abo
     </div>
    </div>
    <div class="dh-links">
-    <a href="https://www.loom.com/share/d7a3709ad77247c48871eb7a7573d835" target="_blank" class="dh-link-card">
+    <a href="https://proofrepo.com/demo" target="_blank" class="dh-link-card">
      <span class="dh-link-icon">&#9654;</span>
      <div><span class="dh-link-label">Demo walkthrough</span><span class="dh-link-sub">See the full workflow</span></div>
     </a>
@@ -12911,7 +12914,7 @@ function collapseWhoSection() {
     var target = showcase.querySelector('.mockup-panel[data-panel="' + panel + '"]');
     if (target) target.classList.add('active');
     // Update URL bar within this showcase only
-    var urlMap = { dashboard: 'proofrepo.com', builder: 'proofrepo.com/new-request', upload: 'proofrepo.com/upload', proofpack: 'proofrepo.com/proofpack', demo: 'loom.com/share/proofrepo-demo' };
+    var urlMap = { dashboard: 'proofrepo.com', builder: 'proofrepo.com/new-request', upload: 'proofrepo.com/upload', proofpack: 'proofrepo.com/proofpack', demo: 'proofrepo.com/demo' };
     var urlEl = showcase.querySelector('.mockup-url');
     if (urlEl && urlMap[panel]) urlEl.textContent = urlMap[panel];
   });
