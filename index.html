@@ -10988,7 +10988,9 @@ function updateLoggedInBar() {
  
  $('#currentUserEmail').textContent = state.user.email;
  
- const credits = state.user.credits || 0;
+ const oneTimeCredits = state.user.credits || 0;
+ const subCredits = (state.user.subscription?.status === 'active') ? (state.user.subscription?.creditsRemaining || 0) : 0;
+ const credits = oneTimeCredits + subCredits;
  const badge = $('#creditsDisplay');
  badge.textContent = `${credits} credit${credits !== 1 ? 's' : ''}`;
  badge.className = 'credits-badge' + (credits === 0 ? ' empty' : credits <= 2 ? ' low' : '');
@@ -12029,8 +12031,8 @@ function updateMainButton() {
  btn.disabled = false;
  btn.style.opacity = '';
  btn.style.cursor = '';
- } else if (state.isLoggedIn && (!state.user?.credits || state.user.credits === 0)) {
- // Logged in, verified, but no credits
+ } else if (state.isLoggedIn && (((state.user?.credits || 0) + ((state.user?.subscription?.status === 'active' ? state.user?.subscription?.creditsRemaining : 0) || 0)) === 0)) {
+ // Logged in, verified, but no credits (one-time + subscription)
  if (!state.paymentVisible) {
  btn.textContent = 'Continue';
  btn.className = 'btn btn-primary btn-full';
@@ -12141,8 +12143,8 @@ async function handleMainAction() {
  return;
  }
  
- // ---- PRIORITY 4: Logged in, 0 credits &mdash; need payment/code ----
- if (state.isLoggedIn && (!state.user?.credits || state.user.credits === 0)) {
+ // ---- PRIORITY 4: Logged in, 0 credits (one-time + subscription) &mdash; need payment/code ----
+ if (state.isLoggedIn && (((state.user?.credits || 0) + ((state.user?.subscription?.status === 'active' ? state.user?.subscription?.creditsRemaining : 0) || 0)) === 0)) {
  if (!state.paymentVisible) {
  showPaymentSection();
  $('#paymentSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
