@@ -12133,8 +12133,9 @@ async function handleMainAction() {
  return;
  }
  
- // ---- PRIORITY 3: Logged in with account credits &mdash; send directly ----
- if (state.isLoggedIn && state.user?.credits > 0) {
+ // ---- PRIORITY 3: Logged in with account credits (one-time OR subscription) &mdash; send directly ----
+ const _totalCredits = (state.user?.credits || 0) + ((state.user?.subscription?.status === 'active' ? state.user?.subscription?.creditsRemaining : 0) || 0);
+ if (state.isLoggedIn && _totalCredits > 0) {
  if (state.paymentVisible) {
  $('#paymentSection').classList.remove('visible');
  state.paymentVisible = false;
@@ -12286,7 +12287,12 @@ async function sendRequest() {
  clearFormState();
  
  if (state.isLoggedIn && state.user) {
+ // Deduct from one-time credits first; if exhausted, deduct from subscription credits (mirrors backend logic)
+ if ((state.user.credits || 0) > 0) {
  state.user.credits = Math.max(0, (state.user.credits || 0) - 1);
+ } else if (state.user.subscription?.status === 'active' && (state.user.subscription.creditsRemaining || 0) > 0) {
+ state.user.subscription.creditsRemaining = Math.max(0, state.user.subscription.creditsRemaining - 1);
+ }
  if (data.token) {
  state.user.requests = state.user.requests || [];
  state.user.requests.unshift(data.token);
@@ -13126,6 +13132,11 @@ function collapseWhoSection() {
       var sub = data.subscription;
 
       if (sub && (sub.status === 'active' || sub.status === 'past_due')) {
+        // Sync subscription state so credit checks stay accurate
+        if (state.user) {
+          state.user.subscription = sub;
+          updateLoggedInBar();
+        }
         // Show branding settings
         if (upsell) upsell.style.display = 'none';
         if (settings) settings.style.display = 'block';
