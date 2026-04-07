@@ -12907,45 +12907,18 @@ function collapseWhoSection() {
   });
 })();
 
+// Demo video mid-play email gate + tracking
+var demoGateEmail = null;
+var DEMO_GATE_TIMESTAMP = 11; // seconds — right after "...structured, guided and efficient process that is trackable."
+
 // Mockup showcase tab switching (scoped per showcase instance)
 (function() {
-  var demoGateEmail = null; // tracks if gate was already passed
-
   document.addEventListener('click', function(e) {
     var tab = e.target.closest('.mockup-tab');
     if (!tab) return;
     var panel = tab.getAttribute('data-panel');
-    // Find the parent showcase section so each instance works independently
     var showcase = tab.closest('.product-mockup-section');
     if (!showcase) return;
-
-    // Email gate: if clicking "Watch Demo" tab and not logged in and gate not yet passed
-    if (panel === 'demo' && !state.isLoggedIn && !demoGateEmail) {
-      var existing = document.getElementById('demoEmailGate');
-      if (existing) existing.remove();
-      var gate = document.createElement('div');
-      gate.id = 'demoEmailGate';
-      gate.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(2,8,23,0.92);display:flex;align-items:center;justify-content:center';
-      gate.innerHTML = '<div style="background:#0f172a;border:1px solid #1e293b;border-radius:16px;padding:40px;max-width:400px;width:90%;text-align:center">'
-        + '<h2 style="font-family:Syne,sans-serif;font-size:1.4rem;color:#f1f5f9;margin-bottom:8px">Watch the Demo</h2>'
-        + '<p style="color:#94a3b8;font-size:.9rem;margin-bottom:20px">Enter your email to access the full product walkthrough.</p>'
-        + '<input id="demoGateInput" type="email" placeholder="you@company.com" style="width:100%;padding:12px 16px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#f1f5f9;font-size:.95rem;margin-bottom:12px;outline:none">'
-        + '<button id="demoGateBtn" style="width:100%;padding:12px;background:#1e40af;color:#fff;border:none;border-radius:8px;font-size:.95rem;font-weight:600;cursor:pointer;transition:background .15s">Watch Demo</button></div>';
-      document.body.appendChild(gate);
-      document.getElementById('demoGateBtn').onclick = function() {
-        var val = document.getElementById('demoGateInput').value.trim();
-        // Lenient validation: just needs @ and a dot, block obvious junk
-        if (!val || !val.includes('@') || !val.includes('.') || val.length < 5 || /^(test|asdf|fake|abc|xxx|nope|no@)/.test(val.toLowerCase())) { document.getElementById('demoGateInput').style.borderColor = '#f87171'; return; }
-        demoGateEmail = val;
-        gate.remove();
-        // Fire tracking event to backend
-        try { fetch('https://api.proofrepo.com/api/video-event', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ event: 'gate_pass', email: val, timestamp: 0, duration: 0, userAgent: navigator.userAgent, referrer: document.referrer }) }); } catch(ex) {}
-        // Now activate the demo panel
-        tab.click();
-      };
-      document.getElementById('demoGateInput').onkeydown = function(ev) { if (ev.key === 'Enter') document.getElementById('demoGateBtn').click(); };
-      return; // don't switch tabs yet
-    }
 
     // Update tabs within this showcase only
     showcase.querySelectorAll('.mockup-tab').forEach(function(t) { t.classList.remove('active'); });
@@ -12958,6 +12931,76 @@ function collapseWhoSection() {
     var urlMap = { dashboard: 'proofrepo.com', builder: 'proofrepo.com/new-request', upload: 'proofrepo.com/upload', proofpack: 'proofrepo.com/proofpack', demo: 'proofrepo.com/demo' };
     var urlEl = showcase.querySelector('.mockup-url');
     if (urlEl && urlMap[panel]) urlEl.textContent = urlMap[panel];
+
+    // Attach mid-video email gate + tracking when demo panel activates (once)
+    if (panel === 'demo' && !showcase._demoTracked) {
+      showcase._demoTracked = true;
+      var demoVid = showcase.querySelector('.mockup-panel[data-panel="demo"] video');
+      if (demoVid) {
+        var gateShown = false;
+        var vf = { play: 0, p25: 0, p50: 0, p75: 0, done: 0 };
+
+        function dte(ev, ct) {
+          if (!demoGateEmail) return; // don't track until we have an email
+          try { fetch('https://api.proofrepo.com/api/video-event', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ event: ev, email: demoGateEmail, timestamp: Math.round(ct * 100) / 100, duration: Math.round((demoVid.duration || 0) * 100) / 100, userAgent: navigator.userAgent, referrer: document.referrer }) }); } catch(ex) {}
+        }
+
+        demoVid.addEventListener('timeupdate', function() {
+          var c = demoVid.currentTime, d = demoVid.duration;
+
+          // Mid-video email gate: pause at DEMO_GATE_TIMESTAMP if not logged in and gate not passed
+          if (c >= DEMO_GATE_TIMESTAMP && !gateShown && !state.isLoggedIn && !demoGateEmail) {
+            gateShown = true;
+            demoVid.pause();
+
+            // Build overlay positioned over the video wrapper
+            var wrap = demoVid.closest('.m-demo-video-wrap');
+            if (wrap) wrap.style.position = 'relative';
+            var overlay = document.createElement('div');
+            overlay.id = 'demoVideoGate';
+            overlay.style.cssText = 'position:absolute;inset:0;z-index:10;background:rgba(2,8,23,0.92);display:flex;align-items:center;justify-content:center;border-radius:8px';
+            overlay.innerHTML = '<div style="text-align:center;padding:24px;max-width:340px;width:90%">'
+              + '<h3 style="font-family:Syne,sans-serif;font-size:1.2rem;color:#f1f5f9;margin:0 0 8px">Want to see the rest?</h3>'
+              + '<p style="color:#94a3b8;font-size:.85rem;margin:0 0 16px">Enter your email to continue watching the full walkthrough.</p>'
+              + '<input id="vidGateInput" type="email" placeholder="you@company.com" style="width:100%;padding:10px 14px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#f1f5f9;font-size:.9rem;margin-bottom:10px;outline:none;box-sizing:border-box">'
+              + '<button id="vidGateBtn" style="width:100%;padding:10px;background:#1e40af;color:#fff;border:none;border-radius:8px;font-size:.9rem;font-weight:600;cursor:pointer">Continue Watching</button></div>';
+            (wrap || demoVid.parentElement).appendChild(overlay);
+
+            // Prevent user from manually playing while gate is up
+            var blockPlay = function(ev) { if (!demoGateEmail) { demoVid.pause(); } };
+            demoVid.addEventListener('play', blockPlay);
+
+            document.getElementById('vidGateBtn').onclick = function() {
+              var val = document.getElementById('vidGateInput').value.trim();
+              if (!val || !val.includes('@') || !val.includes('.') || val.length < 5 || /^(test|asdf|fake|abc|xxx|nope|no@)/.test(val.toLowerCase())) { document.getElementById('vidGateInput').style.borderColor = '#f87171'; return; }
+              demoGateEmail = val;
+              overlay.remove();
+              demoVid.removeEventListener('play', blockPlay);
+              demoVid.play();
+              // Fire gate_pass event
+              try { fetch('https://api.proofrepo.com/api/video-event', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ event: 'gate_pass', email: val, timestamp: c, duration: d || 0, userAgent: navigator.userAgent, referrer: document.referrer }) }); } catch(ex) {}
+              // Also fire play event since they're resuming
+              dte('play', demoVid.currentTime);
+              vf.play = 1;
+            };
+            document.getElementById('vidGateInput').onkeydown = function(ev) { if (ev.key === 'Enter') document.getElementById('vidGateBtn').click(); };
+          }
+
+          // Progress tracking (only fires after gate is passed)
+          if (d > 0 && demoGateEmail) {
+            var pct = c / d * 100;
+            if (pct >= 25 && !vf.p25) { dte('progress_25', c); vf.p25 = 1; }
+            if (pct >= 50 && !vf.p50) { dte('progress_50', c); vf.p50 = 1; }
+            if (pct >= 75 && !vf.p75) { dte('progress_75', c); vf.p75 = 1; }
+            if (pct >= 99 && !vf.done) { dte('complete', c); vf.done = 1; }
+          }
+        });
+
+        demoVid.addEventListener('play', function() { if (demoGateEmail && !vf.play) { dte('play', demoVid.currentTime); vf.play = 1; } });
+        demoVid.addEventListener('pause', function() { if (demoGateEmail && demoVid.currentTime < demoVid.duration) dte('pause', demoVid.currentTime); });
+        demoVid.addEventListener('ended', function() { if (demoGateEmail && !vf.done) { dte('complete', demoVid.currentTime); vf.done = 1; } });
+      }
+    }
   });
 })();
 
