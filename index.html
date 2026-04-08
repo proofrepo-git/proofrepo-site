@@ -12764,9 +12764,42 @@ async function init() {
  
  // Check for URL prefill (resend links from deadline-missed emails)
  const isResendPrefill = handleUrlPrefill();
- 
+
+ // Check for trial code in URL (?code=XXXXX from cold email CTA)
+ const urlCode = new URLSearchParams(window.location.search).get('code');
+ const isCodeReturn = !!(urlCode && urlCode.trim());
+ if (isCodeReturn) {
+ const trimmedCode = urlCode.trim().toUpperCase();
+ if (hasSession && state.isLoggedIn) {
+ // Logged-in user — pre-fill dashboard redeem section
+ const redeemSec = $('#redeemCodeSection');
+ const redeemInput = $('#dashboardRedeemCode');
+ if (redeemSec && redeemInput) {
+ redeemSec.style.display = 'block';
+ redeemInput.value = trimmedCode;
+ setTimeout(() => {
+ redeemInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+ handleDashboardRedeem();
+ }, 400);
+ }
+ } else {
+ // New visitor — set role to "new" and show trial code flow
+ $('#roleSelect').value = 'new';
+ handleRoleChange('new');
+ const codeInput = $('#trialCodeInput');
+ if (codeInput) {
+ codeInput.value = trimmedCode;
+ codeInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+ setTimeout(() => handleApplyTrialCode(), 400);
+ }
+ }
+ // Clean URL without reloading
+ const cleanUrl = window.location.pathname + window.location.hash;
+ window.history.replaceState({}, document.title, cleanUrl);
+ }
+
  // Only restore form state when returning from Stripe checkout
- if (!isCheckoutReturn && !isResendPrefill && !hasSession) {
+ if (!isCheckoutReturn && !isResendPrefill && !isCodeReturn && !hasSession) {
  clearFormState();
  }
  
