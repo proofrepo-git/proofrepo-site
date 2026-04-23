@@ -12884,7 +12884,8 @@ function updateComposerSteps() {
       if (chip2) chip2.textContent = clientEmails[0] + (clientEmails.length > 1 ? ' +' + (clientEmails.length-1) : '');
       if (chip3) chip3.textContent = deadline.toLocaleDateString('en-US', {month:'short', day:'numeric'});
     }
-    if (whoFields && !whoFields.classList.contains('collapsed') && !window._whoSectionManuallyExpanded) {
+    // Only auto-collapse once user has moved to Step 2 (selected evidence items)
+    if (hasEvidence && whoFields && !whoFields.classList.contains('collapsed') && !window._whoSectionManuallyExpanded) {
       whoFields.classList.add('collapsed');
       if (whoSummary) whoSummary.classList.add('visible');
     }
